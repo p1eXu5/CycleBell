@@ -5,8 +5,26 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:CycleBell"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
+        Title="MainWindow" Height="636" Width="374">
     <Grid>
-        
+        <Grid.RowDefinitions>
+            <RowDefinition Height="110*"/>
+            <RowDefinition Height="143*"/>
+            <RowDefinition Height="79*"/>
+            <RowDefinition Height="274*"/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+
+        </Grid.ColumnDefinitions>
+
+        <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center"
+                   Height="75" 
+                   TextWrapping="Wrap" Text="Cycle Bell" 
+                   Width="auto" FontSize="48" FontFamily="Andalus"/>
+        <StackPanel Grid.Row="1" Orientation="Vertical">
+            <TextBlock VerticalAlignment="Center" HorizontalAlignment="Center" 
+                       Text="preset" />
+            <ComboBox />
+        </StackPanel>
     </Grid>
 </Window>
