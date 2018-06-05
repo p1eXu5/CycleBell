@@ -6,9 +6,23 @@
         xmlns:local="clr-namespace:CycleBell"
         mc:Ignorable="d"
         Title="MainWindow" Height="636" Width="374">
+    <Window.Resources>
+        <ResourceDictionary>
+            <ControlTemplate x:Key="Tmp" TargetType="ComboBox">
+                <Border BorderBrush="{DynamicResource {x:Static SystemColors.WindowFrameBrushKey}}" 
+                        BorderThickness="0,0,0,2" 
+                        SnapsToDevicePixels="True" />
+            </ControlTemplate>
+
+            <Style x:Key="FontAbuget" TargetType="TextBlock">
+                <Setter Property="FontFamily" Value="pack://application:,,,/../../fonts/#Abuget" />
+            </Style>
+            
+        </ResourceDictionary>
+    </Window.Resources>
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="110*"/>
+            <RowDefinition Height="auto"/>
             <RowDefinition Height="143*"/>
             <RowDefinition Height="79*"/>
             <RowDefinition Height="274*"/>
@@ -17,14 +31,24 @@
 
         </Grid.ColumnDefinitions>
 
-        <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center"
-                   Height="75" 
-                   TextWrapping="Wrap" Text="Cycle Bell" 
-                   Width="auto" FontSize="48" FontFamily="Andalus"/>
+<!--FontFamily="pack://application:,,,/../../fonts/#Abuget"-->
+
+        <TextBlock Style="{StaticResource FontAbuget}"
+                   HorizontalAlignment="Center" VerticalAlignment="Center"
+                   Width="auto" 
+                   FontSize="74" 
+                   Text="Cycle Bell" TextWrapping="Wrap"
+                   />
         <StackPanel Grid.Row="1" Orientation="Vertical">
             <TextBlock VerticalAlignment="Center" HorizontalAlignment="Center" 
-                       Text="preset" />
-            <ComboBox />
+                       Text="preset" 
+                       />
+            <ComboBox Template="{DynamicResource Tmp}" Height="24"/>
         </StackPanel>
+        <Border Grid.Row="2" Width="100" BorderThickness="0,0,0,2" SnapsToDevicePixels="True">
+            <Border.BorderBrush>
+                <SolidColorBrush Color="{DynamicResource {x:Static SystemColors.WindowFrameColorKey}}"/>
+            </Border.BorderBrush>
+        </Border>
     </Grid>
 </Window>
