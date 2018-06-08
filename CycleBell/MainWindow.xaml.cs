@@ -23,7 +23,6 @@ namespace CycleBell
         public MainWindow()
         {
             InitializeComponent();
-            var a = Properties.Resources.Culture;
         }
     }
 }
