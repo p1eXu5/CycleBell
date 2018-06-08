@@ -92,12 +92,14 @@
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <Resource Include="fonts\Abuget.ttf">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Resource>
     <Resource Include="fonts\OstrichSans-Heavy.otf" />
     <Resource Include="fonts\Prosto.ttf" />
-    <Resource Include="fonts\Russo_One.ttf" />
-    <Resource Include="fonts\sui generis rg.ttf" />
+    <Resource Include="fonts\SuiGenerisRg.ttf">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="fonts\RussoOne.ttf" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>

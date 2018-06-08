@@ -77,7 +77,7 @@
     <SolidColorBrush x:Key="ComboBox.Disabled.Editable.Border" Color="#FFBFBFBF"/>
     <SolidColorBrush x:Key="ComboBox.Disabled.Editable.Button.Background" Color="Transparent"/>
     <SolidColorBrush x:Key="ComboBox.Disabled.Editable.Button.Border" Color="Transparent"/>
-    <SolidColorBrush x:Key="ComboBox.Static.Glyph" Color="#FF606060"/>
+    <SolidColorBrush x:Key="ComboBox.Static.Glyph" Color="Black"/>
     
     <Style x:Key="ComboBoxToggleButton" TargetType="{x:Type ToggleButton}">
         <Setter Property="OverridesDefaultStyle" Value="true"/>
@@ -91,8 +91,16 @@
                             Background="{x:Null}" 
                             BorderThickness="{TemplateBinding BorderThickness}" 
                             BorderBrush="{StaticResource ComboBox.Static.Border}">
-                        <Border x:Name="splitBorder" Width="{DynamicResource {x:Static SystemParameters.VerticalScrollBarWidthKey}}" SnapsToDevicePixels="true" Margin="0" HorizontalAlignment="Right" BorderThickness="1" BorderBrush="Transparent">
-                            <Path x:Name="arrow" VerticalAlignment="Center" Margin="0" HorizontalAlignment="Center" Fill="{StaticResource ComboBox.Static.Glyph}" Data="F1 M 0,0 L 2.667,2.66665 L 5.3334,0 L 5.3334,-1.78168 L 2.6667,0.88501 L0,-1.78168 L0,0 Z"/>
+                        <Border x:Name="splitBorder" 
+                                Width="{DynamicResource {x:Static SystemParameters.VerticalScrollBarWidthKey}}" 
+                                SnapsToDevicePixels="true" 
+                                Margin="0" HorizontalAlignment="Right" 
+                                BorderThickness="1" BorderBrush="Transparent">
+                            <Path x:Name="arrow" 
+                                  VerticalAlignment="Center" 
+                                  Margin="0" HorizontalAlignment="Center" 
+                                  Fill="{StaticResource ComboBox.Static.Glyph}" 
+                                   Data="F1 M 0,0 L 0,1.25 L 3.5,6 L 7,1.25 L 7,0 L 5.75,0 L 5.75,0.8 L 3.5,3.8 L 1.25,0.8 L 1.25,0 Z"/>
                         </Border>
                     </Border>
                     <ControlTemplate.Triggers>
