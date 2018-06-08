@@ -94,6 +94,10 @@
     <Resource Include="fonts\Abuget.ttf">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Resource>
+    <Resource Include="fonts\OstrichSans-Heavy.otf" />
+    <Resource Include="fonts\Prosto.ttf" />
+    <Resource Include="fonts\Russo_One.ttf" />
+    <Resource Include="fonts\sui generis rg.ttf" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>

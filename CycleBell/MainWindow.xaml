@@ -9,9 +9,11 @@
         Title="MainWindow" Height="636" Width="374">
     <Window.Resources>
         <ResourceDictionary>
-            <Style x:Key="FontAbuget" TargetType="{x:Type TextBlock}">
-                <Setter Property="FontFamily" Value="pack://application:,,,/../../fonts/#Abuget" />
-            </Style>
+            <FontFamily x:Key="FontAbuget">pack://application:,,,/../../fonts/#Abuget</FontFamily>
+            <FontFamily x:Key="OstrichSans-Heavy">pack://application:,,,/../../fonts/#OstrichSans-Heavy</FontFamily>
+            <FontFamily x:Key="Prosto">pack://application:,,,/../../fonts/#Prosto</FontFamily>
+            <FontFamily x:Key="Prosto">pack://application:,,,/../../fonts/#Prosto</FontFamily>
+            <FontFamily x:Key="Prosto">pack://application:,,,/../../fonts/#Prosto</FontFamily>
         </ResourceDictionary>
     </Window.Resources>
     <Grid>
@@ -24,17 +26,26 @@
 
         <!--FontFamily="pack://application:,,,/../../fonts/#Abuget"-->
 
-        <TextBlock Style="{StaticResource FontAbuget}"
+        <TextBlock Text="Cycle Bell" 
                    HorizontalAlignment="Center" VerticalAlignment="Center"
+                   Margin="10"
                    Width="auto" 
-                   FontSize="74" 
-                   Text="Cycle Bell" TextWrapping="Wrap"
+                   FontSize="74"
+                   FontFamily="{StaticResource FontAbuget}"
+                   TextWrapping="Wrap"
                    />
         <StackPanel Grid.Row="1" Orientation="Vertical">
-            <TextBlock VerticalAlignment="Center" HorizontalAlignment="Center" 
-                       Text="preset" Margin="0,0,0,5" 
+            <TextBlock Text="preset" 
+                       VerticalAlignment="Center" HorizontalAlignment="Center"
+                       Margin="0,20,0,5"
+                       FontFamily="{StaticResource OstrichSans-Heavy}"
+                       FontWeight="DemiBold"
+                       FontSize="14"
+                        
                        />
-            <ComboBox Style="{DynamicResource MyComboBoxStyle1}">
+            <ComboBox Style="{DynamicResource MyComboBoxStyle1}"
+                      BorderThickness="0,0,0,2"
+                      Margin="80,0">
                 <Label>dfgg</Label>
                 
             </ComboBox>
