@@ -7,7 +7,7 @@
         xmlns:local="clr-namespace:CycleBell"
         xmlns:Themes="clr-namespace:Microsoft.Windows.Themes;assembly=PresentationFramework.Aero2" x:Class="CycleBell.MainWindow"
         mc:Ignorable="d"
-        Title="MainWindow" Height="636" Width="374">
+        Title="MainWindow" Height="695" Width="374" ResizeMode="CanMinimize" WindowStartupLocation="CenterScreen">
     <Window.Resources>
         <ResourceDictionary>
             <FontFamily x:Key="FontAbuget">pack://application:,,,/../../fonts/#Abuget</FontFamily>
@@ -26,6 +26,7 @@
         </ResourceDictionary>
     </Window.Resources>
     <DockPanel>
+        <!-- Menu -->
         <Menu DockPanel.Dock="Top" Height="18">
             <Menu.Background>
                 <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
@@ -49,26 +50,32 @@
                 </MenuItem.Header>
             </MenuItem>
         </Menu>
+
+        <!-- Content -->
         <Grid TextElement.FontSize="14">
             <Grid.RowDefinitions>
                 <RowDefinition Height="auto"/>
                 <RowDefinition Height="auto"/>
-                <RowDefinition Height="79*"/>
-                <RowDefinition Height="274*"/>
+                <RowDefinition Height="auto"/>
+                <RowDefinition Height="auto"/>
+                <RowDefinition Height="auto"/>
             </Grid.RowDefinitions>
 
+            <!-- Header -->
             <TextBlock Text="Cycle Bell" 
                        HorizontalAlignment="Center" VerticalAlignment="Center"
-                       Margin="10"
+                       Margin="0,16,0,4"
                        Width="auto" 
                        FontSize="74"
                        FontFamily="{StaticResource FontAbuget}"
                        TextWrapping="Wrap"
                        />
-            <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,10">
+
+            <!-- preset -->
+            <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,0">
                 <TextBlock Text="preset" 
                            VerticalAlignment="Center" HorizontalAlignment="Center"
-                           Margin="5,0"
+                           Margin="0,0,10,0"
                            FontFamily="{StaticResource SuiGeneris}"
                            FontWeight="Normal"
                            FontSize="14"
@@ -77,17 +84,134 @@
                         <TranslateTransform Y="1"/>
                     </TextBlock.RenderTransform>
                 </TextBlock>
-                <ComboBox Style="{DynamicResource MyComboBoxStyle1}"
+                <ComboBox x:Name="m_presetComboBox" Style="{DynamicResource MyComboBoxStyle1}"
                           VerticalContentAlignment="Center"
-                          SelectedItem="0"
+                          Width="146"
                           BorderThickness="0,0,0,1"
-                          MinWidth="170"
                           Margin="0,0">
                     <Label>dfgg</Label>
-
                 </ComboBox>
             </StackPanel>
-            
+
+            <!-- start time -->
+            <StackPanel Grid.Row="2"
+                        Margin="0,48,0,38"
+                        Orientation="Vertical"
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Center" 
+                        TextElement.FontFamily="{StaticResource SuiGeneris}" >
+                <TextBlock Text="18:00"
+                           HorizontalAlignment="Center"
+                           FontSize="18"/>
+                <Label Content="start time"
+                       HorizontalAlignment="Center"/>
+            </StackPanel>
+
+            <!-- points list -->
+            <ListBox x:Name="m_pointsList"
+                     Grid.Row="3"
+                     Margin="38,0"
+                     MinHeight="150"
+                     BorderThickness="0"
+                     ScrollViewer.HorizontalScrollBarVisibility="Hidden"
+                     >
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition />
+                        <RowDefinition />
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition />
+                        <ColumnDefinition />
+                        <ColumnDefinition />
+                        <ColumnDefinition />
+                    </Grid.ColumnDefinitions>
+
+                    <TextBlock x:Name="m_pointName"
+                               Grid.Column="0" Grid.Row="0"
+                               HorizontalAlignment="Right" VerticalAlignment="Bottom"
+                               Text="Рабочее время"
+                               TextTrimming="CharacterEllipsis"
+                               FontSize="14" FontFamily="Segoe UI Semibold" 
+                                />
+                    <TextBlock x:Name="m_pointTime"
+                               Grid.Column="1" Grid.Row="0"
+                               HorizontalAlignment="Right" VerticalAlignment="Bottom"
+                               Margin="20,0"
+                               Text="18:00"
+                               TextTrimming="CharacterEllipsis"
+                               FontFamily="{StaticResource SuiGeneris}"
+                               FontSize="18" RenderTransformOrigin="0.5,0.5"
+                               >
+                        <TextBlock.RenderTransform>
+                            <TransformGroup>
+                                <ScaleTransform/>
+                                <SkewTransform/>
+                                <RotateTransform/>
+                                <TranslateTransform Y="2"/>
+                            </TransformGroup>
+                        </TextBlock.RenderTransform>
+
+                    </TextBlock>
+                    <!-- mute button -->
+                    <Button x:Name="m_muteHyperlink"
+                            Grid.Column="2" Grid.Row="0"
+                            HorizontalAlignment="Right" VerticalAlignment="Bottom" 
+                            Height="17" 
+                            Background="{x:Null}" BorderBrush="{x:Null}" 
+                            RenderTransformOrigin="0.5,0.5" Width="43"
+                            Padding="0"
+                            >
+                        <Button.RenderTransform>
+                            <TransformGroup>
+                                <ScaleTransform/>
+                                <SkewTransform/>
+                                <RotateTransform/>
+                                <TranslateTransform Y="-1" X="-3"/>
+                            </TransformGroup>
+                        </Button.RenderTransform>
+                        <TextBlock Margin="0"
+                                   Text="mute"
+                                   TextTrimming="CharacterEllipsis"
+                                   FontFamily="{StaticResource SuiGeneris}"
+                                   FontSize="14" Height="13"
+                                   >
+                        </TextBlock>
+                    </Button>
+                    <!-- add sound button -->
+                    <Button x:Name="m_addSoundButton"
+                            Grid.Column="3" Grid.Row="0" Grid.RowSpan="2"
+                            Margin="10,0"
+                            Width="30" Height="30"
+                            >
+                        <Path Data=""/>
+                    </Button>
+                    <!-- sound name -->
+                    <TextBlock x:Name="m_soundName"
+                               Grid.Column="0" Grid.ColumnSpan="3" Grid.Row="1"
+                               Margin="0,0,6,0"
+                               HorizontalAlignment="Right"
+                               Text="default"
+                               TextTrimming="CharacterEllipsis"
+                               FontSize="10"
+                               />
+                </Grid>
+            </ListBox>
+
+            <!-- adding point -->
+            <Grid x:Name="border" Grid.Row="4"
+                  HorizontalAlignment="Center">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                </Grid.ColumnDefinitions>
+                <TextBox x:Name="m_addPointName"
+                         Grid.Column="0"
+                         MinWidth="100"
+                         />
+            </Grid>
         </Grid>
     </DockPanel>
 </Window>

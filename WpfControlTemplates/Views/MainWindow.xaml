@@ -1,0 +1,54 @@
+﻿<Window x:Name="Window"
+        x:Class="WpfControlTemplates.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:WpfControlTemplates"
+        mc:Ignorable="d"
+        
+        xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity"
+        
+        xmlns:vm="clr-namespace:WpfControlTemplates.Models"
+        d:DataContext="{d:DesignInstance {x:Type vm:ControlTemplateViewModel}}"
+
+        Title="MainWindow" Height="450" Width="517.767">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="2*" />
+            <ColumnDefinition Width="3"/>
+            <ColumnDefinition Width="4*" />
+        </Grid.ColumnDefinitions>
+        <ListBox x:Name="ControlsList" Grid.Column="0"
+                 ItemsSource="{Binding ControlsListCollection}" >
+            <ListBox.ItemTemplate>
+                <DataTemplate>
+                    <TextBlock TextTrimming="CharacterEllipsis"
+                               Text="{Binding TypeName}"></TextBlock>
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+            <i:Interaction.Triggers>
+                <i:EventTrigger EventName="SelectionChanged">
+                    <i:InvokeCommandAction Command="{Binding SetSelectedItemCommand}"
+                                           CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ListBox}}, Path=SelectedItems[0]}"/>
+                </i:EventTrigger>
+            </i:Interaction.Triggers>
+        </ListBox>
+        <GridSplitter Grid.Column="1" 
+                      Width="3"
+                      HorizontalAlignment="Stretch"
+                      
+                      />
+        <FlowDocumentScrollViewer Grid.Column="2">
+            <FlowDocument>
+                <Paragraph>
+                    <Run Text="{Binding SelectedItem}"/>
+                </Paragraph>
+                <Paragraph>
+                    <Run Text="{Binding ControlTemplateXaml}"/>
+                </Paragraph>
+            </FlowDocument>
+
+        </FlowDocumentScrollViewer>
+    </Grid>
+</Window>
