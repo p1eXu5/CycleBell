@@ -13,7 +13,7 @@
         d:DataContext="{d:DesignInstance {x:Type vm:ControlTemplateViewModel}}"
 
         Title="MainWindow" Height="450" Width="517.767">
-    <Grid>
+    <Grid x:Name="Grid">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="2*" />
             <ColumnDefinition Width="3"/>

@@ -20,7 +20,7 @@ namespace WpfControlTemplates
 
             MainWindow window = new MainWindow();
 
-            var vm = new ControlTemplateViewModel();
+            var vm = new ControlTemplateViewModel(window.Grid);
             window.DataContext = vm;
 
             window.ShowDialog();
