@@ -88,8 +88,25 @@
                           VerticalContentAlignment="Center"
                           Width="146"
                           BorderThickness="0,0,0,1"
-                          Margin="0,0">
-                    <Label>dfgg</Label>
+                          Margin="0,0" IsEditable="True"
+                          MaxDropDownHeight="90">
+                    <TextBlock TextWrapping="Wrap">First element sdsdd<LineBreak/>sdd dsdd sdds </TextBlock>
+                    <TextBlock>First element sdsdd<LineBreak/>sdd dsdd sdds</TextBlock>
+                    <TextBlock>First element sdsdd<LineBreak/>sdd dsdd sdds</TextBlock>
+                    <TextBlock>First element sdsdd<LineBreak/>sdd dsdd sdds</TextBlock>
+                    <TextBlock>First element sdsdd<LineBreak/>sdd dsdd sdds</TextBlock>
+                    <TextBlock>First element sdsdd<LineBreak/>sdd dsdd sdds</TextBlock>
+                    <Label>Third element</Label>
+                    <Label>Third element</Label>
+                    <Label>Third element</Label>
+                    <Label>Third element</Label>
+                    <Label>Third element</Label>
+                    <Label>Third element</Label>
+                    <Label>Third element</Label>
+                    <Label>Third element</Label>
+                    <Label>Third element</Label>
+                    <Label>Third element</Label>
+                    <Label>Third element</Label>
                 </ComboBox>
             </StackPanel>
 

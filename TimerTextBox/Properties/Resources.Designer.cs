@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace TimerTest.Properties
+namespace TimerTextBox.Properties
 {
 
 
@@ -42,7 +42,7 @@ namespace TimerTest.Properties
         {
             get {
                 if ((resourceMan == null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("TimerTest.Properties.Resources", typeof(Resources).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("TimerTextBox.Properties.Resources", typeof(Resources).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;

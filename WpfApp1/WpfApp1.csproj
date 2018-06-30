@@ -4,10 +4,10 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{230C8138-C604-47BE-8FA3-74250892BCDB}</ProjectGuid>
+    <ProjectGuid>{938CFDF8-AB56-4D2E-A44E-77CC6A39D296}</ProjectGuid>
     <OutputType>WinExe</OutputType>
-    <RootNamespace>TimerTest</RootNamespace>
-    <AssemblyName>TimerTest</AssemblyName>
+    <RootNamespace>WpfApp1</RootNamespace>
+    <AssemblyName>WpfApp1</AssemblyName>
     <TargetFrameworkVersion>v4.7.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{60dc8134-eba5-43b8-bcc9-bb4bc16c2548};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
@@ -68,7 +68,6 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Properties\Annotations.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -93,17 +92,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\Converters\Converters.csproj">
-      <Project>{21f97030-fc01-44cd-b1e9-1fbf0b19e457}</Project>
-      <Name>Converters</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Sounds\1.wav" />
-    <Content Include="Sounds\2.wav" />
-    <Content Include="Sounds\3.wav" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

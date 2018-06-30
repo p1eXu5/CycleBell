@@ -1,0 +1,9 @@
+﻿<Application x:Class="TimerTextBox.App"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:local="clr-namespace:TimerTextBox"
+             StartupUri="MainWindow.xaml">
+    <Application.Resources>
+        <TextBlock x:Key="MyCursor" Cursor="Cursors/MyCursor.cur"/>
+    </Application.Resources>
+</Application>

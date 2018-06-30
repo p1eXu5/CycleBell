@@ -1,1 +1,17 @@
 /.vs/
+/AutoResetEventEx1/obj/Debug
+/AutoResetEventEx1/bin/Debug
+/AutoResetEventEx2/bin/Debug
+/AutoResetEventEx2/obj/Debug
+/ConsoleApp1/bin/Debug
+/ConsoleApp1/obj/Debug
+/Converters/bin/Debug
+/Converters/obj/Debug
+/TimerExample/bin/Debug
+/TimerExample/obj/Debug
+/TimerTest/bin/Debug
+/TimerTest/obj/Debug
+/TimerTextBox/bin/Debug
+/TimerTextBox/obj/Debug
+/WpfApp1/bin/Debug
+/WpfApp1/obj/Debug
