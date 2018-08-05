@@ -15,3 +15,48 @@
 /TimerTextBox/obj/Debug
 /WpfApp1/bin/Debug
 /WpfApp1/obj/Debug
+/Experiments/AutoResetEventEx1/bin/Debug
+/Experiments/AutoResetEventEx1/obj
+/Experiments/AutoResetEventEx2/bin/Debug
+/Experiments/AutoResetEventEx2/obj
+/Experiments/ConsoleApp1/bin/Debug
+/Experiments/ConsoleApp1/obj
+/Experiments/CycleBellLibraryTest/obj/Debug
+/Experiments/DotnetperlsComAsync/bin/Debug
+/Experiments/DotnetperlsComAsync/obj/Debug
+/Experiments/DotnetperlsComAsync2/bin/Debug
+/Experiments/DotnetperlsComAsync2/obj/Debug
+/Experiments/FunWithAsyncAwait/bin/Debug
+/Experiments/FunWithAsyncAwait/obj/Debug
+/Experiments/FunWithObservableCollection1/bin/Debug
+/Experiments/FunWithObservableCollection1/obj
+/Experiments/NullOperatorOrForeach/bin/Debug
+/Experiments/NullOperatorOrForeach/obj/Debug
+/Experiments/SortedList/bin/Debug
+/Experiments/SortedList/obj
+/Experiments/TimerBoxControl/bin/Debug
+/Experiments/TimerBoxControl/obj
+/Experiments/TimerBoxControlTest/bin/Debug
+/Experiments/TimerBoxControlTest/obj
+/Experiments/TimerExample/bin/Debug
+/Experiments/TimerExample/obj
+/Experiments/TimerStateObject/bin/Debug
+/Experiments/TimerStateObject/obj/Debug
+/Experiments/TimerTest/bin/Debug
+/Experiments/TimerTest/obj
+/Experiments/TimerTextBox/bin/Debug
+/Experiments/TimerTextBox/obj
+/Experiments/WpfApp1/bin/Debug
+/Experiments/WpfApp1/obj
+/FunWithLinqProject/bin/Debug
+/FunWithLinqProject/obj
+/Main Project/CycleBellConsolApp/bin/Debug
+/Main Project/CycleBellConsolApp/obj
+/Main Project/CycleBellLibrary/bin/Debug
+/Main Project/CycleBellLibrary/obj
+/packages
+/Tests/CycleBellLibraryTests/bin/Debug
+/Tests/CycleBellLibraryTests/obj
+/Tests/packages
+/TimeSpanLogical/bin/Debug
+/TimeSpanLogical/obj

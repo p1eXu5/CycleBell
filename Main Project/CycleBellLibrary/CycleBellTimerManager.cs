@@ -110,14 +110,23 @@ namespace CycleBellLibrary
 
         #region Methods
 
+        /// <summary>
+        /// dueTime for _timer
+        /// </summary>
+        /// <param name="i"></param>
+        /// <returns></returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public int GetDueTime (int i) => Accuracy - (i % Accuracy);
 
+        /// <summary>
+        /// Invoked by App exit event
+        /// </summary>
+        /// <param name="s"></param>
+        /// <param name="e"></param>
         public void OnAppExit(object s, EventArgs e)
         {
             Console.WriteLine ("Program ending");
         }
-
 
         public void AddPreset(Preset preset) => _director.AddPreset(preset);
 
@@ -142,6 +151,27 @@ namespace CycleBellLibrary
 
             _timer.Change(GetDueTime (currentTime.Milliseconds), Timeout.Infinite);
             _isRunning |= 0x01;
+        }
+
+        /// <summary>
+        /// Find next NextTimePoint after resume
+        /// </summary>
+        /// <param name="currentTime"></param>
+        private (TimeSpan, TimePoint) FindNextTimePoint(ref TimeSpan currentTime)
+        {
+            // TODO:
+
+            // Если текущее время меньше времени следующей точки или следующая точка - это startTime:
+            if (currentTime < _queue.Peek().Item1 || _queue.Peek().Item2.Time < TimeSpan.Zero) {
+                return _queue.Peek();
+            }
+
+            do {
+                _prevQueueElement = _queue.Dequeue();
+                _queue.Enqueue(_prevQueueElement);
+            } while (currentTime >= _queue.Peek().Item1 && _queue.Peek().Item2 != null);
+
+            return _queue.Peek();
         }
 
         /// <summary>
@@ -396,29 +426,6 @@ namespace CycleBellLibrary
             }
 
             return diff;
-        }
-
-        /// <summary>
-        /// Find next NextTimePoint after resume
-        /// </summary>
-        /// <param name="currentTime"></param>
-        private (TimeSpan, TimePoint) FindNextTimePoint(ref TimeSpan currentTime)
-        {
-            // TODO:
-
-            // Если текущее время меньше времени следующей точки или следующая точка - это startTime:
-            if (currentTime < _queue.Peek().Item1 || _queue.Peek().Item2.Time < TimeSpan.Zero) {
-                return _queue.Peek();
-            }
-
-            (TimeSpan, TimePoint) prev;
-
-            do {
-                prev = _queue.Dequeue();
-                _queue.Enqueue(prev);
-            } while (currentTime > prev.Item1 && _queue.Peek().Item2 != null);
-
-            return _queue.Peek();
         }
 
         

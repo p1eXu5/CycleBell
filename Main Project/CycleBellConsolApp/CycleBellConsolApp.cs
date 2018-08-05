@@ -16,6 +16,7 @@ namespace CycleBellConsolApp
         static void Main(string[] args)
         {
             try {
+                #region Arrange
 
                 var sound = new SoundPlayer("../../Sounds/sfx003.wav");
                 //sound.Play();
@@ -60,7 +61,7 @@ namespace CycleBellConsolApp
 
                 TimePoint[] testTimePoints =
                 {
-                    new TimePoint("Start", "0:00:30"),
+                    new TimePoint("First interval", "0:00:30"),
                     new TimePoint("0:00:33"),
                     new TimePoint("0:00:31"),
                 };
@@ -70,28 +71,33 @@ namespace CycleBellConsolApp
                 startTime += TimeSpan.FromSeconds(11);
 
                 manager.AddPreset(new Preset("Test", testTimePoints, startTime, true));
-                int idx = manager.GetIndex("Test");
+                int idx = manager.GetIndex("Test"); 
+
+                #endregion
 
                 #region Event Handlers
+
+                const int verticalLinesOffset = 0;
+                const int horizontalLinesOffset = 8;
 
                 // Load event handlers:
 
                 manager.ChangeTimePointEvent += (sender, e) =>
                                                 {
-                                                    Console.WriteLine("\nOnChangeTimePoint in: " + DateTime.Now.TimeOfDay);
+                                                    Console.WriteLine($"OnChangeTimePoint in: {DateTime.Now.TimeOfDay:h\\:mm\\:ss\\.fff}");
 
                                                     var x = Console.CursorLeft;
                                                     var y = Console.CursorTop;
 
-                                                    Console.SetCursorPosition(Console.WindowWidth / 2 - 14, Console.WindowHeight / 2 - 12);
+                                                    Console.SetCursorPosition(Console.WindowWidth / 2 + 4 + horizontalLinesOffset, Console.WindowHeight / 2 - 12 + verticalLinesOffset);
                                                     Console.WriteLine("OnChangeTimePoint:");
-                                                    Console.SetCursorPosition(Console.WindowWidth / 2 - 10, Console.WindowHeight / 2 - 10);
+                                                    Console.SetCursorPosition(Console.WindowWidth / 2 - 10 + horizontalLinesOffset, Console.WindowHeight / 2 - 10 + verticalLinesOffset);
                                                     Console.WriteLine($"Now is {DateTime.Now.TimeOfDay:h\\:mm\\:ss}");
-                                                    Console.SetCursorPosition(Console.WindowWidth / 2 - 10, Console.WindowHeight / 2 - 8);
+                                                    Console.SetCursorPosition(Console.WindowWidth / 2 - 10 + horizontalLinesOffset, Console.WindowHeight / 2 - 8 + verticalLinesOffset);
                                                     Console.WriteLine($"Next point at {e.NextTimePoint.GetAbsoluteTime()}");
-                                                    Console.SetCursorPosition(Console.WindowWidth / 2 - 10, Console.WindowHeight / 2 - 6);
+                                                    Console.SetCursorPosition(Console.WindowWidth / 2 - 10 + horizontalLinesOffset, Console.WindowHeight / 2 - 6 + verticalLinesOffset);
                                                     Console.WriteLine($"last: {e.LastTime:h\\:mm\\:ss}          ");
-                                                    Console.SetCursorPosition(Console.WindowWidth / 2 - 10, Console.WindowHeight / 2 - 4);
+                                                    Console.SetCursorPosition(Console.WindowWidth / 2 - 10 + horizontalLinesOffset, Console.WindowHeight / 2 - 4 + verticalLinesOffset);
                                                     Console.WriteLine($"Previous point at {e.NextTimePoint.GetAbsoluteTime()}");
 
                                                     Console.CursorTop = y;
@@ -114,12 +120,14 @@ namespace CycleBellConsolApp
                                                       var x = Console.CursorLeft;
                                                       var y = Console.CursorTop;
 
-                                                      Console.SetCursorPosition(Console.WindowWidth / 2 - 14, Console.WindowHeight / 2 - 1);
+                                                      Console.SetCursorPosition(Console.WindowWidth / 2 + 4 + horizontalLinesOffset, Console.WindowHeight / 2 - 1 + verticalLinesOffset);
                                                       Console.WriteLine("OnTimerSecondPassed:");
-                                                      Console.SetCursorPosition(Console.WindowWidth / 2 - 10, Console.WindowHeight / 2 + 1);
+                                                      Console.SetCursorPosition(Console.WindowWidth / 2 - 10 + horizontalLinesOffset, Console.WindowHeight / 2 + 1 + verticalLinesOffset);
                                                       Console.WriteLine($"Now is {DateTime.Now.TimeOfDay:h\\:mm\\:ss}");
-                                                      Console.SetCursorPosition(Console.WindowWidth / 2 - 10, Console.WindowHeight / 2 + 3);
-                                                      Console.WriteLine($"To {e.NextTimePoint} last {e.LastTime:h\\:mm\\:ss}          ");
+                                                      Console.SetCursorPosition(Console.WindowWidth / 2 - 10 + horizontalLinesOffset, Console.WindowHeight / 2 + 3 + verticalLinesOffset);
+                                                      Console.WriteLine($"To {e.NextTimePoint}");
+                                                      Console.SetCursorPosition(Console.WindowWidth / 2 - 10 + horizontalLinesOffset, Console.WindowHeight / 2 + 5 + verticalLinesOffset);
+                                                      Console.WriteLine ($"last {e.LastTime:h\\:mm\\:ss}          ");
 
                                                       Console.CursorTop = y;
                                                       Console.CursorLeft = x;
@@ -129,11 +137,17 @@ namespace CycleBellConsolApp
 
                 #endregion
 
+                #region Print Preset
+
                 foreach (var valueTuple in manager.GetTimerQueue(manager.Presets[idx])) {
 
-                    Console.WriteLine($"{valueTuple.Item2} \n\t\t{valueTuple.Item1}");
+                    Console.WriteLine($"{valueTuple.Item2}\n\nNext alarm at: {valueTuple.Item1:h\\:mm\\:ss\\.fff}");
                 }
-                Console.WriteLine();
+                Console.WriteLine(); 
+
+                #endregion
+
+                Console.WindowHeight = Console.WindowHeight + 10;
 
                 // Run cycle
                 manager.Play(manager.Presets[idx]);

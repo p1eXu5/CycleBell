@@ -1,0 +1,595 @@
+﻿<Window x:Class="TimerTextBox.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:TimerTextBox"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="450" Width="271.23"
+        local:TimerTextBoxControl.TimeEditIsDone="MainWindow_OnLostFocus">
+    <Grid Cursor="IBeam">
+        <Grid VerticalAlignment="Center">
+            <Grid.RowDefinitions>
+                <RowDefinition />
+                <RowDefinition />
+            </Grid.RowDefinitions>
+
+            <local:TimerTextBoxControl x:Name="m_timer" Text="00:00" TextAlignment="Center" 
+                                       VerticalAlignment="Center"
+                                       FontSize="18">
+
+            </local:TimerTextBoxControl>
+
+            <!--<TextBox Text="00:00" HorizontalContentAlignment="Center">
+                <TextBox.Style>
+                    <Style>
+                        <Style.Triggers>
+                            <Trigger Property="IsLostFocus" Value="True">
+                                <Setter Property="Visibility" Value="Hidden" />
+                                <Setter TargetName="m_labels" Property="Visibility" Value="Visible"></Setter>
+                            </Trigger>
+                        </Style.Triggers>
+                    </Style>
+                </TextBox.Style>
+            </TextBox>-->
+
+
+            <StackPanel x:Name="m_labels" Orientation="Horizontal" Grid.Row="1"
+                        HorizontalAlignment="Center" VerticalAlignment="Center"
+                        TextElement.FontFamily="{Binding FontFamily, ElementName=m_timer}"
+                        TextElement.FontSize="{Binding FontSize, ElementName=m_timer}"
+                        TextElement.FontWeight="{Binding FontWeight, ElementName=m_timer}"
+                        Height="{Binding ActualHeight, ElementName=m_timer}">
+
+                <local:TimerTextBlockControl x:Name="m_hours" MaxNum="2" 
+                                             Text="{Binding Hours, ElementName=m_timer}" 
+                                             VerticalAlignment="Center" >
+                    <local:TimerTextBlockControl.Style>
+                        <Style TargetType="{x:Type local:TimerTextBlockControl}">
+                            <Style.Triggers>
+                                <Trigger Property="IsMouseOver" Value="True">
+                                    <Setter Property="Cursor" Value="{Binding Cursor, Source={StaticResource MyCursor}}"></Setter>
+                                </Trigger>
+                            </Style.Triggers>
+                        </Style>
+                    </local:TimerTextBlockControl.Style>
+                </local:TimerTextBlockControl>
+
+
+                <Label Content="{Binding Separator, ElementName=m_timer}"  
+                       Padding="0" VerticalContentAlignment="Center" >
+                    <Label.RenderTransform>
+                        <TranslateTransform X="0.5"></TranslateTransform>
+                    </Label.RenderTransform>
+                </Label>
+
+                <local:TimerTextBlockControl x:Name="m_minutes" MaxNum="2" 
+                                             Text="00" Padding="0" VerticalAlignment="Center" >
+                    <local:TimerTextBlockControl.RenderTransform>
+                        <TranslateTransform X="0.5"></TranslateTransform>
+                    </local:TimerTextBlockControl.RenderTransform>
+                    <local:TimerTextBlockControl.Style>
+                        <Style TargetType="{x:Type local:TimerTextBlockControl}">
+                            <Style.Triggers>
+                                <Trigger Property="IsMouseOver" Value="True">
+                                    <Setter Property="Cursor" Value="{Binding Cursor, Source={StaticResource MyCursor}}"></Setter>
+                                </Trigger>
+                            </Style.Triggers>
+                        </Style>
+                    </local:TimerTextBlockControl.Style>
+                </local:TimerTextBlockControl>
+            </StackPanel>
+        </Grid>
+    </Grid>
+</Window>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

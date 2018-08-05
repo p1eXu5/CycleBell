@@ -12,8 +12,6 @@ namespace CycleBellLibrary
     {
         #region Fields
 
-        private static int _defaultInterval = 15;
-
         private readonly ObservableCollection<TimePoint> _timePoints;
         private byte _isInfiniteLoop = 0;
 
@@ -98,17 +96,24 @@ namespace CycleBellLibrary
 
         #region Properties
 
-        public static int DefaultInterval
-        {
-            get => _defaultInterval;
-            set => _defaultInterval = value;
-        }
+        /// <summary>
+        /// Interval in minutes for startTime if it no set
+        /// </summary>
+        public static int DefaultInterval { get; set; } = 15;
 
+        /// <summary>
+        /// Default name for presets
+        /// </summary>
         public static string DefaultName { get; set; } = "";
 
+        /// <summary>
+        /// Returns Preset with default settings
+        /// </summary>
         public static Preset EmptyPreset => new Preset();
 
-
+        /// <summary>
+        /// Start time for preset
+        /// </summary>
         public TimeSpan StartTime { get; set; }
 
         /// <summary>
@@ -118,8 +123,14 @@ namespace CycleBellLibrary
 
         public IList<TimePoint> TimePoints => _timePoints;
 
+        /// <summary>
+        /// # cycle - n times
+        /// </summary>
         public SortedDictionary<int, int> TimersCycles { get; }
 
+        /// <summary>
+        /// Indicates whether the loop is infinite
+        /// </summary>
         public bool IsInfiniteLoop => _isInfiniteLoop != 0;
 
         #endregion
@@ -164,6 +175,5 @@ namespace CycleBellLibrary
         public void ResetInfiniteLoop() => _isInfiniteLoop ^= _isInfiniteLoop;
 
         #endregion
-
     }
 }

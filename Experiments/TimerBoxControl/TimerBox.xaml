@@ -1,0 +1,73 @@
+﻿<UserControl x:Name="m_root" x:Class="TimerBoxControl.TimerBox"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:TimerBoxControl"
+             mc:Ignorable="d" 
+             d:DesignHeight="100" d:DesignWidth="200" Background="AliceBlue">
+    <UserControl.Resources>
+        <TextBlock x:Key="MyCursor" Cursor="Cursors/MyCursor.cur"/>
+    </UserControl.Resources>
+    <Grid Cursor="IBeam">
+        <Grid VerticalAlignment="Center">
+            <Grid.RowDefinitions>
+                <RowDefinition />
+                <RowDefinition />
+            </Grid.RowDefinitions>
+
+            <TextBox x:Name="m_timer" Text="00:00" TextAlignment="Center" 
+                     VerticalAlignment="Center"
+                     FontSize="18" 
+                     BorderThickness="0"
+                     Background="{Binding Background, ElementName=m_root}"/>
+
+            <StackPanel x:Name="m_labels" Orientation="Horizontal" Grid.Row="1"
+                        HorizontalAlignment="Center" VerticalAlignment="Center"
+                        TextElement.FontFamily="{Binding FontFamily, ElementName=m_timer}"
+                        TextElement.FontSize="{Binding FontSize, ElementName=m_timer}"
+                        TextElement.FontWeight="{Binding FontWeight, ElementName=m_timer}"
+                        Height="{Binding ActualHeight, ElementName=m_timer}">
+
+                <TextBlock x:Name="m_hours" 
+                           Text="{Binding Hours, ElementName=m_root}" 
+                           VerticalAlignment="Center">
+                    <TextBlock.Style>
+                        <Style TargetType="{x:Type TextBlock}">
+                            <Style.Triggers>
+                                <Trigger Property="IsMouseOver" Value="True">
+                                    <Setter Property="Cursor" Value="{Binding Cursor, Source={StaticResource MyCursor}}"></Setter>
+                                </Trigger>
+                            </Style.Triggers>
+                        </Style>
+                    </TextBlock.Style>
+                </TextBlock>
+
+
+                <Label Content="{Binding Separator, ElementName=m_root}"  
+                       Padding="0" VerticalContentAlignment="Center" >
+                    <Label.RenderTransform>
+                        <TranslateTransform X="0.5"></TranslateTransform>
+                    </Label.RenderTransform>
+                </Label>
+
+                <TextBlock x:Name="m_minutes"
+                           Text="00" Padding="0" 
+                           VerticalAlignment="Center" >
+                    <TextBlock.RenderTransform>
+                        <TranslateTransform X="0.5"></TranslateTransform>
+                    </TextBlock.RenderTransform>
+                    <TextBlock.Style>
+                        <Style TargetType="{x:Type TextBlock}">
+                            <Style.Triggers>
+                                <Trigger Property="IsMouseOver" Value="True">
+                                    <Setter Property="Cursor" Value="{Binding Cursor, Source={StaticResource MyCursor}}"></Setter>
+                                </Trigger>
+                            </Style.Triggers>
+                        </Style>
+                    </TextBlock.Style>
+                </TextBlock>
+            </StackPanel>
+        </Grid>
+    </Grid>
+</UserControl>
