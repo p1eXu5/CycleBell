@@ -1,0 +1,29 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    
+    <Path x:Key="path_menuCheckedIcon" Fill="Black" Stroke="Black" StrokeThickness="1" SnapsToDevicePixels="True" x:Shared="False">
+        <Path.Data>
+            <GeometryGroup>
+                <CombinedGeometry GeometryCombineMode="Exclude">
+                    <CombinedGeometry.Geometry1>
+                        <EllipseGeometry Center="5,5" RadiusX="4.5" RadiusY="4.5" />
+                    </CombinedGeometry.Geometry1>
+                    <CombinedGeometry.Geometry2>
+                        <EllipseGeometry Center="5,5" RadiusX="4.25" RadiusY="4.25" />
+                    </CombinedGeometry.Geometry2>
+                </CombinedGeometry>
+                <EllipseGeometry Center="5,5" RadiusX="2" RadiusY="2" />
+            </GeometryGroup>
+        </Path.Data>
+    </Path>
+    
+    <Path x:Key="path_CloseIcon" Stroke="{Binding Foreground, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type Control}}}" 
+          StrokeThickness="2" SnapsToDevicePixels="True" StrokeEndLineCap="Flat">
+        <Path.Data>
+            <GeometryGroup>
+                <LineGeometry StartPoint="0,0" EndPoint="20,20" />
+                <LineGeometry StartPoint="0,20" EndPoint="20,0" />
+            </GeometryGroup>
+        </Path.Data>
+    </Path>
+</ResourceDictionary>
