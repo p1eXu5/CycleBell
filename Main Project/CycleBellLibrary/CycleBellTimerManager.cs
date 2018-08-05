@@ -125,13 +125,24 @@ namespace CycleBellLibrary
         /// <param name="e"></param>
         public void OnAppExit(object s, EventArgs e)
         {
+            // TODO serialization:
+
+            _director.SavePresets();
+
             Console.WriteLine ("Program ending");
         }
 
+        /// <summary>
+        /// Add preset to inner director's collection
+        /// </summary>
+        /// <param name="preset"></param>
         public void AddPreset(Preset preset) => _director.AddPreset(preset);
 
         public void ReloadPresets() => _director.LoadPresets();
 
+        /// <summary>
+        /// Pause timer loop
+        /// </summary>
         public void Pouse()
         {
             if (!IsRunning) return; 
@@ -140,6 +151,9 @@ namespace CycleBellLibrary
             _isRunning ^= _isRunning;
         }
 
+        /// <summary>
+        /// Resume timer loop
+        /// </summary>
         public void Resume()
         {
             if (IsRunning || _queue == null) return;
@@ -159,8 +173,6 @@ namespace CycleBellLibrary
         /// <param name="currentTime"></param>
         private (TimeSpan, TimePoint) FindNextTimePoint(ref TimeSpan currentTime)
         {
-            // TODO:
-
             // Если текущее время меньше времени следующей точки или следующая точка - это startTime:
             if (currentTime < _queue.Peek().Item1 || _queue.Peek().Item2.Time < TimeSpan.Zero) {
                 return _queue.Peek();
@@ -245,6 +257,11 @@ namespace CycleBellLibrary
             OnChangeTimePoint(_prevQueueElement.Item2, _queue.Peek().Item2, LastTime(ref currentTime, _queue.Peek().Item1));
         }
 
+        /// <summary>
+        /// Creates alarm queue
+        /// </summary>
+        /// <param name="preset">Preset</param>
+        /// <returns>Alarm queue</returns>
         public Queue<(TimeSpan, TimePoint)> GetTimerQueue(Preset preset)
         {
             if (preset?.TimePoints == null || preset.TimePoints.Count == 0)
@@ -320,8 +337,6 @@ namespace CycleBellLibrary
         /// <param name="state"></param>
         private void TimerCallbackHandler(object state)
         {
-            // TODO:
-
             var nextTime = _queue.Peek().Item1;
             var currentTime = DateTime.Now.TimeOfDay;
 
@@ -381,7 +396,6 @@ namespace CycleBellLibrary
             _queue.Enqueue(_prevQueueElement);
 
             // If StartTimePoint are next:
-            // TODO: Change Start Time Point check condition
             if (_queue.Peek().Item2.Time < TimeSpan.Zero) {
 
                 // Если цикл не бесконечный:
@@ -427,8 +441,6 @@ namespace CycleBellLibrary
 
             return diff;
         }
-
-        
 
         #endregion Methods
     }

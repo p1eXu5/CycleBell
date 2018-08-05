@@ -1,9 +1,11 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.IO;
 using System.Linq;
 using System.Runtime.CompilerServices;
+using System.Xml.Serialization;
 
 namespace CycleBellLibrary
 {
@@ -53,7 +55,9 @@ namespace CycleBellLibrary
 
         public void LoadPresets()
         {
-            if (!String.IsNullOrEmpty(FileName) && File.Exists(FileName)) { }
+            if (!String.IsNullOrEmpty (FileName) && File.Exists (FileName)) {
+                DeserializePresets();
+            }
             else {
                NewPresets();
             }
@@ -88,6 +92,30 @@ namespace CycleBellLibrary
 
         public void SavePresets()
         {
+            SerializePresets();
+        }
+
+        private void SerializePresets()
+        {
+            XmlSerializer xmlSerializer = new XmlSerializer(typeof(List<Preset>));
+
+            using (Stream fStream = new FileStream(FileName, FileMode.Create,
+                FileAccess.Write, FileShare.None)) {
+                xmlSerializer.Serialize(fStream, _presets.ToList());
+            }
+        }
+
+        private void DeserializePresets()
+        {
+            //XmlSerializer xmlSerializer = new XmlSerializer(typeof(Preset));
+
+            //// Read JamesBondCar from the xml file.
+            //using (Stream fStream = File.OpenRead(FileName)) {
+
+            //    List<Preset> list = (Preset)xmlSerializer.Deserialize(fStream);
+
+            //    Console.WriteLine("Can this car fly? : {0}", carFromDisk.canFly);
+            //}
         }
 
         #endregion

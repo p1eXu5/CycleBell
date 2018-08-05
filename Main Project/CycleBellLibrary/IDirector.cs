@@ -15,5 +15,6 @@ namespace CycleBellLibrary
 
         void LoadPresets();
         void AddPreset(Preset preset);
+        void SavePresets();
     }
 }

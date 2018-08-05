@@ -12,6 +12,7 @@ namespace CycleBellLibrary
         Absolute = 0x02
     }
 
+    [Serializable]
     public class TimePoint
     {
         #region Fields

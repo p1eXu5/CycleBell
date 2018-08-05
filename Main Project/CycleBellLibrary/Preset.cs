@@ -5,9 +5,12 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Xml.Serialization;
 
 namespace CycleBellLibrary
 {
+    [Serializable]
+    [XmlRoot(Namespace = "http://www.MyCompany.com")]
     public class Preset
     {
         #region Fields
@@ -19,11 +22,13 @@ namespace CycleBellLibrary
 
         #region Constructors
 
+        #region Linked Constructors
+
         public Preset()
-            : this(DefaultName, null, DefaultInterval, null, false)
+           : this(DefaultName, null, DefaultInterval, null, false)
         { }
 
-        public Preset(IEnumerable<TimePoint> points) 
+        public Preset(IEnumerable<TimePoint> points)
             : this(DefaultName, points, DefaultInterval, null, false)
         { }
 
@@ -57,7 +62,9 @@ namespace CycleBellLibrary
 
         public Preset(string name, IEnumerable<TimePoint> points, string startTime, bool isInfinite)
             : this(name, points, -1, TimeSpan.Parse(startTime), isInfinite)
-        { }
+
+        { } 
+        #endregion
 
         private Preset(string name, IEnumerable<TimePoint> points, int interval, TimeSpan? startTime, bool isInfinite)
         {

@@ -24,7 +24,7 @@ namespace CycleBellConsolApp
                 Preset.DefaultInterval = 1;
 
                 // Create manager
-                var manager = CycleBellTimerManager.Instance(new Director());
+                var manager = CycleBellTimerManager.Instance(new Director("test.xml"));
 
                 AppDomain.CurrentDomain.ProcessExit += manager.OnAppExit;
 
