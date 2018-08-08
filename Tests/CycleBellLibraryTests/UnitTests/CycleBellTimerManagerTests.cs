@@ -75,8 +75,8 @@ namespace CycleBellLibraryTests
         public void GetTimerQueueReturnsOrderedQueue()
         {
             var manager = CycleBellTimerManager.Instance(mock.Object);
-            var queue = CycleBellTimerManager.GetTimerQueue(manager.Presets[0]);
-            var queue2 = CycleBellTimerManager.GetTimerQueue(manager.Presets[1]);
+            var queue = manager.GetTimerQueue(manager.Presets[0]);
+            var queue2 = manager.GetTimerQueue(manager.Presets[1]);
 
             var indx = 0;
 

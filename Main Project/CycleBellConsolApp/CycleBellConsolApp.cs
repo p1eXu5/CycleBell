@@ -28,49 +28,56 @@ namespace CycleBellConsolApp
 
                 AppDomain.CurrentDomain.ProcessExit += manager.OnAppExit;
 
-                // Create TimePoints
-                TimePoint[] points =
-                {
-                    new TimePoint {Time = TimeSpan.FromSeconds(10), TimerCycleNum = 1},
-                    new TimePoint {Time = TimeSpan.FromSeconds(15), TimerCycleNum = 2},
-                    new TimePoint {Time = TimeSpan.FromSeconds(20), TimerCycleNum = 3},
-                    new TimePoint {Time = TimeSpan.FromSeconds(30), TimerCycleNum = 1},
-                    new TimePoint {Time = TimeSpan.FromSeconds(35), TimerCycleNum = 2},
-                    new TimePoint {Time = TimeSpan.FromSeconds(40), TimerCycleNum = 3},
-                };
 
-                // Set loops counts
-                manager.Presets[0].AddTimePointRange(points);
-                manager.Presets[0].TimersCycles[1] = 4;
-                manager.Presets[0].TimersCycles[2] = 1;
-                manager.Presets[0].TimersCycles[3] = 3;
+                #region CreateTimePoints
 
-                // Create DNS time points
-                TimePoint[] dnsTimePoints = new[]
-                {
-                    new TimePoint("Начало", "8:00", TimePointType.Absolute) {Tag = ""},
-                    new TimePoint("Начало", "8:05", TimePointType.Absolute, 1),
-                    new TimePoint("Перекур", "8:55", TimePointType.Absolute, 1),
-                    new TimePoint("Начало", "9:00", TimePointType.Absolute, 1) {Tag = "../../Sounds/Kiss.wav"},
-                    new TimePoint("Начало", "9:55", TimePointType.Absolute, 1),
-                    new TimePoint("Начало", "10:05", TimePointType.Absolute, 1),
-                };
+                //// Create TimePoints
+                //TimePoint[] points =
+                //{
+                //    new TimePoint {Time = TimeSpan.FromSeconds(10), TimerCycleNum = 1},
+                //    new TimePoint {Time = TimeSpan.FromSeconds(15), TimerCycleNum = 2},
+                //    new TimePoint {Time = TimeSpan.FromSeconds(20), TimerCycleNum = 3},
+                //    new TimePoint {Time = TimeSpan.FromSeconds(30), TimerCycleNum = 1},
+                //    new TimePoint {Time = TimeSpan.FromSeconds(35), TimerCycleNum = 2},
+                //    new TimePoint {Time = TimeSpan.FromSeconds(40), TimerCycleNum = 3},
+                //};
 
-                manager.AddPreset(new Preset("DNS", dnsTimePoints, "8:00", true));
+                //// Set loops counts
+                //manager.Presets[0].AddTimePointRange(points);
+                //manager.Presets[0].TimersCycles[1] = 4;
+                //manager.Presets[0].TimersCycles[2] = 1;
+                //manager.Presets[0].TimersCycles[3] = 3;
+
+                //// Create DNS time points
+                //TimePoint[] dnsTimePoints = new[]
+                //{
+                //    new TimePoint("Начало", "8:00", TimePointType.Absolute) {Tag = ""},
+                //    new TimePoint("Начало", "8:05", TimePointType.Absolute, 1),
+                //    new TimePoint("Перекур", "8:55", TimePointType.Absolute, 1),
+                //    new TimePoint("Начало", "9:00", TimePointType.Absolute, 1) {Tag = "../../Sounds/Kiss.wav"},
+                //    new TimePoint("Начало", "9:55", TimePointType.Absolute, 1),
+                //    new TimePoint("Начало", "10:05", TimePointType.Absolute, 1),
+                //};
+
+                //manager.AddPreset(new Preset("DNS", dnsTimePoints, "8:00", true));
 
 
-                TimePoint[] testTimePoints =
-                {
-                    new TimePoint("First interval", "0:00:30"),
-                    new TimePoint("0:00:33"),
-                    new TimePoint("0:00:31"),
-                };
+                //TimePoint[] testTimePoints =
+                //{
+                //    new TimePoint("First interval", "0:00:30"),
+                //    new TimePoint("0:00:33"),
+                //    new TimePoint("0:00:31"),
+                //};
 
-                // Не гонись за идеалом. -Работает? -Работает!
-                var startTime = DateTime.Now.TimeOfDay;
-                startTime += TimeSpan.FromSeconds(11);
+                //// Не гонись за идеалом. -Работает? -Работает!
+                //var startTime = DateTime.Now.TimeOfDay;
+                //startTime += TimeSpan.FromSeconds(11);
 
-                manager.AddPreset(new Preset("Test", testTimePoints, startTime, true));
+                //manager.AddPreset(new Preset("Test", testTimePoints, startTime, true));
+
+                #endregion
+
+                // TODO ind == -1:
                 int idx = manager.GetIndex("Test"); 
 
                 #endregion

@@ -5,6 +5,7 @@ using System.Collections.Specialized;
 using System.IO;
 using System.Linq;
 using System.Runtime.CompilerServices;
+using System.Xml;
 using System.Xml.Serialization;
 
 namespace CycleBellLibrary
@@ -13,7 +14,7 @@ namespace CycleBellLibrary
     {
         #region Fields
 
-        private readonly ObservableCollection<Preset> _presets;
+        private PresetObservableCollection _presets;
 
         #endregion
 
@@ -21,7 +22,7 @@ namespace CycleBellLibrary
 
         public Director()
         {
-            _presets = new ObservableCollection<Preset>();
+            _presets = new PresetObservableCollection();
             Presets = new ReadOnlyObservableCollection<Preset>(_presets);
         }
 
@@ -55,8 +56,16 @@ namespace CycleBellLibrary
 
         public void LoadPresets()
         {
+            //NewPresets();
+            //return;
+
             if (!String.IsNullOrEmpty (FileName) && File.Exists (FileName)) {
-                DeserializePresets();
+                try {
+                    DeserializePresets();
+                }
+                catch (XmlException) {
+                    NewPresets();
+                }
             }
             else {
                NewPresets();
@@ -97,25 +106,21 @@ namespace CycleBellLibrary
 
         private void SerializePresets()
         {
-            XmlSerializer xmlSerializer = new XmlSerializer(typeof(List<Preset>));
+            using (FileStream fs = File.Open(FileName, FileMode.Create)) {
 
-            using (Stream fStream = new FileStream(FileName, FileMode.Create,
-                FileAccess.Write, FileShare.None)) {
-                xmlSerializer.Serialize(fStream, _presets.ToList());
+                XmlSerializer xmlSerializer = new XmlSerializer(typeof(PresetObservableCollection));
+                xmlSerializer.Serialize(fs, _presets);
             }
         }
 
         private void DeserializePresets()
         {
-            //XmlSerializer xmlSerializer = new XmlSerializer(typeof(Preset));
+            XmlSerializer xmlSerializer = new XmlSerializer(typeof(PresetObservableCollection));
 
-            //// Read JamesBondCar from the xml file.
-            //using (Stream fStream = File.OpenRead(FileName)) {
+            using (FileStream fStream = File.OpenRead(FileName)) {
 
-            //    List<Preset> list = (Preset)xmlSerializer.Deserialize(fStream);
-
-            //    Console.WriteLine("Can this car fly? : {0}", carFromDisk.canFly);
-            //}
+                _presets = (PresetObservableCollection)xmlSerializer.Deserialize(fStream);
+            }
         }
 
         #endregion

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml.Serialization;
 
 namespace CycleBellLibrary
 {
@@ -57,7 +58,7 @@ namespace CycleBellLibrary
 
         #region Properties
 
-            /// <summary>
+        /// <summary>
             /// Дефолтное смещение временной точки относительно текущего времени
             /// </summary>
         public static int DefaultMinutesToStart
@@ -75,6 +76,7 @@ namespace CycleBellLibrary
         /// <summary>
         /// Уникальный порядковый номер временной точки
         /// </summary>
+        [XmlIgnore]
         public int Id { get; private set; }
 
         /// <summary>
@@ -116,6 +118,7 @@ namespace CycleBellLibrary
         /// Returns absolute time by startTime
         /// </summary>
         /// <param name="startTime"></param>
+        /// <param name="convertToAbsolute"></param>
         /// <returns></returns>
         public TimeSpan GetAbsoluteTime(TimeSpan startTime, bool convertToAbsolute = false)
         {

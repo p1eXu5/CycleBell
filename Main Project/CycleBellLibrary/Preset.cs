@@ -106,39 +106,47 @@ namespace CycleBellLibrary
         /// <summary>
         /// Interval in minutes for startTime if it no set
         /// </summary>
+        [XmlIgnore]
         public static int DefaultInterval { get; set; } = 15;
 
         /// <summary>
         /// Default name for presets
         /// </summary>
+        [XmlIgnore]
         public static string DefaultName { get; set; } = "";
 
         /// <summary>
         /// Returns Preset with default settings
         /// </summary>
+        [XmlIgnore]
         public static Preset EmptyPreset => new Preset();
-
-        /// <summary>
-        /// Start time for preset
-        /// </summary>
-        public TimeSpan StartTime { get; set; }
 
         /// <summary>
         /// Preset name
         /// </summary>
+        [XmlElement(Order = 1)]
         public string PresetName { get; set; }
+
+        /// <summary>
+        /// Start time for preset
+        /// </summary>
+        [XmlElement(Order = 2)]
+        public TimeSpan StartTime { get; set; }
+
+        /// <summary>
+        /// Indicates whether the loop is infinite
+        /// </summary>
+        [XmlElement(Order = 3)]
+        public bool IsInfiniteLoop => _isInfiniteLoop != 0;
 
         public IList<TimePoint> TimePoints => _timePoints;
 
         /// <summary>
         /// # cycle - n times
         /// </summary>
+        [XmlIgnore]
         public SortedDictionary<int, int> TimersCycles { get; }
 
-        /// <summary>
-        /// Indicates whether the loop is infinite
-        /// </summary>
-        public bool IsInfiniteLoop => _isInfiniteLoop != 0;
 
         #endregion
 
