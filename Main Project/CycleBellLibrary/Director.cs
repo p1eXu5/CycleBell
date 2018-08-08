@@ -10,7 +10,7 @@ using System.Xml.Serialization;
 
 namespace CycleBellLibrary
 {
-    public class Director : IDirector
+    public sealed class Director : IDirector
     {
         #region Fields
 
@@ -46,7 +46,7 @@ namespace CycleBellLibrary
 
         #region Properties
 
-        public ReadOnlyObservableCollection<Preset> Presets { get; }
+        public ReadOnlyObservableCollection<Preset> Presets { get; private set; }
 
         public string FileName { get; set; }
 
@@ -54,11 +54,11 @@ namespace CycleBellLibrary
 
         #region Methods
 
+        /// <summary>
+        /// Deserializes or creates new empty preset
+        /// </summary>
         public void LoadPresets()
         {
-            //NewPresets();
-            //return;
-
             if (!String.IsNullOrEmpty (FileName) && File.Exists (FileName)) {
                 try {
                     DeserializePresets();
@@ -72,6 +72,9 @@ namespace CycleBellLibrary
             }
         }
 
+        /// <summary>
+        /// Clears exists presets if they are and creates new empty preset
+        /// </summary>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public void NewPresets()
         {
@@ -81,7 +84,11 @@ namespace CycleBellLibrary
             _presets.Add (new Preset());
         }
 
-        public void AddNewPreset(string name = null)
+        /// <summary>
+        /// Adds empty preset if it isn't in preset collection
+        /// </summary>
+        /// <param name="name"></param>
+        public void AddNewEmptyPreset(string name = null)
         {
             var emptyPreset = _presets.FirstOrDefault(p => p.PresetName == "");
 
@@ -97,13 +104,23 @@ namespace CycleBellLibrary
             // Now emptyPreset is filled and unsaved
         }
 
+        /// <summary>
+        /// Adds preset to preset collection
+        /// </summary>
+        /// <param name="preset"></param>
         public void AddPreset(Preset preset) => _presets.Add(preset);
 
+        /// <summary>
+        /// Serializes presets, for a while
+        /// </summary>
         public void SavePresets()
         {
             SerializePresets();
         }
 
+        /// <summary>
+        /// Serializes presets
+        /// </summary>
         private void SerializePresets()
         {
             using (FileStream fs = File.Open(FileName, FileMode.Create)) {
@@ -113,6 +130,9 @@ namespace CycleBellLibrary
             }
         }
 
+        /// <summary>
+        /// Deserialies presets
+        /// </summary>
         private void DeserializePresets()
         {
             XmlSerializer xmlSerializer = new XmlSerializer(typeof(PresetObservableCollection));
@@ -120,6 +140,7 @@ namespace CycleBellLibrary
             using (FileStream fStream = File.OpenRead(FileName)) {
 
                 _presets = (PresetObservableCollection)xmlSerializer.Deserialize(fStream);
+                Presets = new ReadOnlyObservableCollection<Preset>(_presets);
             }
         }
 

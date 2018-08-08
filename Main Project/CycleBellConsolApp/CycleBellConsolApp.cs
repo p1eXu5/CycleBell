@@ -4,16 +4,13 @@
 
 using System;
 using System.Media;
-using System.Net.Mime;
-using System.Runtime.CompilerServices;
-using System.Security.Cryptography;
 using CycleBellLibrary;
 
 namespace CycleBellConsolApp
 {
     class CycleBellConsolApp
     {
-        static void Main(string[] args)
+        static void Main()
         {
             try {
                 #region Arrange
@@ -27,7 +24,6 @@ namespace CycleBellConsolApp
                 var manager = CycleBellTimerManager.Instance(new Director("test.xml"));
 
                 AppDomain.CurrentDomain.ProcessExit += manager.OnAppExit;
-
 
                 #region CreateTimePoints
 
@@ -154,6 +150,8 @@ namespace CycleBellConsolApp
 
                 #endregion
 
+                #region MainLoop
+
                 Console.WindowHeight = Console.WindowHeight + 10;
 
                 // Run cycle
@@ -182,6 +180,8 @@ namespace CycleBellConsolApp
                         else 
                             manager.Resume();
                 }
+
+                #endregion
             }
             catch (Exception ex) {
 

@@ -1,11 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Diagnostics;
-using System.IO;
 using System.Linq;
 using System.Runtime.CompilerServices;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -34,14 +31,14 @@ namespace CycleBellLibrary
         /// <summary>
         /// The main queue. The next (TimeSpan startTimeForNextStartPoint, TimePoint nextPoint) always on the top.
         /// </summary>
-        private Queue<(TimeSpan, TimePoint)> _queue = null;
+        private Queue<(TimeSpan, TimePoint)> _queue;
 
         /// <summary>
         /// Internel timer
         /// </summary>
         private Timer _timer;
 
-        private byte _isRunning = 0;
+        private byte _isRunning;
         private TimeSpan _deltaTime;
         private byte _isInfiniteLoop;
 
@@ -295,8 +292,8 @@ namespace CycleBellLibrary
 
                             queue.Enqueue((nextTime, point));
                             localStartTime = point.GetAbsoluteTime(localStartTime);
-                        };
-                    };
+                        }
+                    }
                 }
                 // Если количество TimePoints равно одной точке:
                 else {
@@ -308,7 +305,7 @@ namespace CycleBellLibrary
 
                         queue.Enqueue((nextTime, timePoint));
                         localStartTime = timePoint.GetAbsoluteTime(localStartTime);
-                    };
+                    }
                 }
             }
 
@@ -316,9 +313,9 @@ namespace CycleBellLibrary
         }
 
         /// <summary>
-        /// 
+        /// Gets preset index
         /// </summary>
-        /// <param name="preset"></param>
+        /// <param name="name"></param>
         /// <returns></returns>
         public int GetIndex(string name)
         {

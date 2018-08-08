@@ -9,9 +9,9 @@ namespace CycleBellLibrary
     [XmlRoot("Presets")]
     public class PresetObservableCollection : ObservableCollection<Preset>, IXmlSerializable
     {
-        public XmlSchema GetSchema() => null;
+        public virtual XmlSchema GetSchema() => null;
 
-        public void ReadXml(XmlReader reader)
+        public virtual void ReadXml(XmlReader reader)
         {
             try {
                 // Читает текущий элемент с заданным именем и смещает указатель к следующему элементу
@@ -25,47 +25,50 @@ namespace CycleBellLibrary
 
                     Preset preset = new Preset();
 
+                    preset.PresetName = reader.GetAttribute("name");
+                    reader.Read();
+
+                    // ReadElementContent... - читает и перекидывает на следующий элемент
+                    preset.StartTime = TimeSpan.Parse(reader.ReadElementContentAsString());
+
+                    // Boolean - это "0", либо "1"
+                    if (reader.ReadElementContentAsBoolean())
+                        preset.SetInfiniteLoop();
+
+                    reader.ReadStartElement("TimePoints");
+
+                    // TimePoints read loop
                     while (reader.NodeType != XmlNodeType.EndElement) {
 
-                        preset.PresetName = reader.GetAttribute("name");
+                        TimePoint tp = new TimePoint();
+                        tp.Name = reader.GetAttribute("name");
                         reader.Read();
+                        tp.Time = TimeSpan.Parse(reader.ReadElementContentAsString());
+                        tp.TimePointType = (TimePointType)(reader.ReadElementContentAsInt());
+                        tp.TimerCycleNum = (byte)(reader.ReadElementContentAsInt());
 
-                        // ReadElementContent... - читает и перекидывает на следующий элемент
-                        preset.StartTime = TimeSpan.Parse(reader.ReadElementContentAsString());
-
-                        // Boolean - это "0", либо "1"
-                        if (reader.ReadElementContentAsBoolean())
-                            preset.SetInfiniteLoop();
-
-                        reader.ReadStartElement("TimePoints");
-
-                        while (reader.NodeType != XmlNodeType.EndElement) {
-
-                            TimePoint tp = new TimePoint();
-                            tp.Name = reader.GetAttribute("name");
+                        if (reader.IsEmptyElement)
                             reader.Read();
-                            tp.Time = TimeSpan.Parse(reader.ReadElementContentAsString());
-                            tp.TimePointType = (TimePointType) (reader.ReadElementContentAsInt());
-                            tp.TimerCycleNum = (byte) (reader.ReadElementContentAsInt());
-
-                            if (reader.IsEmptyElement)
-                                reader.Read();
-                            else {
-                                tp.Tag = reader.ReadElementContentAsString();
-                            }
-
-                            reader.ReadEndElement();
-
-                            preset.AddTimePoint(tp);
+                        else {
+                            tp.Tag = reader.ReadElementContentAsString();
                         }
 
                         reader.ReadEndElement();
+
+                        preset.AddTimePoint(tp);
                     }
 
+                    // </TimePoints>
+                    reader.ReadEndElement();
+
+                    // </Preset>
                     reader.ReadEndElement();
 
                     this.Add(preset);
                 }
+
+                // </Presets>
+                reader.ReadEndElement();
             }
             catch (XmlException ex) {
 
@@ -74,7 +77,7 @@ namespace CycleBellLibrary
             }
         }
 
-        public void WriteXml(XmlWriter writer)
+        public virtual void WriteXml(XmlWriter writer)
         {
             //XmlSerializer timersCyclesSerializer = new XmlSerializer(typeof(TimerCycleDictionary));
 

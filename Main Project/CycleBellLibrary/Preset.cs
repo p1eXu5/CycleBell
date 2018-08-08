@@ -2,9 +2,6 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
-using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
 using System.Xml.Serialization;
 
 namespace CycleBellLibrary
@@ -16,7 +13,7 @@ namespace CycleBellLibrary
         #region Fields
 
         private readonly ObservableCollection<TimePoint> _timePoints;
-        private byte _isInfiniteLoop = 0;
+        private byte _isInfiniteLoop;
 
         #endregion
 
@@ -176,7 +173,7 @@ namespace CycleBellLibrary
         {
             if (_timePoints.Contains(timePoint)) {
                 _timePoints.Remove(timePoint);
-            };
+            }
 
             var points = _timePoints.Where(t => t.TimerCycleNum == timePoint.TimerCycleNum).ToList();
 
