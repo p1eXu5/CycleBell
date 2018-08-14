@@ -93,6 +93,7 @@ namespace CycleBell.ModelViews
         public ActionCommand SaveCommand => new ActionCommand(SavePresets);
         public ActionCommand SaveAsCommand => new ActionCommand(SaveAsPresets);
         public ActionCommand ExitCommand => new ActionCommand(Exit);
+        public ActionCommand SoundSelectCommand => new ActionCommand(SoundSelect);
 
         public ActionCommand FirstCallCommand => new ActionCommand (p =>
                                                     {
@@ -136,9 +137,12 @@ namespace CycleBell.ModelViews
 
         private void Exit(object obj)
         {
-            // TODO:
-
             System.Windows.Application.Current.Shutdown();
+        }
+
+        private void SoundSelect()
+        {
+            throw new NotImplementedException();
         }
 
         private void About(object obj)

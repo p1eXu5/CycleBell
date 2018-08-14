@@ -1,10 +1,36 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
-    
-    <Style x:Key="st_menuuToogleButton" TargetType="{x:Type ToggleButton}">
-        <Setter Property="BorderThickness" Value="0" />
-        <Setter Property="VerticalAlignment" Value="Center" />
-        <Setter Property="HorizontalAlignment" Value="Left" />
-        <Setter Property="Background" Value="#00000000" />
+
+    <ControlTemplate x:Key="BaseButtonTemplate" TargetType="Button" >
+        <Grid SnapsToDevicePixels="True">
+            <Rectangle x:Name="rectangle"
+                                RadiusX="4" 
+                                RadiusY="4">
+                <Rectangle.Fill>
+                    <SolidColorBrush Color="{DynamicResource BackgroundColor}" />
+                </Rectangle.Fill>
+                <Rectangle.Effect>
+                    <DropShadowEffect Direction="-90" Opacity=".12" ShadowDepth="2" BlurRadius="2" />
+                </Rectangle.Effect>
+            </Rectangle>
+            <Viewbox Margin="5">
+                <ContentPresenter />
+            </Viewbox>
+        </Grid>
+    </ControlTemplate>
+
+    <Style x:Key="BaseButtonStyle">
+        <Setter Property="Control.BorderThickness" Value="0" />
+        <Setter Property="Control.VerticalAlignment" Value="Center" />
+        <Setter Property="Control.HorizontalAlignment" Value="Left" />
+        <Setter Property="Control.Template">
+            <Setter.Value>
+                <StaticResource ResourceKey="BaseButtonTemplate" />
+            </Setter.Value>
+        </Setter>
     </Style>
+    
+    <Style TargetType="Button" BasedOn="{StaticResource BaseButtonStyle}"></Style>
+    <Style TargetType="ToggleButton" BasedOn="{StaticResource BaseButtonStyle}"></Style>
+
 </ResourceDictionary>

@@ -124,7 +124,7 @@
             </MenuItem>
         </Menu>
 
-        <!-- Content -->
+        <!-- Window Content -->
         <Grid TextElement.FontSize="14">
             <Grid.RowDefinitions>
                 <RowDefinition Height="auto"/>
@@ -175,8 +175,8 @@
                         VerticalAlignment="Center" 
                         TextElement.FontFamily="{StaticResource font_SuiGeneris}" >
                 <ctrl:TextBox2 Text="{Binding StartTime, StringFormat={}{0:%h}:{0:%mm}}" 
-                               HorizontalAlignment="Center"
-                               FontSize="18"/>
+                               HorizontalAlignment="Stretch"
+                               FontSize="18" BorderThickness="1" BorderBrush="DimGray"/>
                 <Label Content="start time"
                        HorizontalAlignment="Center"/>
             </StackPanel>
@@ -200,7 +200,8 @@
                         <ColumnDefinition />
                         <ColumnDefinition />
                     </Grid.ColumnDefinitions>
-
+                    
+                    <!-- Point Data -->
                     <TextBlock x:Name="m_pointName"
                                Grid.Column="0" Grid.Row="0"
                                HorizontalAlignment="Right" VerticalAlignment="Bottom"
@@ -228,37 +229,22 @@
 
                     </TextBlock>
                     <!-- mute button -->
-                    <Button x:Name="m_muteHyperlink"
-                            Grid.Column="2" Grid.Row="0"
-                            HorizontalAlignment="Right" VerticalAlignment="Bottom" 
-                            Height="17" 
-                            Background="{x:Null}" BorderBrush="{x:Null}" 
-                            RenderTransformOrigin="0.5,0.5" Width="43"
-                            Padding="0"
-                            >
-                        <Button.RenderTransform>
-                            <TransformGroup>
-                                <ScaleTransform/>
-                                <SkewTransform/>
-                                <RotateTransform/>
-                                <TranslateTransform Y="-1" X="-3"/>
-                            </TransformGroup>
-                        </Button.RenderTransform>
-                        <TextBlock Margin="0"
-                                   Text="mute"
-                                   TextTrimming="CharacterEllipsis"
-                                   FontFamily="{StaticResource font_SuiGeneris}"
-                                   FontSize="14" Height="13"
-                                   >
-                        </TextBlock>
-                    </Button>
+                    <TextBlock Grid.Row="0" Grid.Column="2" Margin="0"
+                                Text="mute"
+                                TextTrimming="CharacterEllipsis"
+                                FontFamily="{StaticResource font_SuiGeneris}"
+                                FontSize="14" Height="13"
+                                >
+                        <Hyperlink Command="{Binding MuteCommand}">mute</Hyperlink>
+                    </TextBlock>
+
                     <!-- add sound button -->
                     <Button x:Name="m_addSoundButton"
                             Grid.Column="3" Grid.Row="0" Grid.RowSpan="2"
                             Margin="10,0"
                             Width="30" Height="30"
-                            >
-                        <Path Data=""/>
+                            Content="{StaticResource Notes}"
+                            Command="{Binding SoundSelectCommand}">
                     </Button>
                     <!-- sound name -->
                     <TextBlock x:Name="m_soundName"
@@ -285,6 +271,7 @@
                          Grid.Column="0"
                          MinWidth="100"
                          />
+                <StaticResource ResourceKey="Play" />
             </Grid>
         </Grid>
     </DockPanel>

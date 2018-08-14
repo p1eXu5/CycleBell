@@ -246,7 +246,9 @@
             </Trigger>
         </ControlTemplate.Triggers>
     </ControlTemplate>
+
     <SolidColorBrush x:Key="TextBox.Static.Background" Color="#FFFFFFFF"/>
+
     <Style x:Key="ComboBoxEditableTextBox" TargetType="{x:Type TextBox}">
         <Setter Property="OverridesDefaultStyle" Value="true"/>
         <Setter Property="AllowDrop" Value="true"/>

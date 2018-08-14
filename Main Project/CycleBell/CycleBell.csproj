@@ -57,7 +57,6 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Base\ActionCommand.cs" />
-    <Compile Include="Base\CycleBellStateFlags.cs" />
     <Compile Include="Base\Notifyer.cs" />
     <Compile Include="Base\Registrator.cs" />
     <Compile Include="Controls\TextBox2.cs" />
