@@ -17,14 +17,14 @@ namespace TimerCycleDictionarySerialization
             try {
                 #region Arrange
 
-                TimerCycleDictionary tcd = new TimerCycleDictionary();
+                TimerCycleSortedDictionary tcd = new TimerCycleSortedDictionary();
 
                 tcd[1] = 10;
                 tcd[2] = 20;
                 tcd[3] = 30;
                 tcd[4] = 40;
 
-                TimerCycleDictionary outDict;
+                TimerCycleSortedDictionary outDict;
 
                 #endregion
 
@@ -39,8 +39,8 @@ namespace TimerCycleDictionarySerialization
                 // Deserializing
                 using (FileStream fs = File.Open("TimerCycleDictionary.xml", FileMode.Open)) {
 
-                    XmlSerializer xmlSerializer = new XmlSerializer(typeof(TimerCycleDictionary));
-                    outDict = (TimerCycleDictionary)xmlSerializer.Deserialize(fs);
+                    XmlSerializer xmlSerializer = new XmlSerializer(typeof(TimerCycleSortedDictionary));
+                    outDict = (TimerCycleSortedDictionary)xmlSerializer.Deserialize(fs);
                 }
 
                 qqq:

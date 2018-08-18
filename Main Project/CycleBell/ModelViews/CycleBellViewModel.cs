@@ -140,7 +140,7 @@ namespace CycleBell.ModelViews
             System.Windows.Application.Current.Shutdown();
         }
 
-        private void SoundSelect()
+        private void SoundSelect(object obj)
         {
             throw new NotImplementedException();
         }

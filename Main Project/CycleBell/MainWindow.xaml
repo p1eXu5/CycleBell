@@ -12,16 +12,12 @@
         d:DataContext="{d:DesignInstance models:CycleBellViewModel, IsDesignTimeCreatable=True}"
         
         Title="MainWindow" 
-        Height="695" Width="374" 
+        Height="695" Width="444.125" 
         ResizeMode="CanMinimize" WindowStartupLocation="CenterScreen">
 
     <Window.Resources>
         <ResourceDictionary>
-            <FontFamily x:Key="font_FontAbuget">pack://application:,,,/../../fonts/#Abuget</FontFamily>
-            <FontFamily x:Key="res_prosto">pack://application:,,,/../../fonts/#Prosto</FontFamily>
-            <FontFamily x:Key="RussoOne">pack://application:,,,/../../fonts/#Russo One</FontFamily>
-            <FontFamily x:Key="font_SuiGeneris">pack://application:,,,/../../fonts/#Sui Generis Rg</FontFamily>
-            
+                        
             <sys:Double x:Key="SeparatorSpaseKey">15</sys:Double>
             
             <Style x:Key="Menu.Rectangle" TargetType="Rectangle">
@@ -40,6 +36,22 @@
                 <GradientStop Color="#FFECECEC" Offset="0"/>
                 <GradientStop Color="White" Offset="1"/>
             </LinearGradientBrush>
+
+            <Style  x:Key="myLBStyle" TargetType="ListBoxItem">
+                <Setter Property="Background" Value="Khaki" />
+                <Setter Property="Foreground" Value="DarkSlateGray" />
+                <Setter Property="Margin" Value="5" />
+                <Setter Property="FontStyle" Value="Italic" />
+                <Setter Property="FontSize" Value="14" />
+                <Setter Property="BorderBrush" Value="DarkGray" />
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="ListBoxItem">
+                            <ContentPresenter Content="{TemplateBinding Content}" />
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+            </Style>
 
         </ResourceDictionary>
     </Window.Resources>
@@ -188,13 +200,14 @@
                      MinHeight="150"
                      BorderThickness="0"
                      ScrollViewer.HorizontalScrollBarVisibility="Hidden"
-                     >
+                     ItemContainerStyle="{StaticResource myLBStyle}">
                 <Grid>
                     <Grid.RowDefinitions>
                         <RowDefinition />
                         <RowDefinition />
                     </Grid.RowDefinitions>
                     <Grid.ColumnDefinitions>
+                        <ColumnDefinition />
                         <ColumnDefinition />
                         <ColumnDefinition />
                         <ColumnDefinition />
@@ -246,6 +259,10 @@
                             Content="{StaticResource Notes}"
                             Command="{Binding SoundSelectCommand}">
                     </Button>
+                    
+                    <ToggleButton x:Name="m_delTimePoint"
+                                  Grid.Column="4" Grid.Row="0" Grid.RowSpan="2"
+                                  Width="30" Height="30" Content="del" />
                     <!-- sound name -->
                     <TextBlock x:Name="m_soundName"
                                Grid.Column="0" Grid.ColumnSpan="3" Grid.Row="1"
@@ -271,7 +288,6 @@
                          Grid.Column="0"
                          MinWidth="100"
                          />
-                <StaticResource ResourceKey="Play" />
             </Grid>
         </Grid>
     </DockPanel>

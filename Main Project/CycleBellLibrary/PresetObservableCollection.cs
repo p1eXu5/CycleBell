@@ -13,6 +13,8 @@ namespace CycleBellLibrary
 
         public virtual void ReadXml(XmlReader reader)
         {
+            XmlSerializer timersCyclesSerializer = new XmlSerializer(typeof(TimerCycleSortedDictionary));
+
             try {
                 // Читает текущий элемент с заданным именем и смещает указатель к следующему элементу
                 // иначе бросает исключение
@@ -25,19 +27,22 @@ namespace CycleBellLibrary
 
                     Preset preset = new Preset();
 
+                    // <Preset name=_ >
                     preset.PresetName = reader.GetAttribute("name");
                     reader.Read();
 
-                    // ReadElementContent... - читает и перекидывает на следующий элемент
+                    // <StartTime> (ReadElementContentAs... - читает и перекидывает на следующий элемент)
                     preset.StartTime = TimeSpan.Parse(reader.ReadElementContentAsString());
+                    // </StartrTime>
 
-                    // Boolean - это "0", либо "1"
+                    // <InfiniteLoop> (Boolean - это "0", либо "1")
                     if (reader.ReadElementContentAsBoolean())
                         preset.SetInfiniteLoop();
+                    // </InfiniteLoop>
 
                     reader.ReadStartElement("TimePoints");
 
-                    // TimePoints read loop
+                    // <TimePoints>
                     while (reader.NodeType != XmlNodeType.EndElement) {
 
                         TimePoint tp = new TimePoint();
@@ -61,6 +66,10 @@ namespace CycleBellLibrary
                     // </TimePoints>
                     reader.ReadEndElement();
 
+                    // <TimerCycles>
+                    preset.TimersCycles = (TimerCycleSortedDictionary) timersCyclesSerializer.Deserialize(reader);
+                    // </TimerCycles>
+
                     // </Preset>
                     reader.ReadEndElement();
 
@@ -79,7 +88,7 @@ namespace CycleBellLibrary
 
         public virtual void WriteXml(XmlWriter writer)
         {
-            //XmlSerializer timersCyclesSerializer = new XmlSerializer(typeof(TimerCycleDictionary));
+            XmlSerializer timersCyclesSerializer = new XmlSerializer(typeof(TimerCycleSortedDictionary));
 
             for (int i = 0; i < this.Count; ++i) {
 
@@ -105,7 +114,7 @@ namespace CycleBellLibrary
 
                 writer.WriteEndElement();
 
-                //timersCyclesSerializer.Serialize(writer,this[0].TimersCycles);
+                timersCyclesSerializer.Serialize(writer,this[i].TimersCycles);
 
                 writer.WriteEndElement();
             }

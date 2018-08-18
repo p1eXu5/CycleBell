@@ -2,12 +2,9 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
-using System.Xml.Serialization;
 
 namespace CycleBellLibrary
 {
-    [Serializable]
-    [XmlRoot(Namespace = "http://www.MyCompany.com")]
     public class Preset
     {
         #region Fields
@@ -69,7 +66,7 @@ namespace CycleBellLibrary
 
             if (isInfinite) _isInfiniteLoop |= 0x01;
 
-            TimersCycles = new SortedDictionary<int, int>();
+            TimersCycles = new TimerCycleSortedDictionary();
             _timePoints = new ObservableCollection<TimePoint>();
 
             var pointList = points?.ToList();
@@ -103,37 +100,31 @@ namespace CycleBellLibrary
         /// <summary>
         /// Interval in minutes for startTime if it no set
         /// </summary>
-        [XmlIgnore]
         public static int DefaultInterval { get; set; } = 15;
 
         /// <summary>
         /// Default name for presets
         /// </summary>
-        [XmlIgnore]
         public static string DefaultName { get; set; } = "";
 
         /// <summary>
         /// Returns Preset with default settings
         /// </summary>
-        [XmlIgnore]
         public static Preset EmptyPreset => new Preset();
 
         /// <summary>
         /// Preset name
         /// </summary>
-        [XmlElement(Order = 1)]
         public string PresetName { get; set; }
 
         /// <summary>
         /// Start time for preset
         /// </summary>
-        [XmlElement(Order = 2)]
         public TimeSpan StartTime { get; set; }
 
         /// <summary>
         /// Indicates whether the loop is infinite
         /// </summary>
-        [XmlElement(Order = 3)]
         public bool IsInfiniteLoop => _isInfiniteLoop != 0;
 
         public IList<TimePoint> TimePoints => _timePoints;
@@ -141,9 +132,7 @@ namespace CycleBellLibrary
         /// <summary>
         /// # cycle - n times
         /// </summary>
-        [XmlIgnore]
-        public SortedDictionary<int, int> TimersCycles { get; }
-
+        public TimerCycleSortedDictionary TimersCycles { get; set; }
 
         #endregion
 

@@ -1,8 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Xml;
 using System.Xml.Schema;
 using System.Xml.Serialization;
@@ -10,7 +7,7 @@ using System.Xml.Serialization;
 namespace CycleBellLibrary
 {
     [XmlRoot("TimerCycles")]
-    public class TimerCycleDictionary : SortedDictionary<int, int>, IXmlSerializable
+    public class TimerCycleSortedDictionary : SortedDictionary<int, int>, IXmlSerializable
     {
         public XmlSchema GetSchema() => null;
 
@@ -38,8 +35,6 @@ namespace CycleBellLibrary
 
         public void WriteXml(XmlWriter writer)
         {
-            //writer.WriteElementString("Count", this.Count.ToString());
-
             foreach (var key in Keys) {
 
                 writer.WriteStartElement("Element");

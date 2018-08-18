@@ -73,7 +73,6 @@ namespace CycleBellConsolApp
 
                 #endregion
 
-                // TODO ind == -1:
                 int idx = manager.GetIndex("Test"); 
 
                 #endregion

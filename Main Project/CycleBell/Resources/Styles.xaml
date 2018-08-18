@@ -1,8 +1,24 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
 
-    <ControlTemplate x:Key="BaseButtonTemplate" TargetType="Button" >
+    <ControlTemplate x:Key="BaseButtonTemplate" TargetType="ButtonBase" >
         <Grid SnapsToDevicePixels="True">
+            <VisualStateManager.VisualStateGroups>
+                <!-- Button's states -->
+                <VisualStateGroup x:Name="CommonStates">
+                    <VisualState x:Name="Normal">
+                        <Storyboard>
+                            <DoubleAnimation Storyboard.TargetProperty="(UIElement.Effect).(DropShadowEffect.ShadowDepth)" 
+                                             Storyboard.TargetName="rectangle"
+                                             To="1.0" Duration="0:0:.4"/>
+                            <DoubleAnimation Storyboard.TargetProperty="(UIElement.Effect).(DropShadowEffect.Opacity)" 
+                                             Storyboard.TargetName="rectangle"
+                                             To="0.0" Duration="0:0:.4"/>
+                        </Storyboard>
+                    </VisualState>
+                    <VisualState x:Name="MouseOver" />
+                </VisualStateGroup>
+            </VisualStateManager.VisualStateGroups>
             <Rectangle x:Name="rectangle"
                                 RadiusX="4" 
                                 RadiusY="4">
@@ -10,11 +26,13 @@
                     <SolidColorBrush Color="{DynamicResource BackgroundColor}" />
                 </Rectangle.Fill>
                 <Rectangle.Effect>
-                    <DropShadowEffect Direction="-90" Opacity=".12" ShadowDepth="2" BlurRadius="2" />
+                    <DropShadowEffect x:Name="m_shadow" Direction="-90" 
+                                      Opacity=".12" 
+                                      ShadowDepth="2" BlurRadius="2" />
                 </Rectangle.Effect>
             </Rectangle>
             <Viewbox Margin="5">
-                <ContentPresenter />
+                <ContentPresenter Content="{TemplateBinding Content}"/>
             </Viewbox>
         </Grid>
     </ControlTemplate>
@@ -23,6 +41,10 @@
         <Setter Property="Control.BorderThickness" Value="0" />
         <Setter Property="Control.VerticalAlignment" Value="Center" />
         <Setter Property="Control.HorizontalAlignment" Value="Left" />
+        <Setter Property="Control.FontWeight" Value="Bold" />
+        <Setter Property="Control.FontFamily" Value="{StaticResource font_SuiGeneris}" />
+        <Setter Property="Control.Foreground" Value="{DynamicResource UncheckedStrokeBrush}"></Setter>
+        <Setter Property="Control.FontSize" Value="1" />
         <Setter Property="Control.Template">
             <Setter.Value>
                 <StaticResource ResourceKey="BaseButtonTemplate" />
