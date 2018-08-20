@@ -8,6 +8,8 @@ using System.Windows;
 using CycleBell.Base;
 using CycleBell.ModelViews;
 using CycleBell.Views;
+using CycleBellLibrary;
+using Unity;
 
 namespace CycleBell
 {
@@ -18,12 +20,17 @@ namespace CycleBell
     {
         protected override void OnStartup(StartupEventArgs e)
         {
+            base.OnStartup (e);
+
             Window wnd = new MainWindow();
 
-            Registrator registrator = new Registrator(wnd);
-            registrator.Register<AboutDialogViewModel,AboutWindow>();
+            DialogRegistrator dialogRegistrator = new DialogRegistrator(wnd);
+            dialogRegistrator.Register<AboutDialogViewModel,AboutWindow>();
 
-            wnd.DataContext = new CycleBellViewModel(registrator);
+            var manager = CycleBellTimerManager.Instance (new PresetManager());
+
+            wnd.DataContext = new MainViewModel (dialogRegistrator, manager);
+
             wnd.ShowDialog();
         }
     }

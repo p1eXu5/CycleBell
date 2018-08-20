@@ -21,7 +21,7 @@ namespace CycleBellConsolApp
                 Preset.DefaultInterval = 1;
 
                 // Create manager
-                var manager = CycleBellTimerManager.Instance(new Director("test.xml"));
+                var manager = CycleBellTimerManager.Instance(new PresetManager("test.xml"));
 
                 AppDomain.CurrentDomain.ProcessExit += manager.OnAppExit;
 
@@ -40,9 +40,9 @@ namespace CycleBellConsolApp
 
                 //// Set loops counts
                 //manager.Presets[0].AddTimePointRange(points);
-                //manager.Presets[0].TimersCycles[1] = 4;
-                //manager.Presets[0].TimersCycles[2] = 1;
-                //manager.Presets[0].TimersCycles[3] = 3;
+                //manager.Presets[0].TimerCycles[1] = 4;
+                //manager.Presets[0].TimerCycles[2] = 1;
+                //manager.Presets[0].TimerCycles[3] = 3;
 
                 //// Create DNS time points
                 //TimePoint[] dnsTimePoints = new[]

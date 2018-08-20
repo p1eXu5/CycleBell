@@ -12,7 +12,7 @@ namespace CycleBellLibrary
     /// Посредник, менеджер.
     /// Дай мыне дирехтора!
     /// </summary>
-    public class CycleBellTimerManager
+    public class CycleBellTimerManager : ICycleBellTimerManager
     {
         public const string RestartString = "Restart";
 
@@ -26,7 +26,7 @@ namespace CycleBellLibrary
         /// <summary>
         /// Дирехтор
         /// </summary>
-        private readonly IDirector _director;
+        private readonly IPresetManager _presetManager;
 
         /// <summary>
         /// The main queue. The next (TimeSpan startTimeForNextStartPoint, TimePoint nextPoint) always on the top.
@@ -51,22 +51,22 @@ namespace CycleBellLibrary
 
         #region Constructor
 
-        private CycleBellTimerManager(IDirector director)
+        private CycleBellTimerManager(IPresetManager presetManager)
         {
             // Устанавливаем дирехтора
-            _director = director;
+            _presetManager = presetManager;
 
             // Заводим коллекцию
-            _director.LoadPresets();
+            _presetManager.LoadPresets();
         }
 
         /// <summary>
-        /// Gets instance of manager and if IDirector.FileName is Exist loads presets or loads only one empty preset
+        /// Gets instance of manager and if IPresetManager.FileName is Exist loads presets or loads only one empty preset
         /// </summary>
-        /// <param name="director"></param>
+        /// <param name="presetManager"></param>
         /// <returns></returns>
-        public static CycleBellTimerManager Instance(IDirector director) 
-            => _cycleBellTimerManager ?? (_cycleBellTimerManager = new CycleBellTimerManager(director));
+        public static CycleBellTimerManager Instance(IPresetManager presetManager) 
+            => _cycleBellTimerManager ?? (_cycleBellTimerManager = new CycleBellTimerManager(presetManager));
         
         #endregion
 
@@ -74,14 +74,14 @@ namespace CycleBellLibrary
 
         public event EventHandler<TimePointEventArgs> ChangeTimePointEvent;
 
-        public virtual void OnChangeTimePoint(TimePoint prevTimePoint, TimePoint nextTimePoint, TimeSpan lastTime)
+        private void OnChangeTimePoint(TimePoint prevTimePoint, TimePoint nextTimePoint, TimeSpan lastTime)
         {
             ChangeTimePointEvent?.Invoke(this, new TimePointEventArgs(prevTimePoint, nextTimePoint, lastTime));
         }
 
         public event EventHandler<TimePointEventArgs> TimerSecondPassedEvent;
 
-        public virtual void OnTimerSecondPassed(TimePoint nextTimePoint, TimeSpan lastTime)
+        private void OnTimerSecondPassed(TimePoint nextTimePoint, TimeSpan lastTime)
         {
             TimerSecondPassedEvent?.Invoke(this, new TimePointEventArgs(null, nextTimePoint, lastTime));
         }
@@ -89,7 +89,7 @@ namespace CycleBellLibrary
         public event EventHandler TimerStopEvent;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public virtual void OnTimerStop()
+        private void OnTimerStop()
         {
             TimerStopEvent?.Invoke(this, EventArgs.Empty);
         }
@@ -100,7 +100,7 @@ namespace CycleBellLibrary
 
         public static int Accuracy { get; set; } =300;
 
-        public ReadOnlyObservableCollection<Preset> Presets => _director.Presets;
+        public ReadOnlyObservableCollection<Preset> Presets => _presetManager.Presets;
         public bool IsRunning => _isRunning != 0;
 
         #endregion
@@ -113,7 +113,7 @@ namespace CycleBellLibrary
         /// <param name="i"></param>
         /// <returns></returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public int GetDueTime (int i) => Accuracy - (i % Accuracy);
+        private int GetDueTime (int i) => Accuracy - (i % Accuracy);
 
         /// <summary>
         /// Invoked by App exit event
@@ -124,18 +124,18 @@ namespace CycleBellLibrary
         {
             // TODO serialization:
 
-            _director.SavePresets();
+            _presetManager.SavePresets();
 
             Console.WriteLine ("Program ending");
         }
 
         /// <summary>
-        /// Add preset to inner director's collection
+        /// Add preset to inner presetManager's collection
         /// </summary>
         /// <param name="preset"></param>
-        public void AddPreset(Preset preset) => _director.AddPreset(preset);
+        public void AddPreset(Preset preset) => _presetManager.AddPreset(preset);
 
-        public void ReloadPresets() => _director.LoadPresets();
+        public void ReloadPresets() => _presetManager.LoadPresets();
 
         /// <summary>
         /// Pause timer loop
@@ -259,7 +259,7 @@ namespace CycleBellLibrary
         /// </summary>
         /// <param name="preset">Preset</param>
         /// <returns>Alarm queue</returns>
-        public Queue<(TimeSpan, TimePoint)> GetTimerQueue(Preset preset)
+        public static Queue<(TimeSpan, TimePoint)> GetTimerQueue(Preset preset)
         {
             if (preset?.TimePoints == null || preset.TimePoints.Count == 0)
                 return null;
@@ -274,7 +274,7 @@ namespace CycleBellLibrary
             // Заполняем очередь
 
             // Для всех временных сегментов
-            foreach (var timerCycle in preset.TimersCycles.Keys) {
+            foreach (var timerCycle in preset.TimerCycles.Keys) {
 
                 TimeSpan nextTime;
 
@@ -284,7 +284,7 @@ namespace CycleBellLibrary
                     var timePoints = preset.TimePoints.Where(t => t.TimerCycleNum == timerCycle).OrderBy(t => t.Id)
                                            .ToList();
 
-                    for (var i = 0; i < preset.TimersCycles[timerCycle]; ++i) {
+                    for (var i = 0; i < preset.TimerCycles[timerCycle]; ++i) {
 
                         foreach (var point in timePoints) {
 
@@ -299,7 +299,7 @@ namespace CycleBellLibrary
                 else {
                     var timePoint = preset.TimePoints[0];
 
-                    for (var i = 0; i < preset.TimersCycles[timerCycle]; ++i) {
+                    for (var i = 0; i < preset.TimerCycles[timerCycle]; ++i) {
 
                         nextTime = timePoint.GetAbsoluteTime(localStartTime);
 

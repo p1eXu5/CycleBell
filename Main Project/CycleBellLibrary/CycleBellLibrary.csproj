@@ -40,11 +40,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ICycleBellTimerManager.cs" />
     <Compile Include="PresetObservableCollection.cs" />
     <Compile Include="TimePointEventArgs.cs" />
     <Compile Include="CycleBellTimerManager.cs" />
-    <Compile Include="Director.cs" />
-    <Compile Include="IDirector.cs" />
+    <Compile Include="PresetManager.cs" />
+    <Compile Include="IPresetManager.cs" />
     <Compile Include="Preset.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TimePoint.cs" />

@@ -32,7 +32,7 @@ namespace CycleBell.Base
         public bool? DialogResult { get; }
     }
 
-    public interface IRegistrator
+    public interface IDialogRegistrator
     {
         void Register<TViewModel, TView>() where      TView : IDialog
             where TViewModel : IDialogCloseRequested;
@@ -40,12 +40,12 @@ namespace CycleBell.Base
         bool? ShowDialog<TViewModel>(TViewModel viewModel) where TViewModel: IDialogCloseRequested;
     }
 
-    public class Registrator : IRegistrator
+    public class DialogRegistrator : IDialogRegistrator
     {
         private Dictionary<Type, Type> _map;
         private Window _owner;
 
-        public Registrator(Window window)
+        public DialogRegistrator(Window window)
         {
             _map = new Dictionary<Type, Type>();
             _owner = window;

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace CycleBellLibrary
 {
-    public interface IDirector
+    public interface IPresetManager
     {
         event NotifyCollectionChangedEventHandler CollectionChanged;
 

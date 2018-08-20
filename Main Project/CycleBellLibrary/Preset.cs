@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Linq;
 
 namespace CycleBellLibrary
@@ -9,7 +8,6 @@ namespace CycleBellLibrary
     {
         #region Fields
 
-        private readonly ObservableCollection<TimePoint> _timePoints;
         private byte _isInfiniteLoop;
 
         #endregion
@@ -66,9 +64,10 @@ namespace CycleBellLibrary
 
             if (isInfinite) _isInfiniteLoop |= 0x01;
 
-            TimersCycles = new TimerCycleSortedDictionary();
-            _timePoints = new ObservableCollection<TimePoint>();
+            TimerCycles = new TimerCycleSortedDictionary();
+            TimePoints = new List<TimePoint>();
 
+            // TimePoints seting
             var pointList = points?.ToList();
 
             if (pointList != null && pointList.Count > 0) {
@@ -83,6 +82,7 @@ namespace CycleBellLibrary
                 return;
             }
 
+            // StartTime setting
             var currentTime = DateTime.Now.TimeOfDay;
 
             if (startTime != null) {
@@ -127,12 +127,12 @@ namespace CycleBellLibrary
         /// </summary>
         public bool IsInfiniteLoop => _isInfiniteLoop != 0;
 
-        public IList<TimePoint> TimePoints => _timePoints;
+        public List<TimePoint> TimePoints { get; }
 
         /// <summary>
         /// # cycle - n times
         /// </summary>
-        public TimerCycleSortedDictionary TimersCycles { get; set; }
+        public TimerCycleSortedDictionary TimerCycles { get; set; }
 
         #endregion
 
@@ -144,10 +144,10 @@ namespace CycleBellLibrary
         /// <param name="timePoint"></param>
         public void AddTimePoint(TimePoint timePoint)
         {
-            _timePoints.Add(timePoint);
+            TimePoints.Add(timePoint);
 
-            if (!TimersCycles.ContainsKey(timePoint.TimerCycleNum)) {
-                TimersCycles[timePoint.TimerCycleNum] = 1;
+            if (!TimerCycles.ContainsKey(timePoint.TimerCycleNum)) {
+                TimerCycles[timePoint.TimerCycleNum] = 1;
             }
         }
 
@@ -160,14 +160,14 @@ namespace CycleBellLibrary
 
         public void RemoveTimePoint(TimePoint timePoint)
         {
-            if (_timePoints.Contains(timePoint)) {
-                _timePoints.Remove(timePoint);
+            if (TimePoints.Contains(timePoint)) {
+                TimePoints.Remove(timePoint);
             }
 
-            var points = _timePoints.Where(t => t.TimerCycleNum == timePoint.TimerCycleNum).ToList();
+            var points = TimePoints.Where(t => t.TimerCycleNum == timePoint.TimerCycleNum).ToList();
 
             if (points.Count == 0) {
-                TimersCycles.Remove(timePoint.TimerCycleNum);
+                TimerCycles.Remove(timePoint.TimerCycleNum);
             }
         }
 

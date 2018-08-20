@@ -14,7 +14,7 @@ namespace CycleBellLibraryTests
     [TestClass]
     public class CycleBellTimerManagerTests
     {
-        private readonly Mock<IDirector> mock = new Mock<IDirector>();
+        private readonly Mock<IPresetManager> mock = new Mock<IPresetManager>();
         private ObservableCollection<Preset> _presets;
         private ReadOnlyObservableCollection<Preset> _readOnlePresets;
         private TimeSpan[][] checker;
@@ -94,7 +94,7 @@ namespace CycleBellLibraryTests
         [TestMethod]
         public void CycleBellTimerManagerReturnsEmptyPreset()
         {
-            Director director = new Director();
+            PresetManager presetManager = new PresetManager();
             var manager = CycleBellTimerManager.Instance(mock.Object);
 
             Assert.AreEqual(manager.Presets[0].PresetName, Preset.EmptyPreset.PresetName);

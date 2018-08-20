@@ -10,7 +10,7 @@ using System.Xml.Serialization;
 
 namespace CycleBellLibrary
 {
-    public sealed class Director : IDirector
+    public sealed class PresetManager : IPresetManager
     {
         #region Fields
 
@@ -20,13 +20,13 @@ namespace CycleBellLibrary
 
         #region Constructor
 
-        public Director()
+        public PresetManager()
         {
             _presets = new PresetObservableCollection();
             Presets = new ReadOnlyObservableCollection<Preset>(_presets);
         }
 
-        public Director(string fileName) : this()
+        public PresetManager(string fileName) : this()
         {
             FileName = fileName;
             LoadPresets();

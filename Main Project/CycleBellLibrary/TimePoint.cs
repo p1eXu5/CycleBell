@@ -72,6 +72,7 @@ namespace CycleBellLibrary
         /// </summary>
         public static string FirstPointName { get; set; } = "Launch Time";
 
+        //public static byte LastTimePointNum => (byte)(_timePointNum - 1);
 
         /// <summary>
         /// Уникальный порядковый номер временной точки
@@ -180,6 +181,10 @@ namespace CycleBellLibrary
             return res;
         }
 
+        /// <summary>
+        /// Changes Id of current instance of this class with timePoint's Id
+        /// </summary>
+        /// <param name="timePoint"></param>
         public void ChangeId(TimePoint timePoint)
         {
             timePoint.Id ^= this.Id;

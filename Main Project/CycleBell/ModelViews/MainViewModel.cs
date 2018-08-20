@@ -10,15 +10,18 @@ using System.Windows.Data;
 using CycleBell.Annotations;
 using CycleBell.Base;
 using CycleBell.Models;
+using CycleBellLibrary;
 
 namespace CycleBell.ModelViews
 {
-    public class CycleBellViewModel : INotifyPropertyChanged
+    public class MainViewModel : INotifyPropertyChanged
     {
         #region Private
 
+        private ICycleBellTimerManager _manager;
+
         private CycleBellStateFlags _cycleBellState;
-        private IRegistrator _registrator;
+        private IDialogRegistrator _dialogRegistrator;
         private PresetViewModel _selectedPreset;
         private List<PresetViewModel> _presets;
 
@@ -26,10 +29,10 @@ namespace CycleBell.ModelViews
 
         #region Constructor
 
-        public CycleBellViewModel(IRegistrator registrator)
+        public MainViewModel(IDialogRegistrator dialogRegistrator, ICycleBellTimerManager cbtm)
         {
-            _registrator = registrator;
-            
+            _dialogRegistrator = dialogRegistrator;
+            _manager = cbtm;
         }
 
         #endregion Constructor
@@ -148,7 +151,7 @@ namespace CycleBell.ModelViews
         private void About(object obj)
         {
             var viewModel = new AboutDialogViewModel();
-            bool? res = _registrator.ShowDialog(viewModel);
+            bool? res = _dialogRegistrator.ShowDialog(viewModel);
 
             ;
 

@@ -67,7 +67,7 @@ namespace CycleBellLibrary
                     reader.ReadEndElement();
 
                     // <TimerCycles>
-                    preset.TimersCycles = (TimerCycleSortedDictionary) timersCyclesSerializer.Deserialize(reader);
+                    preset.TimerCycles = (TimerCycleSortedDictionary) timersCyclesSerializer.Deserialize(reader);
                     // </TimerCycles>
 
                     // </Preset>
@@ -114,7 +114,7 @@ namespace CycleBellLibrary
 
                 writer.WriteEndElement();
 
-                timersCyclesSerializer.Serialize(writer,this[i].TimersCycles);
+                timersCyclesSerializer.Serialize(writer,this[i].TimerCycles);
 
                 writer.WriteEndElement();
             }

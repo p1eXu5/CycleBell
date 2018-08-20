@@ -9,7 +9,7 @@
         xmlns:ctrl="clr-namespace:CycleBell.Controls"
         xmlns:Themes="clr-namespace:Microsoft.Windows.Themes;assembly=PresentationFramework.Aero2" x:Class="CycleBell.MainWindow"
         mc:Ignorable="d"
-        d:DataContext="{d:DesignInstance models:CycleBellViewModel, IsDesignTimeCreatable=True}"
+        d:DataContext="{d:DesignInstance models:MainViewModel, IsDesignTimeCreatable=True}"
         
         Title="MainWindow" 
         Height="695" Width="444.125" 
