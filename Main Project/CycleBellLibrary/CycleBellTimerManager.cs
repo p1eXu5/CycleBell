@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Collections.Specialized;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Threading;
@@ -71,6 +72,11 @@ namespace CycleBellLibrary
         #endregion
 
         #region Events
+        public event NotifyCollectionChangedEventHandler PresetCollectionChanged
+        {
+            add => _presetManager.CollectionChanged += value;
+            remove => _presetManager.CollectionChanged -= value;
+        }
 
         public event EventHandler<TimePointEventArgs> ChangeTimePointEvent;
 

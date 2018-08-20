@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Globalization;
 using System.Linq;
@@ -23,7 +24,7 @@ namespace CycleBell.ModelViews
         private CycleBellStateFlags _cycleBellState;
         private IDialogRegistrator _dialogRegistrator;
         private PresetViewModel _selectedPreset;
-        private List<PresetViewModel> _presets;
+        private ObservableCollection<PresetViewModel> _presets;
 
         #endregion Private
 
@@ -33,6 +34,13 @@ namespace CycleBell.ModelViews
         {
             _dialogRegistrator = dialogRegistrator;
             _manager = cbtm;
+
+            _presets = new ObservableCollection<PresetViewModel>(_manager.Presets.Select(p => new PresetViewModel(p)));
+            _manager.PresetCollectionChanged += (s, e) =>
+                                                {
+                                                    // TODO:
+
+                                                };
         }
 
         #endregion Constructor

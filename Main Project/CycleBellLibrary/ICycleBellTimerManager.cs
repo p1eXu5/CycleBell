@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.ObjectModel;
+using System.Collections.Specialized;
 
 namespace CycleBellLibrary
 {
     public interface ICycleBellTimerManager
     {
+        event NotifyCollectionChangedEventHandler PresetCollectionChanged;
         event EventHandler<TimePointEventArgs> ChangeTimePointEvent;
         event EventHandler<TimePointEventArgs> TimerSecondPassedEvent;
         event EventHandler TimerStopEvent;

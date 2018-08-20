@@ -84,7 +84,6 @@
     <Compile Include="Base\Notifyer.cs" />
     <Compile Include="Base\DialogRegistrator.cs" />
     <Compile Include="Controls\TextBox2.cs" />
-    <Compile Include="Models\Preset.cs" />
     <Compile Include="Models\PresetsDispatcher.cs" />
     <Compile Include="Models\TimePoint.cs" />
     <Compile Include="ModelViews\AboutDialogViewModel.cs" />

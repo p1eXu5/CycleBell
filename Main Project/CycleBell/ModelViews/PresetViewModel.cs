@@ -6,8 +6,9 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using CycleBell.Base;
-using CycleBell.Models;
+using CycleBellLibrary;
 using Microsoft.Win32;
+using TimePoint = CycleBell.Models.TimePoint;
 
 namespace CycleBell.ModelViews
 {
@@ -23,10 +24,12 @@ namespace CycleBell.ModelViews
     /// </summary>
     public class PresetViewModel
     {
+        private Preset _preset;
         private List<TimePointViewModel> _timePoints;
 
-        public PresetViewModel()
+        public PresetViewModel(Preset preset)
         {
+            _preset = preset;
             _timePoints = new List<TimePointViewModel>();
         }
 
