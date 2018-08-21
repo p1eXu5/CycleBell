@@ -10,26 +10,20 @@ using System.Xml.Serialization;
 
 namespace CycleBellLibrary
 {
-    public sealed class PresetManager : IPresetManager
+    public sealed class PresetsManager : IPresetsManager
     {
         #region Fields
 
-        private PresetObservableCollection _presets;
+        private readonly PresetObservableCollection _presets;
 
         #endregion
 
         #region Constructor
 
-        public PresetManager()
+        public PresetsManager()
         {
             _presets = new PresetObservableCollection();
             Presets = new ReadOnlyObservableCollection<Preset>(_presets);
-        }
-
-        public PresetManager(string fileName) : this()
-        {
-            FileName = fileName;
-            LoadPresets();
         }
 
         #endregion
@@ -55,60 +49,29 @@ namespace CycleBellLibrary
         #region Methods
 
         /// <summary>
-        /// Deserializes or creates new empty preset
+        /// Clear preset collection
         /// </summary>
-        public void LoadPresets()
-        {
-            if (!String.IsNullOrEmpty (FileName) && File.Exists (FileName)) {
-                try {
-                    DeserializePresets();
-                }
-                catch (XmlException) {
-                    NewPresets();
-                }
-            }
-            else {
-               NewPresets();
-            }
-        }
-
-        /// <summary>
-        /// Clears exists presets if they are and creates new empty preset
-        /// </summary>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public void NewPresets()
+        public void Clear()
         {
             if (_presets.Count > 0) {
                 _presets.Clear();
             }
-            _presets.Add (new Preset());
         }
 
         /// <summary>
-        /// Adds empty preset if it isn't in preset collection
+        /// Deserializes or creates new empty preset
         /// </summary>
-        /// <param name="name"></param>
-        public void AddNewEmptyPreset(string name = null)
+        public void LoadFromFile(string fileName)
         {
-            var emptyPreset = _presets.FirstOrDefault(p => p.PresetName == "");
-
-            if (emptyPreset == null) {
-
-                _presets.Add(new Preset(name));
-                return;
-            }
-
-            if (!emptyPreset.TimePoints.Any())
-                return;
-
-            // Now emptyPreset is filled and unsaved
+            CheckFileName (fileName);
+            DeserializePresets();
         }
 
         /// <summary>
         /// Adds preset to preset collection
         /// </summary>
         /// <param name="preset"></param>
-        public void AddPreset(Preset preset) => _presets.Add(preset);
+        public void Add(Preset preset) => _presets.Add(preset);
 
         /// <summary>
         /// Serializes presets, for a while
@@ -136,12 +99,28 @@ namespace CycleBellLibrary
         private void DeserializePresets()
         {
             XmlSerializer xmlSerializer = new XmlSerializer(typeof(PresetObservableCollection));
-
             using (FileStream fStream = File.OpenRead(FileName)) {
 
-                _presets = (PresetObservableCollection)xmlSerializer.Deserialize(fStream);
-                Presets = new ReadOnlyObservableCollection<Preset>(_presets);
+                var presets = (PresetObservableCollection)xmlSerializer.Deserialize(fStream);
+
+                if (presets.Count > 0) {
+                    _presets.Clear();
+                    foreach (var preset in presets) {
+                        _presets.Add (preset);
+                    }
+                }
             }
+        }
+
+        /// <summary>
+        /// Checks input file name
+        /// </summary>
+        /// <param name="fileName"></param>
+        /// <exception cref="ArgumentException"></exception>
+        private void CheckFileName (string fileName)
+        {
+            if (String.IsNullOrEmpty (fileName) || !File.Exists (fileName))
+                throw new ArgumentException("Invalid file name or file doesn't exist", nameof(fileName));
         }
 
         #endregion

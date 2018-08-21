@@ -30,8 +30,8 @@ namespace CycleBell
             dialogRegistrator.Register<AboutDialogViewModel,AboutWindow>();
             container.RegisterInstance<IDialogRegistrator>(dialogRegistrator);
 
-            var manager = CycleBellTimerManager.Instance (new PresetManager());
-            container.RegisterInstance<ICycleBellTimerManager>(manager);
+            var manager = TimerManager.Instance (new PresetsManager());
+            container.RegisterInstance<ITimerManager>(manager);
 
             container.RegisterType<MainViewModel>();
 

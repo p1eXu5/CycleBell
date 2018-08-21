@@ -82,7 +82,6 @@ namespace CycleBellLibrary
             catch (XmlException ex) {
 
                 this.Clear();
-                throw;
             }
         }
 

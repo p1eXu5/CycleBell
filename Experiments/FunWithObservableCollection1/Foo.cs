@@ -34,6 +34,14 @@ namespace FunWithObservableCollection1
             Coll = new ReadOnlyObservableCollection<string>(_coll);
         }
 
+        public void ResetCollection()
+        {
+            _coll = new ObservableCollection<string>();
+            Coll = new ReadOnlyObservableCollection<string>(_coll);
+        }
+
+        public ReadOnlyObservableCollection<string> Coll { get; private set; }
+
         public string this[int idx]
         {
             get => _coll[idx];
@@ -50,12 +58,11 @@ namespace FunWithObservableCollection1
             _coll.Clear();
         }
 
-        public ReadOnlyObservableCollection<string> Coll { get; }
 
-        public event NotifyCollectionChangedEventHandler CollectionChanged
-        {
-            add => _coll.CollectionChanged += value;
-            remove => _coll.CollectionChanged -= value;
-        }
+        //public event NotifyCollectionChangedEventHandler CollectionChanged
+        //{
+        //    add => _coll.CollectionChanged += value;
+        //    remove => _coll.CollectionChanged -= value;
+        //}
     }
 }

@@ -13,7 +13,7 @@ namespace CycleBellLibrary
     /// Посредник, менеджер.
     /// Дай мыне дирехтора!
     /// </summary>
-    public class CycleBellTimerManager : ICycleBellTimerManager
+    public class TimerManager : ITimerManager
     {
         public const string RestartString = "Restart";
 
@@ -22,12 +22,12 @@ namespace CycleBellLibrary
         /// <summary>
         /// Instance of class
         /// </summary>
-        private static CycleBellTimerManager _cycleBellTimerManager;
+        private static TimerManager _timerManager;
 
         /// <summary>
         /// Дирехтор
         /// </summary>
-        private readonly IPresetManager _presetManager;
+        private readonly IPresetsManager _presetsManager;
 
         /// <summary>
         /// The main queue. The next (TimeSpan startTimeForNextStartPoint, TimePoint nextPoint) always on the top.
@@ -52,30 +52,30 @@ namespace CycleBellLibrary
 
         #region Constructor
 
-        private CycleBellTimerManager(IPresetManager presetManager)
+        private TimerManager(IPresetsManager presetsManager)
         {
             // Устанавливаем дирехтора
-            _presetManager = presetManager;
+            _presetsManager = presetsManager;
 
             // Заводим коллекцию
-            _presetManager.LoadPresets();
+            _presetsManager.LoadFromFile();
         }
 
         /// <summary>
-        /// Gets instance of manager and if IPresetManager.FileName is Exist loads presets or loads only one empty preset
+        /// Gets instance of manager and if IPresetsManager.FileName is Exist loads presets or loads only one empty preset
         /// </summary>
-        /// <param name="presetManager"></param>
+        /// <param name="presetsManager"></param>
         /// <returns></returns>
-        public static CycleBellTimerManager Instance(IPresetManager presetManager) 
-            => _cycleBellTimerManager ?? (_cycleBellTimerManager = new CycleBellTimerManager(presetManager));
+        public static TimerManager Instance(IPresetsManager presetsManager) 
+            => _timerManager ?? (_timerManager = new TimerManager(presetsManager));
         
         #endregion
 
         #region Events
         public event NotifyCollectionChangedEventHandler PresetCollectionChanged
         {
-            add => _presetManager.CollectionChanged += value;
-            remove => _presetManager.CollectionChanged -= value;
+            add => _presetsManager.CollectionChanged += value;
+            remove => _presetsManager.CollectionChanged -= value;
         }
 
         public event EventHandler<TimePointEventArgs> ChangeTimePointEvent;
@@ -106,7 +106,7 @@ namespace CycleBellLibrary
 
         public static int Accuracy { get; set; } =300;
 
-        public ReadOnlyObservableCollection<Preset> Presets => _presetManager.Presets;
+        public ReadOnlyObservableCollection<Preset> Presets => _presetsManager.Presets;
         public bool IsRunning => _isRunning != 0;
 
         #endregion
@@ -122,26 +122,12 @@ namespace CycleBellLibrary
         private int GetDueTime (int i) => Accuracy - (i % Accuracy);
 
         /// <summary>
-        /// Invoked by App exit event
-        /// </summary>
-        /// <param name="s"></param>
-        /// <param name="e"></param>
-        public void OnAppExit(object s, EventArgs e)
-        {
-            // TODO serialization:
-
-            _presetManager.SavePresets();
-
-            Console.WriteLine ("Program ending");
-        }
-
-        /// <summary>
-        /// Add preset to inner presetManager's collection
+        /// Add preset to inner presetsManager's collection
         /// </summary>
         /// <param name="preset"></param>
-        public void AddPreset(Preset preset) => _presetManager.AddPreset(preset);
+        public void AddPreset(Preset preset) => _presetsManager.Add(preset);
 
-        public void ReloadPresets() => _presetManager.LoadPresets();
+        public void ReloadPresets() => _presetsManager.LoadFromFile();
 
         /// <summary>
         /// Pause timer loop
@@ -455,7 +441,7 @@ namespace CycleBellLibrary
     /// </summary>
     public static class PresetExtention
     {
-        public static void RunTimer (this Preset preset, CycleBellTimerManager manager)
+        public static void RunTimer (this Preset preset, TimerManager manager)
         {
             manager.PlayAsync (preset);
         }

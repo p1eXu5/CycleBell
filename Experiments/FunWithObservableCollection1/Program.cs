@@ -14,7 +14,7 @@ namespace FunWithObservableCollection1
         static void Main(string[] args)
         {
             Foo foo = new Foo();
-            foo.CollectionChanged += OnCollectionChanged;
+            ((INotifyCollectionChanged)foo.Coll).CollectionChanged += OnCollectionChanged;
 
             Console.WriteLine ("Enter: \n 'q' for quit, \n '1' for assign \"Reset\" to the foo[0], \n 'r' for clear collection, \n else - to add element.\n");
             while (true) {
@@ -28,9 +28,12 @@ namespace FunWithObservableCollection1
                     foo[0] = "Reset";
                 else if (res == "r")
                     foo.Clear();
+                else if (res == "x") {
+                    foo.ResetCollection();
+                }
                 else {
                     foo.Add (res);
-                    Console.WriteLine ($"\n{foo.Coll.GetType()} contains from:\n");
+                    Console.WriteLine ($"\n{foo.Coll.GetType().Name} contains from:\n");
                     foo.Coll.ToList().ForEach (i => Console.Write($"{i} "));
                     Console.WriteLine ();
                 }
@@ -40,7 +43,7 @@ namespace FunWithObservableCollection1
 
         static void OnCollectionChanged(object s, NotifyCollectionChangedEventArgs e)
         {
-            Console.WriteLine($"Old item is {e.OldItems?[0]}.\n New items {e.NewItems?[0]}");
+            Console.WriteLine($"Old item is {e.OldItems?[0] ?? "null"}.\n New items {e.NewItems?[0] ?? "null"}");
         }
     }
 }

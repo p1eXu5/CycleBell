@@ -21,7 +21,7 @@ namespace CycleBellConsolApp
                 Preset.DefaultInterval = 1;
 
                 // Create manager
-                var manager = CycleBellTimerManager.Instance(new PresetManager("test.xml"));
+                var manager = TimerManager.Instance(new PresetsManager("test.xml"));
 
                 AppDomain.CurrentDomain.ProcessExit += manager.OnAppExit;
 
@@ -55,7 +55,7 @@ namespace CycleBellConsolApp
                 //    new TimePoint("Начало", "10:05", TimePointType.Absolute, 1),
                 //};
 
-                //manager.AddPreset(new Preset("DNS", dnsTimePoints, "8:00", true));
+                //manager.Add(new Preset("DNS", dnsTimePoints, "8:00", true));
 
 
                 //TimePoint[] testTimePoints =
@@ -69,7 +69,7 @@ namespace CycleBellConsolApp
                 //var startTime = DateTime.Now.TimeOfDay;
                 //startTime += TimeSpan.FromSeconds(11);
 
-                //manager.AddPreset(new Preset("Test", testTimePoints, startTime, true));
+                //manager.Add(new Preset("Test", testTimePoints, startTime, true));
 
                 #endregion
 

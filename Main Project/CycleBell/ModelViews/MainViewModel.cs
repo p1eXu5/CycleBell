@@ -19,7 +19,7 @@ namespace CycleBell.ModelViews
     {
         #region Private
 
-        private ICycleBellTimerManager _manager;
+        private ITimerManager _manager;
 
         private CycleBellStateFlags _cycleBellState;
         private IDialogRegistrator _dialogRegistrator;
@@ -30,7 +30,7 @@ namespace CycleBell.ModelViews
 
         #region Constructor
 
-        public MainViewModel(IDialogRegistrator dialogRegistrator, ICycleBellTimerManager cbtm)
+        public MainViewModel(IDialogRegistrator dialogRegistrator, ITimerManager cbtm)
         {
             _dialogRegistrator = dialogRegistrator;
             _manager = cbtm;

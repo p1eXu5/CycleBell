@@ -4,7 +4,7 @@ using System.Collections.Specialized;
 
 namespace CycleBellLibrary
 {
-    public interface ICycleBellTimerManager
+    public interface ITimerManager
     {
         event NotifyCollectionChangedEventHandler PresetCollectionChanged;
         event EventHandler<TimePointEventArgs> ChangeTimePointEvent;
@@ -13,15 +13,9 @@ namespace CycleBellLibrary
         ReadOnlyObservableCollection<Preset> Presets { get; }
         bool IsRunning { get; }
 
-        /// <summary>
-        /// Invoked by App exit event
-        /// </summary>
-        /// <param name="s"></param>
-        /// <param name="e"></param>
-        void OnAppExit(object s, EventArgs e);
 
         /// <summary>
-        /// Add preset to inner presetManager's collection
+        /// Add preset to inner presetsManager's collection
         /// </summary>
         /// <param name="preset"></param>
         void AddPreset(Preset preset);

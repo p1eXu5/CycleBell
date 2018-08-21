@@ -14,7 +14,7 @@ namespace CycleBellLibraryTests
     [TestClass]
     public class CycleBellTimerManagerTests
     {
-        private readonly Mock<IPresetManager> mock = new Mock<IPresetManager>();
+        private readonly Mock<IPresetsManager> mock = new Mock<IPresetsManager>();
         private ObservableCollection<Preset> _presets;
         private ReadOnlyObservableCollection<Preset> _readOnlePresets;
         private TimeSpan[][] checker;
@@ -74,7 +74,7 @@ namespace CycleBellLibraryTests
         [TestMethod]
         public void GetTimerQueueReturnsOrderedQueue()
         {
-            var manager = CycleBellTimerManager.Instance(mock.Object);
+            var manager = TimerManager.Instance(mock.Object);
             var queue = manager.GetTimerQueue(manager.Presets[0]);
             var queue2 = manager.GetTimerQueue(manager.Presets[1]);
 
@@ -94,8 +94,8 @@ namespace CycleBellLibraryTests
         [TestMethod]
         public void CycleBellTimerManagerReturnsEmptyPreset()
         {
-            PresetManager presetManager = new PresetManager();
-            var manager = CycleBellTimerManager.Instance(mock.Object);
+            PresetsManager presetsManager = new PresetsManager();
+            var manager = TimerManager.Instance(mock.Object);
 
             Assert.AreEqual(manager.Presets[0].PresetName, Preset.EmptyPreset.PresetName);
             Assert.AreEqual(manager.Presets.Count, _presets.Count);
