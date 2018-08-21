@@ -1,11 +1,12 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
+﻿/*
+ * Clear: Old is null, New is null
+ * Add: Old is null, New isn't null
+ * Remove: Old is not null, New is null
+ */
+
+using System;
 using System.Collections.Specialized;
 using System.Linq;
-using System.Runtime.InteropServices;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace FunWithObservableCollection1
 {
@@ -16,7 +17,16 @@ namespace FunWithObservableCollection1
             Foo foo = new Foo();
             ((INotifyCollectionChanged)foo.Coll).CollectionChanged += OnCollectionChanged;
 
-            Console.WriteLine ("Enter: \n 'q' for quit, \n '1' for assign \"Reset\" to the foo[0], \n 'r' for clear collection, \n else - to add element.\n");
+            string message = "Enter: \n" +
+                             " 'q' for quit, \n" +
+                             " '1' for assign test object to the foo[0], \n" +
+                             " 'c' for clear collection, \n" +
+                             " <else> - to add element.\n" +
+                             " 'd' space <object> - for delete element \n" +
+                             " '?' - for help";
+
+            Console.WriteLine(message);
+
             while (true) {
 
                 Console.Write ("\n:>");
@@ -24,12 +34,24 @@ namespace FunWithObservableCollection1
 
                 if (res == "q")
                     break;
-                else if (res == "1")
+
+                if (res == "1") {
                     foo[0] = "Reset";
-                else if (res == "r")
+                }
+                else if (res == "c") {
                     foo.Clear();
+                }
                 else if (res == "x") {
                     foo.ResetCollection();
+                }
+                else if (res.Length > 0 && res[0] == 'd') {
+                    string[] elements = res.Split(' ').Select(e => e.Trim()).ToArray();
+                    for (int i = 1; i < elements.Length; ++i) {
+                        foo.Remove(elements[i]);
+                    }
+                }
+                else if (res == "?") {
+                    Console.WriteLine($"\n{message}");
                 }
                 else {
                     foo.Add (res);

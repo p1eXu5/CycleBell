@@ -19,26 +19,28 @@ namespace CycleBell.ModelViews
     {
         #region Private
 
-        private ITimerManager _manager;
+        private CycleBellManager _manager;
 
         private CycleBellStateFlags _cycleBellState;
         private IDialogRegistrator _dialogRegistrator;
         private PresetViewModel _selectedPreset;
-        private ObservableCollection<PresetViewModel> _presets;
 
         #endregion Private
 
         #region Constructor
 
-        public MainViewModel(IDialogRegistrator dialogRegistrator, ITimerManager cbtm)
+        public MainViewModel(IDialogRegistrator dialogRegistrator, CycleBellManager cbm)
         {
             _dialogRegistrator = dialogRegistrator;
-            _manager = cbtm;
+            _manager = cbm;
 
-            _presets = new ObservableCollection<PresetViewModel>(_manager.Presets.Select(p => new PresetViewModel(p)));
-            _manager.PresetCollectionChanged += (s, e) =>
+            Presets = new ObservableCollection<PresetViewModel>(_manager.Presets.Select(p => new PresetViewModel(p)));
+            _manager.CollectionChanged += (s, e) =>
                                                 {
                                                     // TODO:
+                                                    if (e.NewItems[0] != null)
+                                                        Presets.Add((PresetViewModel)e.NewItems[0]);
+
 
                                                 };
         }
@@ -65,14 +67,8 @@ namespace CycleBell.ModelViews
             }
         }
 
-        public List<PresetViewModel> Presets
-        {
-            get => _presets;
-            set {
-                _presets = value;
-                OnPropertyChanged(nameof(Presets));
-            }
-        }
+        public ObservableCollection<PresetViewModel> Presets { get; set; }
+
         public PresetViewModel SelectedPreset
         {
             get => _selectedPreset;
