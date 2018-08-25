@@ -63,7 +63,6 @@
   <ItemGroup>
     <Compile Include="UnitTests\CycleBellTimerManagerTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="UnitTests\TimePointTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

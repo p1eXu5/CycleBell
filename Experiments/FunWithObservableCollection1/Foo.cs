@@ -20,10 +20,11 @@ namespace FunWithObservableCollection1
         
         public Foo(IEnumerable<string> coll) : this()
         {
-            if (coll != null && coll.Any()) {
-                foreach (var element in coll) {
-                    
-                    _coll.Add(element);
+            if (coll != null) {
+                using (IEnumerator<string> enumerator = coll.GetEnumerator()) {
+                    while (enumerator.MoveNext()) {
+                        _coll.Add(enumerator.Current);
+                    }
                 }
             }
         }

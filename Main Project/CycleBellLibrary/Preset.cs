@@ -153,7 +153,7 @@ namespace CycleBellLibrary
         /// <param name="timePoint"></param>
         public void AddTimePoint(TimePoint timePoint)
         {
-            TimePoints.Add(timePoint);
+            _timePoints.Add(timePoint);
 
             if (!TimerLoops.ContainsKey(timePoint.LoopNumber)) {
                 TimerLoops[timePoint.LoopNumber] = 1;
@@ -169,8 +169,8 @@ namespace CycleBellLibrary
 
         public void RemoveTimePoint(TimePoint timePoint)
         {
-            if (TimePoints.Contains(timePoint)) {
-                TimePoints.Remove(timePoint);
+            if (_timePoints.Contains(timePoint)) {
+                _timePoints.Remove(timePoint);
             }
 
             var points = TimePoints.Where(t => t.LoopNumber == timePoint.LoopNumber).ToList();

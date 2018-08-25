@@ -58,8 +58,6 @@ namespace CycleBellLibrary
             if (_timePointNum == byte.MaxValue)
                 throw new OverflowException ("Reached the maximum number of TimePoints");
 
-            LastStartTime = -TimeSpan.FromHours(25);
-
             Name = name;
             Id = _timePointNum++;
 
@@ -83,7 +81,7 @@ namespace CycleBellLibrary
 
         /// <summary>
         /// Имя при null (для определения StartTime)
-        /// </summary>
+        /// </summary>-
         public static string FirstPointName { get; set; } = "Launch Time";
 
         public static int MaxId => Int32.MaxValue;
@@ -111,7 +109,7 @@ namespace CycleBellLibrary
         /// </summary>
         public TimeSpan Time { get; set; }
 
-        public TimeSpan LastStartTime { get; set; }
+        public TimeSpan? BaseTime { get; set; } = null;
 
         /// <summary>
         /// Type of Time, absolute or relative
@@ -133,27 +131,21 @@ namespace CycleBellLibrary
         #region Methods
 
         /// <summary>
-        /// Returns absolute time by startTime
+        /// Returns absolute time by baseTime
         /// </summary>
-        /// <param name="startTime"></param>
+        /// <param name="baseTime"></param>
         /// <param name="convertToAbsolute"></param>
         /// <returns></returns>
-        public TimeSpan GetAbsoluteTime(TimeSpan startTime, bool convertToAbsolute = false)
+        public TimeSpan GetAbsoluteTime(TimeSpan baseTime)
         {
-            if (TimePointType == TimePointType.Relative) {
+            if (TimePointType == TimePointType.Relative && baseTime != TimeSpan.Zero) {
 
-                LastStartTime = startTime;
+                BaseTime = baseTime;
 
-                var res = startTime + Time;
+                var res = baseTime + Time;
 
                 if (res.Days > 0)
                     res -= TimeSpan.FromDays(1);
-
-                if (convertToAbsolute) {
-
-                    Time = res;
-                    TimePointType = TimePointType.Absolute;
-                }
 
                 return res;
             }
@@ -161,39 +153,50 @@ namespace CycleBellLibrary
             return Time;
         }
 
+        /// <summary>
+        /// Gets absolute time
+        /// </summary>
+        /// <returns>Absolute time</returns>
+        /// <exception cref="ArgumentException"></exception>
         public TimeSpan GetAbsoluteTime()
         {
-            if (TimePointType == TimePointType.Relative && LastStartTime < TimeSpan.Zero) {
-                throw new ArgumentException("LastStartTime must be set");
+            if (TimePointType == TimePointType.Absolute)
+                return Time;
+
+            if (!BaseTime.HasValue) {
+                throw new ArgumentException("BaseTime must be set");
             }
 
-            return GetAbsoluteTime(LastStartTime);
+            return GetAbsoluteTime((TimeSpan)BaseTime);
         }
 
-        public TimeSpan GetRelativeTime(TimeSpan startTime, bool convertToRelative = false)
+        public TimeSpan GetRelativeTime()
         {
-            LastStartTime = startTime;
+            if (TimePointType == TimePointType.Relative)
+                return Time;
 
-            if (TimePointType == TimePointType.Relative || startTime == TimeSpan.Zero) {
+            if (!BaseTime.HasValue) {
+                throw new ArgumentException("BaseTime must be set");
+            }
 
-                if (TimePointType == TimePointType.Absolute && convertToRelative)
-                    TimePointType = TimePointType.Relative;
+            return GetRelativeTime((TimeSpan)BaseTime);
+        }
+
+        public TimeSpan GetRelativeTime(TimeSpan baseTime)
+        {
+            BaseTime = baseTime;
+
+            if (TimePointType == TimePointType.Relative || baseTime == TimeSpan.Zero) {
 
                 return Time;
             }
 
             TimeSpan res;
 
-            if (Time <= startTime)
-                res = TimeSpan.FromHours(24) - startTime + Time;
+            if (Time <= baseTime)
+                res = TimeSpan.FromHours(24) - baseTime + Time;
             else
-                res = Time - startTime;
-
-            if (convertToRelative) {
-
-                Time = res;
-                TimePointType = TimePointType.Relative;
-            }
+                res = Time - baseTime;
 
             return res;
         }

@@ -89,6 +89,8 @@
     <Compile Include="ViewModels\MainViewModel.cs" />
     <Compile Include="ViewModels\PresetViewModel.cs" />
     <Compile Include="Properties\Annotations.cs" />
+    <Compile Include="ViewModels\TimePointViewModel.cs" />
+    <Compile Include="ViewModels\TimePointViewModelBase.cs" />
     <Compile Include="ViewModels\TimePointViewModelCollection.cs" />
     <Compile Include="Views\AboutWindow.xaml.cs">
       <DependentUpon>AboutWindow.xaml</DependentUpon>
