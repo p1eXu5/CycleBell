@@ -6,8 +6,8 @@ using System.Xml.Serialization;
 
 namespace CycleBellLibrary
 {
-    [XmlRoot("TimerCycles")]
-    public class TimerCycleSortedDictionary : SortedDictionary<int, int>, IXmlSerializable
+    [XmlRoot("TimerLoops")]
+    public class TimerLoopSortedDictionary : SortedDictionary<int, int>, IXmlSerializable
     {
         public XmlSchema GetSchema() => null;
 

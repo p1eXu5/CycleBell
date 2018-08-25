@@ -80,13 +80,13 @@ namespace CycleBellLibraryTests
         {
             TimePoint[] points = new[]
             {
-                new TimePoint {TimerCycleNum = 0, Name = "A"},
-                new TimePoint {TimerCycleNum = 1, Name = "B"},
-                new TimePoint {TimerCycleNum = 0, Name = "D"},
-                new TimePoint {TimerCycleNum = 1, Name = "C"} 
+                new TimePoint {LoopNumber = 0, Name = "A"},
+                new TimePoint {LoopNumber = 1, Name = "B"},
+                new TimePoint {LoopNumber = 0, Name = "D"},
+                new TimePoint {LoopNumber = 1, Name = "C"} 
             };
 
-            IEnumerable<byte> query = points.OrderBy(t => t.TimerCycleNum).Select(t => t.TimerCycleNum).Distinct();
+            IEnumerable<byte> query = points.OrderBy(t => t.LoopNumber).Select(t => t.LoopNumber).Distinct();
 
             IEnumerable<TimePoint> queryPoint = (from t in points
                                                  orderby t.Id ascending

@@ -13,7 +13,7 @@ namespace CycleBellLibrary
 
         public virtual void ReadXml(XmlReader reader)
         {
-            XmlSerializer timersCyclesSerializer = new XmlSerializer(typeof(TimerCycleSortedDictionary));
+            XmlSerializer timersCyclesSerializer = new XmlSerializer(typeof(TimerLoopSortedDictionary));
 
             try {
                 // Читает текущий элемент с заданным именем и смещает указатель к следующему элементу
@@ -50,7 +50,7 @@ namespace CycleBellLibrary
                         reader.Read();
                         tp.Time = TimeSpan.Parse(reader.ReadElementContentAsString());
                         tp.TimePointType = (TimePointType)(reader.ReadElementContentAsInt());
-                        tp.TimerCycleNum = (byte)(reader.ReadElementContentAsInt());
+                        tp.LoopNumber = (byte)(reader.ReadElementContentAsInt());
 
                         if (reader.IsEmptyElement)
                             reader.Read();
@@ -66,9 +66,9 @@ namespace CycleBellLibrary
                     // </TimePoints>
                     reader.ReadEndElement();
 
-                    // <TimerCycles>
-                    preset.TimerCycles = (TimerCycleSortedDictionary) timersCyclesSerializer.Deserialize(reader);
-                    // </TimerCycles>
+                    // <TimerLoops>
+                    preset.TimerLoops = (TimerLoopSortedDictionary) timersCyclesSerializer.Deserialize(reader);
+                    // </TimerLoops>
 
                     // </Preset>
                     reader.ReadEndElement();
@@ -87,7 +87,7 @@ namespace CycleBellLibrary
 
         public virtual void WriteXml(XmlWriter writer)
         {
-            XmlSerializer timersCyclesSerializer = new XmlSerializer(typeof(TimerCycleSortedDictionary));
+            XmlSerializer timersCyclesSerializer = new XmlSerializer(typeof(TimerLoopSortedDictionary));
 
             for (int i = 0; i < this.Count; ++i) {
 
@@ -106,14 +106,14 @@ namespace CycleBellLibrary
                     writer.WriteElementString("Time", this[i].TimePoints[j].Time.ToString(@"h\:mm\:ss"));
                     writer.WriteElementString("TimePointType",
                                               ((byte) (this[i].TimePoints[j].TimePointType)).ToString());
-                    writer.WriteElementString("CycleNum", this[i].TimePoints[j].TimerCycleNum.ToString());
+                    writer.WriteElementString("CycleNum", this[i].TimePoints[j].LoopNumber.ToString());
                     writer.WriteElementString("SoundLocation", (string) this[i].TimePoints[j].Tag ?? "");
                     writer.WriteEndElement();
                 }
 
                 writer.WriteEndElement();
 
-                timersCyclesSerializer.Serialize(writer,this[i].TimerCycles);
+                timersCyclesSerializer.Serialize(writer,this[i].TimerLoops);
 
                 writer.WriteEndElement();
             }

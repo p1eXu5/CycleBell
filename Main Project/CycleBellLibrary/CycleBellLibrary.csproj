@@ -50,7 +50,7 @@
     <Compile Include="Preset.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TimePoint.cs" />
-    <Compile Include="TimerCycleSortedDictionary.cs" />
+    <Compile Include="TimerLoopSortedDictionary.cs" />
     <Compile Include="TimerSecondPassedEventArgs.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

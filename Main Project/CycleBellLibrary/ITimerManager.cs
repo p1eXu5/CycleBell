@@ -20,8 +20,6 @@ namespace CycleBellLibrary
         /// <param name="preset"></param>
         void AddPreset(Preset preset);
 
-        void ReloadPresets();
-
         /// <summary>
         /// Pause timer loop
         /// </summary>

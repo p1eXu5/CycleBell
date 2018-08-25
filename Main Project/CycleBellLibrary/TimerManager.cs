@@ -1,4 +1,10 @@
-﻿using System;
+﻿/*
+ *
+ *  Copyright (c) p1eXu5. All rights reserved.
+ *
+ */
+
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
@@ -10,8 +16,14 @@ using System.Threading.Tasks;
 namespace CycleBellLibrary
 {
     /// <summary>
-    /// Посредник, менеджер.
-    /// Дай мыне дирехтора!
+    /// Timer manager. Creates timer's queue, emit signals
+    /// every Accuacy of second, when time point has changes
+    /// and when timer has stopped.
+    ///
+    /// The signals contains last TimePoint, next TimePoint and last time
+    /// 
+    /// First TimePointChange signal emits with last TimePoint with
+    /// negative Time, next TimePoint - created TimePoint with name preset.StartTimePointName
     /// </summary>
     public class TimerManager : ITimerManager
     {
@@ -56,9 +68,6 @@ namespace CycleBellLibrary
         {
             // Устанавливаем дирехтора
             _presetsManager = presetsManager;
-
-            // Заводим коллекцию
-            _presetsManager.LoadFromFile();
         }
 
         /// <summary>
@@ -127,8 +136,6 @@ namespace CycleBellLibrary
         /// <param name="preset"></param>
         public void AddPreset(Preset preset) => _presetsManager.Add(preset);
 
-        public void ReloadPresets() => _presetsManager.LoadFromFile();
-
         /// <summary>
         /// Pause timer loop
         /// </summary>
@@ -150,7 +157,7 @@ namespace CycleBellLibrary
             var currentTime = DateTime.Now.TimeOfDay;
             var foundedNextQueueElem = FindNextTimePoint(ref currentTime);
 
-            OnChangeTimePoint(_prevQueueElement.Item2, foundedNextQueueElem.Item2, LastTime(ref currentTime, foundedNextQueueElem.Item1));
+            OnChangeTimePoint(_prevQueueElement.Item2, foundedNextQueueElem.Item2, LastTime(currentTime, foundedNextQueueElem.Item1));
 
             _timer.Change(GetDueTime (currentTime.Milliseconds), Timeout.Infinite);
             _isRunning |= 0x01;
@@ -204,20 +211,7 @@ namespace CycleBellLibrary
             if (IsRunning)
                 return;
 
-            // Заполняем очередь таймеров
             _queue = GetTimerQueue(preset);
-
-            //#region Print Queue
-
-            //foreach (var point in _queue) {
-
-            //    Console.WriteLine($"{point.Item1:h\\:mm\\:ss} {point.Item2?.Name ?? "StartTime"} \n({point.Item2})");
-            //}
-
-            //Console.WriteLine("");
-
-            //#endregion
-
 
             if (_queue == null) {
 
@@ -241,16 +235,17 @@ namespace CycleBellLibrary
             var durTime = GetDueTime(currentTime.Milliseconds);
             _timer = new Timer(TimerCallbackHandler, null, durTime, Timeout.Infinite);
 
-            // Сигналим о смене поинтов
+            // Set previous queue element
             _prevQueueElement = (currentTime, new TimePoint("Launch Time", TimeSpan.FromMinutes(-1), TimePointType.Absolute));
-            OnChangeTimePoint(_prevQueueElement.Item2, _queue.Peek().Item2, LastTime(ref currentTime, _queue.Peek().Item1));
+
+            OnChangeTimePoint(_prevQueueElement.Item2, _queue.Peek().Item2, LastTime(currentTime, _queue.Peek().Item1));
         }
 
         /// <summary>
         /// Creates alarm queue
         /// </summary>
         /// <param name="preset">Preset</param>
-        /// <returns>Alarm queue</returns>
+        /// <returns>The queue of tuples consists of time of the day and TimePoint that will come</returns>
         public static Queue<(TimeSpan, TimePoint)> GetTimerQueue(Preset preset)
         {
             if (preset?.TimePoints == null || preset.TimePoints.Count == 0)
@@ -261,22 +256,22 @@ namespace CycleBellLibrary
 
             // Смещение по времени следующей временной точки
             TimeSpan localStartTime = preset.StartTime;
-            queue.Enqueue((localStartTime, new TimePoint("Start Time Point", localStartTime, TimePointType.Absolute)));
+            queue.Enqueue((localStartTime, new TimePoint(preset.StartTimePointName, localStartTime, TimePointType.Absolute)));
 
             // Заполняем очередь
 
             // Для всех временных сегментов
-            foreach (var timerCycle in preset.TimerCycles.Keys) {
+            foreach (var timerCycle in preset.TimerLoops.Keys) {
 
                 TimeSpan nextTime;
 
                 if (preset.TimePoints.Count > 1) {
 
                     // Список временных точек каждого временного сегмента, порядоченный по Id (по порядку создания)
-                    var timePoints = preset.TimePoints.Where(t => t.TimerCycleNum == timerCycle).OrderBy(t => t.Id)
+                    var timePoints = preset.TimePoints.Where(t => t.LoopNumber == timerCycle).OrderBy(t => t.Id)
                                            .ToList();
 
-                    for (var i = 0; i < preset.TimerCycles[timerCycle]; ++i) {
+                    for (var i = 0; i < preset.TimerLoops[timerCycle]; ++i) {
 
                         foreach (var point in timePoints) {
 
@@ -291,7 +286,7 @@ namespace CycleBellLibrary
                 else {
                     var timePoint = preset.TimePoints[0];
 
-                    for (var i = 0; i < preset.TimerCycles[timerCycle]; ++i) {
+                    for (var i = 0; i < preset.TimerLoops[timerCycle]; ++i) {
 
                         nextTime = timePoint.GetAbsoluteTime(localStartTime);
 
@@ -394,11 +389,11 @@ namespace CycleBellLibrary
                     return;
                 }
 
-                OnChangeTimePoint(_prevQueueElement.Item2, _queue.Peek().Item2, LastTime(ref currentTime, _queue.Peek().Item1));
+                OnChangeTimePoint(_prevQueueElement.Item2, _queue.Peek().Item2, LastTime(currentTime, _queue.Peek().Item1));
                 return;
             }
 
-            OnChangeTimePoint(_prevQueueElement.Item2, _queue.Peek().Item2, LastTime(ref currentTime, _queue.Peek().Item1));
+            OnChangeTimePoint(_prevQueueElement.Item2, _queue.Peek().Item2, LastTime(currentTime, _queue.Peek().Item1));
 
             // Если время следующей точки равно предыдущей:
             if (_queue.Peek().Item1 == _prevQueueElement.Item1) {
@@ -411,13 +406,13 @@ namespace CycleBellLibrary
         }
 
         /// <summary>
-        /// Calculate last time
+        /// Calculate time to the next TimePoint change
         /// </summary>
-        /// <param name="currentTime">will be changed to lastTime</param>
+        /// <param name="currentTime">current time reference</param>
         /// <param name="nextTime"></param>
         /// <returns>Last time to nextTime</returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        private TimeSpan LastTime(ref TimeSpan currentTime, TimeSpan nextTime)
+        private TimeSpan LastTime(TimeSpan currentTime, TimeSpan nextTime)
         {
             TimeSpan diff;
 

@@ -27,6 +27,8 @@ namespace CycleBellLibrary
 
         #region Constructors
 
+        #region Constructor Overrides
+
         public TimePoint()
             : this("Time point " + _timePointNum, TimeSpan.FromMinutes(_defaultMinutesToStart), TimePointType.Relative)
         { }
@@ -39,8 +41,23 @@ namespace CycleBellLibrary
             : this("Time point " + _timePointNum, TimeSpan.Parse(time), timePointType, timerCycleNum)
         { }
 
-        public TimePoint(string name, TimeSpan time, TimePointType timePointType = TimePointType.Relative, byte timerCycleNum = 0)
+        public TimePoint(string name, string time, TimePointType timePointType = TimePointType.Relative, byte loopNumber = 0)
+            : this(name, TimeSpan.Parse(time), timePointType, loopNumber) { }
+
+        #endregion
+
+        /// <summary>
+        /// Creates TimePoint instance
+        /// </summary>
+        /// <param name="name">Name of TimePoint</param>
+        /// <param name="time">An absolute or relative time of day</param>
+        /// <param name="timePointType">A type of TimePoint</param>
+        /// <param name="loopNumber">The loop number</param>
+        public TimePoint(string name, TimeSpan time, TimePointType timePointType = TimePointType.Relative, byte loopNumber = 0)
         {
+            if (_timePointNum == byte.MaxValue)
+                throw new OverflowException ("Reached the maximum number of TimePoints");
+
             LastStartTime = -TimeSpan.FromHours(25);
 
             Name = name;
@@ -48,11 +65,8 @@ namespace CycleBellLibrary
 
             Time = time;
             TimePointType = timePointType;
-            TimerCycleNum = timerCycleNum == Byte.MaxValue ? (byte)(Byte.MaxValue - 1) : timerCycleNum;
+            LoopNumber = loopNumber == Byte.MaxValue ? (byte)(Byte.MaxValue - 1) : loopNumber;
         }
-
-        public TimePoint(string name, string time, TimePointType timePointType = TimePointType.Relative, byte timerCycleNum = 0)
-            : this(name, TimeSpan.Parse(time), timePointType, timerCycleNum) { }
 
         #endregion
 
@@ -71,6 +85,9 @@ namespace CycleBellLibrary
         /// Имя при null (для определения StartTime)
         /// </summary>
         public static string FirstPointName { get; set; } = "Launch Time";
+
+        public static int MaxId => Int32.MaxValue;
+        public static int MinId => Int32.MinValue;
 
         //public static byte LastTimePointNum => (byte)(_timePointNum - 1);
 
@@ -104,7 +121,7 @@ namespace CycleBellLibrary
         /// <summary>
         /// Number of queue where this NextTimePoint will measure off
         /// </summary>
-        public byte TimerCycleNum { get; set; }
+        public byte LoopNumber { get; set; }
 
         /// <summary>
         /// Sound file location for example.

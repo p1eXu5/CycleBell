@@ -30,19 +30,19 @@ namespace CycleBellConsolApp
                 //// Create TimePoints
                 //TimePoint[] points =
                 //{
-                //    new TimePoint {Time = TimeSpan.FromSeconds(10), TimerCycleNum = 1},
-                //    new TimePoint {Time = TimeSpan.FromSeconds(15), TimerCycleNum = 2},
-                //    new TimePoint {Time = TimeSpan.FromSeconds(20), TimerCycleNum = 3},
-                //    new TimePoint {Time = TimeSpan.FromSeconds(30), TimerCycleNum = 1},
-                //    new TimePoint {Time = TimeSpan.FromSeconds(35), TimerCycleNum = 2},
-                //    new TimePoint {Time = TimeSpan.FromSeconds(40), TimerCycleNum = 3},
+                //    new TimePoint {Time = TimeSpan.FromSeconds(10), LoopNumber = 1},
+                //    new TimePoint {Time = TimeSpan.FromSeconds(15), LoopNumber = 2},
+                //    new TimePoint {Time = TimeSpan.FromSeconds(20), LoopNumber = 3},
+                //    new TimePoint {Time = TimeSpan.FromSeconds(30), LoopNumber = 1},
+                //    new TimePoint {Time = TimeSpan.FromSeconds(35), LoopNumber = 2},
+                //    new TimePoint {Time = TimeSpan.FromSeconds(40), LoopNumber = 3},
                 //};
 
                 //// Set loops counts
                 //manager.Presets[0].AddTimePointRange(points);
-                //manager.Presets[0].TimerCycles[1] = 4;
-                //manager.Presets[0].TimerCycles[2] = 1;
-                //manager.Presets[0].TimerCycles[3] = 3;
+                //manager.Presets[0].TimerLoops[1] = 4;
+                //manager.Presets[0].TimerLoops[2] = 1;
+                //manager.Presets[0].TimerLoops[3] = 3;
 
                 //// Create DNS time points
                 //TimePoint[] dnsTimePoints = new[]
