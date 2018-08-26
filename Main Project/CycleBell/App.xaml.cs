@@ -26,14 +26,18 @@ namespace CycleBell
 
             Window wnd = new MainWindow();
 
+            // IDialogRegistrator:
             DialogRegistrator dialogRegistrator = new DialogRegistrator(wnd);
             dialogRegistrator.Register<AboutDialogViewModel,AboutWindow>();
+
             container.RegisterInstance<IDialogRegistrator>(dialogRegistrator);
 
+            // ITimerManager:
             var manager = TimerManager.Instance (new PresetsManager());
+
             container.RegisterInstance<ITimerManager>(manager);
 
-            container.RegisterType<MainViewModel>();
+            //container.RegisterType<MainViewModel>();
 
             wnd.DataContext = container.Resolve<MainViewModel>();
 

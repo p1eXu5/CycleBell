@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Runtime.CompilerServices;
 
 namespace CycleBellLibrary
 {
@@ -23,16 +24,16 @@ namespace CycleBellLibrary
         #region Linked Constructors
 
         public Preset()
-           : this(DefaultName, null, DefaultInterval)
+           : this(DefaultName, null)
         { }
 
         public Preset(IEnumerable<TimePoint> points)
-            : this(DefaultName, points, DefaultInterval)
+            : this(DefaultName, points)
         { }
 
         #endregion
 
-        private Preset(string name, IEnumerable<TimePoint> points, int interval)
+        private Preset(string name, IEnumerable<TimePoint> points)
         {
             PresetName = name;
 
@@ -61,6 +62,7 @@ namespace CycleBellLibrary
 
         #region Properties
 
+        // Static:
         /// <summary>
         /// Interval in minutes for startTime if it no set
         /// </summary>
@@ -75,6 +77,12 @@ namespace CycleBellLibrary
         /// Returns Preset with default settings
         /// </summary>
         public static Preset EmptyPreset => new Preset();
+
+        // Public:
+        /// <summary>
+        /// Algorythms for TimePoints BaseTime set
+        /// </summary>
+        public ITimePointBaseTimeSetter BaseTimeSetter { get; set; }
 
         /// <summary>
         /// Start TimePoint name
