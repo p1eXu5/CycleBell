@@ -55,7 +55,6 @@ namespace CycleBellLibrary
             }
 
             TimePoints = new ReadOnlyObservableCollection<TimePoint> (_timePoints);
-
         }
 
         #endregion
