@@ -5,10 +5,14 @@ using System.Linq;
 
 namespace CycleBellLibrary
 {
+    /// <summary>
+    /// If StartTime not set, getter returns negative TimeSpan (TimeSpan.FromSecond(-1))
+    /// </summary>
     public class Preset
     {
         #region Fields
 
+        private TimeSpan? _startTime = null;
         private ObservableCollection<TimePoint> _timePoints;
         private byte _isInfiniteLoop;
 
@@ -19,52 +23,18 @@ namespace CycleBellLibrary
         #region Linked Constructors
 
         public Preset()
-           : this(DefaultName, null, DefaultInterval, null, false)
+           : this(DefaultName, null, DefaultInterval)
         { }
 
         public Preset(IEnumerable<TimePoint> points)
-            : this(DefaultName, points, DefaultInterval, null, false)
+            : this(DefaultName, points, DefaultInterval)
         { }
 
-        public Preset(string name)
-            : this(name, null, DefaultInterval, null, false)
-        { }
-
-        public Preset(string name, int interval)
-            : this(name, null, interval, null, false)
-        { }
-
-        public Preset(string name, IEnumerable<TimePoint> points)
-            : this(name, points, DefaultInterval, null, false)
-        { }
-
-        public Preset(string name, TimeSpan startTime)
-            : this(name, null, -1, startTime, false)
-        { }
-
-        public Preset(string name, IEnumerable<TimePoint> points, TimeSpan startTime)
-                : this(name, points, -1, startTime, false)
-        { }
-
-        public Preset(string name, IEnumerable<TimePoint> points, TimeSpan startTime, bool isInfinite)
-            : this(name, points, -1, startTime, isInfinite)
-        { }
-
-        public Preset(string name, IEnumerable<TimePoint> points, string startTime)
-            : this(name, points, -1, TimeSpan.Parse(startTime), false)
-        { }
-
-        public Preset(string name, IEnumerable<TimePoint> points, string startTime, bool isInfinite)
-            : this(name, points, -1, TimeSpan.Parse(startTime), isInfinite)
-
-        { } 
         #endregion
 
-        private Preset(string name, IEnumerable<TimePoint> points, int interval, TimeSpan? startTime, bool isInfinite)
+        private Preset(string name, IEnumerable<TimePoint> points, int interval)
         {
             PresetName = name;
-
-            if (isInfinite) _isInfiniteLoop |= 0x01;
 
             TimerLoops = new TimerLoopSortedDictionary();
             _timePoints = new ObservableCollection<TimePoint>();
@@ -74,7 +44,6 @@ namespace CycleBellLibrary
 
             if (pointList != null && pointList.Count > 0) {
 
-                StartTime = startTime ?? pointList[0].GetAbsoluteTime();
 
                 foreach (var point in pointList) {
 
@@ -86,15 +55,6 @@ namespace CycleBellLibrary
 
             TimePoints = new ReadOnlyObservableCollection<TimePoint> (_timePoints);
 
-            // StartTime setting
-            var currentTime = DateTime.Now.TimeOfDay;
-
-            if (startTime != null) {
-                StartTime = (TimeSpan) startTime;
-            }
-            else {
-                StartTime = new TimeSpan(currentTime.Hours, (currentTime.Minutes + interval), 0);
-            }
         }
 
         #endregion
@@ -129,7 +89,11 @@ namespace CycleBellLibrary
         /// <summary>
         /// Start time for preset
         /// </summary>
-        public TimeSpan StartTime { get; set; }
+        public TimeSpan StartTime
+        {
+            get => _startTime ?? TimeSpan.FromSeconds(-1); 
+            set => _startTime = value;
+        }
 
         /// <summary>
         /// Indicates whether the loop is infinite
