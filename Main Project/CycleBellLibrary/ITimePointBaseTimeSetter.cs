@@ -8,6 +8,7 @@ namespace CycleBellLibrary
 {
     public interface ITimePointBaseTimeSetter
     {
-        void UpdateBaseTime (TimePoint timePoint);
+        void UpdateEachBaseTime (IEnumerable<TimePoint> timePoints, TimeSpan startTime);
+        void UpdateBaseTime (TimePoint timePoint, IEnumerable<TimePoint> timePoints, TimeSpan startTime);
     }
 }
