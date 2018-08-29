@@ -37,7 +37,13 @@ namespace CycleBellLibrary
         /// <exception cref="ArgumentException">Throws when empty preset already exists</exception>
         public void CreateNewPreset()
         {
+            var newPreset = Preset.EmptyPreset;
 
+            if (!PresetsManager.Presets.Any(p => p.PresetName.Equals(newPreset.PresetName)))
+                PresetsManager.Add(Preset.EmptyPreset);
+            else {
+                throw new ArgumentException ("Can't create new empty preset. Empty preset already exists.");
+            }
         }
     }
 }

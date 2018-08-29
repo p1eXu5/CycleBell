@@ -128,13 +128,7 @@ namespace CycleBell.ViewModels
 
         private void CreatePreset (object obj)
         {
-            var newPreset = Preset.EmptyPreset;
-
-            if (Presets.Any(p => p.PresetName.Equals(newPreset.PresetName)))
-                PresetsManager.Add(Preset.EmptyPreset);
-            else {
-                throw new ArgumentException ("Can't create new empty preset. Empty preset already exists.");
-            }
+            
         }
 
         private void NewPresets(object obj)
