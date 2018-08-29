@@ -28,16 +28,6 @@ namespace CycleBellLibrary
 
         #endregion
 
-        #region Events
-
-        public event NotifyCollectionChangedEventHandler CollectionChanged
-        {
-            add => _presets.CollectionChanged += value;
-            remove => _presets.CollectionChanged -= value;
-        }
-
-        #endregion
-
         #region Properties
 
         public ReadOnlyObservableCollection<Preset> Presets { get; private set; }
@@ -73,7 +63,24 @@ namespace CycleBellLibrary
         /// <param name="preset"></param>
         public void Add (Preset preset)
         {
+            if (preset == null)
+                throw new ArgumentNullException (nameof(preset), "preset can't be null");
+
+            if (_presets.Any (p => p.PresetName == preset.PresetName)) 
+                throw new ArgumentException("preset already exists", nameof(preset));
+
             _presets.Add (preset);
+        }
+
+        public void Remove (Preset preset)
+        {
+            if (preset == null)
+                throw new ArgumentNullException (nameof(preset), "preset can't be null");
+
+            var res = _presets.Remove (preset);
+
+            if (!res)
+                throw new ArgumentException("preset doesn't exists", nameof(preset));
         }
 
         /// <summary>

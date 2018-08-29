@@ -12,6 +12,12 @@ namespace CycleBellLibrary.NUnitTests
     [TestFixture]
     public class CycleBellManagerTests
     {
+        #region Fields
+
+        private readonly FakePresetsManager _mockPresetsManager = new FakePresetsManager();
+
+        #endregion
+
         [Test]
         public void CreateNewPreset_PresetsDoesntContainsEmptyPreset_AddsEmptyPreset()
         {
@@ -33,44 +39,35 @@ namespace CycleBellLibrary.NUnitTests
             StringAssert.Contains ("Can't create new empty preset. Empty preset already exists.", ex.Message);
         }
 
-
-
         [Test]
-        public void DeletePreset_ExistingPreset_DeletesPreset()
+        public void DeletePreset_WhenCalled_CallsPresetsManager()
         {
             var cbm = GetCycleBellManager();
-            cbm.CreateNewPreset();
-            var addedPreset = cbm.PresetsManager.Presets[0];
+            var preset = Preset.EmptyPreset;
 
-            cbm.DeletePreset (addedPreset);
+            cbm.RemovePreset (preset);
 
-            Assert.IsTrue (cbm.PresetsManager.Presets.Count == 0);
+            Assert.AreSame (_mockPresetsManager.RemovingPreset, preset);
         }
 
         #region Factory
 
         private CycleBellManager GetCycleBellManager()
         {
-            FakePresetManager stubPresetManager = new FakePresetManager();
             FakeTimerManager stubTimerManager = new FakeTimerManager();
 
-            return new CycleBellManager (stubPresetManager, stubTimerManager);
+            return new CycleBellManager (_mockPresetsManager, stubTimerManager);
         }
 
         #endregion
 
         #region FakeTypes
 
-        internal class FakePresetManager : IInnerPresetsManager
+        internal class FakePresetsManager : IInnerPresetsManager
         {
-            private readonly ObservableCollection<Preset> _presets = new ObservableCollection<Preset>();
+            public Preset AddingPreset { get; set; }
+            public Preset RemovingPreset { get; set; }
 
-            public FakePresetManager()
-            {
-                Presets = new System.Collections.ObjectModel.ReadOnlyObservableCollection<Preset> (_presets);
-            }
-
-            public event NotifyCollectionChangedEventHandler CollectionChanged;
             public string FileName { get; set; }
             public ReadOnlyObservableCollection<Preset> Presets { get; } = null;
             public void Clear()
@@ -85,7 +82,12 @@ namespace CycleBellLibrary.NUnitTests
 
             public void Add (Preset preset)
             {
-                _presets.Add(preset);
+                AddingPreset = preset;
+            }
+
+            public void Remove (Preset preset)
+            {
+                RemovingPreset = preset;
             }
 
             public void SavePresets()

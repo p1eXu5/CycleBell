@@ -42,7 +42,19 @@ namespace CycleBellLibrary.NUnitTests
             StringAssert.Contains ("preset already exists", ex.Message);
         }
 
-        #region FakeTypes
+        [Test]
+        public void Remove_ExistingPreset_RemovesPreset()
+        {
+            var pm = GetPresetsManager();
+            pm.Add(Preset.EmptyPreset);
+            var addedPreset = pm.Presets[0];
+
+            pm.Remove (addedPreset);
+
+            Assert.IsTrue (pm.Presets.Count == 0);
+        }
+
+        #region Factory
 
         private PresetsManager GetPresetsManager()
         {

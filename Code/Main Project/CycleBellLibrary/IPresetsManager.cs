@@ -8,10 +8,8 @@ namespace CycleBellLibrary
 {
     public interface IPresetsManager
     {
-        event NotifyCollectionChangedEventHandler CollectionChanged;
-
-        string FileName { get; set; }
         ReadOnlyObservableCollection<Preset> Presets { get; }
+        string FileName { get; set; }
 
         void Clear();
         void LoadFromFile(string fileName);
