@@ -32,7 +32,7 @@ namespace CycleBell.ViewModels
             _manager = cbm;
 
             Presets = new ObservableCollection<PresetViewModel>(_manager.Presets.Select(p => new PresetViewModel(p)));
-            _manager.CollectionChanged += (s, e) =>
+            _manager.PresetCollectionChanged += (s, e) =>
                                                 {
                                                     // TODO:
                                                     if (e.NewItems[0] != null)

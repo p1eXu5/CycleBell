@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace CycleBellLibrary
 {
-    public class CycleBellManager
+    public class CycleBellManager : ICycleBellManager
     {
         private readonly IPresetsManager _presetsManager;
         private readonly ITimerManager _timerManager;
@@ -22,18 +22,39 @@ namespace CycleBellLibrary
         }
 
         public CycleBellManager (IPresetsManager presetsManager, ITimerManager timerManager)
-            : this ("", presetsManager, timerManager)
+            : this (null, presetsManager, timerManager)
         {}
 
         public string FileName { get; }
-        public ReadOnlyObservableCollection<Preset> Presets => _presetsManager.Presets;
+        public ICollection<Preset> Presets => _presetsManager.Presets;
 
-        public event NotifyCollectionChangedEventHandler CollectionChanged
+        public event NotifyCollectionChangedEventHandler PresetCollectionChanged
         {
             add => ((INotifyCollectionChanged) Presets).CollectionChanged += value;
             remove => ((INotifyCollectionChanged) Presets).CollectionChanged -= value;
         }
 
-        public void LoadPresetsFromFile (string fileName) => _presetsManager.LoadFromFile (fileName);
+        public void LoadPresetsFromFile (string fileName)
+        {
+            if (String.IsNullOrWhiteSpace (fileName))
+                throw new ArgumentException("File name isn't correct");
+
+            _presetsManager.LoadFromFile (fileName);
+        }
+
+        /// <summary>
+        /// Creates empty preset
+        /// </summary>
+        /// <exception cref="ArgumentException">Throws when empty preset already exists</exception>
+        public void CreateNewPreset()
+        {
+            var newPreset = Preset.EmptyPreset;
+
+            if (!Presets.Any(p => p.PresetName.Equals(newPreset.PresetName)))
+                _presetsManager.Add(Preset.EmptyPreset);
+            else {
+                throw new ArgumentException ("Can't create new empty preset. Empty preset already exists.");
+            }
+        }
     }
 }

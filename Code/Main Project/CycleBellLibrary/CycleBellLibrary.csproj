@@ -45,6 +45,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CycleBellManager.cs" />
+    <Compile Include="ICycleBellManager.cs" />
     <Compile Include="ITimePointBaseTimeSetter.cs" />
     <Compile Include="ITimerManager.cs" />
     <Compile Include="PresetObservableCollection.cs" />
