@@ -37,7 +37,7 @@ namespace CycleBell
 
             container.RegisterInstance<ITimerManager>(manager);
 
-            //container.RegisterType<MainViewModel>();
+            container.RegisterType<MainViewModel>();
 
             wnd.DataContext = container.Resolve<MainViewModel>();
 

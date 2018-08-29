@@ -28,7 +28,7 @@ namespace CycleBellLibrary.NUnitTests
             var cbm = GetCycleBellManager();
 
             cbm.CreateNewPreset();
-            var ex = Assert.Catch<Exception> (() => cbm.CreateNewPreset());
+            var ex = Assert.Catch<ArgumentException> (() => cbm.CreateNewPreset());
 
             StringAssert.Contains ("Can't create new empty preset. Empty preset already exists.", ex.Message);
         }
@@ -41,7 +41,7 @@ namespace CycleBellLibrary.NUnitTests
             return new CycleBellManager (stubPresetManager, stubTimerManager);
         }
 
-        internal class FakePresetManager : IPresetsManager
+        internal class FakePresetManager : IInnerPresetsManager
         {
             private readonly ObservableCollection<Preset> _presets = new ObservableCollection<Preset>();
 
