@@ -58,5 +58,16 @@ namespace CycleBellLibrary
 
             _presetsManager.Add (preset);
         }
+
+        public void DeletePreset (Preset preset)
+        {
+            if (preset == null)
+                throw new ArgumentNullException (nameof(preset), "preset can't be null");
+
+            if (!_presetsManager.Presets.Contains(preset))
+                throw new ArgumentException("preset doesn't exists", nameof(preset));
+
+            _presetsManager.Remove (preset);
+        }
     }
 }

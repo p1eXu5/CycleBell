@@ -33,36 +33,18 @@ namespace CycleBellLibrary.NUnitTests
             StringAssert.Contains ("Can't create new empty preset. Empty preset already exists.", ex.Message);
         }
 
-        [Test]
-        public void AddPreset_PresetIsNull_Throws()
-        {
-            var cbm = GetCycleBellManager();
 
-            var ex = Assert.Catch<Exception> (() => cbm.AddPreset (null));
-
-            StringAssert.Contains ("preset can't be null", ex.Message);
-        }
 
         [Test]
-        public void AddPreset_ValidPreset_AddsPreset()
+        public void DeletePreset_ExistingPreset_DeletesPreset()
         {
             var cbm = GetCycleBellManager();
-            var preset = Preset.EmptyPreset;
+            cbm.CreateNewPreset();
+            var addedPreset = cbm.PresetsManager.Presets[0];
 
-            cbm.AddPreset (preset);
+            cbm.DeletePreset (addedPreset);
 
-            Assert.IsTrue (cbm.PresetsManager.Presets.Count == 1);
-        }
-
-        [Test]
-        public void AddPreset_ExistingPreset_Throws()
-        {
-            var cbm = GetCycleBellManager();
-            cbm.AddPreset(Preset.EmptyPreset);
-
-            var ex = Assert.Catch<Exception> (() => cbm.AddPreset (Preset.EmptyPreset));
-
-            StringAssert.Contains ("preset already exists", ex.Message);
+            Assert.IsTrue (cbm.PresetsManager.Presets.Count == 0);
         }
 
         #region Factory

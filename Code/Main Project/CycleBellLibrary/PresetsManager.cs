@@ -71,7 +71,10 @@ namespace CycleBellLibrary
         /// Adds preset to preset collection
         /// </summary>
         /// <param name="preset"></param>
-        public void Add(Preset preset) => _presets.Add(preset);
+        public void Add (Preset preset)
+        {
+            _presets.Add (preset);
+        }
 
         /// <summary>
         /// Serializes presets, for a while
