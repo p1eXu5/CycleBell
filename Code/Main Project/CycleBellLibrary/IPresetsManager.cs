@@ -15,7 +15,11 @@ namespace CycleBellLibrary
 
         void Clear();
         void LoadFromFile(string fileName);
-        void Add(Preset preset);
         void SavePresets();
+    }
+
+    internal interface IInnerPresetManager : IPresetsManager
+    {
+        void Add(Preset preset);
     }
 }

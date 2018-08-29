@@ -128,7 +128,7 @@ namespace CycleBell.ViewModels
 
         private void CreatePreset (object obj)
         {
-            
+            _manager.CreateNewPreset();
         }
 
         private void NewPresets(object obj)
