@@ -131,12 +131,6 @@ namespace CycleBellLibrary
         private int GetDueTime (int i) => Accuracy - (i % Accuracy);
 
         /// <summary>
-        /// Add preset to inner presetsManager's collection
-        /// </summary>
-        /// <param name="preset"></param>
-        public void AddPreset(Preset preset) => _presetsManager.Add(preset);
-
-        /// <summary>
         /// Pause timer loop
         /// </summary>
         public void Pouse()

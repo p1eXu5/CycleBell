@@ -13,13 +13,6 @@ namespace CycleBellLibrary
         ReadOnlyObservableCollection<Preset> Presets { get; }
         bool IsRunning { get; }
 
-
-        /// <summary>
-        /// Add preset to inner presetsManager's collection
-        /// </summary>
-        /// <param name="preset"></param>
-        void AddPreset(Preset preset);
-
         /// <summary>
         /// Pause timer loop
         /// </summary>

@@ -66,7 +66,7 @@ namespace CycleBell.ViewModels.NUnitTests
 
             public void CreateNewPreset()
             {
-                PresetsManager.Add(null);
+                ((FakePresetsManager)PresetsManager).Add(null);
             }
         }
 

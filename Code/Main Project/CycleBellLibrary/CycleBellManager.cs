@@ -13,14 +13,14 @@ namespace CycleBellLibrary
     {
         #region ctor
 
-        public CycleBellManager (string fileName, IPresetsManager presetsManager, ITimerManager timerManager)
+        public CycleBellManager (string fileName, IInnerPresetsManager presetsManager, ITimerManager timerManager)
         {
             FileName = fileName;
-            PresetsManager = presetsManager;
+            PresetsManager = (IPresetsManager)presetsManager;
             TimerManager = timerManager;
         }
 
-        public CycleBellManager (IPresetsManager presetsManager, ITimerManager timerManager)
+        public CycleBellManager (IInnerPresetsManager presetsManager, ITimerManager timerManager)
             : this (null, presetsManager, timerManager)
         {}
 
@@ -40,7 +40,7 @@ namespace CycleBellLibrary
             var newPreset = Preset.EmptyPreset;
 
             if (!PresetsManager.Presets.Any(p => p.PresetName.Equals(newPreset.PresetName)))
-                PresetsManager.Add(Preset.EmptyPreset);
+                ((IInnerPresetsManager)PresetsManager).Add(Preset.EmptyPreset);
             else {
                 throw new ArgumentException ("Can't create new empty preset. Empty preset already exists.");
             }
