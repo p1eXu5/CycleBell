@@ -54,6 +54,17 @@ namespace CycleBellLibrary.NUnitTests
             Assert.IsTrue (cbm.PresetsManager.Presets.Count == 1);
         }
 
+        [Test]
+        public void AddPreset_ExistingPreset_Throws()
+        {
+            var cbm = GetCycleBellManager();
+            cbm.AddPreset(Preset.EmptyPreset);
+
+            var ex = Assert.Catch<Exception> (() => cbm.AddPreset (Preset.EmptyPreset));
+
+            StringAssert.Contains ("preset already exists", ex.Message);
+        }
+
         #region Factory
 
         private CycleBellManager GetCycleBellManager()

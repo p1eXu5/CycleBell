@@ -53,6 +53,9 @@ namespace CycleBellLibrary
             if (preset == null)
                 throw new ArgumentNullException (nameof(preset), "preset can't be null");
 
+            if (_presetsManager.Presets.Any (p => p.PresetName == preset.PresetName)) 
+                throw new ArgumentException("preset already exists", nameof(preset));
+
             _presetsManager.Add (preset);
         }
     }
