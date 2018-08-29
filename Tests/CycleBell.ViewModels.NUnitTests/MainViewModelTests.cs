@@ -12,7 +12,7 @@ namespace CycleBell.ViewModels.NUnitTests
         {}
 
         [Test]
-        public void MainViewModel_TypeCheck_IsObservableObject()
+        public void class_TypeCheck_IsObservableObject()
         {
             Type actualType = typeof(MainViewModel).BaseType;
             Type expectedType = typeof(ObservableObject);
