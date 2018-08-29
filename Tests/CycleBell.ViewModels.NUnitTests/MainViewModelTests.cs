@@ -37,6 +37,8 @@ namespace CycleBell.ViewModels.NUnitTests
             Assert.IsTrue (viewModel.Presets.Count == 1);
         }
 
+        #region Factory
+
         private MainViewModel GetStubedMainViewModel()
         {
             var stubDialogRegistrator = new FakeDialogRegistrator();
@@ -44,6 +46,10 @@ namespace CycleBell.ViewModels.NUnitTests
 
             return new MainViewModel (stubDialogRegistrator, stubCycleBellManager);
         }
+
+        #endregion
+
+        #region FakeTypes
 
         internal class FakeDialogRegistrator : IDialogRegistrator
         {
@@ -103,5 +109,7 @@ namespace CycleBell.ViewModels.NUnitTests
                 throw new NotImplementedException();
             }
         }
+
+        #endregion
     }
 }
