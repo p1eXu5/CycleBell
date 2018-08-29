@@ -6,11 +6,10 @@ namespace CycleBellLibrary
 {
     public interface ITimerManager
     {
-        event NotifyCollectionChangedEventHandler PresetCollectionChanged;
         event EventHandler<TimePointEventArgs> ChangeTimePointEvent;
         event EventHandler<TimePointEventArgs> TimerSecondPassedEvent;
         event EventHandler TimerStopEvent;
-        ReadOnlyObservableCollection<Preset> Presets { get; }
+
         bool IsRunning { get; }
 
         /// <summary>

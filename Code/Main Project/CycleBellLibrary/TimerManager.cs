@@ -81,11 +81,6 @@ namespace CycleBellLibrary
         #endregion
 
         #region Events
-        public event NotifyCollectionChangedEventHandler PresetCollectionChanged
-        {
-            add => _presetsManager.CollectionChanged += value;
-            remove => _presetsManager.CollectionChanged -= value;
-        }
 
         public event EventHandler<TimePointEventArgs> ChangeTimePointEvent;
 
