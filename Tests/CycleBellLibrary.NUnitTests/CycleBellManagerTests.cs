@@ -33,15 +33,6 @@ namespace CycleBellLibrary.NUnitTests
             StringAssert.Contains ("Can't create new empty preset. Empty preset already exists.", ex.Message);
         }
 
-        [Test]
-        public void class_WhenCreatingNewPreset_RaisesPropertyCollectionChanged()
-        {
-            var cbm = GetStubedCycleBellManager();
-            bool raised = false;
-
-
-        }
-
         private CycleBellManager GetStubedCycleBellManager()
         {
             FakePresetManager stubPresetManager = new FakePresetManager();

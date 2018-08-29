@@ -9,9 +9,9 @@ namespace CycleBellLibrary
 {
     public interface ICycleBellManager
     {
-        ICollection<Preset> Presets { get; }
-
-        event NotifyCollectionChangedEventHandler PresetCollectionChanged;
+        IPresetsManager PresetsManager { get; }
+        ITimerManager TimerManager { get; }
+        string FileName { get; }
 
         void CreateNewPreset();
     }

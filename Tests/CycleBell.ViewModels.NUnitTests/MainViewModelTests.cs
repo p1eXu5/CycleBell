@@ -22,9 +22,13 @@ namespace CycleBell.ViewModels.NUnitTests
         }
 
         [Test]
-        public void CreatePresetCommand_WhenExecuted_AddsPreset()
+        public void CreatePresetCommand_PresetsIsEmpty_AddsEmptyPreset()
         {
+            var viewModel = GetStubedMainViewModel();
 
+            viewModel.CreatePresetCommand.Execute(null);
+
+            Assert.IsTrue (viewModel.Presets.Count == 1);
         }
 
         private MainViewModel GetStubedMainViewModel()
@@ -50,6 +54,10 @@ namespace CycleBell.ViewModels.NUnitTests
 
         internal class FakeCycleBellManager : ICycleBellManager
         {
+            public IPresetsManager PresetsManager { get; }
+            public ITimerManager TimerManager { get; }
+            public string FileName { get; }
+
             public void CreateNewPreset()
             {
                 throw new NotImplementedException();

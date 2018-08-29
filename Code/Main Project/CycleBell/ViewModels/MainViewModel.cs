@@ -1,12 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Globalization;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Windows.Data;
-
+using System.Windows.Input;
 using CycleBellLibrary;
 
 using CycleBell.Annotations;
@@ -18,9 +19,11 @@ namespace CycleBell.ViewModels
     {
         #region Private
 
-        private readonly ICycleBellManager _manager;
         private readonly IDialogRegistrator _dialogRegistrator;
 
+        private readonly ICycleBellManager _manager;
+        private readonly IPresetsManager _presetManaget;
+        private readonly ITimerManager _timerManager;
 
         #endregion Private
 
@@ -30,16 +33,17 @@ namespace CycleBell.ViewModels
         {
             _dialogRegistrator = dialogRegistrator;
             _manager = cbm;
+            _presetManaget = cbm.PresetsManager;
+            _timerManager = cbm.TimerManager;
 
-            Presets = new ObservableCollection<PresetViewModel>(_manager.Presets.Select(p => new PresetViewModel(p)));
-            _manager.PresetCollectionChanged += (s, e) =>
+            Presets = new ObservableCollection<PresetViewModel>(_presetManaget.Presets.Select(p => new PresetViewModel(p)));
+            ((INotifyCollectionChanged)(_presetManaget.Presets)).CollectionChanged += (s, e) =>
                                                 {
                                                     // TODO:
                                                     if (e.NewItems[0] != null)
                                                         Presets.Add((PresetViewModel)e.NewItems[0]);
-
-
                                                 };
+
         }
 
         #endregion Constructor
@@ -94,12 +98,13 @@ namespace CycleBell.ViewModels
 
         #region Commands
 
-        public ActionCommand NewCommand => new ActionCommand(NewPresets);
-        public ActionCommand OpenCommand => new ActionCommand(OpenPresets);
-        public ActionCommand SaveCommand => new ActionCommand(SavePresets);
-        public ActionCommand SaveAsCommand => new ActionCommand(SaveAsPresets);
-        public ActionCommand ExitCommand => new ActionCommand(Exit);
-        public ActionCommand SoundSelectCommand => new ActionCommand(SoundSelect);
+        public ICommand CreatePresetCommand => new ActionCommand(CreatePreset);
+        public ICommand NewCommand => new ActionCommand(NewPresets);
+        public ICommand OpenCommand => new ActionCommand(OpenPresets);
+        public ICommand SaveCommand => new ActionCommand(SavePresets);
+        public ICommand SaveAsCommand => new ActionCommand(SaveAsPresets);
+        public ICommand ExitCommand => new ActionCommand(Exit);
+        public ICommand SoundSelectCommand => new ActionCommand(SoundSelect);
 
         //public ActionCommand FirstCallCommand => new ActionCommand (p =>
         //                                            {
@@ -120,6 +125,11 @@ namespace CycleBell.ViewModels
         #endregion Commands
 
         #region Methods
+
+        private void CreatePreset (object obj)
+        {
+
+        }
 
         private void NewPresets(object obj)
         {

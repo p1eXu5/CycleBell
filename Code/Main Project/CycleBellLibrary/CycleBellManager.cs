@@ -11,36 +11,25 @@ namespace CycleBellLibrary
 {
     public class CycleBellManager : ICycleBellManager
     {
-        private readonly IPresetsManager _presetsManager;
-        private readonly ITimerManager _timerManager;
+        #region ctor
 
         public CycleBellManager (string fileName, IPresetsManager presetsManager, ITimerManager timerManager)
         {
             FileName = fileName;
-            _presetsManager = presetsManager;
-            _timerManager = timerManager;
+            PresetsManager = presetsManager;
+            TimerManager = timerManager;
         }
 
         public CycleBellManager (IPresetsManager presetsManager, ITimerManager timerManager)
             : this (null, presetsManager, timerManager)
         {}
 
+        #endregion
+
+        public IPresetsManager PresetsManager { get; }
+        public ITimerManager TimerManager { get; }
+
         public string FileName { get; }
-        public ICollection<Preset> Presets => _presetsManager.Presets;
-
-        public event NotifyCollectionChangedEventHandler PresetCollectionChanged
-        {
-            add => ((INotifyCollectionChanged) Presets).CollectionChanged += value;
-            remove => ((INotifyCollectionChanged) Presets).CollectionChanged -= value;
-        }
-
-        public void LoadPresetsFromFile (string fileName)
-        {
-            if (String.IsNullOrWhiteSpace (fileName))
-                throw new ArgumentException("File name isn't correct");
-
-            _presetsManager.LoadFromFile (fileName);
-        }
 
         /// <summary>
         /// Creates empty preset
@@ -50,8 +39,8 @@ namespace CycleBellLibrary
         {
             var newPreset = Preset.EmptyPreset;
 
-            if (!Presets.Any(p => p.PresetName.Equals(newPreset.PresetName)))
-                _presetsManager.Add(Preset.EmptyPreset);
+            if (PresetsManager.Presets.Any(p => p.PresetName.Equals(newPreset.PresetName)))
+                PresetsManager.Add(Preset.EmptyPreset);
             else {
                 throw new ArgumentException ("Can't create new empty preset. Empty preset already exists.");
             }
