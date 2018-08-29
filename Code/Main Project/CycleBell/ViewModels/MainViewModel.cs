@@ -22,7 +22,7 @@ namespace CycleBell.ViewModels
         private readonly IDialogRegistrator _dialogRegistrator;
 
         private readonly ICycleBellManager _manager;
-        private readonly IPresetsManager _presetManaget;
+        private readonly IPresetsManager _presetManager;
         private readonly ITimerManager _timerManager;
 
         #endregion Private
@@ -33,15 +33,15 @@ namespace CycleBell.ViewModels
         {
             _dialogRegistrator = dialogRegistrator;
             _manager = cbm;
-            _presetManaget = cbm.PresetsManager;
+            _presetManager = cbm.PresetsManager;
             _timerManager = cbm.TimerManager;
 
-            Presets = new ObservableCollection<PresetViewModel>(_presetManaget.Presets.Select(p => new PresetViewModel(p)));
-            ((INotifyCollectionChanged)(_presetManaget.Presets)).CollectionChanged += (s, e) =>
+            Presets = new ObservableCollection<PresetViewModel>(_presetManager.Presets.Select(p => new PresetViewModel(p)));
+            ((INotifyCollectionChanged)(_presetManager.Presets)).CollectionChanged += (s, e) =>
                                                 {
                                                     // TODO:
                                                     if (e.NewItems[0] != null)
-                                                        Presets.Add((PresetViewModel)e.NewItems[0]);
+                                                        Presets.Add(new PresetViewModel((Preset)e.NewItems[0]));
                                                 };
 
         }
@@ -128,7 +128,13 @@ namespace CycleBell.ViewModels
 
         private void CreatePreset (object obj)
         {
+            var newPreset = Preset.EmptyPreset;
 
+            if (Presets.Any(p => p.PresetName.Equals(newPreset.PresetName)))
+                PresetsManager.Add(Preset.EmptyPreset);
+            else {
+                throw new ArgumentException ("Can't create new empty preset. Empty preset already exists.");
+            }
         }
 
         private void NewPresets(object obj)

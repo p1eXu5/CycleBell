@@ -43,7 +43,7 @@ namespace CycleBellLibrary.NUnitTests
 
         internal class FakePresetManager : IPresetsManager
         {
-            private ObservableCollection<Preset> _presets = new ObservableCollection<Preset>();
+            private readonly ObservableCollection<Preset> _presets = new ObservableCollection<Preset>();
 
             public FakePresetManager()
             {
