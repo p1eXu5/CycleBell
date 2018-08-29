@@ -1,5 +1,6 @@
 ﻿using System;
 using CycleBell.Base;
+using CycleBellLibrary;
 using NUnit.Framework;
 
 namespace CycleBell.ViewModels.NUnitTests
@@ -26,9 +27,33 @@ namespace CycleBell.ViewModels.NUnitTests
 
         }
 
-        private MainViewModel MakeMainViewModel()
+        private MainViewModel GetStubedMainViewModel()
         {
-            throw new NotImplementedException();
+            var stubDialogRegistrator = new FakeDialogRegistrator();
+            var stubCycleBellManager = new FakeCycleBellManager();
+
+            return new MainViewModel (stubDialogRegistrator, stubCycleBellManager);
+        }
+
+        internal class FakeDialogRegistrator : IDialogRegistrator
+        {
+            public void Register<TViewModel, TView>() where TViewModel : IDialogCloseRequested where TView : IDialog
+            {
+                throw new NotImplementedException();
+            }
+
+            public bool? ShowDialog<TViewModel> (TViewModel viewModel) where TViewModel : IDialogCloseRequested
+            {
+                throw new NotImplementedException();
+            }
+        }
+
+        internal class FakeCycleBellManager : ICycleBellManager
+        {
+            public void CreateNewPreset()
+            {
+                throw new NotImplementedException();
+            }
         }
     }
 }

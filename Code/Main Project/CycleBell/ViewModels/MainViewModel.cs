@@ -18,15 +18,15 @@ namespace CycleBell.ViewModels
     {
         #region Private
 
-        private CycleBellManager _manager;
-        private IDialogRegistrator _dialogRegistrator;
+        private readonly ICycleBellManager _manager;
+        private readonly IDialogRegistrator _dialogRegistrator;
 
 
         #endregion Private
 
         #region Constructor
 
-        public MainViewModel(IDialogRegistrator dialogRegistrator, CycleBellManager cbm)
+        public MainViewModel(IDialogRegistrator dialogRegistrator, ICycleBellManager cbm)
         {
             _dialogRegistrator = dialogRegistrator;
             _manager = cbm;

@@ -54,6 +54,10 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\Code\Main Project\CycleBellLibrary\CycleBellLibrary.csproj">
+      <Project>{9d17cc68-d43e-45af-bd40-4443a579b8c5}</Project>
+      <Name>CycleBellLibrary</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\Code\Main Project\CycleBell\CycleBell.csproj">
       <Project>{b098ffd5-0010-4c65-94b0-0a73ded8dbd6}</Project>
       <Name>CycleBell</Name>
