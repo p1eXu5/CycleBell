@@ -73,3 +73,11 @@
 /CycleBellLibrary.NUnitTests/bin/Debug
 /CycleBellLibrary.NUnitTests/obj/Debug
 /CycleBell.ViewModels.NUnitTests/obj/Debug
+/Build
+/Code/.vs
+/Code/Main Project/CycleBellConsolApp/obj
+/Code/Main Project/CycleBellLibrary/obj
+/Code/packages
+/Tests/CycleBell.ViewModels.NUnitTests/bin/Debug
+/Tests/CycleBell.ViewModels.NUnitTests/obj
+/Tests/CycleBellLibrary.NUnitTests/obj

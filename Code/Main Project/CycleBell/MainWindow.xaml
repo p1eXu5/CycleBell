@@ -1,0 +1,294 @@
+﻿<Window x:Name="Window"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:sys="clr-namespace:System;assembly=mscorlib"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:CycleBell"
+        xmlns:vmodels="clr-namespace:CycleBell.ViewModels"
+        xmlns:ctrl="clr-namespace:CycleBell.Controls"
+        xmlns:Themes="clr-namespace:Microsoft.Windows.Themes;assembly=PresentationFramework.Aero2" x:Class="CycleBell.MainWindow"
+        mc:Ignorable="d"
+        d:DataContext="{d:DesignInstance vmodels:MainViewModel, IsDesignTimeCreatable=True}"
+        
+        Title="MainWindow" 
+        Height="695" Width="444.125" 
+        ResizeMode="CanMinimize" WindowStartupLocation="CenterScreen">
+
+    <Window.Resources>
+        <ResourceDictionary>
+                        
+            <sys:Double x:Key="SeparatorSpaseKey">15</sys:Double>
+            
+            <Style x:Key="Menu.Rectangle" TargetType="Rectangle">
+                <Setter Property="Width" Value="1"/>
+                <Setter Property="Height" Value="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Menu}, Path=ActualHeight}"/>
+                <Setter Property="VerticalAlignment" Value="Center"/>
+                <Setter Property="Margin" Value="0"/>
+                <Setter Property="Fill" Value="Black"/>
+                <Setter Property="SnapsToDevicePixels" Value="true"/>
+            </Style>
+
+            <vmodels:CycleBellStateConverter x:Key="CycleBellStateConverter" />
+            <vmodels:FlagToOpacityConverter x:Key="FlagToOpacityConverter" />
+
+            <LinearGradientBrush x:Key="col_menuBackground" StartPoint="0.5,0" EndPoint="0.5,1" >
+                <GradientStop Color="#FFECECEC" Offset="0"/>
+                <GradientStop Color="White" Offset="1"/>
+            </LinearGradientBrush>
+
+            <Style  x:Key="myLBStyle" TargetType="ListBoxItem">
+                <Setter Property="Background" Value="Khaki" />
+                <Setter Property="Foreground" Value="DarkSlateGray" />
+                <Setter Property="Margin" Value="5" />
+                <Setter Property="FontStyle" Value="Italic" />
+                <Setter Property="FontSize" Value="14" />
+                <Setter Property="BorderBrush" Value="DarkGray" />
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="ListBoxItem">
+                            <ContentPresenter Content="{TemplateBinding Content}" />
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+            </Style>
+
+        </ResourceDictionary>
+    </Window.Resources>
+    <DockPanel>
+        <!-- Menu -->
+        <Menu DockPanel.Dock="Top" Height="auto" Background="{StaticResource col_menuBackground}">
+
+            <!-- File menu -->
+            <MenuItem Name="m_fileMenu">
+                <MenuItem.Header>
+                    <TextBlock VerticalAlignment="Center">File</TextBlock>
+                </MenuItem.Header>
+                
+                <MenuItem Header="_New..." Command="{Binding NewCommand}"></MenuItem>
+                <MenuItem Header="_Open..." Command="{Binding OpenCommand}"></MenuItem>
+                <Separator></Separator>
+                <MenuItem Header="_Save" Command="{Binding SaveCommand}"></MenuItem>
+                <MenuItem Header="Save _As..." Command="{Binding SaveAsCommand}"></MenuItem>
+                <Separator></Separator>
+                <MenuItem Header="_Exit" Command="{Binding ExitCommand}"></MenuItem>
+            </MenuItem>
+            
+            <!-- Settings menu -->
+            <MenuItem Name="m_settingsMenu">
+                <MenuItem.Header>
+                    <TextBlock VerticalAlignment="Center">Settings</TextBlock>
+                </MenuItem.Header>
+
+                <!-- First Call menu -->
+                <MenuItem Header="First _Call" Command="{Binding FirstCallCommand}">
+                    <MenuItem.Icon>
+                        <Grid VerticalAlignment="Center" HorizontalAlignment="Right" 
+                              RenderTransformOrigin="0.5,0.5"
+                              Opacity="{Binding FirstCallState, Converter={StaticResource FlagToOpacityConverter}}">
+                            <Grid.RenderTransform>
+                                <TransformGroup>
+                                    <TranslateTransform X="-1" Y="1"/>
+                                </TransformGroup>
+                            </Grid.RenderTransform>
+                            <StaticResource ResourceKey="path_menuCheckedIcon"></StaticResource>
+                        </Grid>
+                    </MenuItem.Icon>
+                    <!--<MenuItem.Style>
+                        <Style TargetType="MenuItem">
+                            <Setter Property="Icon" Value="{x:Null}" />
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding FirstCallState, Converter={StaticResource CycleBellStateConverter}}" 
+                                             Value="FirstCall">
+                                    <Setter Property="Icon" Value="{StaticResource menuIconGrid}"></Setter>
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </MenuItem.Style>-->
+                </MenuItem>
+
+                <!-- Infinite Loop menu -->
+                <MenuItem Header="_Infinite Loop" Command="{Binding InfiniteLoopCommand}">
+                    <MenuItem.Icon>
+                        <Grid VerticalAlignment="Center" HorizontalAlignment="Right" 
+                              RenderTransformOrigin="0.5,0.5"
+                              Opacity="{Binding InfiniteLoopState, Converter={StaticResource FlagToOpacityConverter}}">
+                            <Grid.RenderTransform>
+                                <TransformGroup>
+                                    <TranslateTransform X="-1" Y="1"/>
+                                </TransformGroup>
+                            </Grid.RenderTransform>
+                            <StaticResource ResourceKey="path_menuCheckedIcon"></StaticResource>
+                        </Grid>
+                    </MenuItem.Icon>
+                </MenuItem>
+            </MenuItem>
+            
+            <!-- About menu -->
+            <MenuItem Name="m_aboutMenu">
+                <MenuItem.Header>
+                    <TextBlock VerticalAlignment="Center">About</TextBlock>
+                </MenuItem.Header>
+
+                <MenuItem Header="View Help" Command="{Binding ViewHelpCommand}" />
+                <Separator />
+            <MenuItem Header="About Cycle Bell"  Command="{Binding AboutCommand}" />
+            </MenuItem>
+        </Menu>
+
+        <!-- Window Content -->
+        <Grid TextElement.FontSize="14">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="auto"/>
+                <RowDefinition Height="auto"/>
+                <RowDefinition Height="auto"/>
+                <RowDefinition Height="auto"/>
+                <RowDefinition Height="auto"/>
+            </Grid.RowDefinitions>
+
+            <!-- Header -->
+            <TextBlock Text="Cycle Bell" 
+                       HorizontalAlignment="Center" VerticalAlignment="Center"
+                       Margin="0,16,0,4"
+                       Width="auto" 
+                       FontSize="74"
+                       FontFamily="{StaticResource font_FontAbuget}"
+                       TextWrapping="Wrap"
+                       />
+
+            <!-- preset -->
+            <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,0">
+                <TextBlock Text="preset" 
+                           VerticalAlignment="Center" HorizontalAlignment="Center"
+                           Margin="0,0,10,0"
+                           FontFamily="{StaticResource font_SuiGeneris}"
+                           FontWeight="Normal"
+                           FontSize="14"
+                           RenderTransformOrigin="0.5, 0.5">
+                    <TextBlock.RenderTransform>
+                        <TranslateTransform Y="1"/>
+                    </TextBlock.RenderTransform>
+                </TextBlock>
+                <ComboBox x:Name="m_presetComboBox" Style="{DynamicResource MyComboBoxStyle1}"
+                          ItemsSource="{Binding Presets}"
+                          VerticalContentAlignment="Center"
+                          Width="146"
+                          BorderThickness="0,0,0,1"
+                          Margin="0,0" IsEditable="True"
+                          MaxDropDownHeight="90">
+                </ComboBox>
+            </StackPanel>
+
+            <!-- start time -->
+            <StackPanel Grid.Row="2"
+                        Margin="0,48,0,38"
+                        Orientation="Vertical"
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Center" 
+                        TextElement.FontFamily="{StaticResource font_SuiGeneris}" >
+                <ctrl:TextBox2 Text="{Binding StartTime, StringFormat={}{0:%h}:{0:%mm}}" 
+                               HorizontalAlignment="Stretch"
+                               FontSize="18" BorderThickness="1" BorderBrush="DimGray"/>
+                <Label Content="start time"
+                       HorizontalAlignment="Center"/>
+            </StackPanel>
+
+            <!-- points list -->
+            <ListBox x:Name="m_pointsList"
+                     Grid.Row="3"
+                     Margin="38,0"
+                     MinHeight="150"
+                     BorderThickness="0"
+                     ScrollViewer.HorizontalScrollBarVisibility="Hidden"
+                     ItemContainerStyle="{StaticResource myLBStyle}">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition />
+                        <RowDefinition />
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition />
+                        <ColumnDefinition />
+                        <ColumnDefinition />
+                        <ColumnDefinition />
+                        <ColumnDefinition />
+                    </Grid.ColumnDefinitions>
+                    
+                    <!-- Point Data -->
+                    <TextBlock x:Name="m_pointName"
+                               Grid.Column="0" Grid.Row="0"
+                               HorizontalAlignment="Right" VerticalAlignment="Bottom"
+                               Text="Рабочее время"
+                               TextTrimming="CharacterEllipsis"
+                               FontSize="14" FontFamily="Segoe UI Semibold" 
+                                />
+                    <TextBlock x:Name="m_pointTime"
+                               Grid.Column="1" Grid.Row="0"
+                               HorizontalAlignment="Right" VerticalAlignment="Bottom"
+                               Margin="20,0"
+                               Text="18:00"
+                               TextTrimming="CharacterEllipsis"
+                               FontFamily="{StaticResource font_SuiGeneris}"
+                               FontSize="18" RenderTransformOrigin="0.5,0.5"
+                               >
+                        <TextBlock.RenderTransform>
+                            <TransformGroup>
+                                <ScaleTransform/>
+                                <SkewTransform/>
+                                <RotateTransform/>
+                                <TranslateTransform Y="2"/>
+                            </TransformGroup>
+                        </TextBlock.RenderTransform>
+
+                    </TextBlock>
+                    <!-- mute button -->
+                    <TextBlock Grid.Row="0" Grid.Column="2" Margin="0"
+                                Text="mute"
+                                TextTrimming="CharacterEllipsis"
+                                FontFamily="{StaticResource font_SuiGeneris}"
+                                FontSize="14" Height="13"
+                                >
+                        <Hyperlink Command="{Binding MuteCommand}">mute</Hyperlink>
+                    </TextBlock>
+
+                    <!-- add sound button -->
+                    <Button x:Name="m_addSoundButton"
+                            Grid.Column="3" Grid.Row="0" Grid.RowSpan="2"
+                            Margin="10,0"
+                            Width="30" Height="30"
+                            Content="{StaticResource Notes}"
+                            Command="{Binding SoundSelectCommand}">
+                    </Button>
+                    
+                    <ToggleButton x:Name="m_delTimePoint"
+                                  Grid.Column="4" Grid.Row="0" Grid.RowSpan="2"
+                                  Width="30" Height="30" Content="del" />
+                    <!-- sound name -->
+                    <TextBlock x:Name="m_soundName"
+                               Grid.Column="0" Grid.ColumnSpan="3" Grid.Row="1"
+                               Margin="0,0,6,0"
+                               HorizontalAlignment="Right"
+                               Text="default"
+                               TextTrimming="CharacterEllipsis"
+                               FontSize="10"
+                               />
+                </Grid>
+            </ListBox>
+
+            <!-- adding point -->
+            <Grid x:Name="border" Grid.Row="4"
+                  HorizontalAlignment="Center">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                </Grid.ColumnDefinitions>
+                <TextBox x:Name="m_addPointName"
+                         Grid.Column="0"
+                         MinWidth="100"
+                         />
+            </Grid>
+        </Grid>
+    </DockPanel>
+</Window>
