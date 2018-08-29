@@ -33,6 +33,29 @@ namespace CycleBellLibrary.NUnitTests
             StringAssert.Contains ("Can't create new empty preset. Empty preset already exists.", ex.Message);
         }
 
+        [Test]
+        public void AddPreset_PresetIsNull_Throws()
+        {
+            var cbm = GetCycleBellManager();
+
+            var ex = Assert.Catch<Exception> (() => cbm.AddPreset (null));
+
+            StringAssert.Contains ("preset can't be null", ex.Message);
+        }
+
+        [Test]
+        public void AddPreset_ValidPreset_AddsPreset()
+        {
+            var cbm = GetCycleBellManager();
+            var preset = Preset.EmptyPreset;
+
+            cbm.AddPreset (preset);
+
+            Assert.IsTrue (cbm.PresetsManager.Presets.Count == 1);
+        }
+
+        #region Factory
+
         private CycleBellManager GetCycleBellManager()
         {
             FakePresetManager stubPresetManager = new FakePresetManager();
@@ -40,6 +63,10 @@ namespace CycleBellLibrary.NUnitTests
 
             return new CycleBellManager (stubPresetManager, stubTimerManager);
         }
+
+        #endregion
+
+        #region FakeTypes
 
         internal class FakePresetManager : IInnerPresetsManager
         {
@@ -117,5 +144,7 @@ namespace CycleBellLibrary.NUnitTests
                 throw new NotImplementedException();
             }
         }
+
+        #endregion
     }
 }

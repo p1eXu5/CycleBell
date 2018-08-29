@@ -11,13 +11,15 @@ namespace CycleBellLibrary
 {
     public class CycleBellManager : ICycleBellManager
     {
+        private readonly IInnerPresetsManager _presetsManager;
+
         #region ctor
 
         public CycleBellManager (string fileName, IInnerPresetsManager presetsManager, ITimerManager timerManager)
         {
             FileName = fileName;
-            PresetsManager = (IPresetsManager)presetsManager;
-            TimerManager = timerManager;
+           _presetsManager = presetsManager ?? throw new ArgumentNullException(nameof(presetsManager), "presetsManager can't be null");
+            TimerManager = timerManager ?? throw new ArgumentNullException(nameof(timerManager), "timerManager can't be null");
         }
 
         public CycleBellManager (IInnerPresetsManager presetsManager, ITimerManager timerManager)
@@ -26,7 +28,7 @@ namespace CycleBellLibrary
 
         #endregion
 
-        public IPresetsManager PresetsManager { get; }
+        public IPresetsManager PresetsManager => _presetsManager;
         public ITimerManager TimerManager { get; }
 
         public string FileName { get; }
@@ -40,10 +42,18 @@ namespace CycleBellLibrary
             var newPreset = Preset.EmptyPreset;
 
             if (!PresetsManager.Presets.Any(p => p.PresetName.Equals(newPreset.PresetName)))
-                ((IInnerPresetsManager)PresetsManager).Add(Preset.EmptyPreset);
+                _presetsManager.Add(Preset.EmptyPreset);
             else {
                 throw new ArgumentException ("Can't create new empty preset. Empty preset already exists.");
             }
+        }
+
+        public void AddPreset(Preset preset)
+        {
+            if (preset == null)
+                throw new ArgumentNullException (nameof(preset), "preset can't be null");
+
+            _presetsManager.Add (preset);
         }
     }
 }
