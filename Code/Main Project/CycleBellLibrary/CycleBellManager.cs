@@ -1,11 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Collections.Specialized;
-using System.IO;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using CycleBellLibrary.Context;
 using CycleBellLibrary.Repository;
 using CycleBellLibrary.Timer;
@@ -14,9 +8,13 @@ namespace CycleBellLibrary
 {
     public class CycleBellManager : ICycleBellManager
     {
+        #region Fields
+
         private readonly IInnerPresetsManager _presetsManager;
 
-        #region ctor
+        #endregion
+
+        #region Constructors
 
         public CycleBellManager (string fileName, IInnerPresetsManager presetsManager, ITimerManager timerManager)
         {
@@ -31,38 +29,54 @@ namespace CycleBellLibrary
 
         #endregion
 
+        #region Properties
+
         public IPresetsManager PresetsManager => _presetsManager;
         public ITimerManager TimerManager { get; }
 
         public string FileName { get; }
 
+        #endregion
+
+        #region Methods
+
         /// <summary>
-        /// Creates empty preset
+        /// Creates empty preset when it doesn't exist.
         /// </summary>
-        /// <exception cref="ArgumentException">Throws when empty preset already exists</exception>
+        /// <exception cref="ArgumentException">Throws when empty preset already exists and it is particulary filled</exception>
         public void CreateNewPreset()
         {
-            var newPreset = Preset.EmptyPreset;
+            var existEmptyPreset = PresetsManager.Presets.FirstOrDefault (p => p.PresetName == Preset.DefaultName);
 
-            if (PresetsManager.Presets != null && PresetsManager.Presets.All (p => p.PresetName != newPreset.PresetName))
-                _presetsManager.Add(Preset.EmptyPreset);
+            if (existEmptyPreset == null) {
+                _presetsManager.Add (Preset.EmptyPreset);
+            }
             else {
-                throw new ArgumentException ("Can't create new empty preset. Empty preset already exists.");
+                // TODO if existing EmptyPreset does not equal Preset.EmptyPreset than throw, else - do nothing
+                if (existEmptyPreset.StartTime >= TimeSpan.Zero || existEmptyPreset.TimePoints.Count > 0) {
+                    throw new ArgumentException ("Can't create new empty preset. Empty preset already exists and it is particulary filled.");
+                }
             }
         }
 
+        /// <summary>
+        /// Adds preset
+        /// </summary>
+        /// <param name="preset"></param>
         public void AddPreset(Preset preset)
         {
-
-
             _presetsManager.Add (preset);
         }
 
+        /// <summary>
+        /// Remove preset
+        /// </summary>
+        /// <param name="preset"></param>
         public void RemovePreset (Preset preset)
         {
-           
-
             _presetsManager.Remove (preset);
         }
+
+        #endregion
     }
 }
