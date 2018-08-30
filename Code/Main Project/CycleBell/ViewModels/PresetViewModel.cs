@@ -4,6 +4,7 @@ using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.Linq;
 using CycleBellLibrary;
+using CycleBellLibrary.Repository;
 
 namespace CycleBell.ViewModels
 {

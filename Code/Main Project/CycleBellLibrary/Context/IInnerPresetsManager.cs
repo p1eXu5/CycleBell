@@ -1,4 +1,6 @@
-﻿namespace CycleBellLibrary
+﻿using CycleBellLibrary.Repository;
+
+namespace CycleBellLibrary.Context
 {
     public interface IInnerPresetsManager : IPresetsManager
     {

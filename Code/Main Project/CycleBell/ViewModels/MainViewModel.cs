@@ -12,6 +12,9 @@ using CycleBellLibrary;
 
 using CycleBell.Annotations;
 using CycleBell.Base;
+using CycleBellLibrary.Context;
+using CycleBellLibrary.Repository;
+using CycleBellLibrary.Timer;
 
 namespace CycleBell.ViewModels
 {

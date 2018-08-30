@@ -5,6 +5,9 @@ using System.Collections.Specialized;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using CycleBellLibrary.Context;
+using CycleBellLibrary.Repository;
+using CycleBellLibrary.Timer;
 using NUnit.Framework;
 
 namespace CycleBellLibrary.NUnitTests
@@ -14,40 +17,29 @@ namespace CycleBellLibrary.NUnitTests
     {
         #region Fields
 
-        private readonly FakePresetsManager _mockPresetsManager = new FakePresetsManager();
+        private readonly PresetsManager _presetsManager = new PresetsManager();
 
         #endregion
 
         [Test]
-        public void CreateNewPreset_PresetsDoesntContainsEmptyPreset_AddsEmptyPreset()
-        {
-            CycleBellManager cycleBellManager = GetCycleBellManager();
-
-            cycleBellManager.CreateNewPreset();
-
-            Assert.IsTrue(cycleBellManager.PresetsManager.Presets.Count == 1);
-        }
-
-        [Test]
-        public void CreateNewPreset_PresetsContainsEmptyPreset_Throws()
+        public void CreateNewPreset_EmptyPresetDoesntExist_CallsPresetManager()
         {
             var cbm = GetCycleBellManager();
 
             cbm.CreateNewPreset();
-            var ex = Assert.Catch<ArgumentException> (() => cbm.CreateNewPreset());
 
-            StringAssert.Contains ("Can't create new empty preset. Empty preset already exists.", ex.Message);
+            Assert.IsTrue(cbm.PresetsManager.Presets.Count == 1);
         }
 
         [Test]
-        public void DeletePreset_WhenCalled_CallsPresetsManager()
+        public void CreateNewPreset_EmptyPresetExists_DoesNotCallPresetManager()
         {
             var cbm = GetCycleBellManager();
-            var preset = Preset.EmptyPreset;
 
-            cbm.RemovePreset (preset);
+            cbm.CreateNewPreset();
+            cbm.CreateNewPreset();
 
-            Assert.AreSame (_mockPresetsManager.RemovingPreset, preset);
+            Assert.IsTrue(cbm.PresetsManager.Presets.Count == 1);
         }
 
         #region Factory
@@ -56,45 +48,12 @@ namespace CycleBellLibrary.NUnitTests
         {
             FakeTimerManager stubTimerManager = new FakeTimerManager();
 
-            return new CycleBellManager (_mockPresetsManager, stubTimerManager);
+            return new CycleBellManager (_presetsManager, stubTimerManager);
         }
 
         #endregion
 
         #region FakeTypes
-
-        internal class FakePresetsManager : IInnerPresetsManager
-        {
-            public Preset AddingPreset { get; set; }
-            public Preset RemovingPreset { get; set; }
-
-            public string FileName { get; set; }
-            public ReadOnlyObservableCollection<Preset> Presets { get; } = null;
-            public void Clear()
-            {
-                throw new NotImplementedException();
-            }
-
-            public void LoadFromFile (string fileName)
-            {
-                throw new NotImplementedException();
-            }
-
-            public void Add (Preset preset)
-            {
-                AddingPreset = preset;
-            }
-
-            public void Remove (Preset preset)
-            {
-                RemovingPreset = preset;
-            }
-
-            public void SavePresets()
-            {
-                throw new NotImplementedException();
-            }
-        }
 
         internal class FakeTimerManager : ITimerManager
         {

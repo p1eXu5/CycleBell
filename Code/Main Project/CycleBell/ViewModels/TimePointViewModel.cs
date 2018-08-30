@@ -3,6 +3,7 @@ using System.Media;
 using System.Windows.Input;
 using CycleBell.Base;
 using CycleBellLibrary;
+using CycleBellLibrary.Models;
 using Microsoft.Win32;
 
 namespace CycleBell.ViewModels 

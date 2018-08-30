@@ -3,8 +3,9 @@ using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.Text;
 using System.Threading.Tasks;
+using CycleBellLibrary.Repository;
 
-namespace CycleBellLibrary
+namespace CycleBellLibrary.Context
 {
     public interface IPresetsManager
     {

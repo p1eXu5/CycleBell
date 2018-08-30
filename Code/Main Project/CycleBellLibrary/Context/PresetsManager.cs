@@ -7,10 +7,11 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Xml;
 using System.Xml.Serialization;
+using CycleBellLibrary.Repository;
 
-namespace CycleBellLibrary
+namespace CycleBellLibrary.Context
 {
-    public sealed class PresetsManager : IPresetsManager
+    public sealed class PresetsManager : IInnerPresetsManager
     {
         #region Fields
 

@@ -1,6 +1,7 @@
 ﻿using System;
+using CycleBellLibrary.Models;
 
-namespace CycleBellLibrary
+namespace CycleBellLibrary.Timer
 {
     public class TimerEventArgs : EventArgs
     {

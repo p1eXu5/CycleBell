@@ -1,8 +1,7 @@
 ﻿using System;
-using System.Collections.ObjectModel;
-using System.Collections.Specialized;
+using CycleBellLibrary.Repository;
 
-namespace CycleBellLibrary
+namespace CycleBellLibrary.Timer
 {
     public interface ITimerManager
     {

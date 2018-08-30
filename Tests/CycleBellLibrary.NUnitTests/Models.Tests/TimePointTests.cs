@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using CycleBellLibrary.Models;
 using NUnit.Framework;
 
 namespace CycleBellLibrary.NUnitTests.Models.Tests

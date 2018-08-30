@@ -4,8 +4,11 @@ using System.Xml;
 using System.Xml.Schema;
 using System.Xml.Serialization;
 
-namespace CycleBellLibrary
+namespace CycleBellLibrary.Repository
 {
+    /// <summary>
+    /// For serialization
+    /// </summary>
     [XmlRoot("TimerLoops")]
     public class TimerLoopSortedDictionary : SortedDictionary<int, int>, IXmlSerializable
     {

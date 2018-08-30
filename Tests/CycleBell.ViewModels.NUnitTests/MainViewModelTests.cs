@@ -3,6 +3,9 @@ using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using CycleBell.Base;
 using CycleBellLibrary;
+using CycleBellLibrary.Context;
+using CycleBellLibrary.Repository;
+using CycleBellLibrary.Timer;
 using Moq;
 using NUnit.Framework;
 

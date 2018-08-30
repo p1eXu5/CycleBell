@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Serialization;
 
-namespace CycleBellLibrary
+namespace CycleBellLibrary.Models
 {
     public enum TimePointType : byte
     {

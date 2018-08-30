@@ -7,13 +7,15 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Collections.Specialized;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Threading;
 using System.Threading.Tasks;
+using CycleBellLibrary.Context;
+using CycleBellLibrary.Models;
+using CycleBellLibrary.Repository;
 
-namespace CycleBellLibrary
+namespace CycleBellLibrary.Timer
 {
     /// <summary>
     /// Timer manager. Creates timer's queue, emit signals
@@ -49,7 +51,7 @@ namespace CycleBellLibrary
         /// <summary>
         /// Internel timer
         /// </summary>
-        private Timer _timer;
+        private System.Threading.Timer _timer;
 
         private byte _isRunning;
         private TimeSpan _deltaTime;
@@ -222,7 +224,7 @@ namespace CycleBellLibrary
 
             // Инициируем таймер
             var durTime = GetDueTime(currentTime.Milliseconds);
-            _timer = new Timer(TimerCallbackHandler, null, durTime, Timeout.Infinite);
+            _timer = new System.Threading.Timer(TimerCallbackHandler, null, durTime, Timeout.Infinite);
 
             // Set previous queue element
             _prevQueueElement = (currentTime, new TimePoint("Launch Time", TimeSpan.FromMinutes(-1), TimePointType.Absolute));

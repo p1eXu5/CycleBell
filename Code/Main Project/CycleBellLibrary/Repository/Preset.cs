@@ -2,12 +2,12 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
-using System.Runtime.CompilerServices;
+using CycleBellLibrary.Models;
 
-namespace CycleBellLibrary
+namespace CycleBellLibrary.Repository
 {
     /// <summary>
-    /// If StartTime not set, getter returns negative TimeSpan (TimeSpan.FromSecond(-1))
+    /// It's a TimePoint repository. If StartTime not set, getter returns negative TimeSpan (TimeSpan.FromSecond(-1))
     /// </summary>
     public class Preset
     {

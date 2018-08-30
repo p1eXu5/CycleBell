@@ -3,9 +3,13 @@ using System.Collections.ObjectModel;
 using System.Xml;
 using System.Xml.Schema;
 using System.Xml.Serialization;
+using CycleBellLibrary.Models;
 
-namespace CycleBellLibrary
+namespace CycleBellLibrary.Repository
 {
+    /// <summary>
+    /// For serialization <see cref="Preset"/><seealso cref="ObservableCollection{T}"/>
+    /// </summary>
     [XmlRoot("Presets")]
     public class PresetObservableCollection : ObservableCollection<Preset>, IXmlSerializable
     {
