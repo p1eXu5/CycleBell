@@ -67,6 +67,9 @@ namespace CycleBellLibrary.Context
             if (preset == null)
                 throw new ArgumentNullException (nameof(preset), "preset can't be null");
 
+            if (preset.PresetName == null)
+                throw new ArgumentNullException (nameof(preset.PresetName), "PresetName can't be null");
+
             if (_presets.Any (p => p.PresetName == preset.PresetName)) 
                 throw new ArgumentException("preset already exists", nameof(preset));
 

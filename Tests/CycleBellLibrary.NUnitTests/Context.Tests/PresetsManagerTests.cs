@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using CycleBellLibrary.Context;
 using CycleBellLibrary.Repository;
 using NUnit.Framework;
@@ -42,6 +38,15 @@ namespace CycleBellLibrary.NUnitTests.Context.Tests
             var ex = Assert.Catch<Exception> (() => presetsManager.Add (Preset.EmptyPreset));
 
             StringAssert.Contains ("preset already exists", ex.Message);
+        }
+
+        [Test]
+        public void AddPreset_PresetNameIsNull_Throws()
+        {
+            var pm = GetPresetsManager();
+            var preset = new Preset() {PresetName = null};
+
+            Assert.That (() => pm.Add (preset), Throws.ArgumentNullException);
         }
 
         [Test]
