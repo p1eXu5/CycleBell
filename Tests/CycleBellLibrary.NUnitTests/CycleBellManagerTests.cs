@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using CycleBellLibrary.Context;
 using CycleBellLibrary.Repository;
 using CycleBellLibrary.Timer;
+using Moq;
 using NUnit.Framework;
 
 namespace CycleBellLibrary.NUnitTests
@@ -18,8 +19,17 @@ namespace CycleBellLibrary.NUnitTests
         #region Fields
 
         private readonly PresetsManager _presetsManager = new PresetsManager();
+        private readonly Mock<IInnerPresetsManager> _mockPresetsManager = new Mock<IInnerPresetsManager>();
 
         #endregion
+
+        [SetUp]
+        public void TestInitializer()
+        {
+            List<Preset> presetList = new List<Preset>();
+            _mockPresetsManager.Setup (m => m.Add (It.IsAny<Preset>())).Callback (delegate (Preset p) { presetList.Add (p); });
+            _mockPresetsManager.Setup (m => m.Presets).Returns (() => new ReadOnlyObservableCollection<Preset>(new ObservableCollection<Preset>(presetList)));
+        }
 
         [Test]
         public void CreateNewPreset_EmptyPresetDoesntExist_CallsPresetManager()
@@ -48,7 +58,7 @@ namespace CycleBellLibrary.NUnitTests
         {
             FakeTimerManager stubTimerManager = new FakeTimerManager();
 
-            return new CycleBellManager (_presetsManager, stubTimerManager);
+            return new CycleBellManager (_mockPresetsManager.Object, stubTimerManager);
         }
 
         #endregion
