@@ -2,9 +2,9 @@
 
 namespace CycleBellLibrary
 {
-    public class TimePointEventArgs : EventArgs
+    public class TimerEventArgs : EventArgs
     {
-        public TimePointEventArgs(TimePoint prevTimePoint, TimePoint nextTimePoint, TimeSpan lastTime)
+        public TimerEventArgs(TimePoint prevTimePoint, TimePoint nextTimePoint, TimeSpan lastTime)
         {
             PrevTimePoint = prevTimePoint;
             NextTimePoint = nextTimePoint;

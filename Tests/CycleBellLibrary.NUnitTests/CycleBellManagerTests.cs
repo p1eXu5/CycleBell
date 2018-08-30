@@ -99,8 +99,8 @@ namespace CycleBellLibrary.NUnitTests
         internal class FakeTimerManager : ITimerManager
         {
             public event NotifyCollectionChangedEventHandler PresetCollectionChanged;
-            public event EventHandler<TimePointEventArgs> ChangeTimePointEvent;
-            public event EventHandler<TimePointEventArgs> TimerSecondPassedEvent;
+            public event EventHandler<TimerEventArgs> ChangeTimePointEvent;
+            public event EventHandler<TimerEventArgs> TimerSecondPassedEvent;
             public event EventHandler TimerStopEvent;
             public ReadOnlyObservableCollection<Preset> Presets { get; }
             public bool IsRunning { get; }

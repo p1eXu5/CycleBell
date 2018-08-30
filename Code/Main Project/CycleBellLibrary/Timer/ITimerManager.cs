@@ -6,8 +6,8 @@ namespace CycleBellLibrary
 {
     public interface ITimerManager
     {
-        event EventHandler<TimePointEventArgs> ChangeTimePointEvent;
-        event EventHandler<TimePointEventArgs> TimerSecondPassedEvent;
+        event EventHandler<TimerEventArgs> ChangeTimePointEvent;
+        event EventHandler<TimerEventArgs> TimerSecondPassedEvent;
         event EventHandler TimerStopEvent;
 
         bool IsRunning { get; }

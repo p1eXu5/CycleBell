@@ -82,18 +82,18 @@ namespace CycleBellLibrary
 
         #region Events
 
-        public event EventHandler<TimePointEventArgs> ChangeTimePointEvent;
+        public event EventHandler<TimerEventArgs> ChangeTimePointEvent;
 
         private void OnChangeTimePoint(TimePoint prevTimePoint, TimePoint nextTimePoint, TimeSpan lastTime)
         {
-            ChangeTimePointEvent?.Invoke(this, new TimePointEventArgs(prevTimePoint, nextTimePoint, lastTime));
+            ChangeTimePointEvent?.Invoke(this, new TimerEventArgs(prevTimePoint, nextTimePoint, lastTime));
         }
 
-        public event EventHandler<TimePointEventArgs> TimerSecondPassedEvent;
+        public event EventHandler<TimerEventArgs> TimerSecondPassedEvent;
 
         private void OnTimerSecondPassed(TimePoint nextTimePoint, TimeSpan lastTime)
         {
-            TimerSecondPassedEvent?.Invoke(this, new TimePointEventArgs(null, nextTimePoint, lastTime));
+            TimerSecondPassedEvent?.Invoke(this, new TimerEventArgs(null, nextTimePoint, lastTime));
         }
 
         public event EventHandler TimerStopEvent;
