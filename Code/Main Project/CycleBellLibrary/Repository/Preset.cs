@@ -124,6 +124,9 @@ namespace CycleBellLibrary
         /// <param name="timePoint"></param>
         public void AddTimePoint(TimePoint timePoint)
         {
+            if (timePoint == null)
+                throw new ArgumentNullException(nameof(timePoint), "timePoint can't be null");
+
             _timePoints.Add(timePoint);
 
             if (!TimerLoops.ContainsKey(timePoint.LoopNumber)) {
@@ -133,6 +136,9 @@ namespace CycleBellLibrary
 
         public void AddTimePointRange(IEnumerable<TimePoint> timePoints)
         {
+            if (timePoints == null)
+                throw new ArgumentNullException();
+
             foreach (TimePoint timePoint in timePoints) {
                 AddTimePoint(timePoint);
             }
@@ -140,6 +146,12 @@ namespace CycleBellLibrary
 
         public void RemoveTimePoint(TimePoint timePoint)
         {
+            if (timePoint == null)
+                throw new ArgumentNullException(nameof(timePoint), "timePoint can't be null");
+
+            if (!_timePoints.Contains (timePoint))
+                throw new ArgumentException("timePoint not in collection", nameof(timePoint));
+
             if (_timePoints.Contains(timePoint)) {
                 _timePoints.Remove(timePoint);
             }
