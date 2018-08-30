@@ -7,7 +7,7 @@ using CycleBell.Base;
 
 namespace CycleBell.ViewModels
 {
-    public class AboutDialogViewModel : DialogViewModelBase
+    public class SavePresetAsDialogViewModel : DialogViewModelBase
     {
         public override event EventHandler<DialogRequestCloseEventArgs> DialogCloseRequested;
     }

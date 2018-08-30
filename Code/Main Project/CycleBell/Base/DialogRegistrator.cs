@@ -24,12 +24,14 @@ namespace CycleBell.Base
 
     public class DialogRequestCloseEventArgs : EventArgs
     {
-        public DialogRequestCloseEventArgs(bool? dialogResult)
+        public DialogRequestCloseEventArgs(bool? dialogResult, object tag = null)
         {
             DialogResult = dialogResult;
+            Tag = tag;
         }
 
         public bool? DialogResult { get; }
+        public object Tag { get; }
     }
 
     public interface IDialogRegistrator
@@ -37,7 +39,7 @@ namespace CycleBell.Base
         void Register<TViewModel, TView>() where      TView : IDialog
             where TViewModel : IDialogCloseRequested;
 
-        bool? ShowDialog<TViewModel>(TViewModel viewModel) where TViewModel: IDialogCloseRequested;
+        bool? ShowDialog<TViewModel>(TViewModel viewModel, Predicate<object> predicate = null) where TViewModel: IDialogCloseRequested;
     }
 
     public class DialogRegistrator : IDialogRegistrator
@@ -63,7 +65,7 @@ namespace CycleBell.Base
             _map[viewModelType] = typeof(TView);
         }
 
-        public bool? ShowDialog<TViewModel>(TViewModel viewModel) where TViewModel: IDialogCloseRequested
+        public bool? ShowDialog<TViewModel>(TViewModel viewModel, Predicate<object> predicate = null) where TViewModel: IDialogCloseRequested
         {
             Type viewType;
 
@@ -77,6 +79,9 @@ namespace CycleBell.Base
 
                 handler += (sender, args) =>
                 {
+                    if (predicate != null && !predicate(args.Tag))
+                        return;
+
                     viewModel.DialogCloseRequested -= handler;
 
                     if (args.DialogResult.HasValue) {
