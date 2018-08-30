@@ -27,8 +27,9 @@ namespace CycleBellLibrary.NUnitTests
         public void TestInitializer()
         {
             List<Preset> presetList = new List<Preset>();
-            _mockPresetsManager.Setup (m => m.Add (It.IsAny<Preset>())).Callback (delegate (Preset p) { presetList.Add (p); });
+            _mockPresetsManager.Setup (m => m.Add (It.IsAny<Preset>())).Callback ((Preset p) => presetList.Add (p));
             _mockPresetsManager.Setup (m => m.Presets).Returns (() => new ReadOnlyObservableCollection<Preset>(new ObservableCollection<Preset>(presetList)));
+            _mockPresetsManager.Setup (m => m.Remove (It.IsAny<Preset>())).Callback ((Preset p) => presetList.Remove (p));
         }
 
         [Test]
@@ -50,6 +51,30 @@ namespace CycleBellLibrary.NUnitTests
             cbm.CreateNewPreset();
 
             Assert.IsTrue(cbm.PresetsManager.Presets.Count == 1);
+        }
+
+        [Test]
+        public void AddPreset_WhenCalled_CallsPresetManager()
+        {
+            var cbm = GetCycleBellManager();
+            var addingPreset = Preset.EmptyPreset;
+            
+            cbm.AddPreset (addingPreset);
+
+            Assert.IsTrue (cbm.PresetsManager.Presets.Count == 1);
+        }
+
+        [Test]
+        public void RemovePreset_WhenCalled_CallsPresetsManager()
+        {
+            var cbm = GetCycleBellManager();
+            var addingPreset = Preset.EmptyPreset;
+            
+            cbm.AddPreset (addingPreset);
+
+            cbm.RemovePreset (addingPreset);
+
+            Assert.IsTrue (cbm.PresetsManager.Presets.Count == 0);
         }
 
         #region Factory
