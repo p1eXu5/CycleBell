@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using NUnit.Framework;
 
-namespace CycleBellLibrary.NUnitTests
+namespace CycleBellLibrary.NUnitTests.Context.Tests
 {
     [TestFixture]
     public class PresetsManagerTests

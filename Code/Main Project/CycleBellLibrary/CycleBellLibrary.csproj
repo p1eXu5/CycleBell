@@ -46,14 +46,14 @@
   <ItemGroup>
     <Compile Include="CycleBellManager.cs" />
     <Compile Include="ICycleBellManager.cs" />
-    <Compile Include="Contexts\IInnerPresetsManager.cs" />
+    <Compile Include="Context\IInnerPresetsManager.cs" />
     <Compile Include="Repository\ITimePointBaseTimeSetter.cs" />
     <Compile Include="Timer\ITimerManager.cs" />
     <Compile Include="Repository\PresetObservableCollection.cs" />
     <Compile Include="Timer\TimerEventArgs.cs" />
     <Compile Include="Timer\TimerManager.cs" />
-    <Compile Include="Contexts\PresetsManager.cs" />
-    <Compile Include="Contexts\IPresetsManager.cs" />
+    <Compile Include="Context\PresetsManager.cs" />
+    <Compile Include="Context\IPresetsManager.cs" />
     <Compile Include="Repository\Preset.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Models\TimePoint.cs" />
