@@ -18,6 +18,17 @@ namespace CycleBell.ViewModels.NUnitTests
             Assert.AreEqual (typeof(PresetViewModel).BaseType, typeof(ObservableObject));
         }
 
+        [Test]
+        public void AddTimePointCommand_ValidTimePoint_AddsTimePoint()
+        {
+            var preset = GetTestPreset();
+            var pvm = new PresetViewModel (preset);
+
+            pvm.AddTimePointCommand.Execute (null);
+
+            Assert.IsTrue (pvm.TimePoints.Count == 1);
+        }
+
         #region Factory
 
         private Preset GetTestPreset() => new Preset("Test preset");
