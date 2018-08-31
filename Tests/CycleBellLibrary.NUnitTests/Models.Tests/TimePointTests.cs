@@ -12,6 +12,14 @@ namespace CycleBellLibrary.NUnitTests.Models.Tests
     public class TimePointTests
     {
         [Test]
+        public void ctor_NegativeTime_CreatesPositiveTime()
+        {
+            var tp = new TimePoint("-1:00:00");
+
+            Assert.IsFalse (tp.Time < TimeSpan.Zero);
+        }
+
+        [Test]
         public void TimePoint_AbsoluteTimePoint_CreatesNoSetBaseTime()
         {
             var timePoint = GetAbsoluteTimePoint();

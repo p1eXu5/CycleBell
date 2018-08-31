@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.Linq;
+using System.Windows.Input;
 using CycleBell.Base;
 using CycleBellLibrary;
 using CycleBellLibrary.Models;
@@ -66,5 +67,10 @@ namespace CycleBell.ViewModels
 
         public ReadOnlyObservableCollection<TimePointViewModelBase> TimePoints { get; }
         public TimerLoopSortedDictionary TimerLoops => _preset.TimerLoops;
+
+        #region Commands
+
+        public ICommand AddTimePointCommand => new ActionCommand (o => _preset.AddTimePoint(_addingTimePoint.));
+        #endregion
     }
 }

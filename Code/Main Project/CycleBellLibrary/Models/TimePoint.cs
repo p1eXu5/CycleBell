@@ -19,32 +19,14 @@ namespace CycleBellLibrary.Models
         #region Fields
 
         private static byte _timePointNum = 0;
-        private static int _defaultMinutesToStart = 15;
+        private static TimeSpan _defaultTime = TimeSpan.Zero;
 
         private string _name;
+        private TimeSpan _time;
 
         #endregion
 
         #region Constructors
-
-        #region Constructor Overrides
-
-        public TimePoint()
-            : this("Time point " + _timePointNum, TimeSpan.FromMinutes(_defaultMinutesToStart), TimePointType.Relative)
-        { }
-
-        public TimePoint(TimeSpan time, TimePointType timePointType = TimePointType.Relative, byte timerCycleNum = 0)
-            : this("Time point " + _timePointNum, time, timePointType, timerCycleNum)
-        { }
-
-        public TimePoint(string time, TimePointType timePointType = TimePointType.Relative, byte timerCycleNum = 0)
-            : this("Time point " + _timePointNum, TimeSpan.Parse(time), timePointType, timerCycleNum)
-        { }
-
-        public TimePoint(string name, string time, TimePointType timePointType = TimePointType.Relative, byte loopNumber = 0)
-            : this(name, TimeSpan.Parse(time), timePointType, loopNumber) { }
-
-        #endregion
 
         /// <summary>
         /// Creates TimePoint instance
@@ -61,22 +43,46 @@ namespace CycleBellLibrary.Models
             Name = name;
             Id = _timePointNum++;
 
-            Time = time;
+            Time = time < TimeSpan.Zero ? time.Negate() : time;
             TimePointType = timePointType;
             LoopNumber = loopNumber == Byte.MaxValue ? (byte)(Byte.MaxValue - 1) : loopNumber;
         }
+
+        #region Constructor Overload
+
+        public TimePoint()
+            : this(
+                name: "Time point " + _timePointNum, 
+                time: _defaultTime, 
+                timePointType: TimePointType.Relative)
+        { }
+
+        public TimePoint(TimeSpan time, TimePointType timePointType = TimePointType.Relative, byte timerCycleNum = 0)
+            : this("Time point " + _timePointNum, time, timePointType, timerCycleNum)
+        { }
+
+        public TimePoint(string time, TimePointType timePointType = TimePointType.Relative, byte timerCycleNum = 0)
+            : this("Time point " + _timePointNum, TimeSpan.Parse(time), timePointType, timerCycleNum)
+        { }
+
+        public TimePoint(string name, string time, TimePointType timePointType = TimePointType.Relative, byte loopNumber = 0)
+            : this(name, TimeSpan.Parse(time), timePointType, loopNumber) { }
+
+        #endregion
 
         #endregion
 
         #region Properties
 
+        // Static:
+
         /// <summary>
             /// Дефолтное смещение временной точки относительно текущего времени
             /// </summary>
-        public static int DefaultMinutesToStart
+        public static TimeSpan DefaultTime
         {
-            get => _defaultMinutesToStart;
-            set => _defaultMinutesToStart = value;
+            get => _defaultTime;
+            set => _defaultTime = value;
         }
 
         /// <summary>
@@ -87,7 +93,9 @@ namespace CycleBellLibrary.Models
         public static int MaxId => Int32.MaxValue;
         public static int MinId => Int32.MinValue;
 
-        //public static byte LastTimePointNum => (byte)(_timePointNum - 1);
+        public static TimePoint DefaultTimePoint => new TimePoint();
+
+        // Instance:
 
         /// <summary>
         /// Уникальный порядковый номер временной точки
@@ -107,7 +115,11 @@ namespace CycleBellLibrary.Models
         /// <summary>
         /// Absolute or relative time
         /// </summary>
-        public TimeSpan Time { get; set; }
+        public TimeSpan Time
+        {
+            get => _time; 
+            set => _time = value < TimeSpan.Zero ? value.Negate() : value;
+        }
 
         public TimeSpan? BaseTime { get; set; } = null;
 
