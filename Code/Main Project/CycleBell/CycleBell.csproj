@@ -86,8 +86,9 @@
     <Compile Include="Controls\TextBox2.cs" />
     <Compile Include="ViewModels\AboutDialogViewModel.cs" />
     <Compile Include="ViewModels\DialogViewModelBase.cs" />
+    <Compile Include="ViewModels\EndTimePointViewModel.cs" />
     <Compile Include="ViewModels\MainViewModel.cs" />
-    <Compile Include="ViewModels\MinTimePointViewModel.cs" />
+    <Compile Include="ViewModels\BeginTimePointViewModel.cs" />
     <Compile Include="ViewModels\PresetViewModel.cs" />
     <Compile Include="Properties\Annotations.cs" />
     <Compile Include="ViewModels\SavePresetAsDialogViewModel.cs" />

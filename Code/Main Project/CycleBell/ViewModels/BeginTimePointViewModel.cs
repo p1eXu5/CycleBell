@@ -7,11 +7,11 @@ using CycleBellLibrary.Models;
 
 namespace CycleBell.ViewModels
 {
-    public class MinTimePointViewModel : TimePointViewModelBase
+    public class BeginTimePointViewModel : TimePointViewModelBase
     {
         private readonly PresetViewModel _presetViewModel;
 
-        public MinTimePointViewModel(byte loopNumber, PresetViewModel presetViewModel) : base(TimePoint.MinId, loopNumber)
+        public BeginTimePointViewModel(byte loopNumber, PresetViewModel presetViewModel) : base(TimePoint.MinId, loopNumber)
         {
             _presetViewModel = presetViewModel;
         }
