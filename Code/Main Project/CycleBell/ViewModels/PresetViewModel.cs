@@ -29,6 +29,7 @@ namespace CycleBell.ViewModels
         private readonly ObservableCollection<TimePointViewModelBase> _timePoints;
 
         private TimePointViewModel _addingTimePoint;
+        private readonly HashSet<byte> _settedLoopNumbers;
 
         #endregion
 
@@ -36,9 +37,23 @@ namespace CycleBell.ViewModels
 
         public PresetViewModel(Preset preset)
         {
-            _preset = preset;
+            _preset = preset ?? throw new ArgumentNullException();
+            _settedLoopNumbers = new HashSet<byte>();
+            _timePoints = new ObservableCollection<TimePointViewModelBase>();
 
-            _timePoints = new ObservableCollection<TimePointViewModelBase>(_preset.TimePoints.Select(t => new TimePointViewModel(t)));
+            foreach (var point in _preset.TimePoints) {
+
+                if (point.Time < TimeSpan.Zero)
+                    point.Time = point.Time.Negate();
+
+                if (point.Time == TimeSpan.Zero && point.TimePointType == TimePointType.Relative)
+                    point.TimePointType = TimePointType.Absolute;
+
+                _timePoints.Add (new TimePointViewModel (point));
+
+                CheckBounds(point);
+            }
+
             TimePoints = new ReadOnlyObservableCollection<TimePointViewModelBase>(_timePoints);
 
             ((INotifyCollectionChanged) _preset.TimePoints).CollectionChanged += (s, e) =>
@@ -47,8 +62,7 @@ namespace CycleBell.ViewModels
                     _timePoints.Add (new TimePointViewModel ((TimePoint)e.NewItems[0]));
             };
 
-            var timePoint = TimePoint.DefaultTimePoint;
-            _addingTimePoint = new TimePointViewModel (timePoint);
+            AddingTimePoint = new TimePointViewModel (TimePoint.DefaultTimePoint);
         }
 
         #endregion
@@ -85,7 +99,21 @@ namespace CycleBell.ViewModels
         {
             // TODO:
             _preset.AddTimePoint(_addingTimePoint.TimePoint);
+            CheckBounds (_addingTimePoint.TimePoint);
+
+            // Resetting AddingTimePoint
             AddingTimePoint = new TimePointViewModel(TimePoint.DefaultTimePoint);
+        }
+
+        private void CheckBounds(TimePoint timePoint)
+        {
+            if (_settedLoopNumbers.Contains (timePoint.LoopNumber))
+                return;
+
+            _timePoints.Add (new BeginTimePointViewModel (timePoint.LoopNumber, this));
+            _timePoints.Add (new EndTimePointViewModel (timePoint.LoopNumber));
+
+            _settedLoopNumbers.Add (timePoint.LoopNumber);
         }
 
         private bool CanAddTimePoint(object obj)
