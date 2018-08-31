@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using CycleBell.Base;
 using CycleBell.ViewModels;
 using CycleBellLibrary;
@@ -41,16 +42,17 @@ namespace CycleBell.NUnitTests.ViewModels
         }
 
         [Test]
-        public void AddTimePointCommand_CanExecuteLoopNumUnknown_AddsMinBoundTimePointViewModels()
+        public void AddTimePointCommand_CanExecuteLoopNumUnknown_AddsBeginTimePointViewModels()
         {
             var pvm = GetPresetViewModel();
             pvm.AddingTimePoint.Time = TimeSpan.FromSeconds (1);
             pvm.AddingTimePoint.LoopNumber = 10;
-            var minBoundTimePoint = new TimePointViewModelBase ();
 
             pvm.AddTimePointCommand.Execute (null);
 
-            Assert.AreEqual (pvm.TimePoints[0].GetType(), typeof());
+            var begin = pvm.TimePoints.OrderBy (tp => tp.Id).ThenBy (tp => tp.LoopNumber).First();
+
+            Assert.AreEqual (begin, typeof(BeginTimePointViewModel));
         }
         #region Factory
 
