@@ -5,6 +5,7 @@ using System.Collections.Specialized;
 using System.Linq;
 using CycleBell.Base;
 using CycleBellLibrary;
+using CycleBellLibrary.Models;
 using CycleBellLibrary.Repository;
 
 namespace CycleBell.ViewModels
@@ -24,6 +25,8 @@ namespace CycleBell.ViewModels
         private readonly Preset _preset;
         private readonly ObservableCollection<TimePointViewModelBase> _timePoints;
 
+        private TimePointViewModel _addingTimePoint;
+
         #region Constructor
 
         public PresetViewModel(Preset preset)
@@ -33,7 +36,26 @@ namespace CycleBell.ViewModels
             _timePoints = new ObservableCollection<TimePointViewModelBase>(_preset.TimePoints.Select(t => new TimePointViewModel(t)));
             TimePoints = new ReadOnlyObservableCollection<TimePointViewModelBase>(_timePoints);
 
-            ((INotifyCollectionChanged) _preset.TimePoints).CollectionChanged += (s, e) => { };
+            ((INotifyCollectionChanged) _preset.TimePoints).CollectionChanged += (s, e) =>
+            {
+                if (e.NewItems[0] != null)
+                    _timePoints.Add (new TimePointViewModel ((TimePoint)e.NewItems[0]));
+            };
+
+            _addingTimePoint = new TimePointViewModel (TimePoint.DefaultTimePoint);
+        }
+
+        #endregion
+
+        #region Properties
+
+        public TimePointViewModel AddingTimePoint
+        {
+            get => _addingTimePoint;
+            set {
+                _addingTimePoint = value;
+                OnPropertyChanged ();
+            }
         }
 
         #endregion
