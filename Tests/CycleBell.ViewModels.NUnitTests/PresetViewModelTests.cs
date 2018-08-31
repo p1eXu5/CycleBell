@@ -19,10 +19,18 @@ namespace CycleBell.ViewModels.NUnitTests
         }
 
         [Test]
+        public void AddTimePointCommand_TimePointWithDefaultName_CantExecute()
+        {
+            var pvm = GetPresetViewModel();
+
+            Assert.IsFalse(pvm.AddTimePointCommand.CanExecute(null));
+        }
+
+        [Test]
         public void AddTimePointCommand_ValidTimePoint_AddsTimePoint()
         {
-            var preset = GetTestPreset();
-            var pvm = new PresetViewModel (preset);
+            var pvm = GetPresetViewModel();
+            pvm.AddingTimePoint.Name = "New TimePoint";
 
             pvm.AddTimePointCommand.Execute (null);
 
@@ -30,6 +38,12 @@ namespace CycleBell.ViewModels.NUnitTests
         }
 
         #region Factory
+
+        private PresetViewModel GetPresetViewModel()
+        {
+            var preset = GetTestPreset();
+            return new PresetViewModel(preset);
+        }
 
         private Preset GetTestPreset() => new Preset("Test preset");
 

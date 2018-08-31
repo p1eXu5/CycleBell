@@ -1,12 +1,10 @@
 ﻿using System;
 using System.Collections.ObjectModel;
-using System.Collections.Specialized;
 using CycleBell.Base;
 using CycleBellLibrary;
 using CycleBellLibrary.Context;
 using CycleBellLibrary.Repository;
 using CycleBellLibrary.Timer;
-using Moq;
 using NUnit.Framework;
 
 namespace CycleBell.ViewModels.NUnitTests
@@ -14,7 +12,7 @@ namespace CycleBell.ViewModels.NUnitTests
     [TestFixture]
     public class MainViewModelTests
     {
-        private Mock<IPresetsManager> mockPresetsManager = new Mock<IPresetsManager>();
+        //private readonly Mock<IPresetsManager> _mockPresetsManager = new Mock<IPresetsManager>();
 
         [SetUp]
         public void TestInitializer()
@@ -72,8 +70,8 @@ namespace CycleBell.ViewModels.NUnitTests
         internal class FakeCycleBellManager : ICycleBellManager
         {
             public IPresetsManager PresetsManager { get; } = new FakePresetsManager();
-            public ITimerManager TimerManager { get; }
-            public string FileName { get; }
+            public ITimerManager TimerManager { get; } = null;
+            public string FileName { get; } = null;
 
             public void CreateNewPreset()
             {
@@ -91,7 +89,6 @@ namespace CycleBell.ViewModels.NUnitTests
                 Presets = new ReadOnlyObservableCollection<Preset>(_presets);
             }
 
-            public event NotifyCollectionChangedEventHandler CollectionChanged;
             public string FileName { get; set; }
             public ReadOnlyObservableCollection<Preset> Presets { get; }
             public void Clear()

@@ -23,10 +23,14 @@ namespace CycleBell.ViewModels
     /// </summary>
     public class PresetViewModel : ObservableObject
     {
+        #region Fields
+
         private readonly Preset _preset;
         private readonly ObservableCollection<TimePointViewModelBase> _timePoints;
 
         private TimePointViewModel _addingTimePoint;
+
+        #endregion
 
         #region Constructor
 
@@ -59,8 +63,6 @@ namespace CycleBell.ViewModels
             }
         }
 
-        #endregion
-
         public string Name { get; set; }
         public TimeSpan StartTime { get; set; } = DateTime.Now.TimeOfDay + new TimeSpan(0, 5, 0);
         public CycleBellStateFlags State { get; set; }
@@ -68,9 +70,22 @@ namespace CycleBell.ViewModels
         public ReadOnlyObservableCollection<TimePointViewModelBase> TimePoints { get; }
         public TimerLoopSortedDictionary TimerLoops => _preset.TimerLoops;
 
+        #endregion
+
         #region Commands
 
-        public ICommand AddTimePointCommand => new ActionCommand (o => _preset.AddTimePoint(_addingTimePoint.TimePoint));
+        public ICommand AddTimePointCommand => new ActionCommand (o => AddTimePoint());
+
+        #endregion
+
+        #region Methods
+
+        private void AddTimePoint()
+        {
+            _preset.AddTimePoint(_addingTimePoint.TimePoint);
+            AddingTimePoint = new TimePointViewModel(TimePoint.DefaultTimePoint);
+        }
+
         #endregion
     }
 }
