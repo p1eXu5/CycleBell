@@ -8,13 +8,6 @@ namespace CycleBell.NUnitTests.ViewModels
     [TestFixture]
     public class MainViewModelTests
     {
-        //private readonly Mock<IPresetsManager> _mockPresetsManager = new Mock<IPresetsManager>();
-
-        [SetUp]
-        public void TestInitializer()
-        {
-        }
-
         [Test]
         public void class_TypeCheck_IsObservableObject()
         {

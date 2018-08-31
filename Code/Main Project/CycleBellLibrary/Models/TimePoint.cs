@@ -43,7 +43,7 @@ namespace CycleBellLibrary.Models
             Name = name;
             Id = _timePointNum++;
 
-            Time = time < TimeSpan.Zero ? time.Negate() : time;
+            Time = time;
             TimePointType = timePointType;
             LoopNumber = loopNumber == Byte.MaxValue ? (byte)(Byte.MaxValue - 1) : loopNumber;
         }
@@ -118,7 +118,7 @@ namespace CycleBellLibrary.Models
         public TimeSpan Time
         {
             get => _time; 
-            set => _time = value < TimeSpan.Zero ? value.Negate() : value;
+            set => _time = value;
         }
 
         public TimeSpan? BaseTime { get; set; } = null;

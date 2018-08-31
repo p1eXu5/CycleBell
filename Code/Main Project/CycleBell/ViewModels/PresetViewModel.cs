@@ -47,7 +47,8 @@ namespace CycleBell.ViewModels
                     _timePoints.Add (new TimePointViewModel ((TimePoint)e.NewItems[0]));
             };
 
-            _addingTimePoint = new TimePointViewModel (TimePoint.DefaultTimePoint);
+            var timePoint = TimePoint.DefaultTimePoint;
+            _addingTimePoint = new TimePointViewModel (timePoint);
         }
 
         #endregion

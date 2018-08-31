@@ -13,7 +13,7 @@ namespace CycleBell.ViewModels
         
         #region Constructors
 
-        protected TimePointViewModelBase() {}
+        private TimePointViewModelBase() {}
 
         public TimePointViewModelBase (int id, byte loopNumber)
         {

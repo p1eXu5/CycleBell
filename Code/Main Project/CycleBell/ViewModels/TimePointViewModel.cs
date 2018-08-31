@@ -12,7 +12,7 @@ namespace CycleBell.ViewModels
     {
         #region Fields
 
-        private static SoundPlayer _sound = new SoundPlayer("pack://application:,,,/Sounds/default.wav");
+        //private static SoundPlayer _sound = new SoundPlayer("pack://application:,,,/Sounds/default.wav");
 
         private readonly TimePoint _timePoint;
 
@@ -20,7 +20,7 @@ namespace CycleBell.ViewModels
 
         #region Constructor
 
-        public TimePointViewModel(TimePoint timePoint)
+        public TimePointViewModel(TimePoint timePoint) : base(timePoint.Id, timePoint.LoopNumber)
         {
             _timePoint = timePoint;
         }
@@ -72,7 +72,7 @@ namespace CycleBell.ViewModels
         /// <summary>
         /// Sound location
         /// </summary>
-        public string SoundLocation => String.IsNullOrEmpty((string)_timePoint?.Tag) ? (string)_timePoint?.Tag : _sound.SoundLocation;
+        //public string SoundLocation => String.IsNullOrEmpty((string)_timePoint?.Tag) ? (string)_timePoint?.Tag : _sound.SoundLocation;
 
         #endregion
 
