@@ -36,6 +36,8 @@ namespace CycleBell.ViewModels
 
         #endregion
 
+        public TimePoint TimePoint => _timePoint;
+
         /// <summary>
         /// Name of TimePoint
         /// </summary>
@@ -91,6 +93,8 @@ namespace CycleBell.ViewModels
                 sound.SoundLocation = ofd.FileName;
             }
         }
+
+        public static implicit operator TimePoint(TimePointViewModel instance) => instance.TimePoint;
 
         #endregion
     }

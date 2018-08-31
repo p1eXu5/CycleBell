@@ -70,7 +70,7 @@ namespace CycleBell.ViewModels
 
         #region Commands
 
-        public ICommand AddTimePointCommand => new ActionCommand (o => _preset.AddTimePoint(_addingTimePoint.));
+        public ICommand AddTimePointCommand => new ActionCommand (o => _preset.AddTimePoint(_addingTimePoint.TimePoint));
         #endregion
     }
 }
