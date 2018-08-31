@@ -54,6 +54,39 @@ namespace CycleBell.NUnitTests.ViewModels
 
             Assert.AreEqual (begin, typeof(BeginTimePointViewModel));
         }
+
+        [Test]
+        public void AddTimePointCommand_CanExecuteLoopNumUnknown_AddsEndTimePointViewModels()
+        {
+            var pvm = GetPresetViewModel();
+            pvm.AddingTimePoint.Time = TimeSpan.FromSeconds (1);
+            pvm.AddingTimePoint.LoopNumber = 10;
+
+            pvm.AddTimePointCommand.Execute (null);
+
+            var begin = pvm.TimePoints.OrderBy (tp => tp.Id).ThenBy (tp => tp.LoopNumber).Last();
+
+            Assert.AreEqual (begin, typeof(EndTimePointViewModel));
+        }
+
+        [Test]
+        public void AddTimePointCommand_CanExecuteLoopUnknown_AddsTimePointViewModels()
+        {
+            var pvm = GetPresetViewModel();
+            pvm.AddingTimePoint.Time = TimeSpan.FromSeconds (1);
+            pvm.AddingTimePoint.LoopNumber = 10;
+
+            pvm.AddTimePointCommand.Execute (null);
+            pvm.AddTimePointCommand.Execute (null);
+
+            var sortedTimePoints = pvm.TimePoints.OrderBy (tp => tp.Id).ThenBy (tp => tp.LoopNumber).ToArray();
+
+            Assert.AreEqual (sortedTimePoints[0], typeof(BeginTimePointViewModel));
+            Assert.AreEqual (sortedTimePoints[1], typeof(TimePointViewModel));
+            Assert.AreEqual (sortedTimePoints[2], typeof(TimePointViewModel));
+            Assert.AreEqual (sortedTimePoints[3], typeof(TimePointViewModel));
+        }
+
         #region Factory
 
         private PresetViewModel GetPresetViewModel()
