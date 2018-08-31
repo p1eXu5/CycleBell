@@ -27,6 +27,10 @@ namespace CycleBellLibrary.Repository
            : this(DefaultName, null)
         { }
 
+        public Preset (string presetName)
+            : this (presetName, null)
+        { }
+
         public Preset(IEnumerable<TimePoint> points)
             : this(DefaultName, points)
         { }

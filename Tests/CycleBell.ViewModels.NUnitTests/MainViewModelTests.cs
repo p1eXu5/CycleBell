@@ -40,6 +40,8 @@ namespace CycleBell.ViewModels.NUnitTests
             Assert.IsTrue (viewModel.Presets.Count == 1);
         }
 
+        
+
         #region Factory
 
         private MainViewModel GetStubedMainViewModel()

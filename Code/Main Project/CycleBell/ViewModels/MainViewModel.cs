@@ -28,6 +28,8 @@ namespace CycleBell.ViewModels
         private readonly IPresetsManager _presetManager;
         private readonly ITimerManager _timerManager;
 
+        private PresetViewModel _selectedPreset;
+
         #endregion Private
 
         #region Constructor
@@ -55,6 +57,14 @@ namespace CycleBell.ViewModels
 
         public ObservableCollection<PresetViewModel> Presets { get; set; }
 
+        public PresetViewModel SelectedPreset
+        {
+            get => _selectedPreset;
+            set {
+                _selectedPreset = value;
+                OnPropertyChanged ();
+            }
+        }
 
         //public CycleBellStateFlags FirstCallState 
         //{
