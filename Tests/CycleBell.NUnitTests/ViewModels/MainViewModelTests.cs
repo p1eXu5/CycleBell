@@ -1,13 +1,9 @@
 ﻿using System;
-using System.Collections.ObjectModel;
 using CycleBell.Base;
-using CycleBellLibrary;
-using CycleBellLibrary.Context;
-using CycleBellLibrary.Repository;
-using CycleBellLibrary.Timer;
+using CycleBell.ViewModels;
 using NUnit.Framework;
 
-namespace CycleBell.ViewModels.NUnitTests
+namespace CycleBell.NUnitTests.ViewModels
 {
     [TestFixture]
     public class MainViewModelTests

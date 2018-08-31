@@ -62,6 +62,8 @@ namespace CycleBell.ViewModels
             }
         }
 
+        public TimePointType TimePointType => _timePoint.TimePointType;
+
         public bool IsAbsoluteTime
         {
             get => _timePoint.TimePointType == TimePointType.Absolute;

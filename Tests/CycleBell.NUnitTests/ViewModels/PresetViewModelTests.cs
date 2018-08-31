@@ -1,13 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using CycleBell.Base;
+using CycleBellLibrary.Models;
 using CycleBellLibrary.Repository;
 using NUnit.Framework;
 
-namespace CycleBell.ViewModels.NUnitTests
+namespace CycleBell.NUnitTests.ViewModels
 {
     [TestFixture]
     public class PresetViewModelTests
@@ -18,12 +15,15 @@ namespace CycleBell.ViewModels.NUnitTests
             Assert.AreEqual (typeof(PresetViewModel).BaseType, typeof(ObservableObject));
         }
 
-        [Test]
-        public void AddTimePointCommand_TimePointWithDefaultName_CanNotExecute()
+        [TestCase("-0:00:01", TimePointType.Relative, false)]
+        [TestCase("-0:00:01", TimePointType.Absolute, false)]
+        [TestCase("0:00:00", TimePointType.Relative, false)]
+        public void AddTimePointCommand_InvalidTimePoints_CanNotExecute(string time, TimePointType timePointType, bool canExecute)
         {
             var pvm = GetPresetViewModel();
+            pvm.AddingTimePoint = new TimePointViewModel(new TimePoint(TimeSpan.Parse (time), timePointType));
 
-            Assert.IsFalse(pvm.AddTimePointCommand.CanExecute(null));
+            Assert.AreEqual(canExecute, pvm.AddTimePointCommand.CanExecute(null));
         }
 
         [Test]

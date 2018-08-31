@@ -83,3 +83,5 @@
 /Tests/CycleBellLibrary.NUnitTests/bin
 /Tests/CycleBellLibrary.NUnitTests/obj
 
+/Tests/CycleBell.NUnitTests/bin/Debug
+/Tests/CycleBell.NUnitTests/obj
