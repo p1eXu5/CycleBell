@@ -75,14 +75,15 @@ namespace CycleBell.ViewModels
 
         #region Commands
 
-        public ICommand AddTimePointCommand => new ActionCommand (o => AddTimePoint(), CanAddTimePoint);
+        public ICommand AddTimePointCommand => new ActionCommand (AddTimePoint, CanAddTimePoint);
 
         #endregion
 
         #region Methods
 
-        private void AddTimePoint()
+        private void AddTimePoint(object o)
         {
+            // TODO:
             _preset.AddTimePoint(_addingTimePoint.TimePoint);
             AddingTimePoint = new TimePointViewModel(TimePoint.DefaultTimePoint);
         }
