@@ -1,8 +1,9 @@
-﻿using CycleBell.Base;
+﻿using System;
+using CycleBell.Base;
 
 namespace CycleBell.ViewModels 
 {
-    public class TimePointViewModelBase : ObservableObject
+    public abstract class TimePointViewModelBase : ObservableObject
     {
         #region Fields
 
@@ -13,9 +14,7 @@ namespace CycleBell.ViewModels
         
         #region Constructors
 
-        private TimePointViewModelBase() {}
-
-        public TimePointViewModelBase (int id, byte loopNumber)
+        protected TimePointViewModelBase (int id, byte loopNumber)
         {
             _id = id;
             _loopNumber = loopNumber;

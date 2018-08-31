@@ -21,7 +21,7 @@ namespace CycleBell.NUnitTests.ViewModels
         [TestCase("-0:00:01", TimePointType.Relative)]
         [TestCase("-0:00:01", TimePointType.Absolute)]
         [TestCase("0:00:00", TimePointType.Relative)]
-        public void AddTimePointCommand_InvalidTimePoints_CanNotExecute(string time, TimePointType timePointType)
+        public void AddTimePointCommand_NegativeOrZeroRelativeTimePoint_CanNotExecute(string time, TimePointType timePointType)
         {
             var pvm = GetPresetViewModel();
             pvm.AddingTimePoint = new TimePointViewModel(new TimePoint(TimeSpan.Parse (time), timePointType));
@@ -32,7 +32,7 @@ namespace CycleBell.NUnitTests.ViewModels
 
         [TestCase("0:00:00", TimePointType.Absolute)]
         [TestCase("0:00:01", TimePointType.Relative)]
-        public void AddTimePointCommand_ValidTimePoints_CanExecute(string time, TimePointType timePointType)
+        public void AddTimePointCommand_PositiveOrZeroAbsoluteTimePoint_CanExecute(string time, TimePointType timePointType)
         {
             var pvm = GetPresetViewModel();
             pvm.AddingTimePoint = new TimePointViewModel(new TimePoint(TimeSpan.Parse(time), timePointType));
@@ -41,14 +41,16 @@ namespace CycleBell.NUnitTests.ViewModels
         }
 
         [Test]
-        public void AddTimePointCommand_WhenCanExecute_AddsTimePoint()
+        public void AddTimePointCommand_CanExecuteLoopNumUnknown_AddsMinBoundTimePointViewModels()
         {
             var pvm = GetPresetViewModel();
             pvm.AddingTimePoint.Time = TimeSpan.FromSeconds (1);
+            pvm.AddingTimePoint.LoopNumber = 10;
+            var minBoundTimePoint = new TimePointViewModelBase ();
 
             pvm.AddTimePointCommand.Execute (null);
 
-            Assert.IsTrue (pvm.TimePoints.Count == 1);
+            Assert.AreEqual (pvm.TimePoints[0].GetType(), typeof());
         }
         #region Factory
 
