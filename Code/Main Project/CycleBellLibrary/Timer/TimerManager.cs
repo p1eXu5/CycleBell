@@ -39,11 +39,6 @@ namespace CycleBellLibrary.Timer
         private static TimerManager _timerManager;
 
         /// <summary>
-        /// Дирехтор
-        /// </summary>
-        private readonly IPresetsManager _presetsManager;
-
-        /// <summary>
         /// The main queue. The next (TimeSpan startTimeForNextStartPoint, TimePoint nextPoint) always on the top.
         /// </summary>
         private Queue<(TimeSpan, TimePoint)> _queue;
@@ -108,7 +103,6 @@ namespace CycleBellLibrary.Timer
 
         public static int Accuracy { get; set; } =300;
 
-        public ReadOnlyObservableCollection<Preset> Presets => _presetsManager.Presets;
         public bool IsRunning => _isRunning != 0;
 
         #endregion
@@ -284,22 +278,6 @@ namespace CycleBellLibrary.Timer
             }
 
             return queue;
-        }
-
-        /// <summary>
-        /// Gets preset index
-        /// </summary>
-        /// <param name="name"></param>
-        /// <returns></returns>
-        public int GetIndex(string name)
-        {
-            if (Presets != null)
-                for (int i = 0; i < Presets.Count; ++i) {
-                    if (name.Equals(Presets[i].PresetName, StringComparison.OrdinalIgnoreCase))
-                        return i;
-                }
-
-            return -1;
         }
 
         /// <summary>

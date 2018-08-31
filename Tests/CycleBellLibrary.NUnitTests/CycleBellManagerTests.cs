@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using CycleBellLibrary.Context;
+using CycleBellLibrary.Models;
 using CycleBellLibrary.Repository;
 using CycleBellLibrary.Timer;
 using Moq;
@@ -90,6 +91,7 @@ namespace CycleBellLibrary.NUnitTests
 
         #region FakeTypes
 
+        #pragma warning disable 0067
         internal class FakeTimerManager : ITimerManager
         {
             public event NotifyCollectionChangedEventHandler PresetCollectionChanged;
@@ -128,11 +130,17 @@ namespace CycleBellLibrary.NUnitTests
                 throw new NotImplementedException();
             }
 
+            public Queue<(TimeSpan, TimePoint)> GetTimerQueue(Preset preset)
+            {
+                throw new NotImplementedException();
+            }
+
             public int GetIndex (string name)
             {
                 throw new NotImplementedException();
             }
         }
+        #pragma warning restore 0067
 
         #endregion
     }

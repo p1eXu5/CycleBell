@@ -19,7 +19,7 @@ namespace CycleBell.ViewModels.NUnitTests
         }
 
         [Test]
-        public void AddTimePointCommand_TimePointWithDefaultName_CantExecute()
+        public void AddTimePointCommand_TimePointWithDefaultName_CanNotExecute()
         {
             var pvm = GetPresetViewModel();
 
