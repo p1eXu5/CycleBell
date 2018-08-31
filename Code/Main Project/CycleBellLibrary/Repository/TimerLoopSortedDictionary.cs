@@ -30,7 +30,7 @@ namespace CycleBellLibrary.Repository
 
                 reader.ReadEndElement();
             }
-            catch (Exception ex) {
+            catch {
                 this.Clear();
                 throw;
             }

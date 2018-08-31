@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using CycleBellLibrary.Models;
 using CycleBellLibrary.Repository;
 
 namespace CycleBellLibrary.Timer
@@ -35,10 +37,10 @@ namespace CycleBellLibrary.Timer
         void Play(Preset preset);
 
         /// <summary>
-        /// Gets preset index
+        /// Creates alarm queue
         /// </summary>
-        /// <param name="name"></param>
-        /// <returns></returns>
-        int GetIndex(string name);
+        /// <param name="preset">Preset</param>
+        /// <returns>The queue of tuples consists of time of the day and TimePoint that will come in this time</returns>
+        Queue<(TimeSpan, TimePoint)> GetTimerQueue(Preset preset);
     }
 }

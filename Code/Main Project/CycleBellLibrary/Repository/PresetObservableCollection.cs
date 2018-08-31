@@ -83,9 +83,10 @@ namespace CycleBellLibrary.Repository
                 // </Presets>
                 reader.ReadEndElement();
             }
-            catch (XmlException ex) {
+            catch {
 
                 this.Clear();
+                throw;
             }
         }
 

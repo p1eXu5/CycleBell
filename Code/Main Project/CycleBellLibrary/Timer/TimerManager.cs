@@ -232,8 +232,8 @@ namespace CycleBellLibrary.Timer
         /// Creates alarm queue
         /// </summary>
         /// <param name="preset">Preset</param>
-        /// <returns>The queue of tuples consists of time of the day and TimePoint that will come</returns>
-        public static Queue<(TimeSpan, TimePoint)> GetTimerQueue(Preset preset)
+        /// <returns>The queue of tuples consists of time of the day and TimePoint that will come in this time</returns>
+        public Queue<(TimeSpan, TimePoint)> GetTimerQueue(Preset preset)
         {
             if (preset?.TimePoints == null || preset.TimePoints.Count == 0)
                 return null;

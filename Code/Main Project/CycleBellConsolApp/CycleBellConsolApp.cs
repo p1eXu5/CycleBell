@@ -3,6 +3,7 @@
 // -------------------------------------------------------
 
 using System;
+using System.Linq;
 using System.Media;
 using CycleBellLibrary;
 using CycleBellLibrary.Context;
@@ -26,7 +27,7 @@ namespace CycleBellConsolApp
                 // Create manager
                 var manager = new CycleBellManager("test.xml", new PresetsManager(), TimerManager.Instance);
 
-                AppDomain.CurrentDomain.ProcessExit += manager.SavePresets();
+                AppDomain.CurrentDomain.ProcessExit += (s, e) => manager.SavePresets();
 
                 #region CreateTimePoints
 
@@ -76,7 +77,7 @@ namespace CycleBellConsolApp
 
                 #endregion
 
-                int idx = manager.GetIndex("Test"); 
+                var preset = manager.PresetsManager.Presets.First(p => p.PresetName == "Test"); 
 
                 #endregion
 
@@ -87,7 +88,7 @@ namespace CycleBellConsolApp
 
                 // Load event handlers:
 
-                manager.ChangeTimePointEvent += (sender, e) =>
+                manager.TimerManager.ChangeTimePointEvent += (sender, e) =>
                                                 {
                                                     Console.WriteLine($"OnChangeTimePoint in: {DateTime.Now.TimeOfDay:h\\:mm\\:ss\\.fff}");
 
@@ -110,7 +111,7 @@ namespace CycleBellConsolApp
 
 
                                                     // Проверку вообще над делать по Tag'ам, но в UI
-                                                    if (e.PrevTimePoint.Time < TimeSpan.Zero || e.PrevTimePoint.Time == manager.Presets[idx].StartTime) {
+                                                    if (e.PrevTimePoint.Time < TimeSpan.Zero || e.PrevTimePoint.Time == preset.StartTime) {
                                                         return;
                                                     }
 
@@ -120,7 +121,7 @@ namespace CycleBellConsolApp
                                                     sound.Play();
                                                 };
 
-                manager.TimerSecondPassedEvent += (s, e) =>
+                manager.TimerManager.TimerSecondPassedEvent += (s, e) =>
                                                   {
                                                       var x = Console.CursorLeft;
                                                       var y = Console.CursorTop;
@@ -138,13 +139,13 @@ namespace CycleBellConsolApp
                                                       Console.CursorLeft = x;
                                                   };
 
-                manager.TimerStopEvent += (s, e) => Console.WriteLine("Timer has stopped");
+                manager.TimerManager.TimerStopEvent += (s, e) => Console.WriteLine("Timer has stopped");
 
                 #endregion
 
                 #region Print Preset
 
-                foreach (var valueTuple in manager.GetTimerQueue(manager.Presets[idx])) {
+                foreach (var valueTuple in manager.TimerManager.GetTimerQueue(preset)) {
 
                     Console.WriteLine($"{valueTuple.Item2}\n\nNext alarm at: {valueTuple.Item1:h\\:mm\\:ss\\.fff}");
                 }
@@ -157,7 +158,7 @@ namespace CycleBellConsolApp
                 Console.WindowHeight = Console.WindowHeight + 10;
 
                 // Run cycle
-                manager.Play(manager.Presets[idx]);
+                manager.TimerManager.Play(preset);
 
                 string str = null;
 
@@ -169,18 +170,18 @@ namespace CycleBellConsolApp
                     str = Console.ReadLine();
 
                     if (str == "s") {
-                        manager.Stop();
-                        Console.WriteLine($"\nstart point{manager.Presets[idx].StartTime}");
+                        manager.TimerManager.Stop();
+                        Console.WriteLine($"\nstart point{preset.StartTime}");
                     }
                     else if (str == "p") {
-                        manager.Play(manager.Presets[idx]);
-                        Console.WriteLine($"\nstart point{manager.Presets[idx].StartTime}");
+                        manager.TimerManager.Play(preset);
+                        Console.WriteLine($"\nstart point{preset.StartTime}");
                     }
                     else if (str == " ")
-                        if (manager.IsRunning)
-                            manager.Pouse();
+                        if (manager.TimerManager.IsRunning)
+                            manager.TimerManager.Pouse();
                         else 
-                            manager.Resume();
+                            manager.TimerManager.Resume();
                 }
 
                 #endregion

@@ -53,7 +53,7 @@ namespace CycleBellLibrary.Context
         public void LoadFromFile(string fileName)
         {
             CheckFileName (fileName);
-            DeserializePresets();
+            DeserializePresets(fileName);
         }
 
         /// <summary>
@@ -90,9 +90,7 @@ namespace CycleBellLibrary.Context
         /// </summary>
         public void SavePresets(string fileName)
         {
-            if (String.IsNullOrWhiteSpace(fileName))
-                throw new ArgumentException();
-
+            CheckFileName(fileName);
             SerializePresets(fileName);
         }
 
@@ -111,10 +109,10 @@ namespace CycleBellLibrary.Context
         /// <summary>
         /// Deserialies presets
         /// </summary>
-        private void DeserializePresets()
+        private void DeserializePresets(string fileName)
         {
             XmlSerializer xmlSerializer = new XmlSerializer(typeof(PresetObservableCollection));
-            using (FileStream fStream = File.OpenRead(FileName)) {
+            using (FileStream fStream = File.OpenRead(fileName)) {
 
                 var presets = (PresetObservableCollection)xmlSerializer.Deserialize(fStream);
 

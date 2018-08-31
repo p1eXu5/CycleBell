@@ -77,7 +77,10 @@ namespace CycleBellLibrary
             _presetsManager.Remove (preset);
         }
 
-        public void SavePresets() => PresetsManager.SavePresets();
+        /// <summary>
+        /// Serialize presets
+        /// </summary>
+        public void SavePresets() => PresetsManager.SavePresets(FileName);
 
         #endregion
     }
