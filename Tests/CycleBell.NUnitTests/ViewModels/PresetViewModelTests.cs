@@ -52,7 +52,7 @@ namespace CycleBell.NUnitTests.ViewModels
 
             var begin = pvm.TimePoints.OrderBy (tp => tp.Id).ThenBy (tp => tp.LoopNumber).First();
 
-            Assert.AreEqual (begin, typeof(BeginTimePointViewModel));
+            Assert.AreEqual (begin.GetType(), typeof(BeginTimePointViewModel));
         }
 
         [Test]
@@ -66,25 +66,28 @@ namespace CycleBell.NUnitTests.ViewModels
 
             var begin = pvm.TimePoints.OrderBy (tp => tp.Id).ThenBy (tp => tp.LoopNumber).Last();
 
-            Assert.AreEqual (begin, typeof(EndTimePointViewModel));
+            Assert.AreEqual (begin.GetType(), typeof(EndTimePointViewModel));
         }
 
         [Test]
         public void AddTimePointCommand_CanExecuteLoopUnknown_AddsTimePointViewModels()
         {
             var pvm = GetPresetViewModel();
+
             pvm.AddingTimePoint.Time = TimeSpan.FromSeconds (1);
             pvm.AddingTimePoint.LoopNumber = 10;
-
             pvm.AddTimePointCommand.Execute (null);
+
+            pvm.AddingTimePoint.Time = TimeSpan.FromSeconds (1);
+            pvm.AddingTimePoint.LoopNumber = 10;
             pvm.AddTimePointCommand.Execute (null);
 
             var sortedTimePoints = pvm.TimePoints.OrderBy (tp => tp.Id).ThenBy (tp => tp.LoopNumber).ToArray();
 
-            Assert.AreEqual (sortedTimePoints[0], typeof(BeginTimePointViewModel));
-            Assert.AreEqual (sortedTimePoints[1], typeof(TimePointViewModel));
-            Assert.AreEqual (sortedTimePoints[2], typeof(TimePointViewModel));
-            Assert.AreEqual (sortedTimePoints[3], typeof(TimePointViewModel));
+            Assert.AreEqual (sortedTimePoints[0].GetType(), typeof(BeginTimePointViewModel));
+            Assert.AreEqual (sortedTimePoints[1].GetType(), typeof(TimePointViewModel));
+            Assert.AreEqual (sortedTimePoints[2].GetType(), typeof(TimePointViewModel));
+            Assert.AreEqual (sortedTimePoints[3].GetType(), typeof(EndTimePointViewModel));
         }
 
         #region Factory

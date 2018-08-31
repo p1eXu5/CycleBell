@@ -2,7 +2,10 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
+using System.ComponentModel;
 using System.Linq;
+using System.Runtime.CompilerServices;
+using System.Windows.Data;
 using System.Windows.Input;
 using CycleBell.Base;
 using CycleBellLibrary;
@@ -56,13 +59,20 @@ namespace CycleBell.ViewModels
 
             TimePoints = new ReadOnlyObservableCollection<TimePointViewModelBase>(_timePoints);
 
+            // TODO CollectionView:
+            ICollectionView view = CollectionViewSource.GetDefaultView (TimePoints);
+
+            view.SortDescriptions.Clear();
+            view.SortDescriptions.Add (new SortDescription ("Id", ListSortDirection.Ascending));
+            view.SortDescriptions.Add (new SortDescription("LoopNumber", ListSortDirection.Ascending));
+
             ((INotifyCollectionChanged) _preset.TimePoints).CollectionChanged += (s, e) =>
             {
                 if (e.NewItems[0] != null)
                     _timePoints.Add (new TimePointViewModel ((TimePoint)e.NewItems[0]));
             };
 
-            AddingTimePoint = new TimePointViewModel (TimePoint.DefaultTimePoint);
+            ResetAddingTimePoint();
         }
 
         #endregion
@@ -97,12 +107,10 @@ namespace CycleBell.ViewModels
 
         private void AddTimePoint(object o)
         {
-            // TODO:
             _preset.AddTimePoint(_addingTimePoint.TimePoint);
             CheckBounds (_addingTimePoint.TimePoint);
 
-            // Resetting AddingTimePoint
-            AddingTimePoint = new TimePointViewModel(TimePoint.DefaultTimePoint);
+            ResetAddingTimePoint();
         }
 
         private void CheckBounds(TimePoint timePoint)
@@ -124,6 +132,9 @@ namespace CycleBell.ViewModels
 
             return false;
         }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        private void ResetAddingTimePoint() => AddingTimePoint = new TimePointViewModel (TimePoint.DefaultTimePoint);
 
         #endregion
     }
