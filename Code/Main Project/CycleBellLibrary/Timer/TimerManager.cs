@@ -66,19 +66,15 @@ namespace CycleBellLibrary.Timer
 
         #region Constructor
 
-        private TimerManager(IPresetsManager presetsManager)
-        {
-            // Устанавливаем дирехтора
-            _presetsManager = presetsManager;
-        }
+        private TimerManager() { }
 
         /// <summary>
         /// Gets instance of manager and if IPresetsManager.FileName is Exist loads presets or loads only one empty preset
         /// </summary>
         /// <param name="presetsManager"></param>
         /// <returns></returns>
-        public static TimerManager Instance(IPresetsManager presetsManager) 
-            => _timerManager ?? (_timerManager = new TimerManager(presetsManager));
+        public static TimerManager Instance 
+            => _timerManager ?? (_timerManager = new TimerManager());
         
         #endregion
 

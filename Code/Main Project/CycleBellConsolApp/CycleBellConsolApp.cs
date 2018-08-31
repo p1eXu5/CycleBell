@@ -5,6 +5,9 @@
 using System;
 using System.Media;
 using CycleBellLibrary;
+using CycleBellLibrary.Context;
+using CycleBellLibrary.Repository;
+using CycleBellLibrary.Timer;
 
 namespace CycleBellConsolApp
 {
@@ -21,7 +24,7 @@ namespace CycleBellConsolApp
                 Preset.DefaultInterval = 1;
 
                 // Create manager
-                var manager = TimerManager.Instance(new PresetsManager("test.xml"));
+                var manager = new CycleBellManager("test.xml", new PresetsManager(), TimerManager.Instance);
 
                 AppDomain.CurrentDomain.ProcessExit += manager.OnAppExit;
 
