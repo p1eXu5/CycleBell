@@ -26,7 +26,7 @@ namespace CycleBellConsolApp
                 // Create manager
                 var manager = new CycleBellManager("test.xml", new PresetsManager(), TimerManager.Instance);
 
-                AppDomain.CurrentDomain.ProcessExit += manager.OnAppExit;
+                AppDomain.CurrentDomain.ProcessExit += manager.SavePresets();
 
                 #region CreateTimePoints
 

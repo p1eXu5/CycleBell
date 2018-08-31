@@ -10,10 +10,9 @@ namespace CycleBellLibrary.Context
     public interface IPresetsManager
     {
         ReadOnlyObservableCollection<Preset> Presets { get; }
-        string FileName { get; set; }
 
         void Clear();
         void LoadFromFile(string fileName);
-        void SavePresets();
+        void SavePresets(string fileName);
     }
 }

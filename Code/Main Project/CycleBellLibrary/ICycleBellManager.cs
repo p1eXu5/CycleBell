@@ -16,5 +16,6 @@ namespace CycleBellLibrary
         string FileName { get; }
 
         void CreateNewPreset();
+        void SavePresets();
     }
 }

@@ -33,8 +33,6 @@ namespace CycleBellLibrary.Context
 
         public ReadOnlyObservableCollection<Preset> Presets { get; private set; }
 
-        public string FileName { get; set; }
-
         #endregion
 
         #region Methods
@@ -90,17 +88,20 @@ namespace CycleBellLibrary.Context
         /// <summary>
         /// Serializes presets, for a while
         /// </summary>
-        public void SavePresets()
+        public void SavePresets(string fileName)
         {
-            SerializePresets();
+            if (String.IsNullOrWhiteSpace(fileName))
+                throw new ArgumentException();
+
+            SerializePresets(fileName);
         }
 
         /// <summary>
         /// Serializes presets
         /// </summary>
-        private void SerializePresets()
+        private void SerializePresets(string fileName)
         {
-            using (FileStream fs = File.Open(FileName, FileMode.Create)) {
+            using (FileStream fs = File.Open(fileName, FileMode.Create)) {
 
                 XmlSerializer xmlSerializer = new XmlSerializer(typeof(PresetObservableCollection));
                 xmlSerializer.Serialize(fs, _presets);
