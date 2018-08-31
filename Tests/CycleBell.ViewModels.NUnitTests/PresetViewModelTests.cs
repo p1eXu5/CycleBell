@@ -15,7 +15,7 @@ namespace CycleBell.ViewModels.NUnitTests
         [Test]
         public void class_DerivedToObservableObject()
         {
-            Assert.Equals (typeof(PresetViewModel).BaseType, typeof(ObservableObject));
+            Assert.AreEqual (typeof(PresetViewModel).BaseType, typeof(ObservableObject));
         }
 
         #region Factory

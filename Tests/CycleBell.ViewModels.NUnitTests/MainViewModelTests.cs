@@ -63,7 +63,7 @@ namespace CycleBell.ViewModels.NUnitTests
                 throw new NotImplementedException();
             }
 
-            public bool? ShowDialog<TViewModel> (TViewModel viewModel) where TViewModel : IDialogCloseRequested
+            public bool? ShowDialog<TViewModel> (TViewModel viewModel, Predicate<Object> predicate = null) where TViewModel : IDialogCloseRequested
             {
                 throw new NotImplementedException();
             }

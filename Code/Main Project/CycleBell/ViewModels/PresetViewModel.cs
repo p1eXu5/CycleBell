@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.Linq;
+using CycleBell.Base;
 using CycleBellLibrary;
 using CycleBellLibrary.Repository;
 
@@ -18,7 +19,7 @@ namespace CycleBell.ViewModels
     /// <summary>
     /// Timer preset
     /// </summary>
-    public class PresetViewModel
+    public class PresetViewModel : ObservableObject
     {
         private readonly Preset _preset;
         private readonly ObservableCollection<TimePointViewModelBase> _timePoints;
