@@ -8,7 +8,7 @@ namespace CycleBell.ViewModels
 
         public TimePointViewModelCollection (PresetViewModel preset)
         {
-            var timePoints = preset.TimePoints;
+            var timePoints = preset.TimePointVmCollection;
 
             if (timePoints == null)
                 throw new ArgumentNullException (nameof(timePoints), @"Collection can't be null");

@@ -25,18 +25,17 @@ namespace CycleBell.NUnitTests.ViewModels
         public void AddTimePointCommand_NegativeOrZeroRelativeTimePoint_CanNotExecute(string time, TimePointType timePointType)
         {
             var pvm = GetPresetViewModel();
-            pvm.AddingTimePoint = new TimePointViewModel(new TimePoint(TimeSpan.Parse (time), timePointType));
+            pvm.AddingTimePoint = new TimePointViewModel(new TimePoint(TimeSpan.Parse (time), timePointType), pvm.Preset);
 
             Assert.IsFalse(pvm.AddTimePointCommand.CanExecute(null));
         }
-
 
         [TestCase("0:00:00", TimePointType.Absolute)]
         [TestCase("0:00:01", TimePointType.Relative)]
         public void AddTimePointCommand_PositiveOrZeroAbsoluteTimePoint_CanExecute(string time, TimePointType timePointType)
         {
             var pvm = GetPresetViewModel();
-            pvm.AddingTimePoint = new TimePointViewModel(new TimePoint(TimeSpan.Parse(time), timePointType));
+            pvm.AddingTimePoint = new TimePointViewModel(new TimePoint(TimeSpan.Parse(time), timePointType), pvm.Preset);
 
             Assert.IsTrue(pvm.AddTimePointCommand.CanExecute(null));
         }
@@ -50,7 +49,7 @@ namespace CycleBell.NUnitTests.ViewModels
 
             pvm.AddTimePointCommand.Execute (null);
 
-            var begin = pvm.TimePoints.OrderBy (tp => tp.Id).ThenBy (tp => tp.LoopNumber).First();
+            var begin = pvm.TimePointVmCollection.OrderBy (tp => tp.Id).ThenBy (tp => tp.LoopNumber).First();
 
             Assert.AreEqual (begin.GetType(), typeof(BeginTimePointViewModel));
         }
@@ -64,7 +63,7 @@ namespace CycleBell.NUnitTests.ViewModels
 
             pvm.AddTimePointCommand.Execute (null);
 
-            var begin = pvm.TimePoints.OrderBy (tp => tp.Id).ThenBy (tp => tp.LoopNumber).Last();
+            var begin = pvm.TimePointVmCollection.OrderBy (tp => tp.Id).ThenBy (tp => tp.LoopNumber).Last();
 
             Assert.AreEqual (begin.GetType(), typeof(EndTimePointViewModel));
         }
@@ -82,12 +81,18 @@ namespace CycleBell.NUnitTests.ViewModels
             pvm.AddingTimePoint.LoopNumber = 10;
             pvm.AddTimePointCommand.Execute (null);
 
-            var sortedTimePoints = pvm.TimePoints.OrderBy (tp => tp.Id).ThenBy (tp => tp.LoopNumber).ToArray();
+            var sortedTimePoints = pvm.TimePointVmCollection.OrderBy (tp => tp.Id).ThenBy (tp => tp.LoopNumber).ToArray();
 
             Assert.AreEqual (sortedTimePoints[0].GetType(), typeof(BeginTimePointViewModel));
             Assert.AreEqual (sortedTimePoints[1].GetType(), typeof(TimePointViewModel));
             Assert.AreEqual (sortedTimePoints[2].GetType(), typeof(TimePointViewModel));
             Assert.AreEqual (sortedTimePoints[3].GetType(), typeof(EndTimePointViewModel));
+        }
+
+        [Test]
+        public void UpdateTimePointVmCollection_EventHasRaised_Called()
+        {
+            
         }
 
         #region Factory

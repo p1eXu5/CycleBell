@@ -99,7 +99,7 @@ namespace CycleBell.ViewModels
 
         }
 
-        private void RemoveTimePoint()
+        private void RemoveTimePoint(object o)
         {
             _preset.RemoveTimePoint (_timePoint);
         }

@@ -111,7 +111,7 @@ namespace CycleBellLibrary.Repository
         /// </summary>
         public bool IsInfiniteLoop => _isInfiniteLoop != 0;
 
-        public ReadOnlyObservableCollection<TimePoint> TimePoints { get; }
+        public virtual ReadOnlyObservableCollection<TimePoint> TimePoints { get; }
 
         /// <summary>
         /// # cycle - n times
@@ -126,7 +126,7 @@ namespace CycleBellLibrary.Repository
         /// Add NextTimePoint
         /// </summary>
         /// <param name="timePoint"></param>
-        public void AddTimePoint(TimePoint timePoint)
+        public virtual void AddTimePoint(TimePoint timePoint)
         {
             if (timePoint == null)
                 throw new ArgumentNullException(nameof(timePoint), "timePoint can't be null");
@@ -148,7 +148,7 @@ namespace CycleBellLibrary.Repository
             }
         }
 
-        public void RemoveTimePoint(TimePoint timePoint)
+        public virtual void RemoveTimePoint(TimePoint timePoint)
         {
             if (timePoint == null)
                 throw new ArgumentNullException(nameof(timePoint), "timePoint can't be null");

@@ -63,6 +63,7 @@
     <Compile Include="ViewModels\MainViewModelTests.cs" />
     <Compile Include="ViewModels\PresetViewModelTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ViewModels\TimePointViewModelTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
