@@ -86,13 +86,27 @@ namespace CycleBell.NUnitTests.ViewModels
 
         #endregion
 
+        #region Ring
+
         [Test]
-        public void RingCommand_SoundPlayerNotNull_CanExecute()
+        public void RingCommand_SoundPlayerNotNullMuteIsFalse_CanExecute()
         {
             var tpvm = GetTimePointViewModel();
+            tpvm.MuteFlag = false;
 
             Assert.IsTrue (tpvm.RingCommand.CanExecute(null));
         }
+
+        [Test]
+        public void RingCommand_SoundPlayerNotNullMuteIsTrue_CanNotExecute()
+        {
+            var tpvm = GetTimePointViewModel();
+            tpvm.MuteFlag = true;
+
+            Assert.IsFalse (tpvm.RingCommand.CanExecute(null));
+        }
+
+        #endregion
 
 
         #region Factory
