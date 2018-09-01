@@ -12,5 +12,7 @@ namespace CycleBell.ViewModels
         public EndTimePointViewModel(byte loopNumber) : base(TimePoint.MaxId, loopNumber)
         {
         }
+
+        public override TimePoint TimePoint => throw new NotImplementedException();
     }
 }

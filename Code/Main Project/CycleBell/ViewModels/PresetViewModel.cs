@@ -29,7 +29,7 @@ namespace CycleBell.ViewModels
         #region Fields
 
         private readonly Preset _preset;
-        private readonly ObservableCollection<TimePointViewModelBase> _timePoints;
+        private readonly ObservableCollection<TimePointViewModelBase> _timePointVms;
 
         private TimePointViewModel _addingTimePoint;
         private readonly HashSet<byte> _settedLoopNumbers;
@@ -42,7 +42,7 @@ namespace CycleBell.ViewModels
         {
             _preset = preset ?? throw new ArgumentNullException();
             _settedLoopNumbers = new HashSet<byte>();
-            _timePoints = new ObservableCollection<TimePointViewModelBase>();
+            _timePointVms = new ObservableCollection<TimePointViewModelBase>();
 
             foreach (var point in _preset.TimePoints) {
 
@@ -52,12 +52,12 @@ namespace CycleBell.ViewModels
                 if (point.Time == TimeSpan.Zero && point.TimePointType == TimePointType.Relative)
                     point.TimePointType = TimePointType.Absolute;
 
-                _timePoints.Add (new TimePointViewModel (point));
+                _timePointVms.Add (new TimePointViewModel (point, _preset));
 
                 CheckBounds(point);
             }
 
-            TimePoints = new ReadOnlyObservableCollection<TimePointViewModelBase>(_timePoints);
+            TimePoints = new ReadOnlyObservableCollection<TimePointViewModelBase>(_timePointVms);
 
             // TODO CollectionView:
             ICollectionView view = CollectionViewSource.GetDefaultView (TimePoints);
@@ -69,7 +69,13 @@ namespace CycleBell.ViewModels
             ((INotifyCollectionChanged) _preset.TimePoints).CollectionChanged += (s, e) =>
             {
                 if (e.NewItems[0] != null)
-                    _timePoints.Add (new TimePointViewModel ((TimePoint)e.NewItems[0]));
+                    _timePointVms.Add (new TimePointViewModel ((TimePoint)e.NewItems[0], _preset));
+
+                if (e.OldItems[0] != null && e.NewItems[0] == null) {
+
+                    var removingTimePointVm = _timePointVms.First (tpvm => tpvm.TimePoint.Equals ((TimePoint) e.OldItems[0]));
+                    _timePointVms.Remove (removingTimePointVm);
+                }
             };
 
             ResetAddingTimePoint();
@@ -118,8 +124,8 @@ namespace CycleBell.ViewModels
             if (_settedLoopNumbers.Contains (timePoint.LoopNumber))
                 return;
 
-            _timePoints.Add (new BeginTimePointViewModel (timePoint.LoopNumber, this));
-            _timePoints.Add (new EndTimePointViewModel (timePoint.LoopNumber));
+            _timePointVms.Add (new BeginTimePointViewModel (timePoint.LoopNumber, _preset));
+            _timePointVms.Add (new EndTimePointViewModel (timePoint.LoopNumber));
 
             _settedLoopNumbers.Add (timePoint.LoopNumber);
         }
@@ -134,7 +140,7 @@ namespace CycleBell.ViewModels
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        private void ResetAddingTimePoint() => AddingTimePoint = new TimePointViewModel (TimePoint.DefaultTimePoint);
+        private void ResetAddingTimePoint() => AddingTimePoint = new TimePointViewModel (TimePoint.DefaultTimePoint, _preset);
 
         #endregion
     }

@@ -1,5 +1,6 @@
 ﻿using System;
 using CycleBell.Base;
+using CycleBellLibrary.Models;
 
 namespace CycleBell.ViewModels 
 {
@@ -41,6 +42,8 @@ namespace CycleBell.ViewModels
                 OnPropertyChanged();
             }
         }
+
+        public abstract TimePoint TimePoint { get; }
         
         #endregion
     }

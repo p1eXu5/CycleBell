@@ -4,6 +4,7 @@ using System.Windows.Input;
 using CycleBell.Base;
 using CycleBellLibrary;
 using CycleBellLibrary.Models;
+using CycleBellLibrary.Repository;
 using Microsoft.Win32;
 
 namespace CycleBell.ViewModels 
@@ -15,14 +16,16 @@ namespace CycleBell.ViewModels
         //private static SoundPlayer _sound = new SoundPlayer("pack://application:,,,/Sounds/default.wav");
 
         private readonly TimePoint _timePoint;
+        private readonly Preset _preset;
 
         #endregion
 
         #region Constructor
 
-        public TimePointViewModel(TimePoint timePoint) : base(timePoint.Id, timePoint.LoopNumber)
+        public TimePointViewModel(TimePoint timePoint, Preset preset) : base(timePoint.Id, timePoint.LoopNumber)
         {
             _timePoint = timePoint;
+            _preset = preset;
         }
 
         #endregion
@@ -36,7 +39,7 @@ namespace CycleBell.ViewModels
 
         #endregion
 
-        public TimePoint TimePoint => _timePoint;
+        public override TimePoint TimePoint => _timePoint;
 
         /// <summary>
         /// Name of TimePoint
@@ -78,11 +81,28 @@ namespace CycleBell.ViewModels
 
         #region Commands
 
-        public ICommand AddSoundCommand { get; }
+        public ICommand AddSoundCommand
+        {
+            get => new ActionCommand (AddSound);
+        }
+        public ICommand RemoveTimePointCommand
+        {
+            get => new ActionCommand (RemoveTimePoint);
+        }
 
         #endregion
 
         #region Methods
+
+        private void AddSound (object o)
+        {
+
+        }
+
+        private void RemoveTimePoint()
+        {
+            _preset.RemoveTimePoint (_timePoint);
+        }
 
         private static void OpenWavFile(SoundPlayer sound)
         {
