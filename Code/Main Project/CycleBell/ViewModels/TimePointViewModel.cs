@@ -33,6 +33,8 @@ namespace CycleBell.ViewModels
 
         static TimePointViewModel()
         {
+            // TODO дебажить фолдеры
+
             if (File.Exists (DefaultSoundFileName)) {
                 DefaultSoundPlayer = new SoundPlayer(DefaultSoundFileName);
             }

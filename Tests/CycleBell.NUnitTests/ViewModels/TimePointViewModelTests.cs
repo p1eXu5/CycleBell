@@ -18,6 +18,23 @@ namespace CycleBell.NUnitTests.ViewModels
         #endregion
 
 
+        #region ctor
+
+        [Test]
+        public void ctor_WhenCalledInTests_CreatsValidSoundPlayer()
+        {
+            // Arrange:
+            SoundPlayer player = new SoundPlayer("default.wav");
+
+            // Action:
+            var tpvm = GetTimePointViewModel();
+
+            // Assert:
+            Assert.AreEqual (player, tpvm.SoundPlayer);
+        }
+
+        #endregion
+
         #region RemoveTimePointCommand
 
         [Test]
