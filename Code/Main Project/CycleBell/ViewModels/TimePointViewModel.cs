@@ -174,7 +174,7 @@ namespace CycleBell.ViewModels
         }
         private bool CanRing (object o)
         {
-            return _soundPlayer != null;
+            return (_soundPlayer != null) && !MuteFlag;
         }
 
         private void AddSound (object o)
