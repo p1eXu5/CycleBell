@@ -17,6 +17,7 @@ namespace CycleBell.NUnitTests.ViewModels
     
         #endregion
 
+
         #region RemoveTimePointCommand
 
         [Test]
@@ -70,6 +71,7 @@ namespace CycleBell.NUnitTests.ViewModels
         }
 
         #endregion
+
 
         #region Factory
 

@@ -14,7 +14,7 @@ namespace CycleBell.ViewModels
     {
         #region Const
 
-        public const string DefaultSoundFileName = "Default.wav";
+        public const string DefaultSoundFileName = "default.wav";
         private static readonly SoundPlayer DefaultSoundPlayer; 
 
         #endregion

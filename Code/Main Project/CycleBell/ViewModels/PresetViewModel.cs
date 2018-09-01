@@ -31,6 +31,7 @@ namespace CycleBell.ViewModels
         private readonly Preset _preset;
         private readonly ObservableCollection<TimePointViewModelBase> _timePointVmCollection;
 
+        private TimePointViewModelBase _selectedTimePoint;
         private TimePointViewModel _addingTimePoint;
         private readonly HashSet<byte> _settedLoopNumbers;
 
@@ -71,6 +72,21 @@ namespace CycleBell.ViewModels
 
         #region Properties
 
+
+        public Preset Preset => _preset;
+        public ReadOnlyObservableCollection<TimePointViewModelBase> TimePointVmCollection { get; }
+
+        public TimePointViewModelBase SelectedTimePoint
+        {
+            get => _selectedTimePoint;
+            set {
+                if (value is TimePointViewModel newValue) {
+                    _selectedTimePoint = newValue;
+                }
+                OnPropertyChanged ();
+            }
+        }
+
         public TimePointViewModel AddingTimePoint
         {
             get => _addingTimePoint;
@@ -79,14 +95,12 @@ namespace CycleBell.ViewModels
                 OnPropertyChanged ();
             }
         }
+        public TimerLoopSortedDictionary TimerLoops => _preset.TimerLoops;
 
-        public Preset Preset => _preset;
         public string Name { get; set; }
         public TimeSpan StartTime { get; set; } = DateTime.Now.TimeOfDay + new TimeSpan(0, 5, 0);
         public CycleBellStateFlags State { get; set; }
 
-        public ReadOnlyObservableCollection<TimePointViewModelBase> TimePointVmCollection { get; }
-        public TimerLoopSortedDictionary TimerLoops => _preset.TimerLoops;
 
         #endregion
 
@@ -114,16 +128,6 @@ namespace CycleBell.ViewModels
             ResetAddingTimePoint();
         }
 
-        private void CheckBounds(TimePoint timePoint)
-        {
-            if (_settedLoopNumbers.Contains (timePoint.LoopNumber))
-                return;
-
-            _timePointVmCollection.Add (new BeginTimePointViewModel (timePoint.LoopNumber, _preset));
-            _timePointVmCollection.Add (new EndTimePointViewModel (timePoint.LoopNumber));
-
-            _settedLoopNumbers.Add (timePoint.LoopNumber);
-        }
 
         private bool CanAddTimePoint(object obj)
         {
@@ -166,6 +170,19 @@ namespace CycleBell.ViewModels
                 }
             }
         }
+
+        // Checkers:
+        private void CheckBounds(TimePoint timePoint)
+        {
+            if (_settedLoopNumbers.Contains (timePoint.LoopNumber))
+                return;
+
+            _timePointVmCollection.Add (new BeginTimePointViewModel (timePoint.LoopNumber, _preset));
+            _timePointVmCollection.Add (new EndTimePointViewModel (timePoint.LoopNumber));
+
+            _settedLoopNumbers.Add (timePoint.LoopNumber);
+        }
+
         #endregion
     }
 }
