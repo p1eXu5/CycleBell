@@ -20,6 +20,8 @@ namespace CycleBell.NUnitTests.ViewModels
     
         #endregion
 
+        #region RemoveTimePointCommand
+
         [Test]
         public void RemoveTimePointCommand_WhenCalled_RemovesTimePoint()
         {
@@ -32,6 +34,40 @@ namespace CycleBell.NUnitTests.ViewModels
             // Assert
             Assert.IsFalse (mockPreset.TimePoints.Contains (tpvm.TimePoint));
         }
+
+        #endregion
+
+        #region MuteToggleCommand
+
+        [Test]
+        public void MuteToggleCommand_MuteFlagIsTrue_SetsMuteFlagInFalse()
+        {
+            var tpvm = GetTimePointViewModel();
+            tpvm.MuteFlag = true;
+
+            tpvm.MuteToggleCommand.Execute (null);
+
+            Assert.IsTrue (tpvm.MuteFlag);
+        }
+
+        [Test]
+        public void MuteToggleCommand_MuteFlagIsFalse_SetsMuteFlagInTrue()
+        {
+            var tpvm = GetTimePointViewModel();
+
+            tpvm.MuteToggleCommand.Execute (null);
+
+            Assert.IsFalse (tpvm.MuteFlag);
+        }
+
+        [Test]
+        public void MuteToggleCommand_SoundPlayerIsNull_CanExecute()
+        {
+            var tpvm = GetTimePointViewModel();
+
+        }
+
+        #endregion
 
         #region Factory
 

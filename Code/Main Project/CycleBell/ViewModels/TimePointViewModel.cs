@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using System.Media;
 using System.Windows.Input;
 using CycleBell.Base;
@@ -11,21 +12,35 @@ namespace CycleBell.ViewModels
 {
     public class TimePointViewModel : TimePointViewModelBase
     {
+        public const string DefaultSoundFileName = "Default.wav";
+        private static readonly SoundPlayer DefaultSoundPlayer; 
+
         #region Fields
 
-        //private static SoundPlayer _sound = new SoundPlayer("pack://application:,,,/Sounds/default.wav");
+        private SoundPlayer _soundPlayer;
 
         private readonly TimePoint _timePoint;
         private readonly Preset _preset;
+
+        private bool _muteFlag = false;
 
         #endregion
 
         #region Constructor
 
+        static TimePointViewModel()
+        {
+            if (File.Exists (DefaultSoundFileName)) {
+                DefaultSoundPlayer = new SoundPlayer(DefaultSoundFileName);
+            }
+        }
+
         public TimePointViewModel(TimePoint timePoint, Preset preset) : base(timePoint.Id, timePoint.LoopNumber)
         {
             _timePoint = timePoint;
             _preset = preset;
+
+            _soundPlayer = GetSoundPlayer(_timePoint);
         }
 
         #endregion
@@ -39,6 +54,9 @@ namespace CycleBell.ViewModels
 
         #endregion
 
+        /// <summary>
+        /// Gets TimePoint
+        /// </summary>
         public override TimePoint TimePoint => _timePoint;
 
         /// <summary>
@@ -65,6 +83,9 @@ namespace CycleBell.ViewModels
             }
         }
 
+        /// <summary>
+        /// Gets TimePointTime
+        /// </summary>
         public TimePointType TimePointType => _timePoint.TimePointType;
 
         public bool IsAbsoluteTime
@@ -72,10 +93,24 @@ namespace CycleBell.ViewModels
             get => _timePoint.TimePointType == TimePointType.Absolute;
         }
 
-        /// <summary>
-        /// Sound location
-        /// </summary>
-        //public string SoundLocation => String.IsNullOrEmpty((string)_timePoint?.Tag) ? (string)_timePoint?.Tag : _sound.SoundLocation;
+        public bool MuteFlag
+        {
+            get => _muteFlag;
+            set {
+                _muteFlag = value;
+                OnPropertyChanged ();
+            }
+        }
+
+        public SoundPlayer SoundPlayer
+        {
+            get => _soundPlayer;
+            set  {
+                _soundPlayer = value;
+                OnPropertyChanged ();
+            }
+        }
+        public string SoundLocation => _soundPlayer?.SoundLocation;
 
         #endregion
 
@@ -93,6 +128,23 @@ namespace CycleBell.ViewModels
         #endregion
 
         #region Methods
+
+        private SoundPlayer GetSoundPlayer (TimePoint timePoint)
+        {
+            if (String.IsNullOrWhiteSpace ((string) timePoint.Tag)) {
+
+                timePoint.Tag = DefaultSoundFileName;
+                return DefaultSoundPlayer;
+            }
+
+            if ((string) timePoint.Tag == DefaultSoundFileName)
+                return DefaultSoundPlayer;
+
+            if (File.Exists ((string)timePoint.Tag))
+                return new SoundPlayer((string)timePoint.Tag);
+
+            return null;
+        }
 
         private void AddSound (object o)
         {
