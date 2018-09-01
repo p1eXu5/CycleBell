@@ -45,7 +45,7 @@ namespace CycleBell.NUnitTests.ViewModels
 
             tpvm.MuteToggleCommand.Execute (null);
 
-            Assert.IsTrue (tpvm.MuteFlag);
+            Assert.IsFalse (tpvm.MuteFlag);
         }
 
         [Test]
@@ -57,7 +57,7 @@ namespace CycleBell.NUnitTests.ViewModels
 
             tpvm.MuteToggleCommand.Execute (null);
 
-            Assert.IsFalse (tpvm.MuteFlag);
+            Assert.IsTrue (tpvm.MuteFlag);
         }
 
         [Test]
