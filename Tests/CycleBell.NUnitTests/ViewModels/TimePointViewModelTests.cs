@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using System.Media;
 using CycleBell.ViewModels;
 using CycleBellLibrary.Models;
 using CycleBellLibrary.Repository;
@@ -43,6 +40,7 @@ namespace CycleBell.NUnitTests.ViewModels
         public void MuteToggleCommand_MuteFlagIsTrue_SetsMuteFlagInFalse()
         {
             var tpvm = GetTimePointViewModel();
+            tpvm.SoundPlayer = new SoundPlayer();
             tpvm.MuteFlag = true;
 
             tpvm.MuteToggleCommand.Execute (null);
@@ -54,6 +52,8 @@ namespace CycleBell.NUnitTests.ViewModels
         public void MuteToggleCommand_MuteFlagIsFalse_SetsMuteFlagInTrue()
         {
             var tpvm = GetTimePointViewModel();
+            tpvm.SoundPlayer = new SoundPlayer();
+            tpvm.MuteFlag = false;
 
             tpvm.MuteToggleCommand.Execute (null);
 
@@ -64,7 +64,9 @@ namespace CycleBell.NUnitTests.ViewModels
         public void MuteToggleCommand_SoundPlayerIsNull_CanExecute()
         {
             var tpvm = GetTimePointViewModel();
+            tpvm.SoundPlayer = null;
 
+            Assert.IsFalse (tpvm.MuteToggleCommand.CanExecute(null));
         }
 
         #endregion

@@ -12,16 +12,19 @@ namespace CycleBell.ViewModels
 {
     public class TimePointViewModel : TimePointViewModelBase
     {
+        #region Const
+
         public const string DefaultSoundFileName = "Default.wav";
         private static readonly SoundPlayer DefaultSoundPlayer; 
 
-        #region Fields
+        #endregion
 
-        private SoundPlayer _soundPlayer;
+        #region Fields
 
         private readonly TimePoint _timePoint;
         private readonly Preset _preset;
 
+        private SoundPlayer _soundPlayer;
         private bool _muteFlag = false;
 
         #endregion
@@ -116,18 +119,27 @@ namespace CycleBell.ViewModels
 
         #region Commands
 
-        public ICommand AddSoundCommand
-        {
-            get => new ActionCommand (AddSound);
-        }
         public ICommand RemoveTimePointCommand
         {
             get => new ActionCommand (RemoveTimePoint);
         }
 
+        public ICommand MuteToggleCommand
+        {
+            get => new ActionCommand (MuteToggle, CanMuteToggle);
+        }
+
+        // Not tested
+        public ICommand AddSoundCommand
+        {
+            get => new ActionCommand (AddSound);
+        }
+
         #endregion
 
         #region Methods
+
+        public static implicit operator TimePoint(TimePointViewModel instance) => instance.TimePoint;
 
         private SoundPlayer GetSoundPlayer (TimePoint timePoint)
         {
@@ -145,16 +157,26 @@ namespace CycleBell.ViewModels
 
             return null;
         }
+        private void RemoveTimePoint(object o)
+        {
+            _preset.RemoveTimePoint (_timePoint);
+        }
+
+        private void MuteToggle (object o)
+        {
+            MuteFlag = (MuteFlag != true);
+        }
+
+        private bool CanMuteToggle (object o)
+        {
+            return _soundPlayer != null;
+        }
 
         private void AddSound (object o)
         {
 
         }
 
-        private void RemoveTimePoint(object o)
-        {
-            _preset.RemoveTimePoint (_timePoint);
-        }
 
         private static void OpenWavFile(SoundPlayer sound)
         {
@@ -168,7 +190,6 @@ namespace CycleBell.ViewModels
             }
         }
 
-        public static implicit operator TimePoint(TimePointViewModel instance) => instance.TimePoint;
 
         #endregion
     }
