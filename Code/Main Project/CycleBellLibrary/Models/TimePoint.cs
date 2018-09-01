@@ -18,8 +18,9 @@ namespace CycleBellLibrary.Models
     {
         #region Fields
 
+        public static readonly TimeSpan InitialDefaultTime = TimeSpan.Zero;
+
         private static byte _timePointNum = 1;
-        private static TimeSpan _defaultTime = TimeSpan.Zero;
 
         private string _name;
         private TimeSpan _time;
@@ -30,6 +31,9 @@ namespace CycleBellLibrary.Models
 
         static TimePoint()
         {
+            DefaultTime = InitialDefaultTime;
+
+            // Да хуй его, прикольно было попробовать
             Type type = MaxId.GetType();
 
             dynamic max = _timePointNum.GetType().GetField ("MaxValue")?.GetValue (null);
@@ -45,8 +49,16 @@ namespace CycleBellLibrary.Models
                 throw new InvalidOperationException();
 
             MinId = (Int64) min;
+
         }
 
+        public TimePoint()
+            : this(
+                name: "Time point " + _timePointNum, 
+                time: DefaultTime, 
+                timePointType: TimePointType.Relative)
+        { }
+        
         /// <summary>
         /// Creates TimePoint instance
         /// </summary>
@@ -67,14 +79,7 @@ namespace CycleBellLibrary.Models
             LoopNumber = loopNumber == Byte.MaxValue ? (byte)(Byte.MaxValue - 1) : loopNumber;
         }
 
-        #region Constructor Overload
-
-        public TimePoint()
-            : this(
-                name: "Time point " + _timePointNum, 
-                time: _defaultTime, 
-                timePointType: TimePointType.Relative)
-        { }
+        #region Linked
 
         public TimePoint(TimeSpan time, TimePointType timePointType = TimePointType.Relative, byte timerCycleNum = 0)
             : this("Time point " + _timePointNum, time, timePointType, timerCycleNum)
@@ -93,16 +98,12 @@ namespace CycleBellLibrary.Models
 
         #region Properties
 
-        // Static:
+        // Static:_________________________________________________________________________
 
         /// <summary>
             /// Дефолтное смещение временной точки относительно текущего времени
             /// </summary>
-        public static TimeSpan DefaultTime
-        {
-            get => _defaultTime;
-            set => _defaultTime = value;
-        }
+        public static TimeSpan DefaultTime { get; set; }
 
         /// <summary>
         /// Имя при null (для определения StartTime)
@@ -114,7 +115,7 @@ namespace CycleBellLibrary.Models
 
         public static TimePoint DefaultTimePoint => new TimePoint();
 
-        // Instance:
+        // Instance:_______________________________________________________________________
 
         /// <summary>
         /// Уникальный порядковый номер временной точки

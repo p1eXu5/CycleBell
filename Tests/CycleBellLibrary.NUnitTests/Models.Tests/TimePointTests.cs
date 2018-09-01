@@ -12,6 +12,14 @@ namespace CycleBellLibrary.NUnitTests.Models.Tests
     public class TimePointTests
     {
         [Test]
+        public void ctor_ParameterlessCalled_CreatsTimePointWithNullBaseTime()
+        {
+            var timePoint = TimePoint.DefaultTimePoint;
+
+            Assert.IsTrue (timePoint.BaseTime == null);
+        }
+
+        [Test]
         public void TimePoint_AbsoluteTimePoint_CreatesNoSetBaseTime()
         {
             var timePoint = GetAbsoluteTimePoint();
@@ -140,6 +148,10 @@ namespace CycleBellLibrary.NUnitTests.Models.Tests
             }
         }
 
+
+
+        #region Factory
+
         private TimePoint GetRelativeTimePoint()
         {
             return new TimePoint("0:00:30");
@@ -149,5 +161,7 @@ namespace CycleBellLibrary.NUnitTests.Models.Tests
         {
             return new TimePoint("0:00:30", TimePointType.Absolute);
         }
+
+        #endregion
     }
 }

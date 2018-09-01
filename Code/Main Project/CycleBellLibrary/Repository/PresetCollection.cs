@@ -11,7 +11,7 @@ using CycleBellLibrary.Repository;
 
 namespace CycleBellLibrary.Context
 {
-    public sealed class PresetsManager : IInnerPresetsManager
+    public sealed class PresetCollection : IInnerPresetCollection
     {
         #region Fields
 
@@ -21,7 +21,7 @@ namespace CycleBellLibrary.Context
 
         #region Constructor
 
-        public PresetsManager()
+        public PresetCollection()
         {
             _presets = new PresetObservableCollection();
             Presets = new ReadOnlyObservableCollection<Preset>(_presets);

@@ -44,20 +44,20 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="CycleBellManager.cs" />
-    <Compile Include="ICycleBellManager.cs" />
-    <Compile Include="Context\IInnerPresetsManager.cs" />
-    <Compile Include="Repository\ITimePointBaseTimeSetter.cs" />
+    <Compile Include="Context\CycleBellManager.cs" />
+    <Compile Include="Context\ICycleBellManager.cs" />
+    <Compile Include="Repository\IInnerPresetCollection.cs" />
+    <Compile Include="Models\ITimePointBaseTimeSetter.cs" />
     <Compile Include="Timer\ITimerManager.cs" />
-    <Compile Include="Repository\PresetObservableCollection.cs" />
+    <Compile Include="Models\PresetObservableCollection.cs" />
     <Compile Include="Timer\TimerEventArgs.cs" />
     <Compile Include="Timer\TimerManager.cs" />
-    <Compile Include="Context\PresetsManager.cs" />
-    <Compile Include="Context\IPresetsManager.cs" />
-    <Compile Include="Repository\Preset.cs" />
+    <Compile Include="Repository\PresetCollection.cs" />
+    <Compile Include="Repository\IPresetCollection.cs" />
+    <Compile Include="Models\Preset.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Models\TimePoint.cs" />
-    <Compile Include="Repository\TimerLoopSortedDictionary.cs" />
+    <Compile Include="Models\TimerLoopSortedDictionary.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

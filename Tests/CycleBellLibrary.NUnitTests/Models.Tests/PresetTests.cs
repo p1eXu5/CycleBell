@@ -12,6 +12,8 @@ namespace CycleBellLibrary.NUnitTests.Repository.Tests
     [TestFixture]
     public class PresetTests
     {
+        #region ctor
+
         [Test]
         public void ctor_ParameterlessCalled_PresetNameIsDefaultName()
         {
@@ -36,6 +38,10 @@ namespace CycleBellLibrary.NUnitTests.Repository.Tests
             Assert.IsTrue (preset.TimePoints.Count == 0);
         }
 
+        #endregion
+
+        #region AddTimePoint
+
         [Test]
         public void AddTimePoint_ValidTimePoint_AddsTimePoint()
         {
@@ -54,6 +60,17 @@ namespace CycleBellLibrary.NUnitTests.Repository.Tests
 
             Assert.That(() => preset.AddTimePoint (null), Throws.ArgumentNullException);
         }
+
+        [Test]
+        public void AddTimePoint_TimePointWithNoStartTime_SetsStartTime()
+        {
+            var preset = new Preset();
+            var timePoint = TimePoint.DefaultTimePoint;
+        }
+
+        #endregion
+
+        #region RemoveTimePoint
 
         [Test]
         public void RemoveTimePoint_TimePointIsNull_Throws()
@@ -91,6 +108,9 @@ namespace CycleBellLibrary.NUnitTests.Repository.Tests
             // Action and Assertion
             Assert.That (() => preset.RemoveTimePoint (notInCollectionTimePoint), Throws.ArgumentException);
         }
+
+        #endregion
+
 
         #region Factory
 

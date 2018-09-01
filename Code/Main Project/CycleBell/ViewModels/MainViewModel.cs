@@ -25,7 +25,7 @@ namespace CycleBell.ViewModels
         private readonly IDialogRegistrator _dialogRegistrator;
 
         private readonly ICycleBellManager _manager;
-        private readonly IPresetsManager _presetManager;
+        private readonly IPresetCollection _presetManager;
         private readonly ITimerManager _timerManager;
 
         private PresetViewModel _selectedPreset;
@@ -38,7 +38,7 @@ namespace CycleBell.ViewModels
         {
             _dialogRegistrator = dialogRegistrator;
             _manager = cbm;
-            _presetManager = cbm.PresetsManager;
+            _presetManager = cbm.PresetCollection;
             _timerManager = cbm.TimerManager;
 
             Presets = new ObservableCollection<PresetViewModel>(_presetManager.Presets.Select(p => new PresetViewModel(p)));

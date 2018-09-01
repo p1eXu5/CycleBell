@@ -108,6 +108,12 @@ namespace CycleBell.NUnitTests.ViewModels
 
         #endregion
 
+        #region ChangeTimpePointTypeCommand
+
+
+
+        #endregion
+
 
         #region Factory
 

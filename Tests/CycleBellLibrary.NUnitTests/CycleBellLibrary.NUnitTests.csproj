@@ -59,9 +59,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="CycleBellManagerTests.cs" />
-    <Compile Include="Context.Tests\PresetsManagerTests.cs" />
-    <Compile Include="Repository.Tests\PresetTests.cs" />
+    <Compile Include="Context.Tests\CycleBellManagerTests.cs" />
+    <Compile Include="Repository.Tests\PresetCollectionTests.cs" />
+    <Compile Include="Models.Tests\PresetTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Models.Tests\TimePointTests.cs" />
   </ItemGroup>

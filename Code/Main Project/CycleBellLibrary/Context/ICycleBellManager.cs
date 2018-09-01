@@ -11,7 +11,7 @@ namespace CycleBellLibrary
 {
     public interface ICycleBellManager
     {
-        IPresetsManager PresetsManager { get; }
+        IPresetCollection PresetCollection { get; }
         ITimerManager TimerManager { get; }
         string FileName { get; }
 

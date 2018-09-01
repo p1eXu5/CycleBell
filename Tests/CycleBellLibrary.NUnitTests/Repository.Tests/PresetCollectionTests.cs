@@ -6,7 +6,7 @@ using NUnit.Framework;
 namespace CycleBellLibrary.NUnitTests.Context.Tests
 {
     [TestFixture]
-    public class PresetsManagerTests
+    public class PresetCollectionTests
     {
         [Test]
         public void AddPreset_PresetIsNull_Throws()
@@ -63,9 +63,9 @@ namespace CycleBellLibrary.NUnitTests.Context.Tests
 
         #region Factory
 
-        private PresetsManager GetPresetsManager()
+        private PresetCollection GetPresetsManager()
         {
-            return new PresetsManager();
+            return new PresetCollection();
         }
 
         #endregion
