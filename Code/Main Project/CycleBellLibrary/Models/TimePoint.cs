@@ -56,7 +56,7 @@ namespace CycleBellLibrary.Models
             : this(
                 name: "Time point " + _timePointNum, 
                 time: DefaultTime, 
-                timePointType: TimePointType.Relative)
+                timePointType: DefaultTimePointType)
         { }
         
         /// <summary>
@@ -66,7 +66,7 @@ namespace CycleBellLibrary.Models
         /// <param name="time">An absolute or relative time of day</param>
         /// <param name="timePointType">A type of TimePoint</param>
         /// <param name="loopNumber">The loop number</param>
-        public TimePoint(string name, TimeSpan time, TimePointType timePointType = TimePointType.Relative, byte loopNumber = 0)
+        public TimePoint(string name, TimeSpan time, TimePointType timePointType, byte loopNumber = 0)
         {
             if (_timePointNum == MaxId)
                 throw new OverflowException ("Reached the maximum number of TimePoints");
@@ -81,16 +81,13 @@ namespace CycleBellLibrary.Models
 
         #region Linked
 
-        public TimePoint(TimeSpan time, TimePointType timePointType = TimePointType.Relative, byte timerCycleNum = 0)
+        public TimePoint(TimeSpan time, TimePointType timePointType, byte timerCycleNum = 0)
             : this("Time point " + _timePointNum, time, timePointType, timerCycleNum)
         { }
 
-        public TimePoint(string time, TimePointType timePointType = TimePointType.Relative, byte timerCycleNum = 0)
+        public TimePoint(string time, TimePointType timePointType, byte timerCycleNum = 0)
             : this("Time point " + _timePointNum, TimeSpan.Parse(time), timePointType, timerCycleNum)
         { }
-
-        public TimePoint(string name, string time, TimePointType timePointType = TimePointType.Relative, byte loopNumber = 0)
-            : this(name, TimeSpan.Parse(time), timePointType, loopNumber) { }
 
         #endregion
 
@@ -104,6 +101,8 @@ namespace CycleBellLibrary.Models
             /// Дефолтное смещение временной точки относительно текущего времени
             /// </summary>
         public static TimeSpan DefaultTime { get; set; }
+
+        public static TimePointType DefaultTimePointType { get; set; } = TimePointType.Relative;
 
         /// <summary>
         /// Имя при null (для определения StartTime)

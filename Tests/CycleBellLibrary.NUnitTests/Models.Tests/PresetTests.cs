@@ -61,11 +61,46 @@ namespace CycleBellLibrary.NUnitTests.Repository.Tests
             Assert.That(() => preset.AddTimePoint (null), Throws.ArgumentNullException);
         }
 
-        [Test]
-        public void AddTimePoint_TimePointWithNoStartTime_SetsStartTime()
+        [TestCase("0:00:00", "0:00:00", "0:00:00")]
+        [TestCase("23:59:59", "23:59:59", "0:00:00")]
+        [TestCase("0:00:10", "0:00:20", "0:00:10")]
+        [TestCase("23:59:50", "0:00:00", "0:00:10")]
+        [TestCase("23:59:55", "0:00:10", "0:00:15")]
+        public void AddTimePoint_AbsoluteTimeBaseTimeIsNull_SetsBaseTime(string startTime, string absoluteTime, string expectedRelativeTime)
         {
+            Preset.DefaultStartTime = TimeSpan.Parse (startTime);
             var preset = new Preset();
+
+            TimePoint.DefaultTime = TimeSpan.Parse (time);
+            TimePoint.DefaultTimePointType = TimePointType.Absolute;
             var timePoint = TimePoint.DefaultTimePoint;
+
+            // Action
+            preset.AddTimePoint (timePoint);
+
+            // Assert
+            Assert.AreEqual (TimeSpan.Parse (expectedRelativeTime), timePoint.GetRelativeTime());
+        }
+
+        [TestCase("0:00:00", "0:00:00", "0:00:00")]
+        [TestCase("23:59:59", "0:00:00", "23:59:59")]
+        [TestCase("0:00:10", "0:00:10", "0:00:20")]
+        [TestCase("23:59:50", "0:00:10", "0:00:00")]
+        [TestCase("23:59:55", "0:00:15", "0:00:10")]
+        public void AddTimePoint_RelativeTimeBaseTimeIsNull_SetsBaseTime(string startTime, string relativeTime, string expectedAbsoluteTime)
+        {
+            Preset.DefaultStartTime = TimeSpan.Parse (startTime);
+            var preset = new Preset();
+
+            TimePoint.DefaultTime = TimeSpan.Parse (time);
+            TimePoint.DefaultTimePointType = TimePointType.Absolute;
+            var timePoint = TimePoint.DefaultTimePoint;
+
+            // Action
+            preset.AddTimePoint (timePoint);
+
+            // Assert
+            Assert.AreEqual (TimeSpan.Parse (expectedAbsoluteTime), timePoint.GetAbsoluteTime());
         }
 
         #endregion
