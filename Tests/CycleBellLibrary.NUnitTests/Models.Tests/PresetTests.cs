@@ -71,7 +71,7 @@ namespace CycleBellLibrary.NUnitTests.Repository.Tests
             Preset.DefaultStartTime = TimeSpan.Parse (startTime);
             var preset = new Preset();
 
-            TimePoint.DefaultTime = TimeSpan.Parse (time);
+            TimePoint.DefaultTime = TimeSpan.Parse (absoluteTime);
             TimePoint.DefaultTimePointType = TimePointType.Absolute;
             var timePoint = TimePoint.DefaultTimePoint;
 
@@ -89,11 +89,14 @@ namespace CycleBellLibrary.NUnitTests.Repository.Tests
         [TestCase("23:59:55", "0:00:15", "0:00:10")]
         public void AddTimePoint_RelativeTimeBaseTimeIsNull_SetsBaseTime(string startTime, string relativeTime, string expectedAbsoluteTime)
         {
+            // Arrange
             Preset.DefaultStartTime = TimeSpan.Parse (startTime);
+
             var preset = new Preset();
 
-            TimePoint.DefaultTime = TimeSpan.Parse (time);
+            TimePoint.DefaultTime = TimeSpan.Parse (relativeTime);
             TimePoint.DefaultTimePointType = TimePointType.Absolute;
+            
             var timePoint = TimePoint.DefaultTimePoint;
 
             // Action

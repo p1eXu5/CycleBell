@@ -81,12 +81,17 @@ namespace CycleBellLibrary.Models
 
         #region Linked
 
-        public TimePoint(TimeSpan time, TimePointType timePointType, byte timerCycleNum = 0)
-            : this("Time point " + _timePointNum, time, timePointType, timerCycleNum)
+        public TimePoint(TimeSpan time, TimePointType timePointType)
+            : this("Time point " + _timePointNum, time, timePointType)
         { }
-
-        public TimePoint(string time, TimePointType timePointType, byte timerCycleNum = 0)
-            : this("Time point " + _timePointNum, TimeSpan.Parse(time), timePointType, timerCycleNum)
+        public TimePoint(string time, TimePointType timePointType)
+            : this("Time point " + _timePointNum, TimeSpan.Parse(time), timePointType)
+        { }
+        public TimePoint(string time)
+            :this("Time point " + _timePointNum, TimeSpan.Parse(time), DefaultTimePointType)
+        { }
+        public TimePoint(string name, string time)
+            :this(name, TimeSpan.Parse(time), DefaultTimePointType)
         { }
 
         #endregion

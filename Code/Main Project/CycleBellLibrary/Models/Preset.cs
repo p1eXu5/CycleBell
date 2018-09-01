@@ -69,7 +69,7 @@ namespace CycleBellLibrary.Repository
         /// <summary>
         /// Interval in minutes for startTime if it no set
         /// </summary>
-        public static int DefaultInterval { get; set; } = 15;
+        public static TimeSpan DefaultStartTime { get; set; } = TimeSpan.Zero;
 
         /// <summary>
         /// Default name for presets
