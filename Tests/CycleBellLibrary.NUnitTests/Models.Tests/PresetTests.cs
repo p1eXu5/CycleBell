@@ -61,6 +61,8 @@ namespace CycleBellLibrary.NUnitTests.Repository.Tests
             Assert.That(() => preset.AddTimePoint (null), Throws.ArgumentNullException);
         }
 
+        // TODO Next tests are failed
+
         [TestCase("0:00:00", "0:00:00", "0:00:00")]
         [TestCase("23:59:59", "23:59:59", "0:00:00")]
         [TestCase("0:00:10", "0:00:20", "0:00:10")]
