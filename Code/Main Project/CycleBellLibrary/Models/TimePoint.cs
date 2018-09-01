@@ -18,7 +18,7 @@ namespace CycleBellLibrary.Models
     {
         #region Fields
 
-        private static byte _timePointNum = 0;
+        private static byte _timePointNum = 1;
         private static TimeSpan _defaultTime = TimeSpan.Zero;
 
         private string _name;
@@ -27,6 +27,25 @@ namespace CycleBellLibrary.Models
         #endregion
 
         #region Constructors
+
+        static TimePoint()
+        {
+            Type type = MaxId.GetType();
+
+            dynamic max = _timePointNum.GetType().GetField ("MaxValue")?.GetValue (null);
+
+            if (max == null)
+                throw new InvalidOperationException();
+
+            MaxId = (Int64) max;
+
+            dynamic min = _timePointNum.GetType().GetField ("MinValue")?.GetValue (null);
+
+            if (min == null)
+                throw new InvalidOperationException();
+
+            MinId = (Int64) min;
+        }
 
         /// <summary>
         /// Creates TimePoint instance
@@ -37,7 +56,7 @@ namespace CycleBellLibrary.Models
         /// <param name="loopNumber">The loop number</param>
         public TimePoint(string name, TimeSpan time, TimePointType timePointType = TimePointType.Relative, byte loopNumber = 0)
         {
-            if (_timePointNum == byte.MaxValue)
+            if (_timePointNum == MaxId)
                 throw new OverflowException ("Reached the maximum number of TimePoints");
 
             Name = name;
@@ -90,8 +109,8 @@ namespace CycleBellLibrary.Models
         /// </summary>-
         public static string FirstPointName { get; set; } = "Launch Time";
 
-        public static int MaxId => Int32.MaxValue;
-        public static int MinId => Int32.MinValue;
+        public static Int64 MaxId { get; }
+        public static Int64 MinId { get; }
 
         public static TimePoint DefaultTimePoint => new TimePoint();
 

@@ -12,7 +12,7 @@ namespace CycleBell.ViewModels
     {
         private readonly Preset _preset;
 
-        public BeginTimePointViewModel(byte loopNumber, Preset preset) : base(TimePoint.MinId, loopNumber)
+        public BeginTimePointViewModel(byte loopNumber, Preset preset) : base((int)TimePoint.MinId, loopNumber)
         {
             _preset = preset;
         }

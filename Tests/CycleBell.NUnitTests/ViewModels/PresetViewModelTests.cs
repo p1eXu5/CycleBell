@@ -90,9 +90,17 @@ namespace CycleBell.NUnitTests.ViewModels
         }
 
         [Test]
-        public void UpdateTimePointVmCollection_EventHasRaised_Called()
+        public void UpdateTimePointVmCollection_EventRaisedByNewTimePoint_Adds()
         {
-            
+            // Arrange
+            var pvm = GetPresetViewModel();
+            var preset = pvm.Preset;
+
+            // Action
+             preset.AddTimePoint (TimePoint.DefaultTimePoint);
+
+            // Assert
+            Assert.IsTrue (pvm.TimePointVmCollection.Count == 3);
         }
 
         #region Factory

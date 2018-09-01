@@ -46,12 +46,7 @@ namespace CycleBell.ViewModels
 
             foreach (var point in _preset.TimePoints) {
 
-                if (point.Time < TimeSpan.Zero)
-                    point.Time = point.Time.Negate();
-
-                if (point.Time == TimeSpan.Zero && point.TimePointType == TimePointType.Relative)
-                    point.TimePointType = TimePointType.Absolute;
-
+                PrepareTimePoint(point);
                 _timePointVmCollection.Add (new TimePointViewModel (point, _preset));
 
                 CheckBounds(point);
@@ -70,6 +65,7 @@ namespace CycleBell.ViewModels
 
             ResetAddingTimePoint();
         }
+
 
         #endregion
 
@@ -102,10 +98,18 @@ namespace CycleBell.ViewModels
 
         #region Methods
 
+        private static void PrepareTimePoint (TimePoint point)
+        {
+            if (point.Time < TimeSpan.Zero)
+                point.Time = point.Time.Negate();
+
+            if (point.Time == TimeSpan.Zero && point.TimePointType == TimePointType.Relative)
+                point.TimePointType = TimePointType.Absolute;
+        }
+
         private void AddTimePoint(object o)
         {
             _preset.AddTimePoint(_addingTimePoint.TimePoint);
-            CheckBounds (_addingTimePoint.TimePoint);
 
             ResetAddingTimePoint();
         }
@@ -135,10 +139,17 @@ namespace CycleBell.ViewModels
 
         private void UpdateTimePointVmCollection (Object sender, NotifyCollectionChangedEventArgs e)
         {
-            if (e.NewItems[0] != null)
-                _timePointVmCollection.Add (new TimePointViewModel ((TimePoint)e.NewItems[0], _preset));
+            if (e.NewItems?[0] != null) {
 
-            if (e.OldItems[0] != null && e.NewItems[0] == null) {
+                var newTimePoint = (TimePoint) e.NewItems[0];
+
+                PrepareTimePoint(newTimePoint);
+                _timePointVmCollection.Add (new TimePointViewModel (newTimePoint, _preset));
+
+                CheckBounds (newTimePoint);
+            }
+
+            if (e.OldItems?[0] != null && e.NewItems?[0] == null) {
 
                 var loopNumber = ((TimePoint) e.OldItems[0]).LoopNumber;
                 var removingTimePointVm = _timePointVmCollection.First (tpvm => tpvm.TimePoint.Equals ((TimePoint) e.OldItems[0]));
