@@ -23,14 +23,11 @@ namespace CycleBell.NUnitTests.ViewModels
         [Test]
         public void ctor_WhenCalledInTests_CreatsValidSoundPlayer()
         {
-            // Arrange:
-            SoundPlayer player = new SoundPlayer("default.wav");
-
-            // Action:
+            // Arrange and Action:
             var tpvm = GetTimePointViewModel();
 
             // Assert:
-            Assert.AreEqual (player, tpvm.SoundPlayer);
+            Assert.NotNull (tpvm.SoundPlayer);
         }
 
         #endregion
@@ -88,6 +85,14 @@ namespace CycleBell.NUnitTests.ViewModels
         }
 
         #endregion
+
+        [Test]
+        public void RingCommand_SoundPlayerNotNull_CanExecute()
+        {
+            var tpvm = GetTimePointViewModel();
+
+            Assert.IsTrue (tpvm.RingCommand.CanExecute(null));
+        }
 
 
         #region Factory

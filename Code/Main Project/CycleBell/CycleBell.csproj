@@ -165,9 +165,7 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Sounds\default.wav">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Resource>
+    <Content Include="Sounds\default.wav" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\CycleBellLibrary\CycleBellLibrary.csproj">

@@ -35,9 +35,7 @@ namespace CycleBell.ViewModels
         {
             // TODO дебажить фолдеры
 
-            if (File.Exists (DefaultSoundFileName)) {
-                DefaultSoundPlayer = new SoundPlayer(DefaultSoundFileName);
-            }
+                DefaultSoundPlayer = new SoundPlayer(CycleBell.Properties.Resources._default);
         }
 
         public TimePointViewModel(TimePoint timePoint, Preset preset) : base(timePoint.Id, timePoint.LoopNumber)
@@ -125,17 +123,14 @@ namespace CycleBell.ViewModels
         {
             get => new ActionCommand (RemoveTimePoint);
         }
-
         public ICommand MuteToggleCommand
         {
             get => new ActionCommand (MuteToggle, CanMuteToggle);
         }
-
-        // Not tested
-        public ICommand AddSoundCommand
-        {
-            get => new ActionCommand (AddSound);
-        }
+        public ICommand RingCommand => new ActionCommand (Ring, CanRing);
+        
+        // Calls std dialog
+        public ICommand AddSoundCommand => new ActionCommand (AddSound);
 
         #endregion
 
@@ -168,19 +163,26 @@ namespace CycleBell.ViewModels
         {
             MuteFlag = (MuteFlag != true);
         }
-
         private bool CanMuteToggle (object o)
+        {
+            return _soundPlayer != null;
+        }
+
+        private void Ring (object o)
+        {
+            _soundPlayer.Play();
+        }
+        private bool CanRing (object o)
         {
             return _soundPlayer != null;
         }
 
         private void AddSound (object o)
         {
-
+            OpenWavFile (_soundPlayer);
         }
 
-
-        private static void OpenWavFile(SoundPlayer sound)
+        private void OpenWavFile(SoundPlayer sound)
         {
             OpenFileDialog ofd = new OpenFileDialog
             {
