@@ -14,7 +14,7 @@ namespace CycleBell.ViewModels
     {
         #region Const
 
-        public const string DefaultSoundFileName = "default.wav";
+        public const string DefaultSoundName = "default";
         private static readonly SoundPlayer DefaultSoundPlayer; 
 
         #endregion
@@ -142,11 +142,11 @@ namespace CycleBell.ViewModels
         {
             if (String.IsNullOrWhiteSpace ((string) timePoint.Tag)) {
 
-                timePoint.Tag = DefaultSoundFileName;
+                timePoint.Tag = DefaultSoundName;
                 return DefaultSoundPlayer;
             }
 
-            if ((string) timePoint.Tag == DefaultSoundFileName)
+            if ((string) timePoint.Tag == DefaultSoundName)
                 return DefaultSoundPlayer;
 
             if (File.Exists ((string)timePoint.Tag))
@@ -184,13 +184,12 @@ namespace CycleBell.ViewModels
 
         private void OpenWavFile(SoundPlayer sound)
         {
-            OpenFileDialog ofd = new OpenFileDialog
-            {
-                Filter = "Waveform Audio File Format|*.wav"
-            };
+            OpenFileDialog ofd = new OpenFileDialog { Filter = "Waveform Audio File Format|*.wav" };
 
             if (ofd.ShowDialog() == true) {
+
                 sound.SoundLocation = ofd.FileName;
+                _timePoint.Tag = ofd.FileName;
             }
         }
 
