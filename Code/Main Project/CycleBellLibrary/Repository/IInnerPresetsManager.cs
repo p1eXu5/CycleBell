@@ -2,7 +2,7 @@
 
 namespace CycleBellLibrary.Context
 {
-    public interface IInnerPresetCollectionWrap : IPresetCollectionWrap
+    public interface IInnerPresetsManager : IPresetsManager
     {
         void Add(Preset preset);
         void Remove (Preset preset);

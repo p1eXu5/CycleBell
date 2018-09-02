@@ -32,7 +32,7 @@ namespace CycleBell.ViewModels
 
         private readonly Preset _preset;
         private readonly ITimerManager _timerManager;
-        private readonly IPresetCollectionWrap _presetCollectionWrap;
+        private readonly IPresetsManager _presetsManager;
 
         private readonly ObservableCollection<TimePointViewModelBase> _timePointVmCollection;
         private TimePointViewModelBase _selectedTimePoint;
@@ -54,8 +54,8 @@ namespace CycleBell.ViewModels
             if (manager == null)
                 throw new ArgumentNullException(nameof(manager));
 
-            // _presetCollectionWrap
-            _presetCollectionWrap = manager.PresetCollectionWrap ?? throw new ArgumentNullException(nameof(PresetCollectionWrap));
+            // _presetsManager
+            _presetsManager = manager.PresetsManager ?? throw new ArgumentNullException(nameof(PresetsManager));
 
             // _timerManager and handlers
             _timerManager = manager.TimerManager ?? throw new ArgumentNullException(nameof(TimerManager));

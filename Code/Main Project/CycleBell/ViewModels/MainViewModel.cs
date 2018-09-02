@@ -34,7 +34,7 @@ namespace CycleBell.ViewModels
             _manager = cycleBellManager;
             _timerManager = cycleBellManager.TimerManager;
 
-            var presetManager = cycleBellManager.PresetCollectionWrap;
+            var presetManager = cycleBellManager.PresetsManager;
 
             Presets = new ObservableCollection<PresetViewModel>(presetManager.Presets.Select(p => new PresetViewModel(p, _manager)));
             ((INotifyCollectionChanged)(presetManager.Presets)).CollectionChanged += (s, e) =>
@@ -56,6 +56,8 @@ namespace CycleBell.ViewModels
         {
             get => _selectedPreset;
             set {
+                SavePresetAsCommand.Execute (null);
+
                 _selectedPreset = value;
                 OnPropertyChanged ();
             }
@@ -80,18 +82,19 @@ namespace CycleBell.ViewModels
         public ICommand CreateNewPresetCommand => new ActionCommand(CreateNewPreset);
         public ICommand ExitCommand => new ActionCommand(Exit);
         public ICommand AboutCommand => new ActionCommand(About);
+        public ICommand SavePresetAsCommand => new ActionCommand(SavePresetAs, CanSavePresetAs);
 
         // In process
         public ICommand NewCommand => new ActionCommand(NewPresets);
         public ICommand OpenCommand => new ActionCommand(OpenPresets);
-        public ICommand SaveCommand => new ActionCommand(SavePresets);
-        public ICommand SaveAsCommand => new ActionCommand(SaveAsPresets);
+        public ICommand ExportPresetsCommand => new ActionCommand(SavePresets);
         public ICommand ViewHelpCommand => new ActionCommand(About);
 
         #endregion Commands
 
         #region Methods
 
+        // CreateNewPresetCommand
         private void CreateNewPreset (object obj)
         {
             try {
@@ -102,6 +105,18 @@ namespace CycleBell.ViewModels
                 SavePresetAsCommand (null);
             }
         }
+
+        // SavePresetAsCommand
+        private void SavePresetAs(object obj)
+        {
+            var viewModel = new SavePresetAsViewModel();
+            bool? res = _dialogRegistrator.ShowDialog(viewModel);
+
+            if (res == null || res == false) {
+                _manager.DeletePreset (_selectedPreset.Preset);
+            }
+        }
+        private bool CanSavePresetAs(object obj) => _selectedPreset?.IsModified ?? false;
 
         private void NewPresets(object obj)
         {
@@ -118,13 +133,9 @@ namespace CycleBell.ViewModels
             // TODO:
         }
 
-        private void SaveAsPresets(object obj)
-        {
-            // TODO:
-        }
-
         private void Exit(object obj) => System.Windows.Application.Current.Shutdown();
 
+        // AboutCommand
         private void About(object obj)
         {
             var viewModel = new AboutDialogViewModel();

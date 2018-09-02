@@ -12,7 +12,7 @@ using CycleBellLibrary.Repository;
 
 namespace CycleBellLibrary.Context
 {
-    public sealed class PresetCollectionWrap : IEnumerable<Preset>, IInnerPresetCollectionWrap
+    public sealed class PresetsManager : IEnumerable<Preset>, IInnerPresetsManager
     {
         #region Fields
 
@@ -22,7 +22,7 @@ namespace CycleBellLibrary.Context
 
         #region Constructor
 
-        public PresetCollectionWrap()
+        public PresetsManager()
         {
             _presets = new PresetObservableCollection();
             Presets = new ReadOnlyObservableCollection<Preset>(_presets);

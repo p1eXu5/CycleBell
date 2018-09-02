@@ -61,9 +61,9 @@ namespace CycleBellLibrary.NUnitTests.Context.Tests
 
         #region Factory
 
-        private PresetCollectionWrap GetPresetsManager()
+        private PresetsManager GetPresetsManager()
         {
-            return new PresetCollectionWrap();
+            return new PresetsManager();
         }
 
         #endregion

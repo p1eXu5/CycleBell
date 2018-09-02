@@ -7,7 +7,7 @@ using CycleBellLibrary.Repository;
 
 namespace CycleBellLibrary.Context
 {
-    public interface IPresetCollectionWrap : IEnumerable<Preset>
+    public interface IPresetsManager : IEnumerable<Preset>
     {
         ReadOnlyObservableCollection<Preset> Presets { get; }
 

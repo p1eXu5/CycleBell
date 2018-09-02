@@ -12,7 +12,7 @@ namespace CycleBellLibrary
 {
     public interface ICycleBellManager
     {
-        IPresetCollectionWrap PresetCollectionWrap { get; }
+        IPresetsManager PresetsManager { get; }
         ITimerManager TimerManager { get; }
         string FileName { get; }
 
@@ -21,6 +21,8 @@ namespace CycleBellLibrary
         /// </summary>
         /// <exception cref="InvalidOperationException"></exception>
         void CreateNewPreset();
+
+        void DeletePreset (Preset preset);
 
         void SavePresets();
         void RenamePreset (Preset preset, string newName);

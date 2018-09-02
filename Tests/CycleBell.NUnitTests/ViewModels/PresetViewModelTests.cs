@@ -16,7 +16,7 @@ namespace CycleBell.NUnitTests.ViewModels
     public class PresetViewModelTests
     {
         private Mock<ITimerManager> _mockTimerManager;
-        private Mock<IPresetCollectionWrap> _mockPresetCollection;
+        private Mock<IPresetsManager> _mockPresetCollection;
         private readonly Mock<ICycleBellManager> _mockCycleBellManager = new Mock<ICycleBellManager>();
 
         [Test]
@@ -178,10 +178,10 @@ namespace CycleBell.NUnitTests.ViewModels
         {
             var preset = GetEmptyTestPreset();
 
-            _mockPresetCollection = _mockCycleBellManager.As<IPresetCollectionWrap>();
+            _mockPresetCollection = _mockCycleBellManager.As<IPresetsManager>();
             _mockTimerManager = _mockCycleBellManager.As<ITimerManager>();
 
-            _mockCycleBellManager.Setup (c => c.PresetCollectionWrap).Returns(_mockPresetCollection.Object);
+            _mockCycleBellManager.Setup (c => c.PresetsManager).Returns(_mockPresetCollection.Object);
             _mockCycleBellManager.Setup (c => c.TimerManager).Returns (_mockTimerManager.Object);
 
             return new PresetViewModel(preset, _mockCycleBellManager.Object);

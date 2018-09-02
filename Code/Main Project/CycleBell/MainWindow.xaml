@@ -68,8 +68,8 @@
                 <MenuItem Header="_New..." Command="{Binding NewCommand}"></MenuItem>
                 <MenuItem Header="_Open..." Command="{Binding OpenCommand}"></MenuItem>
                 <Separator></Separator>
-                <MenuItem Header="_Save" Command="{Binding SaveCommand}"></MenuItem>
-                <MenuItem Header="Save _As..." Command="{Binding SaveAsCommand}"></MenuItem>
+                <MenuItem Header="_Save" Command="{Binding ExportPresetsCommand}"></MenuItem>
+                <MenuItem Header="Save _As..." Command="{Binding SavePresetAsCommand}"></MenuItem>
                 <Separator></Separator>
                 <MenuItem Header="_Exit" Command="{Binding ExitCommand}"></MenuItem>
             </MenuItem>

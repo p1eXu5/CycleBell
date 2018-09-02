@@ -92,6 +92,7 @@
     <Compile Include="ViewModels\PresetViewModel.cs" />
     <Compile Include="Properties\Annotations.cs" />
     <Compile Include="ViewModels\SavePresetAsDialogViewModel.cs" />
+    <Compile Include="ViewModels\SavePresetAsViewModel.cs" />
     <Compile Include="ViewModels\TimePointViewModel.cs" />
     <Compile Include="ViewModels\TimePointViewModelBase.cs" />
     <Compile Include="ViewModels\TimePointViewModelCollection.cs" />
