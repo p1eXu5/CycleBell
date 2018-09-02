@@ -41,12 +41,12 @@ namespace CycleBell.ViewModels
             _presetManager = cbm.PresetCollection;
             _timerManager = cbm.TimerManager;
 
-            Presets = new ObservableCollection<PresetViewModel>(_presetManager.Presets.Select(p => new PresetViewModel(p, _timerManager)));
+            Presets = new ObservableCollection<PresetViewModel>(_presetManager.Presets.Select(p => new PresetViewModel(p, _manager)));
             ((INotifyCollectionChanged)(_presetManager.Presets)).CollectionChanged += (s, e) =>
                                                 {
                                                     // TODO:
                                                     if (e.NewItems[0] != null)
-                                                        Presets.Add( new PresetViewModel((Preset)e.NewItems[0], _timerManager) );
+                                                        Presets.Add( new PresetViewModel((Preset)e.NewItems[0], _manager) );
                                                 };
 
         }

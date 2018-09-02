@@ -30,14 +30,12 @@ namespace CycleBellLibrary.NUnitTests.Context.Tests
         }
 
         [Test]
-        public void AddPreset_ExistingPreset_Throws()
+        public void AddPreset_ExistingPreset_NotThrows()
         {
             var presetsManager = GetPresetsManager();
             presetsManager.Add(Preset.EmptyPreset);
 
-            var ex = Assert.Catch<Exception> (() => presetsManager.Add (Preset.EmptyPreset));
-
-            StringAssert.Contains ("preset already exists", ex.Message);
+            Assert.DoesNotThrow (() => presetsManager.Add (Preset.EmptyPreset));
         }
 
         [Test]
