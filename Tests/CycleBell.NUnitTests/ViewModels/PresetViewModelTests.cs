@@ -140,6 +140,7 @@ namespace CycleBell.NUnitTests.ViewModels
 
         // PouseCommand
 
+        [Test]
         public void PouseCommand_TimerIsNotRunning_CanNotExecuted()
         {
             var pvm = GetPresetViewModel();

@@ -116,6 +116,8 @@ namespace CycleBell.ViewModels
         public TimeSpan StartTime { get; set; } = DateTime.Now.TimeOfDay + new TimeSpan(0, 5, 0);
         public CycleBellStateFlags State { get; set; }
 
+        // ITimerManager
+        public bool IsRunning => _timerManager.IsRunning;
 
         #endregion
 
@@ -123,6 +125,9 @@ namespace CycleBell.ViewModels
 
         public ICommand AddTimePointCommand => new ActionCommand (AddTimePoint, CanAddTimePoint);
         public ICommand PlayCommand => new ActionCommand (Play, CanPlay);
+        public ICommand PouseCommand => new ActionCommand(Pouse, CanPouse);
+        public ICommand ResumeCommand => new ActionCommand (Resume, CanResume);
+        public ICommand StopCommand => new ActionCommand(Stop, CanStop);
 
         #endregion
 
@@ -187,14 +192,20 @@ namespace CycleBell.ViewModels
         }
 
         // PlayCommand:
-        private void Play (object o)
-        {
-            _timerManager.Play (_preset);
-        }
-        private bool CanPlay (object o)
-        {
-            return TimePointVmCollection.Count > 0;
-        }
+        private void Play(object o) => _timerManager.Play(_preset);
+        private bool CanPlay(object o) => TimePointVmCollection.Count > 0;
+
+        // PouseCommand
+        private void Pouse (object o) => _timerManager.Pouse();
+        private bool CanPouse (object o) => IsRunning;
+
+        // StopCommand
+        private void Stop (object o) => _timerManager.Stop();
+        private bool CanStop (object o) => IsRunning;
+
+        // StopReset
+        private void Resume (object o) => _timerManager.Resume();
+        private bool CanResume (object o) => IsRunning;
 
         // TimerManager handlers:
         private void OnSecondPassed(object s, TimerEventArgs e)
