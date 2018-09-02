@@ -12,7 +12,7 @@ using CycleBellLibrary.Repository;
 
 namespace CycleBellLibrary.Context
 {
-    public sealed class PresetCollection : IEnumerable<Preset>, IInnerPresetCollection
+    public sealed class PresetCollectionWrap : IEnumerable<Preset>, IInnerPresetCollectionWrap
     {
         #region Fields
 
@@ -22,7 +22,7 @@ namespace CycleBellLibrary.Context
 
         #region Constructor
 
-        public PresetCollection()
+        public PresetCollectionWrap()
         {
             _presets = new PresetObservableCollection();
             Presets = new ReadOnlyObservableCollection<Preset>(_presets);
@@ -95,6 +95,16 @@ namespace CycleBellLibrary.Context
             SerializePresets(fileName);
         }
 
+        /// <summary>
+        /// Checks input file name
+        /// </summary>
+        /// <param name="fileName"></param>
+        /// <exception cref="ArgumentException"></exception>
+        private void CheckFileName (string fileName)
+        {
+            if (String.IsNullOrEmpty (fileName) || !File.Exists (fileName))
+                throw new ArgumentException("Invalid file name or file doesn't exist", nameof(fileName));
+        }
 
 
         /// <summary>
@@ -128,16 +138,6 @@ namespace CycleBellLibrary.Context
             }
         }
 
-        /// <summary>
-        /// Checks input file name
-        /// </summary>
-        /// <param name="fileName"></param>
-        /// <exception cref="ArgumentException"></exception>
-        private void CheckFileName (string fileName)
-        {
-            if (String.IsNullOrEmpty (fileName) || !File.Exists (fileName))
-                throw new ArgumentException("Invalid file name or file doesn't exist", nameof(fileName));
-        }
 
         #endregion
 

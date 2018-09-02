@@ -19,8 +19,8 @@ namespace CycleBellLibrary.NUnitTests
     {
         #region Fields
 
-        private readonly PresetCollection _presetCollection = new PresetCollection();
-        private readonly Mock<IInnerPresetCollection> _mockPresetsManager = new Mock<IInnerPresetCollection>();
+        private readonly PresetCollectionWrap _presetCollectionWrap = new PresetCollectionWrap();
+        private readonly Mock<IInnerPresetCollectionWrap> _mockPresetsManager = new Mock<IInnerPresetCollectionWrap>();
 
         #endregion
 
@@ -40,7 +40,7 @@ namespace CycleBellLibrary.NUnitTests
 
             cbm.CreateNewPreset();
 
-            Assert.IsTrue(cbm.PresetCollection.Presets.Count == 1);
+            Assert.IsTrue(cbm.PresetCollectionWrap.Presets.Count == 1);
         }
 
         [Test]
@@ -51,7 +51,7 @@ namespace CycleBellLibrary.NUnitTests
             cbm.CreateNewPreset();
             cbm.CreateNewPreset();
 
-            Assert.IsTrue(cbm.PresetCollection.Presets.Count == 1);
+            Assert.IsTrue(cbm.PresetCollectionWrap.Presets.Count == 1);
         }
 
         [Test]
@@ -62,7 +62,7 @@ namespace CycleBellLibrary.NUnitTests
             
             cbm.AddPreset (addingPreset);
 
-            Assert.IsTrue (cbm.PresetCollection.Presets.Count == 1);
+            Assert.IsTrue (cbm.PresetCollectionWrap.Presets.Count == 1);
         }
 
         [Test]
@@ -75,7 +75,7 @@ namespace CycleBellLibrary.NUnitTests
 
             cbm.RemovePreset (addingPreset);
 
-            Assert.IsTrue (cbm.PresetCollection.Presets.Count == 0);
+            Assert.IsTrue (cbm.PresetCollectionWrap.Presets.Count == 0);
         }
 
         #region Factory

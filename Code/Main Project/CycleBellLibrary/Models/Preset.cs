@@ -103,6 +103,8 @@ namespace CycleBellLibrary.Repository
         /// </summary>
         public TimerLoopSortedDictionary TimerLoops { get; set; }
 
+        public Object Tag { get; set; }
+
         #endregion
 
         #region Methods

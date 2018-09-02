@@ -1,18 +1,13 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
-using System.ComponentModel;
 using System.Globalization;
 using System.Linq;
-using System.Runtime.CompilerServices;
 using System.Windows.Data;
 using System.Windows.Input;
 using CycleBellLibrary;
 
-using CycleBell.Annotations;
 using CycleBell.Base;
-using CycleBellLibrary.Context;
 using CycleBellLibrary.Repository;
 using CycleBellLibrary.Timer;
 
@@ -25,7 +20,6 @@ namespace CycleBell.ViewModels
         private readonly IDialogRegistrator _dialogRegistrator;
 
         private readonly ICycleBellManager _manager;
-        private readonly IPresetCollection _presetManager;
         private readonly ITimerManager _timerManager;
 
         private PresetViewModel _selectedPreset;
@@ -34,15 +28,16 @@ namespace CycleBell.ViewModels
 
         #region Constructor
 
-        public MainViewModel(IDialogRegistrator dialogRegistrator, ICycleBellManager cbm)
+        public MainViewModel(IDialogRegistrator dialogRegistrator, ICycleBellManager cycleBellManager)
         {
             _dialogRegistrator = dialogRegistrator;
-            _manager = cbm;
-            _presetManager = cbm.PresetCollection;
-            _timerManager = cbm.TimerManager;
+            _manager = cycleBellManager;
+            _timerManager = cycleBellManager.TimerManager;
 
-            Presets = new ObservableCollection<PresetViewModel>(_presetManager.Presets.Select(p => new PresetViewModel(p, _manager)));
-            ((INotifyCollectionChanged)(_presetManager.Presets)).CollectionChanged += (s, e) =>
+            var presetManager = cycleBellManager.PresetCollectionWrap;
+
+            Presets = new ObservableCollection<PresetViewModel>(presetManager.Presets.Select(p => new PresetViewModel(p, _manager)));
+            ((INotifyCollectionChanged)(presetManager.Presets)).CollectionChanged += (s, e) =>
                                                 {
                                                     // TODO:
                                                     if (e.NewItems[0] != null)
@@ -97,7 +92,16 @@ namespace CycleBell.ViewModels
 
         #region Methods
 
-        private void CreateNewPreset(object obj) => _manager.CreateNewPreset();
+        private void CreateNewPreset (object obj)
+        {
+            try {
+                _manager.CreateNewPreset();
+            }
+            catch (InvalidOperationException) {
+
+                SavePresetAsCommand (null);
+            }
+        }
 
         private void NewPresets(object obj)
         {
@@ -124,7 +128,7 @@ namespace CycleBell.ViewModels
         private void About(object obj)
         {
             var viewModel = new AboutDialogViewModel();
-            bool? res = _dialogRegistrator.ShowDialog(viewModel);
+            _dialogRegistrator.ShowDialog(viewModel);
         }
 
         #endregion Methods

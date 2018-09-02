@@ -32,7 +32,7 @@ namespace CycleBell.ViewModels
 
         private readonly Preset _preset;
         private readonly ITimerManager _timerManager;
-        private readonly IPresetCollection _presetCollection;
+        private readonly IPresetCollectionWrap _presetCollectionWrap;
 
         private readonly ObservableCollection<TimePointViewModelBase> _timePointVmCollection;
         private TimePointViewModelBase _selectedTimePoint;
@@ -54,8 +54,8 @@ namespace CycleBell.ViewModels
             if (manager == null)
                 throw new ArgumentNullException(nameof(manager));
 
-            // _presetCollection
-            _presetCollection = manager.PresetCollection ?? throw new ArgumentNullException(nameof(PresetCollection));
+            // _presetCollectionWrap
+            _presetCollectionWrap = manager.PresetCollectionWrap ?? throw new ArgumentNullException(nameof(PresetCollectionWrap));
 
             // _timerManager and handlers
             _timerManager = manager.TimerManager ?? throw new ArgumentNullException(nameof(TimerManager));
@@ -89,6 +89,14 @@ namespace CycleBell.ViewModels
 
             //TimePoints INotifyCollectionChanged
             ((INotifyCollectionChanged) _preset.TimePoints).CollectionChanged += UpdateTimePointVmCollection;
+
+            if (_preset.Tag is string str) {
+
+                if (str == "true")
+                    CanBellOnStartTime = true;
+                else if (str == "false")
+                    CanBellOnStartTime = false;
+            }
 
             ResetAddingTimePoint();
         }
@@ -129,6 +137,8 @@ namespace CycleBell.ViewModels
                 OnPropertyChanged ();
             }
         }
+
+        public bool IsModified { get; set; }
 
         public bool IsInfiniteLoop
         {

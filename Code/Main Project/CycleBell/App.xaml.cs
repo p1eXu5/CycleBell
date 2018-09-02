@@ -35,7 +35,7 @@ namespace CycleBell
             container.RegisterInstance<IDialogRegistrator>(dialogRegistrator);
 
             // ITimerManager:
-            var manager =  new CycleBellManager("test.xml", new PresetCollection(), TimerManager.Instance);;
+            var manager =  new CycleBellManager("test.xml", new PresetCollectionWrap(), TimerManager.Instance);;
 
             container.RegisterInstance<ICycleBellManager>(manager);
 

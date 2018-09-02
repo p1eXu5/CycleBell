@@ -44,6 +44,10 @@ namespace CycleBellLibrary.Repository
                         preset.SetInfiniteLoop();
                     // </InfiniteLoop>
 
+                    // <Tag>
+                    preset.Tag = reader.ReadElementContentAsString();
+                    // </Tag
+
                     reader.ReadStartElement("TimePoints");
 
                     // <TimePoints>
@@ -101,6 +105,7 @@ namespace CycleBellLibrary.Repository
 
                 writer.WriteElementString("StartTime", this[i].StartTime.ToString(@"h\:mm"));
                 writer.WriteElementString("IsInfiniteLoop", this[i].IsInfiniteLoop ? "1" : "0");
+                writer.WriteElementString("Tag", this[i].Tag == null ? "" : this[i].Tag.ToString());
 
                 writer.WriteStartElement("TimePoints");
 
@@ -118,7 +123,9 @@ namespace CycleBellLibrary.Repository
 
                 writer.WriteEndElement();
 
+                // <TimerLoops>
                 timersCyclesSerializer.Serialize(writer,this[i].TimerLoops);
+                // </TimerLoops>
 
                 writer.WriteEndElement();
             }
