@@ -171,6 +171,8 @@ namespace CycleBellLibrary.Repository
         public void SetInfiniteLoop() => _isInfiniteLoop |= 0x01;
         public void ResetInfiniteLoop() => _isInfiniteLoop ^= _isInfiniteLoop;
 
+        // TODO:
+        public Preset GetDeepCopy() { return null; }
         #endregion
     }
 }

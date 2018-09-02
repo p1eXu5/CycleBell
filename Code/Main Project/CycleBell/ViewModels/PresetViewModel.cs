@@ -183,6 +183,12 @@ namespace CycleBell.ViewModels
 
         #region Methods
 
+        public PresetViewModel GetDeepCopy()
+        {
+            var presetVm = (PresetViewModel) this.MemberwiseClone();
+            presetVm._preset = _preset.GetDeepCopy();
+        }
+
         private static void PrepareTimePoint (TimePoint point)
         {
             if (point.Time < TimeSpan.Zero)
