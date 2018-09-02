@@ -9,6 +9,7 @@ using System.Windows.Data;
 using System.Windows.Input;
 using CycleBell.Base;
 using CycleBellLibrary;
+using CycleBellLibrary.Context;
 using CycleBellLibrary.Models;
 using CycleBellLibrary.Repository;
 using CycleBellLibrary.Timer;
@@ -31,6 +32,7 @@ namespace CycleBell.ViewModels
 
         private readonly Preset _preset;
         private readonly ITimerManager _timerManager;
+        private readonly IPresetCollection _presetCollection;
         private readonly ObservableCollection<TimePointViewModelBase> _timePointVmCollection;
 
         private TimePointViewModelBase _selectedTimePoint;
@@ -41,13 +43,19 @@ namespace CycleBell.ViewModels
 
         #region Constructor
 
-        public PresetViewModel(Preset preset, ITimerManager timerManager)
+        public PresetViewModel(Preset preset, ICycleBellManager manager)
         {
             // _preset
             _preset = preset ?? throw new ArgumentNullException(nameof(preset));
 
+            if (manager == null)
+                throw new ArgumentNullException(nameof(manager));
+
+            // _presetCollection
+            _presetCollection = manager.PresetCollection ?? throw new ArgumentNullException(nameof(PresetCollection));
+
             // _timerManager and handlers
-            _timerManager = timerManager ?? throw new ArgumentNullException(nameof(timerManager));
+            _timerManager = manager.TimerManager ?? throw new ArgumentNullException(nameof(TimerManager));
             _timerManager.TimerSecondPassedEvent += OnSecondPassed;
             _timerManager.ChangeTimePointEvent += OnTimePointChanged;
             _timerManager.TimerStopEvent += OnStop;
@@ -87,10 +95,22 @@ namespace CycleBell.ViewModels
 
         #region Properties
 
-
+        // Preset
         public Preset Preset => _preset;
-        public ReadOnlyObservableCollection<TimePointViewModelBase> TimePointVmCollection { get; }
 
+        public string Name
+        {
+            get => _preset.PresetName;
+            set {
+                if (value != "")
+                    _presetCollection.RenamePreset (_preset, value);
+
+                OnPropertyChanged ();
+            }
+        }
+        public TimeSpan StartTime { get; set; }
+
+        public ReadOnlyObservableCollection<TimePointViewModelBase> TimePointVmCollection { get; }
         public TimePointViewModelBase SelectedTimePoint
         {
             get => _selectedTimePoint;
@@ -101,7 +121,6 @@ namespace CycleBell.ViewModels
                 OnPropertyChanged ();
             }
         }
-
         public TimePointViewModel AddingTimePoint
         {
             get => _addingTimePoint;
@@ -110,10 +129,21 @@ namespace CycleBell.ViewModels
                 OnPropertyChanged ();
             }
         }
-        public TimerLoopSortedDictionary TimerLoops => _preset.TimerLoops;
 
-        public string Name { get; set; }
-        public TimeSpan StartTime { get; set; } = DateTime.Now.TimeOfDay + new TimeSpan(0, 5, 0);
+        public bool IsInfiniteLoop
+        {
+            get => _preset.IsInfiniteLoop;
+            set {
+                if (value) {
+                    _preset.SetInfiniteLoop();
+                }
+                else {
+                    _preset.ResetInfiniteLoop();
+                }
+                OnPropertyChanged ();
+            }
+        }
+
         public CycleBellStateFlags State { get; set; }
 
         // ITimerManager
@@ -128,6 +158,8 @@ namespace CycleBell.ViewModels
         public ICommand PouseCommand => new ActionCommand(Pouse, CanPouse);
         public ICommand ResumeCommand => new ActionCommand (Resume, CanResume);
         public ICommand StopCommand => new ActionCommand(Stop, CanStop);
+        public ICommand InfiniteToggleCommand => new ActionCommand (ToggleInfinite, CanToggleInfinite);
+        public ICommand RingCommand => new ActionCommand(Ring);
 
         #endregion
 
@@ -174,7 +206,6 @@ namespace CycleBell.ViewModels
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         private void ResetAddingTimePoint() => AddingTimePoint = new TimePointViewModel (TimePoint.DefaultTimePoint, _preset);
 
-
         // AddTimePointCommand:
         private void AddTimePoint(object o)
         {
@@ -206,6 +237,13 @@ namespace CycleBell.ViewModels
         // StopReset
         private void Resume (object o) => _timerManager.Resume();
         private bool CanResume (object o) => IsRunning;
+
+        // StopReset
+        private void ToggleInfinite (object o) => IsInfiniteLoop = (IsInfiniteLoop != true);
+        private bool CanToggleInfinite (object o) => !IsRunning;
+
+        // RingCommand
+        private void Ring (object o) => TimePointViewModel.DefaultSoundPlayer.Play();
 
         // TimerManager handlers:
         private void OnSecondPassed(object s, TimerEventArgs e)

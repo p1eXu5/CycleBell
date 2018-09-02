@@ -14,5 +14,6 @@ namespace CycleBellLibrary.Context
         void Clear();
         void LoadFromFile(string fileName);
         void SavePresets(string fileName);
+        void RenamePreset (Preset preset, string newName);
     }
 }

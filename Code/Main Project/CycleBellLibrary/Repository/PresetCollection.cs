@@ -57,7 +57,7 @@ namespace CycleBellLibrary.Context
         }
 
         /// <summary>
-        /// Adds preset to preset collection
+        /// Adds preset to preset collection. If name of a new preset consists in collection then added "_copy" to the it
         /// </summary>
         /// <param name="preset"></param>
         public void Add (Preset preset)
@@ -69,7 +69,7 @@ namespace CycleBellLibrary.Context
                 throw new ArgumentNullException (nameof(preset.PresetName), "PresetName can't be null");
 
             if (_presets.Any (p => p.PresetName == preset.PresetName)) 
-                throw new ArgumentException("preset already exists", nameof(preset));
+                preset.PresetName += "_copy";
 
             _presets.Add (preset);
         }
@@ -92,6 +92,17 @@ namespace CycleBellLibrary.Context
         {
             CheckFileName(fileName);
             SerializePresets(fileName);
+        }
+
+        public void RenamePreset (Preset preset, string newName)
+        {
+            if (preset == null || !_presets.Contains (preset) || newName == null)
+                return;
+
+            var presetWithSameNewName = _presets.FirstOrDefault (p => p.PresetName == newName);
+
+            if (presetWithSameNewName == null)
+                preset.PresetName = newName;
         }
 
         /// <summary>
