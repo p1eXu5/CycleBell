@@ -72,12 +72,6 @@ namespace CycleBellLibrary.Repository
         /// </summary>
         public static Preset EmptyPreset => new Preset();
 
-        // Public:
-        /// <summary>
-        /// Algorythms for TimePoints BaseTime set
-        /// </summary>
-        public ITimePointBaseTimeSetter BaseTimeSetter { get; set; }
-
         /// <summary>
         /// Start TimePoint name
         /// </summary>

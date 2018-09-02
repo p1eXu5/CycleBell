@@ -33,10 +33,13 @@ namespace CycleBell.ViewModels
         private readonly Preset _preset;
         private readonly ITimerManager _timerManager;
         private readonly IPresetCollection _presetCollection;
-        private readonly ObservableCollection<TimePointViewModelBase> _timePointVmCollection;
 
+        private readonly ObservableCollection<TimePointViewModelBase> _timePointVmCollection;
         private TimePointViewModelBase _selectedTimePoint;
         private TimePointViewModel _addingTimePoint;
+
+        private bool _canBellOnStartTime;
+
         private readonly HashSet<byte> _settedLoopNumbers;
 
         #endregion
@@ -89,7 +92,6 @@ namespace CycleBell.ViewModels
 
             ResetAddingTimePoint();
         }
-
 
         #endregion
 
@@ -144,7 +146,14 @@ namespace CycleBell.ViewModels
             }
         }
 
-        public CycleBellStateFlags State { get; set; }
+        public bool CanBellOnStartTime
+        {
+            get => _canBellOnStartTime;
+            set {
+                _canBellOnStartTime = value;
+                OnPropertyChanged ();
+            }
+        }
 
         // ITimerManager
         public bool IsRunning => _timerManager.IsRunning;
@@ -159,6 +168,7 @@ namespace CycleBell.ViewModels
         public ICommand ResumeCommand => new ActionCommand (Resume, CanResume);
         public ICommand StopCommand => new ActionCommand(Stop, CanStop);
         public ICommand InfiniteToggleCommand => new ActionCommand (ToggleInfinite, CanToggleInfinite);
+        public ICommand BellOnStartTimeToggleCommand => new ActionCommand (BellOnStartTime);
         public ICommand RingCommand => new ActionCommand(Ring);
 
         #endregion
@@ -241,6 +251,9 @@ namespace CycleBell.ViewModels
         // StopReset
         private void ToggleInfinite (object o) => IsInfiniteLoop = (IsInfiniteLoop != true);
         private bool CanToggleInfinite (object o) => !IsRunning;
+
+        // BellOnStartTimeCommand
+        private void BellOnStartTime (object o) => CanBellOnStartTime = (CanBellOnStartTime != true);
 
         // RingCommand
         private void Ring (object o) => TimePointViewModel.DefaultSoundPlayer.Play();
