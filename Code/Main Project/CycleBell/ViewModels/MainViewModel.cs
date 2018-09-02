@@ -30,19 +30,29 @@ namespace CycleBell.ViewModels
 
         public MainViewModel(IDialogRegistrator dialogRegistrator, ICycleBellManager cycleBellManager)
         {
-            _dialogRegistrator = dialogRegistrator;
-            _manager = cycleBellManager;
+            _dialogRegistrator = dialogRegistrator ?? throw new ArgumentNullException(nameof(dialogRegistrator));
+
+            _manager = cycleBellManager ?? throw new ArgumentNullException(nameof(cycleBellManager));
+
             _timerManager = cycleBellManager.TimerManager;
 
             var presetManager = cycleBellManager.PresetsManager;
 
             Presets = new ObservableCollection<PresetViewModel>(presetManager.Presets.Select(p => new PresetViewModel(p, _manager)));
+
             ((INotifyCollectionChanged)(presetManager.Presets)).CollectionChanged += (s, e) =>
                                                 {
-                                                    // TODO:
-                                                    if (e.NewItems[0] != null)
+                                                    if (e?.NewItems[0] != null && e?.OldItems[0] == null)
                                                         Presets.Add( new PresetViewModel((Preset)e.NewItems[0], _manager) );
+
+                                                    if (e?.OldItems[0] != null && e?.NewItems[0] == null)
+                                                    {
+                                                        var deletingPresetVm = Presets.First (pvm => pvm.Preset.Equals ((Preset) e.OldItems[0]));
+                                                        Presets.Remove (deletingPresetVm);
+                                                    }
                                                 };
+
+            AppDomain.CurrentDomain.ProcessExit += (s, e) => SavePresetsCommand.Execute (null);
 
         }
 
@@ -83,6 +93,7 @@ namespace CycleBell.ViewModels
         public ICommand ExitCommand => new ActionCommand(Exit);
         public ICommand AboutCommand => new ActionCommand(About);
         public ICommand SavePresetAsCommand => new ActionCommand(SavePresetAs, CanSavePresetAs);
+        public ICommand SavePresetsCommand => new ActionCommand(SavePresets);
 
         // In process
         public ICommand NewCommand => new ActionCommand(NewPresets);
@@ -102,18 +113,22 @@ namespace CycleBell.ViewModels
             }
             catch (InvalidOperationException) {
 
-                SavePresetAsCommand (null);
+                SavePresetAsCommand.Execute (null);
             }
         }
 
         // SavePresetAsCommand
         private void SavePresetAs(object obj)
         {
-            var viewModel = new SavePresetAsViewModel();
-            bool? res = _dialogRegistrator.ShowDialog(viewModel);
+            if (_selectedPreset.Name == Preset.DefaultName) {
 
-            if (res == null || res == false) {
-                _manager.DeletePreset (_selectedPreset.Preset);
+                var viewModel = new SavePresetAsViewModel();
+                bool? res = _dialogRegistrator.ShowDialog (viewModel);
+
+                if (res == null || res == false) {
+
+                    _manager.DeletePreset (_selectedPreset.Preset);
+                }
             }
         }
         private bool CanSavePresetAs(object obj) => _selectedPreset?.IsModified ?? false;
@@ -128,9 +143,13 @@ namespace CycleBell.ViewModels
             // TODO:
         }
 
+        // SavePresetsCommand
         private void SavePresets(object obj)
         {
             // TODO:
+            SavePresetAsCommand.Execute (null);
+
+            _manager.SavePresets();
         }
 
         private void Exit(object obj) => System.Windows.Application.Current.Shutdown();

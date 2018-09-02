@@ -24,7 +24,11 @@ namespace CycleBellLibrary
 
         void DeletePreset (Preset preset);
 
-        void SavePresets();
         void RenamePreset (Preset preset, string newName);
+
+        /// <summary>
+        /// Serializes into xml file
+        /// </summary>
+        void SavePresets();
     }
 }
