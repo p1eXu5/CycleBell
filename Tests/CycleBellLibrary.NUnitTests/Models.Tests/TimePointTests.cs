@@ -59,7 +59,9 @@ namespace CycleBellLibrary.NUnitTests.Models.Tests
         [TestCase("0:00:30", "23:59:29", "23:59:59")]
         [TestCase("0:00:30", "-23:59:30", "-23:59:00")]
         [TestCase("0:00:30", "0:00:00", "0:00:30")]
-        public void GetAbsoluteTime_RelativeTimePointValidBaseTime_ReturnsAbsoluteTime(string time, string baseTime, string expectedAbsoluteTime)
+        [TestCase("23:59:59", "23:59:59", "23:59:58")]
+        [TestCase("00:00:00", "23:59:59", "23:59:59")]
+        public void GetAbsoluteTime_RelativeTimePointValidBaseTime_ReturnsExpectedAbsoluteTime(string time, string baseTime, string expectedAbsoluteTime)
         {
             var timePoint = GetRelativeTimePoint();
 
@@ -93,6 +95,7 @@ namespace CycleBellLibrary.NUnitTests.Models.Tests
         [TestCase("0:00:30", "23:59:29", "0:01:01")]
         [TestCase("0:00:30", "-23:59:30", "1.00:00:00")]
         [TestCase("0:00:30", "0:00:00", "0:00:30")]
+        [TestCase("23:59:59", "23:59:59", "0:00:00")]
         public void GetRelativeTime_AbsoluteTimePointValidBaseTime_ReturnsRelativeTime(string time, string baseTime, string expectedRelativeTime)
         {
             var timePoint = GetAbsoluteTimePoint();
@@ -154,7 +157,7 @@ namespace CycleBellLibrary.NUnitTests.Models.Tests
 
         private TimePoint GetRelativeTimePoint()
         {
-            return new TimePoint("0:00:30");
+            return new TimePoint("0:00:30") {TimePointType = TimePointType.Relative};
         }
 
         private TimePoint GetAbsoluteTimePoint()

@@ -53,7 +53,7 @@ namespace CycleBellLibrary
             }
             else {
                 // TODO if existing EmptyPreset does not equal Preset.EmptyPreset than throw, else - do nothing
-                if (existEmptyPreset.StartTime >= TimeSpan.Zero || existEmptyPreset.TimePoints.Count > 0) {
+                if (existEmptyPreset.StartTime != Preset.DefaultStartTime || existEmptyPreset.TimePoints.Count > 0) {
                     throw new ArgumentException ("Can't create new empty preset. Empty preset already exists and it is particulary filled.");
                 }
             }

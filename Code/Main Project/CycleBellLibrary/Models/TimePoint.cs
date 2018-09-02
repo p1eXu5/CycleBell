@@ -93,6 +93,9 @@ namespace CycleBellLibrary.Models
         public TimePoint(string name, string time)
             :this(name, TimeSpan.Parse(time), DefaultTimePointType)
         { }
+        public TimePoint(string name, string time, TimePointType timePointType)
+            :this(name, TimeSpan.Parse(time), timePointType)
+        { }
 
         #endregion
 
@@ -174,20 +177,14 @@ namespace CycleBellLibrary.Models
         /// <returns></returns>
         public TimeSpan GetAbsoluteTime(TimeSpan baseTime)
         {
-            if (TimePointType == TimePointType.Relative && baseTime != TimeSpan.Zero) {
+            BaseTime = baseTime;
 
-                BaseTime = baseTime;
-
-                var res = baseTime + Time;
-
-                if (res.Days > 0)
-                    res -= TimeSpan.FromDays(1);
-
-                return res;
-            }
-
-            return Time;
+            if (TimePointType == TimePointType.Absolute)
+                return Time;
+            else
+                return _GetAbsoluteTime();
         }
+
 
         /// <summary>
         /// Gets absolute time
@@ -203,7 +200,21 @@ namespace CycleBellLibrary.Models
                 throw new ArgumentException("BaseTime must be set");
             }
 
-            return GetAbsoluteTime((TimeSpan)BaseTime);
+            return _GetAbsoluteTime();
+        }
+
+        private TimeSpan _GetAbsoluteTime ()
+        {
+            if (BaseTime == TimeSpan.Zero) 
+                return Time;
+
+            // ReSharper disable once PossibleInvalidOperationException
+            var res = (TimeSpan)BaseTime + Time;
+
+            if (res.Days > 0)
+                res -= TimeSpan.FromDays (1);
+
+            return res;
         }
 
         public TimeSpan GetRelativeTime()
@@ -215,24 +226,34 @@ namespace CycleBellLibrary.Models
                 throw new ArgumentException("BaseTime must be set");
             }
 
-            return GetRelativeTime((TimeSpan)BaseTime);
+            return _GetRelativeTime();
         }
 
         public TimeSpan GetRelativeTime(TimeSpan baseTime)
         {
             BaseTime = baseTime;
 
-            if (TimePointType == TimePointType.Relative || baseTime == TimeSpan.Zero) {
-
+            if (TimePointType == TimePointType.Relative)
                 return Time;
-            }
+            else
+                return _GetRelativeTime();
+        }
+
+        private TimeSpan _GetRelativeTime ()
+        {
+            if (BaseTime == TimeSpan.Zero) 
+                return Time;
+
+            if (BaseTime == Time)
+                return TimeSpan.Zero;
 
             TimeSpan res;
 
-            if (Time <= baseTime)
-                res = TimeSpan.FromHours(24) - baseTime + Time;
+            if (Time <= BaseTime)
+                res = TimeSpan.FromHours (24) - (TimeSpan)BaseTime + Time;
             else
-                res = Time - baseTime;
+                // ReSharper disable once PossibleInvalidOperationException
+                res = Time - (TimeSpan)BaseTime;
 
             return res;
         }

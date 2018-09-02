@@ -44,7 +44,7 @@ namespace CycleBellLibrary.NUnitTests
         }
 
         [Test]
-        public void CreateNewPreset_EmptyPresetExists_DoesNotCallPresetManager()
+        public void CreateNewPreset_DoubleCallEmptyPresetExists_DoesNotCallPresetManager()
         {
             var cbm = GetCycleBellManager();
 

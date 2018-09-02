@@ -64,11 +64,11 @@ namespace CycleBellLibrary.NUnitTests.Repository.Tests
         // TODO Next tests are failed
 
         [TestCase("0:00:00", "0:00:00", "0:00:00")]
-        [TestCase("23:59:59", "23:59:59", "0:00:00")]
+        [TestCase("23:59:59", "23:59:59", "00:00:00")]
         [TestCase("0:00:10", "0:00:20", "0:00:10")]
         [TestCase("23:59:50", "0:00:00", "0:00:10")]
         [TestCase("23:59:55", "0:00:10", "0:00:15")]
-        public void AddTimePoint_AbsoluteTimeBaseTimeIsNull_SetsBaseTime(string startTime, string absoluteTime, string expectedRelativeTime)
+        public void AddTimePoint_AbsoluteTimeBaseTimeIsNull_GetsCorrectRelativeTime(string startTime, string absoluteTime, string expectedRelativeTime)
         {
             Preset.DefaultStartTime = TimeSpan.Parse (startTime);
             var preset = new Preset();
@@ -84,6 +84,7 @@ namespace CycleBellLibrary.NUnitTests.Repository.Tests
             Assert.AreEqual (TimeSpan.Parse (expectedRelativeTime), timePoint.GetRelativeTime());
         }
 
+
         [TestCase("0:00:00", "0:00:00", "0:00:00")]
         [TestCase("23:59:59", "0:00:00", "23:59:59")]
         [TestCase("0:00:10", "0:00:10", "0:00:20")]
@@ -97,7 +98,7 @@ namespace CycleBellLibrary.NUnitTests.Repository.Tests
             var preset = new Preset();
 
             TimePoint.DefaultTime = TimeSpan.Parse (relativeTime);
-            TimePoint.DefaultTimePointType = TimePointType.Absolute;
+            TimePoint.DefaultTimePointType = TimePointType.Relative;
             
             var timePoint = TimePoint.DefaultTimePoint;
 
@@ -106,6 +107,82 @@ namespace CycleBellLibrary.NUnitTests.Repository.Tests
 
             // Assert
             Assert.AreEqual (TimeSpan.Parse (expectedAbsoluteTime), timePoint.GetAbsoluteTime());
+        }
+
+
+        [TestCase("0:00:00", "0:00:10", "1:12:45", "0:00:00")]
+        [TestCase("0:00:00", "0:00:00", "1:12:45", "0:00:00")]
+        [TestCase("0:10:00", "0:00:10", "1:12:45", "0:10:00")]
+        [TestCase("0:10:00", "0:00:00", "1:12:45", "0:10:00")]
+        public void AddTimePoint__RelativeTimePoint_BaseTimeSetted_TimePointsEmpty__ChangesEveryoneBaseTime(string startTime, string relativeTime, string preBaseTime, string expectedBaseTime)
+        {
+            var preset = new Preset();
+            preset.StartTime = TimeSpan.Parse (startTime);
+
+            var timePoint = GetRelativeTimePoint(TimeSpan.Parse (relativeTime));
+            timePoint.BaseTime = TimeSpan.Parse (preBaseTime);
+
+            preset.AddTimePoint (timePoint);
+
+            Assert.AreEqual(TimeSpan.Parse (expectedBaseTime), preset.TimePoints[0].BaseTime);
+        }
+ 
+
+        [TestCase("0:00:00", "0:00:10", "1:12:45", "0:00:00")]
+        [TestCase("0:00:00", "0:00:00", "1:12:45", "0:00:00")]
+        [TestCase("0:10:00", "0:00:10", "1:12:45", "0:10:00")]
+        [TestCase("0:10:00", "0:00:00", "1:12:45", "0:10:00")]
+        public void AddTimePoint__AbsoluteTimePoint_BaseTimeSetted_TimePointsEmpty__ChangesEveryoneBaseTime(string startTime, string relativeTime, string preBaseTime, string expectedBaseTime)
+        {
+            var preset = new Preset();
+            preset.StartTime = TimeSpan.Parse (startTime);
+
+            var timePoint = GetAbsoluteTimePoint(TimeSpan.Parse (relativeTime));
+            timePoint.BaseTime = TimeSpan.Parse (preBaseTime);
+
+            preset.AddTimePoint (timePoint);
+
+            Assert.AreEqual(TimeSpan.Parse (expectedBaseTime), preset.TimePoints[0].BaseTime);
+        }
+
+
+        [TestCase("0:00:00", "0:00:10", "1:12:45", "1:00:00")]
+        [TestCase("0:00:00", "0:00:00", "1:12:45", "1:00:00")]
+        [TestCase("0:10:00", "0:00:10", "1:12:45", "1:00:00")]
+        [TestCase("0:10:00", "0:00:00", "1:12:45", "1:00:00")]
+        public void AddTimePoint__RelativeTimePoint_BaseTimeSetted_TimePointsWithOneAbsolute__ChangesBaseTimeNextAddedTimePoint
+            (string startTime, string relativeTime, string preBaseTime, string expectedBaseTime)
+        {
+            var preset = new Preset();
+            preset.StartTime = TimeSpan.Parse (startTime);
+            preset.AddTimePoint (new TimePoint("Arrange", "1:00:00", TimePointType.Absolute));
+
+            var timePoint = GetRelativeTimePoint (TimeSpan.Parse (relativeTime));
+            timePoint.BaseTime = TimeSpan.Parse (preBaseTime);
+
+            preset.AddTimePoint (timePoint);
+
+            Assert.AreEqual(TimeSpan.Parse (expectedBaseTime), preset.TimePoints[1].BaseTime);
+        }
+
+
+        [TestCase("0:00:00", "0:00:10", "1:12:45", "1:00:00")]
+        [TestCase("0:00:00", "0:00:00", "1:12:45", "1:00:00")]
+        [TestCase("0:10:00", "0:00:10", "1:12:45", "1:10:00")]
+        [TestCase("0:10:00", "0:00:00", "1:12:45", "1:10:00")]
+        public void AddTimePoint__AbsoluteTimePoint_BaseTimeSetted_TimePointsWithOneRelative__ChangesBaseTimeNextAddedTimePoint
+            (string startTime, string absoluteTime, string preBaseTime, string expectedBaseTime)
+        {
+            var preset = new Preset();
+            preset.StartTime = TimeSpan.Parse (startTime);
+            preset.AddTimePoint (new TimePoint("Arrange", "1:00:00", TimePointType.Relative));
+
+            var timePoint = GetAbsoluteTimePoint(TimeSpan.Parse (absoluteTime));
+            timePoint.BaseTime = TimeSpan.Parse (preBaseTime);
+
+            preset.AddTimePoint (timePoint);
+
+            Assert.AreEqual(TimeSpan.Parse (expectedBaseTime), preset.TimePoints[1].BaseTime);
         }
 
         #endregion
@@ -158,6 +235,20 @@ namespace CycleBellLibrary.NUnitTests.Repository.Tests
         {
             var timePoint = new TimePoint("Test TimePoint", "0:00:30");
             timePoint.Name += timePoint.Id;
+
+            return timePoint;
+        }
+
+        private TimePoint GetAbsoluteTimePoint(TimeSpan time)
+        {
+            var timePoint = new TimePoint(time, TimePointType.Absolute);
+
+            return timePoint;
+        }
+
+        private TimePoint GetRelativeTimePoint(TimeSpan time)
+        {
+            var timePoint = new TimePoint(time, TimePointType.Relative);
 
             return timePoint;
         }

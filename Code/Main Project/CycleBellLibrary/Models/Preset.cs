@@ -11,10 +11,12 @@ namespace CycleBellLibrary.Repository
     /// </summary>
     public class Preset
     {
+        public static readonly TimeSpan InitDefaultStartTime = TimeSpan.Zero;
+
         #region Fields
 
-        private TimeSpan? _startTime = null;
-        private ObservableCollection<TimePoint> _timePoints;
+        private TimeSpan? _startTime;
+        private readonly ObservableCollection<TimePoint> _timePoints;
         private byte _isInfiniteLoop;
 
         #endregion
@@ -24,41 +26,30 @@ namespace CycleBellLibrary.Repository
         #region Linked Constructors
 
         public Preset()
-           : this(DefaultName, null)
+           : this(DefaultName, DefaultStartTime)
         { }
 
-        public Preset (string presetName)
-            : this (presetName, null)
-        { }
-
-        public Preset(IEnumerable<TimePoint> points)
-            : this(DefaultName, points)
+        public Preset (string name)
+            : this (name, DefaultStartTime)
         { }
 
         #endregion
 
-        private Preset(string name, IEnumerable<TimePoint> points)
+        static Preset()
+        {
+            DefaultStartTime = InitDefaultStartTime;
+        }
+
+        private Preset(string name, TimeSpan startTime)
         {
             PresetName = name;
 
             TimerLoops = new TimerLoopSortedDictionary();
             _timePoints = new ObservableCollection<TimePoint>();
 
-            // TimePoints seting
-            var pointList = points?.ToList();
-
-            if (pointList != null && pointList.Count > 0) {
-
-
-                foreach (var point in pointList) {
-
-                    AddTimePoint(point);
-                }
-
-                return;
-            }
-
             TimePoints = new ReadOnlyObservableCollection<TimePoint> (_timePoints);
+
+            _startTime = startTime;
         }
 
         #endregion
@@ -69,7 +60,7 @@ namespace CycleBellLibrary.Repository
         /// <summary>
         /// Interval in minutes for startTime if it no set
         /// </summary>
-        public static TimeSpan DefaultStartTime { get; set; } = TimeSpan.Zero;
+        public static TimeSpan DefaultStartTime { get; set; }
 
         /// <summary>
         /// Default name for presets
@@ -126,10 +117,15 @@ namespace CycleBellLibrary.Repository
         /// Add NextTimePoint
         /// </summary>
         /// <param name="timePoint"></param>
-        public virtual void AddTimePoint(TimePoint timePoint)
+        /// <exception cref="ArgumentNullException">when timePoint is null</exception>
+        public void AddTimePoint(TimePoint timePoint)
         {
+            PreAddTimePoint(timePoint);
+
             if (timePoint == null)
                 throw new ArgumentNullException(nameof(timePoint), "timePoint can't be null");
+
+            SetBaseTime (timePoint);
 
             _timePoints.Add(timePoint);
 
@@ -138,18 +134,25 @@ namespace CycleBellLibrary.Repository
             }
         }
 
-        public void AddTimePointRange(IEnumerable<TimePoint> timePoints)
+        public virtual void SetBaseTime (TimePoint timePoint)
         {
-            if (timePoints == null)
-                throw new ArgumentNullException();
+            if (TimePoints.Count == 0) {
 
-            foreach (TimePoint timePoint in timePoints) {
-                AddTimePoint(timePoint);
+                timePoint.BaseTime = StartTime;
+            }
+            else {
+
+                var lastCollectedTimePoint = TimePoints.Where (tp => tp.LoopNumber == timePoint.LoopNumber).OrderBy (tp => tp.Id).Last();
+                timePoint.BaseTime = lastCollectedTimePoint.GetAbsoluteTime();
             }
         }
 
-        public virtual void RemoveTimePoint(TimePoint timePoint)
+        public virtual void PreAddTimePoint (TimePoint timePoint) { }
+
+        public void RemoveTimePoint(TimePoint timePoint)
         {
+            PreRemoveTimePoint (timePoint);
+
             if (timePoint == null)
                 throw new ArgumentNullException(nameof(timePoint), "timePoint can't be null");
 
@@ -167,6 +170,7 @@ namespace CycleBellLibrary.Repository
             }
         }
 
+        public virtual void PreRemoveTimePoint (TimePoint timePoint) { }
 
         public void SetInfiniteLoop() => _isInfiniteLoop |= 0x01;
         public void ResetInfiniteLoop() => _isInfiniteLoop ^= _isInfiniteLoop;
