@@ -99,18 +99,16 @@ namespace CycleBell.ViewModels
 
         // Preset
         public Preset Preset => _preset;
+        public string Name => _preset.PresetName;
 
-        public string Name
+        public TimeSpan StartTime
         {
-            get => _preset.PresetName;
+            get => _preset.StartTime;
             set {
-                if (value != "")
-                    _presetCollection.RenamePreset (_preset, value);
-
-                OnPropertyChanged ();
+                _preset.StartTime = value;
+                OnPropertyChanged();
             }
         }
-        public TimeSpan StartTime { get; set; }
 
         public ReadOnlyObservableCollection<TimePointViewModelBase> TimePointVmCollection { get; }
         public TimePointViewModelBase SelectedTimePoint

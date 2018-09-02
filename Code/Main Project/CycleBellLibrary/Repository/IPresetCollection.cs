@@ -7,13 +7,12 @@ using CycleBellLibrary.Repository;
 
 namespace CycleBellLibrary.Context
 {
-    public interface IPresetCollection
+    public interface IPresetCollection : IEnumerable<Preset>
     {
         ReadOnlyObservableCollection<Preset> Presets { get; }
 
         void Clear();
         void LoadFromFile(string fileName);
         void SavePresets(string fileName);
-        void RenamePreset (Preset preset, string newName);
     }
 }

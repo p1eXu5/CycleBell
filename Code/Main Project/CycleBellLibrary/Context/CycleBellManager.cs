@@ -82,6 +82,17 @@ namespace CycleBellLibrary
         /// </summary>
         public void SavePresets() => PresetCollection.SavePresets(FileName);
 
+        public void RenamePreset (Preset preset, string newName)
+        {
+            if (preset == null || !_presetCollection.Contains (preset) || newName == null)
+                return;
+
+            var presetWithSameNewName = _presetCollection.FirstOrDefault (p => p.PresetName == newName);
+
+            if (presetWithSameNewName == null)
+                preset.PresetName = newName;
+        }
+
         #endregion
     }
 }

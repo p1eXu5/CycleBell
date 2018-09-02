@@ -66,83 +66,38 @@ namespace CycleBell.ViewModels
             }
         }
 
-        //public CycleBellStateFlags FirstCallState 
-        //{
-        //    get => _cycleBellState & CycleBellStateFlags.FirstCall;
-        //    set {
-        //        _cycleBellState = value & CycleBellStateFlags.FirstCall | InfiniteLoopState;
-        //        OnPropertyChanged (nameof(FirstCallState));
-        //    }
-        //}
+        public string Name
+        {
+            get => _selectedPreset?.Name;
+            set {
+                if (value != "")
+                    _manager.RenamePreset (_selectedPreset?.Preset, value);
 
-        //public CycleBellStateFlags InfiniteLoopState 
-        //{ 
-        //    get => _cycleBellState & CycleBellStateFlags.InfiniteLoop;
-        //    set {
-        //         _cycleBellState = value & CycleBellStateFlags.InfiniteLoop | FirstCallState;
-        //        OnPropertyChanged (nameof(InfiniteLoopState));
-        //    }
-        //}
-
-
-        //public PresetViewModel SelectedPreset
-        //{
-        //    get => _selectedPreset;
-        //    set {
-        //        _selectedPreset = value;
-        //        OnPropertyChanged(nameof(SelectedPreset));
-        //        OnPropertyChanged(nameof(StartTime));
-        //    }
-        //}
-
-        //public TimeSpan StartTime
-        //{
-        //    get => _selectedPreset?.StartTime ?? TimeSpan.Zero;
-        //    set {
-        //        if (_selectedPreset != null) {
-
-        //            _selectedPreset.StartTime = value;
-        //            OnPropertyChanged(nameof(StartTime));
-        //        }
-        //    }
-        //}
+                OnPropertyChanged ();
+            }
+        }
 
         #endregion CLR Properties
 
         #region Commands
 
-        public ICommand CreatePresetCommand => new ActionCommand(CreatePreset);
+        // Done
+        public ICommand CreateNewPresetCommand => new ActionCommand(CreateNewPreset);
+        public ICommand ExitCommand => new ActionCommand(Exit);
+        public ICommand AboutCommand => new ActionCommand(About);
+
+        // In process
         public ICommand NewCommand => new ActionCommand(NewPresets);
         public ICommand OpenCommand => new ActionCommand(OpenPresets);
         public ICommand SaveCommand => new ActionCommand(SavePresets);
         public ICommand SaveAsCommand => new ActionCommand(SaveAsPresets);
-        public ICommand ExitCommand => new ActionCommand(Exit);
-        public ICommand SoundSelectCommand => new ActionCommand(SoundSelect);
-
-        //public ActionCommand FirstCallCommand => new ActionCommand (p =>
-        //                                            {
-        //                                                CycleBellStateFlags state = _cycleBellState & CycleBellStateFlags.FirstCall;
-        //                                                FirstCallState = (byte) state == 0 ? CycleBellStateFlags.FirstCall : 0;
-        //                                            });
-
-            
-        //public ActionCommand InfiniteLoopCommand => new ActionCommand (p =>
-        //                                            {
-        //                                                CycleBellStateFlags state = _cycleBellState & CycleBellStateFlags.InfiniteLoop;
-        //                                                InfiniteLoopState = (byte) state == 0 ? CycleBellStateFlags.InfiniteLoop : 0;
-        //                                            });
-
-        public ActionCommand ViewHelpCommand => new ActionCommand(About);
-        public ActionCommand AboutCommand => new ActionCommand(About);
+        public ICommand ViewHelpCommand => new ActionCommand(About);
 
         #endregion Commands
 
         #region Methods
 
-        private void CreatePreset (object obj)
-        {
-            _manager.CreateNewPreset();
-        }
+        private void CreateNewPreset(object obj) => _manager.CreateNewPreset();
 
         private void NewPresets(object obj)
         {
@@ -164,23 +119,12 @@ namespace CycleBell.ViewModels
             // TODO:
         }
 
-        private void Exit(object obj)
-        {
-            System.Windows.Application.Current.Shutdown();
-        }
-
-        private void SoundSelect(object obj)
-        {
-            throw new NotImplementedException();
-        }
+        private void Exit(object obj) => System.Windows.Application.Current.Shutdown();
 
         private void About(object obj)
         {
             var viewModel = new AboutDialogViewModel();
             bool? res = _dialogRegistrator.ShowDialog(viewModel);
-
-            ;
-
         }
 
         #endregion Methods

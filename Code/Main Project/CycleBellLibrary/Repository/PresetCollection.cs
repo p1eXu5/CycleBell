@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
@@ -11,7 +12,7 @@ using CycleBellLibrary.Repository;
 
 namespace CycleBellLibrary.Context
 {
-    public sealed class PresetCollection : IInnerPresetCollection
+    public sealed class PresetCollection : IEnumerable<Preset>, IInnerPresetCollection
     {
         #region Fields
 
@@ -94,16 +95,7 @@ namespace CycleBellLibrary.Context
             SerializePresets(fileName);
         }
 
-        public void RenamePreset (Preset preset, string newName)
-        {
-            if (preset == null || !_presets.Contains (preset) || newName == null)
-                return;
 
-            var presetWithSameNewName = _presets.FirstOrDefault (p => p.PresetName == newName);
-
-            if (presetWithSameNewName == null)
-                preset.PresetName = newName;
-        }
 
         /// <summary>
         /// Serializes presets
@@ -149,5 +141,8 @@ namespace CycleBellLibrary.Context
 
         #endregion
 
+        public IEnumerator<Preset> GetEnumerator() => _presets.GetEnumerator();
+
+        IEnumerator IEnumerable.GetEnumerator() { return GetEnumerator(); }
     }
 }
