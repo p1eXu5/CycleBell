@@ -11,6 +11,7 @@ using CycleBell.Base;
 using CycleBellLibrary;
 using CycleBellLibrary.Models;
 using CycleBellLibrary.Repository;
+using CycleBellLibrary.Timer;
 
 namespace CycleBell.ViewModels
 {
@@ -29,6 +30,7 @@ namespace CycleBell.ViewModels
         #region Fields
 
         private readonly Preset _preset;
+        private readonly ITimerManager _timerManager;
         private readonly ObservableCollection<TimePointViewModelBase> _timePointVmCollection;
 
         private TimePointViewModelBase _selectedTimePoint;
@@ -39,10 +41,21 @@ namespace CycleBell.ViewModels
 
         #region Constructor
 
-        public PresetViewModel(Preset preset)
+        public PresetViewModel(Preset preset, ITimerManager timerManager)
         {
-            _preset = preset ?? throw new ArgumentNullException();
+            // _preset
+            _preset = preset ?? throw new ArgumentNullException(nameof(preset));
+
+            // _timerManager and handlers
+            _timerManager = timerManager ?? throw new ArgumentNullException(nameof(timerManager));
+            _timerManager.TimerSecondPassedEvent += OnSecondPassed;
+            _timerManager.ChangeTimePointEvent += OnTimePointChanged;
+            _timerManager.TimerStopEvent += OnStop;
+
+            // _settedLoopNumbers
             _settedLoopNumbers = new HashSet<byte>();
+
+            // _timePointVmCollection
             _timePointVmCollection = new ObservableCollection<TimePointViewModelBase>();
 
             foreach (var point in _preset.TimePoints) {
@@ -53,15 +66,17 @@ namespace CycleBell.ViewModels
                 CheckBounds(point);
             }
 
+            // TimePointVmCollection
             TimePointVmCollection = new ReadOnlyObservableCollection<TimePointViewModelBase>(_timePointVmCollection);
 
-            // TODO CollectionView:
+            // CollectionView:
             ICollectionView view = CollectionViewSource.GetDefaultView (TimePointVmCollection);
 
             view.SortDescriptions.Clear();
             view.SortDescriptions.Add (new SortDescription ("Id", ListSortDirection.Ascending));
             view.SortDescriptions.Add (new SortDescription("LoopNumber", ListSortDirection.Ascending));
 
+            //TimePoints INotifyCollectionChanged
             ((INotifyCollectionChanged) _preset.TimePoints).CollectionChanged += UpdateTimePointVmCollection;
 
             ResetAddingTimePoint();
@@ -107,6 +122,7 @@ namespace CycleBell.ViewModels
         #region Commands
 
         public ICommand AddTimePointCommand => new ActionCommand (AddTimePoint, CanAddTimePoint);
+        public ICommand PlayCommand => new ActionCommand (Play, CanPlay);
 
         #endregion
 
@@ -120,27 +136,6 @@ namespace CycleBell.ViewModels
             if (point.Time == TimeSpan.Zero && point.TimePointType == TimePointType.Relative)
                 point.TimePointType = TimePointType.Absolute;
         }
-
-        private void AddTimePoint(object o)
-        {
-            _preset.AddTimePoint(_addingTimePoint.TimePoint);
-
-            ResetAddingTimePoint();
-        }
-
-
-        private bool CanAddTimePoint(object obj)
-        {
-            if (_addingTimePoint.Time == TimeSpan.Zero && _addingTimePoint.TimePointType == TimePointType.Absolute 
-                || _addingTimePoint.Time > TimeSpan.Zero)
-                return true;
-
-            return false;
-        }
-
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        private void ResetAddingTimePoint() => AddingTimePoint = new TimePointViewModel (TimePoint.DefaultTimePoint, _preset);
-
         private void UpdateTimePointVmCollection (Object sender, NotifyCollectionChangedEventArgs e)
         {
             if (e.NewItems?[0] != null) {
@@ -169,6 +164,52 @@ namespace CycleBell.ViewModels
                     _timePointVmCollection.Remove (end);
                 }
             }
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        private void ResetAddingTimePoint() => AddingTimePoint = new TimePointViewModel (TimePoint.DefaultTimePoint, _preset);
+
+
+        // AddTimePointCommand:
+        private void AddTimePoint(object o)
+        {
+            _preset.AddTimePoint(_addingTimePoint.TimePoint);
+
+            ResetAddingTimePoint();
+        }
+        private bool CanAddTimePoint(object obj)
+        {
+            if (_addingTimePoint.Time == TimeSpan.Zero && _addingTimePoint.TimePointType == TimePointType.Absolute 
+                || _addingTimePoint.Time > TimeSpan.Zero)
+                return true;
+
+            return false;
+        }
+
+        // PlayCommand:
+        private void Play (object o)
+        {
+            _timerManager.Play (_preset);
+        }
+        private bool CanPlay (object o)
+        {
+            return TimePointVmCollection.Count > 0;
+        }
+
+        // TimerManager handlers:
+        private void OnSecondPassed(object s, TimerEventArgs e)
+        {
+            throw new NotImplementedException();
+        }
+
+        private void OnTimePointChanged(object s, TimerEventArgs e)
+        {
+            throw new NotImplementedException();
+        }
+
+        private void OnStop(object s, EventArgs e)
+        {
+            throw new NotImplementedException();
         }
 
         // Checkers:

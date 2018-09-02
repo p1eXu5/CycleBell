@@ -103,15 +103,34 @@ namespace CycleBell.NUnitTests.ViewModels
             Assert.IsTrue (pvm.TimePointVmCollection.Count == 3);
         }
 
+        [Test]
+        public void PlayCommand_TimePointsIsEmpty_CanNotExecuted()
+        {
+            var pvm = GetPresetViewModel();
+
+            Assert.IsFalse (pvm.PlayCommand.CanExecuted (null));
+        }
+
+        [Test]
+        public void PlayCommand_TimePointsNotEmpty_CanExecuted()
+        {
+            var pvm = GetPresetViewModel();
+            pvm.Preset.AddTimePoint (GetTestTimePoint());
+
+            Assert.IsTrue (pvm.PlayCommand.CanExecuted(null));
+        }
+
         #region Factory
 
         private PresetViewModel GetPresetViewModel()
         {
-            var preset = GetTestPreset();
+            var preset = GetEmptyTestPreset();
             return new PresetViewModel(preset);
         }
 
-        private Preset GetTestPreset() => new Preset("Test preset");
+        private Preset GetEmptyTestPreset() => new Preset("Test preset");
+
+        private TimePoint GetTestTimePoint() => new TimePoint("0:00:10");
 
         #endregion
     }
