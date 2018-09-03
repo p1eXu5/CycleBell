@@ -194,6 +194,11 @@ namespace CycleBellLibrary.Repository
         // TODO:
         public Preset GetDeepCopy() { return null; }
 
+        /// <summary>
+        /// Calls when TimePoint LoopNumber changed
+        /// </summary>
+        /// <param name="sender">TimePoint</param>
+        /// <param name="args">The new and old LoopNumbers</param>
         private void OnTimePointLoopNumberChanged (object sender, NotifyCollectionChangedEventArgs args)
         {
             if (sender is TimePoint tp) {

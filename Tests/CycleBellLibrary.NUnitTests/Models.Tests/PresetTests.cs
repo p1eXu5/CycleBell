@@ -243,6 +243,8 @@ namespace CycleBellLibrary.NUnitTests.Repository.Tests
                     TimerLoops = new TimerLoopSortedDictionary { [1] = 1 }
                 };
 
+            originPreset.SetInfiniteLoop();
+
             // Actoin:
 
             var deepPreset = originPreset.GetDeepCopy();
@@ -258,9 +260,17 @@ namespace CycleBellLibrary.NUnitTests.Repository.Tests
             TimePoint deepNewTimePoint = new TimePoint ("3", new TimeSpan (3, 3, 3), TimePointType.Absolute, 3);
             deepPreset.AddTimePoint (deepNewTimePoint);
 
+            deepPreset.ResetInfiniteLoop();
+
             // Assert:
 
-
+            Assert.AreNotSame (originPreset, deepPreset);
+            Assert.AreNotEqual (originPreset.PresetName, deepPreset.PresetName);
+            Assert.AreNotEqual (originPreset.StartTime, deepPreset.StartTime);
+            Assert.AreNotEqual (originPreset.IsInfiniteLoop, deepPreset.IsInfiniteLoop);
+            Assert.AreNotSame (originPreset.TimePoints, deepPreset.TimePoints);
+            Assert.AreNotSame (originPreset.TimerLoops, deepPreset.TimerLoops);
+            Assert.AreNotSame (originPreset.Tag, deepPreset.Tag);
         }
 
 
