@@ -105,11 +105,9 @@ namespace CycleBellLibrary.Repository
         {
             get => _startTime;
             set {
-                var oldStartTime = value;
-                _startTime = value;
 
-                if (_startTime != oldStartTime)
-                    UpdateTimePointBaseTimes(_startTime, oldStartTime);
+                if (_startTime != value)
+                    _startTime = UpdateTimePointBaseTimes(value, _startTime);
             }
         }
 
@@ -118,7 +116,9 @@ namespace CycleBellLibrary.Repository
         /// </summary>
         public bool IsInfiniteLoop => _isInfiniteLoop != 0;
 
-        public virtual ReadOnlyObservableCollection<TimePoint> TimePoints => _readOnlyTimePointCollection;
+        public ReadOnlyObservableCollection<TimePoint> TimePoints => _readOnlyTimePointCollection;
+
+        public virtual IEnumerable<TimePoint> GetTimePoints() => _timePoints.OrderBy (tp => tp.Id).ThenBy (tp => tp.LoopNumber);
 
         /// <summary>
         /// # cycle - n times
@@ -146,7 +146,7 @@ namespace CycleBellLibrary.Repository
             if (TimePoints.Contains (timePoint))
                 throw new ArgumentException("timePoint already exists", nameof(timePoint));
 
-            SetTimePointBaseTime (timePoint);
+            PresetTimePointBaseTime (timePoint);
 
             _timePoints.Add(timePoint);
             AddLoopNumber(timePoint);
@@ -202,17 +202,23 @@ namespace CycleBellLibrary.Repository
                 TimerLoops[key] = timerLoops[key];
             }
 
+            var tag = Tag;
+            Tag = new object();
+
             var preset = (Preset)this.MemberwiseClone();
+
+            Tag = tag;
+
+            TimerLoops = timerLoops;
 
             _timePoints = timePoints;
             _readOnlyTimePointCollection = new ReadOnlyObservableCollection<TimePoint>(_timePoints);
 
-            TimerLoops = timerLoops;
             
             return preset;
         }
 
-        protected virtual void SetTimePointBaseTime (TimePoint timePoint)
+        protected void PresetTimePointBaseTime (TimePoint timePoint)
         {
             if (TimePoints.Count == 0) {
 
@@ -243,17 +249,26 @@ namespace CycleBellLibrary.Repository
             }
         }
 
-        private void UpdateTimePointBaseTimes(TimeSpan newStartTime, TimeSpan oldStartTime)
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="newStartTime"></param>
+        /// <param name="oldStartTime"></param>
+        /// <returns>newStartTime</returns>
+        private TimeSpan UpdateTimePointBaseTimes(TimeSpan newStartTime, TimeSpan oldStartTime)
         {
             if (TimePoints.Count == 0)
-                return;
+                goto exit;
 
-            var diff = _startTime - oldStartTime;
+            var diff = newStartTime - oldStartTime;
 
             foreach (var timePoint in TimePoints) {
                 
                 timePoint.BaseTime += diff;
             }
+
+            exit:
+            return newStartTime;
         }
 
         private void UpdateTimePointBaseTimes()

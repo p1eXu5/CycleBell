@@ -90,6 +90,7 @@ namespace CycleBellLibrary.NUnitTests.Repository.Tests
         [TestCase("0:00:10", "0:00:10", "0:00:20")]
         [TestCase("23:59:50", "0:00:10", "0:00:00")]
         [TestCase("23:59:55", "0:00:15", "0:00:10")]
+        [TestCase("01:01:01","01:01:01", "02:02:02")]
         public void AddTimePoint_RelativeTimeBaseTimeIsNull_SetsBaseTime(string startTime, string relativeTime, string expectedAbsoluteTime)
         {
             // Arrange
@@ -229,50 +230,116 @@ namespace CycleBellLibrary.NUnitTests.Repository.Tests
         #endregion
 
         [Test]
+        public void StartTimeSet_WheCalled_UpdateTimePointBaseTime()
+        {
+            var timePoint = new TimePoint[] {new TimePoint("Test", new TimeSpan(1, 1, 1), TimePointType.Relative, 2)};
+            
+            var preset = new Preset(timePoint)
+                {
+                    StartTime = new TimeSpan (1, 1, 1)
+                };
+
+
+            Assert.AreSame (timePoint[0], preset.TimePoints[0]);
+            Assert.AreEqual (TimeSpan.Parse ("01:01:01"), timePoint[0].BaseTime);
+        }
+
+
+        [Test]
         public void GetDeepCopy_WhenCalled_CreatesDeepCopy()
         {
             // Arrage:
-
             TimePoint[] originTimePoints = new TimePoint[] { new TimePoint("1", new TimeSpan(1, 1, 1), TimePointType.Relative, 1) };
 
             var originPreset = new Preset(originTimePoints)
                 {
                     PresetName = "Origin",
                     StartTime = new TimeSpan (1, 1, 1),
-                    Tag = "origin",
+                    Tag = "origin"
                 };
+
 
             originPreset.SetInfiniteLoop();
 
             // Actoin:
-
             var deepPreset = originPreset.GetDeepCopy();
 
-            deepPreset.PresetName = "Deep";
-            deepPreset.StartTime = new TimeSpan(2, 2, 2);
-            deepPreset.Tag = null;
-
-            deepPreset.TimePoints[0].Name = "2";
-            deepPreset.TimePoints[0].BaseTime = new TimeSpan(2, 2, 2);
-            deepPreset.TimePoints[0].TimePointType = TimePointType.Absolute;
-            deepPreset.TimePoints[0].LoopNumber = 2;
-
-            TimePoint deepNewTimePoint = new TimePoint ("3", new TimeSpan (3, 3, 3), TimePointType.Absolute, 3);
-            deepPreset.AddTimePoint (deepNewTimePoint);
-
-            deepPreset.ResetInfiniteLoop();
-
             // Assert:
-
             Assert.AreNotSame (originPreset, deepPreset);
-            Assert.AreNotEqual (originPreset.PresetName, deepPreset.PresetName);
-            Assert.AreNotEqual (originPreset.StartTime, deepPreset.StartTime);
-            Assert.AreNotEqual (originPreset.IsInfiniteLoop, deepPreset.IsInfiniteLoop);
             Assert.AreNotSame (originPreset.TimePoints, deepPreset.TimePoints);
             Assert.AreNotSame (originPreset.TimerLoops, deepPreset.TimerLoops);
             Assert.AreNotSame (originPreset.Tag, deepPreset.Tag);
+
+            originPreset.PresetName = "Else";
+            Assert.AreNotEqual (originPreset.PresetName, deepPreset.PresetName);
+
+            originPreset.StartTime = new TimeSpan(2, 0, 0);
+            Assert.AreNotEqual (originPreset.StartTime, deepPreset.StartTime);
+
+            originPreset.ResetInfiniteLoop();
+            Assert.AreNotEqual (originPreset.IsInfiniteLoop, deepPreset.IsInfiniteLoop);
         }
 
+        [Test]
+        public void GetDeepCopy_AfterCall_SameTimePointsLinks()
+        {
+            // Arrage:
+            TimePoint[] originTimePoints = new TimePoint[] { new TimePoint("1", new TimeSpan(1, 1, 1), TimePointType.Relative, 1) };
+
+            var originPreset = new Preset(originTimePoints)
+                {
+                    PresetName = "Origin",
+                    StartTime = new TimeSpan (1, 1, 1),
+                    Tag = "origin"
+                };
+
+
+            originPreset.SetInfiniteLoop();
+
+            // Actoin:
+            var deepPreset = originPreset.GetDeepCopy();
+
+            // Assert:
+            Assert.AreSame (originPreset.TimePoints[0], deepPreset.TimePoints[0]);
+        }
+
+        [Test]
+        public void GetDeepCopy_AfterCallThenAddTimePointToOrigin_NotSameAddedTimePointsLinks()
+        {
+            // Arrage:
+            TimePoint[] originTimePoints = new TimePoint[] { new TimePoint("1", new TimeSpan(1, 1, 1), TimePointType.Relative, 1) };
+
+            var originPreset = new Preset(originTimePoints)
+                {
+                    PresetName = "Origin",
+                    StartTime = new TimeSpan (1, 1, 1),
+                    Tag = "origin"
+                };
+
+
+            originPreset.SetInfiniteLoop();
+
+            // Actoin:
+            var deepPreset = originPreset.GetDeepCopy();
+            originPreset.AddTimePoint (TimePoint.DefaultTimePoint);
+
+            // Assert:
+            Assert.IsTrue (originPreset.TimePoints.Count == 2);
+            Assert.IsTrue (deepPreset.TimePoints.Count == 1);
+        }
+
+
+        [Test]
+        public void PresetTimePointBaseTime_TimePointEmptyRelativeTimePoint_SetsEqualStartTime()
+        {
+            var preset = new Preset();
+            var relTp = GetRelativeTimePoint(new TimeSpan(1, 1, 1));
+            var startTime = new TimeSpan(1, 2, 3);
+
+            preset.AddTimePoint (relTp);
+
+            Assert.AreEqual (preset.StartTime, relTp.BaseTime);
+        }
 
         #region Factory
 
