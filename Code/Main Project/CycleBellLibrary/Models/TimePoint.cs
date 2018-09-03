@@ -1,9 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.Specialized;
+using System.ComponentModel;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Serialization;
+using CycleBellLibrary.Annotations;
 
 namespace CycleBellLibrary.Models
 {
@@ -14,7 +18,7 @@ namespace CycleBellLibrary.Models
     }
 
     [Serializable]
-    public class TimePoint
+    public class TimePoint : INotifyCollectionChanged
     {
         #region Fields
 
@@ -24,6 +28,7 @@ namespace CycleBellLibrary.Models
 
         private string _name;
         private TimeSpan _time;
+        private byte _loopNumber;
 
         #endregion
 
@@ -158,7 +163,15 @@ namespace CycleBellLibrary.Models
         /// <summary>
         /// Number of queue where this NextTimePoint will measure off
         /// </summary>
-        public byte LoopNumber { get; set; }
+        public byte LoopNumber 
+        { 
+            get => _loopNumber;
+            set {
+                byte oldValue = _loopNumber;
+                _loopNumber = value;
+                OnCollectionChanged (_loopNumber, oldValue, NotifyCollectionChangedAction.Add);
+            }
+        }
 
         /// <summary>
         /// Sound file location for example.
@@ -272,5 +285,12 @@ namespace CycleBellLibrary.Models
         public override string ToString() => $"{Name}: {Time:h\\:mm\\:ss} ({TimePointType})"; 
 
         #endregion
+
+        public event NotifyCollectionChangedEventHandler CollectionChanged;
+
+        protected virtual void OnCollectionChanged (byte newValue, byte oldValue, NotifyCollectionChangedAction action)
+        {
+            CollectionChanged?.Invoke (this, new NotifyCollectionChangedEventArgs (action, new List<byte> { newValue }, new List<byte> { oldValue }) );
+        }
     }
 }

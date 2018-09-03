@@ -228,6 +228,41 @@ namespace CycleBellLibrary.NUnitTests.Repository.Tests
 
         #endregion
 
+        [Test]
+        public void GetDeepCopy_WhenCalled_CreatesDeepCopy()
+        {
+            // Arrage:
+
+            TimePoint[] originTimePoints = new TimePoint[] { new TimePoint("1", new TimeSpan(1, 1, 1), TimePointType.Relative, 1) };
+
+            var originPreset = new Preset(originTimePoints)
+                {
+                    PresetName = "Origin",
+                    StartTime = new TimeSpan (1, 1, 1),
+                    Tag = "origin",
+                    TimerLoops = new TimerLoopSortedDictionary { [1] = 1 }
+                };
+
+            // Actoin:
+
+            var deepPreset = originPreset.GetDeepCopy();
+
+            deepPreset.PresetName = "Deep";
+            deepPreset.StartTime = new TimeSpan(2, 2, 2);
+            deepPreset.Tag = null;
+            deepPreset.TimePoints[0].Name = "2";
+            deepPreset.TimePoints[0].BaseTime = new TimeSpan(2, 2, 2);
+            deepPreset.TimePoints[0].TimePointType = TimePointType.Absolute;
+            deepPreset.TimePoints[0].LoopNumber = 2;
+
+            TimePoint deepNewTimePoint = new TimePoint ("3", new TimeSpan (3, 3, 3), TimePointType.Absolute, 3);
+            deepPreset.AddTimePoint (deepNewTimePoint);
+
+            // Assert:
+
+
+        }
+
 
         #region Factory
 

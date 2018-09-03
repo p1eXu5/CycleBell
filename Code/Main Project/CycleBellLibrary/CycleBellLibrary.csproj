@@ -46,6 +46,7 @@
   <ItemGroup>
     <Compile Include="Context\CycleBellManager.cs" />
     <Compile Include="Context\ICycleBellManager.cs" />
+    <Compile Include="Properties\Annotations.cs" />
     <Compile Include="Repository\IInnerPresetsManager.cs" />
     <Compile Include="Models\ITimePointBaseTimeSetter.cs" />
     <Compile Include="Timer\ITimerManager.cs" />

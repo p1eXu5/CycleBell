@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Collections.Specialized;
+using System.ComponentModel;
 using System.Linq;
 using CycleBellLibrary.Models;
 
@@ -33,13 +35,26 @@ namespace CycleBellLibrary.Repository
             : this (name, DefaultStartTime)
         { }
 
+        public Preset (IEnumerable<TimePoint> timePoints)
+            : this (DefaultName, DefaultStartTime)
+        {
+            if (timePoints == null)
+                throw new ArgumentNullException();
+
+            foreach (var timePoint in timePoints) {
+                AddTimePoint (timePoint);
+            }
+        }
+
         #endregion
 
+        // Static
         static Preset()
         {
             DefaultStartTime = InitDefaultStartTime;
         }
 
+        // Instance
         private Preset(string name, TimeSpan startTime)
         {
             PresetName = name;
@@ -75,7 +90,7 @@ namespace CycleBellLibrary.Repository
         /// <summary>
         /// Start TimePoint name
         /// </summary>
-        public string StartTimePointName { get; set; } = "Start Time Point";
+        public static string StartTimePointName { get; set; } = "Start Time Point";
 
         /// <summary>
         /// Preset name
@@ -122,10 +137,15 @@ namespace CycleBellLibrary.Repository
                 throw new ArgumentNullException(nameof(timePoint), "timePoint can't be null");
 
             SetBaseTime (timePoint);
-
             _timePoints.Add(timePoint);
+            AddLoopNumber(timePoint);
 
-            if (!TimerLoops.ContainsKey(timePoint.LoopNumber)) {
+            timePoint.CollectionChanged += OnTimePointLoopNumberChanged;
+        }
+
+        private void AddLoopNumber (TimePoint timePoint)
+        {
+            if (!TimerLoops.ContainsKey (timePoint.LoopNumber)) {
                 TimerLoops[timePoint.LoopNumber] = 1;
             }
         }
@@ -173,6 +193,19 @@ namespace CycleBellLibrary.Repository
 
         // TODO:
         public Preset GetDeepCopy() { return null; }
+
+        private void OnTimePointLoopNumberChanged (object sender, NotifyCollectionChangedEventArgs args)
+        {
+            if (sender is TimePoint tp) {
+                
+                AddTimePoint (tp);
+
+                if (TimePoints.FirstOrDefault (t => t.LoopNumber == (Byte) args.OldItems[0]) == null) {
+
+                    this.TimerLoops.Remove ((Byte) args.OldItems[0]);
+                }
+            }
+        }
         #endregion
     }
 }
