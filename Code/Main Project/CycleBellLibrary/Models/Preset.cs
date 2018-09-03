@@ -142,7 +142,7 @@ namespace CycleBellLibrary.Repository
             if (TimePoints.Contains (timePoint))
                 throw new ArgumentException("timePoint already exists", nameof(timePoint));
 
-            //PresetTimePointId (timePoint);
+            PresetTimePointId (timePoint);
 
             _timePoints.Add(timePoint);
 
@@ -150,17 +150,8 @@ namespace CycleBellLibrary.Repository
 
             timePoint.CollectionChanged += OnTimePointLoopNumberChanged;
         }
-
-        private void AddLoopNumber (TimePoint timePoint)
-        {
-            if (!TimerLoops.ContainsKey (timePoint.LoopNumber)) {
-                TimerLoops[timePoint.LoopNumber] = 1;
-            }
-        }
-
-
         public virtual void PreAddTimePoint (TimePoint timePoint) { timePoint.BaseTime = null; }
-
+        
         public void RemoveTimePoint(TimePoint timePoint)
         {
             PreRemoveTimePoint (timePoint);
@@ -181,9 +172,8 @@ namespace CycleBellLibrary.Repository
                 TimerLoops.Remove(timePoint.LoopNumber);
             }
         }
-
         public virtual void PreRemoveTimePoint (TimePoint timePoint) { }
-
+        
         public void SetInfiniteLoop() => _isInfiniteLoop |= 0x01;
         public void ResetInfiniteLoop() => _isInfiniteLoop ^= _isInfiniteLoop;
 
@@ -212,6 +202,24 @@ namespace CycleBellLibrary.Repository
             _readOnlyTimePointCollection = new ReadOnlyObservableCollection<TimePoint>(_timePoints);
 
             return preset;
+        }
+
+        private void AddLoopNumber (TimePoint timePoint)
+        {
+            if (!TimerLoops.ContainsKey (timePoint.LoopNumber)) {
+                TimerLoops[timePoint.LoopNumber] = 1;
+            }
+        }
+
+        private void PresetTimePointId (TimePoint timePoint)
+        {
+            var maxId = TimePoints.Max (tp => tp.Id);
+
+            if (timePoint.Id <= maxId) {
+
+                var tmp = TimePoint.DefaultTimePoint;
+                timePoint.ChangeId (tmp);
+            }
         }
 
         /// <summary>
