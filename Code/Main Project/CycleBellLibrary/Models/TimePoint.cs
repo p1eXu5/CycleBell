@@ -169,7 +169,7 @@ namespace CycleBellLibrary.Models
             set {
                 byte oldValue = _loopNumber;
                 _loopNumber = value;
-                OnCollectionChanged (_loopNumber, oldValue, NotifyCollectionChangedAction.Add);
+                OnCollectionChanged (_loopNumber, oldValue, NotifyCollectionChangedAction.Replace);
             }
         }
 
@@ -197,7 +197,6 @@ namespace CycleBellLibrary.Models
             else
                 return _GetAbsoluteTime();
         }
-
 
         /// <summary>
         /// Gets absolute time

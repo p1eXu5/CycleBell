@@ -186,7 +186,9 @@ namespace CycleBell.ViewModels
         public PresetViewModel GetDeepCopy()
         {
             var presetVm = (PresetViewModel) this.MemberwiseClone();
-            presetVm._preset = _preset.GetDeepCopy();
+            //presetVm._preset = _preset.GetDeepCopy();
+
+            return null;
         }
 
         private static void PrepareTimePoint (TimePoint point)

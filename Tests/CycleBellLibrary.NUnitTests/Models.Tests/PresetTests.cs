@@ -240,7 +240,6 @@ namespace CycleBellLibrary.NUnitTests.Repository.Tests
                     PresetName = "Origin",
                     StartTime = new TimeSpan (1, 1, 1),
                     Tag = "origin",
-                    TimerLoops = new TimerLoopSortedDictionary { [1] = 1 }
                 };
 
             originPreset.SetInfiniteLoop();
@@ -252,6 +251,7 @@ namespace CycleBellLibrary.NUnitTests.Repository.Tests
             deepPreset.PresetName = "Deep";
             deepPreset.StartTime = new TimeSpan(2, 2, 2);
             deepPreset.Tag = null;
+
             deepPreset.TimePoints[0].Name = "2";
             deepPreset.TimePoints[0].BaseTime = new TimeSpan(2, 2, 2);
             deepPreset.TimePoints[0].TimePointType = TimePointType.Absolute;

@@ -237,7 +237,7 @@ namespace CycleBellLibrary.Timer
 
             // Смещение по времени следующей временной точки
             TimeSpan localStartTime = preset.StartTime;
-            queue.Enqueue((localStartTime, new TimePoint(preset.StartTimePointName, localStartTime, TimePointType.Absolute)));
+            queue.Enqueue((localStartTime, new TimePoint(Preset.StartTimePointName, localStartTime, TimePointType.Absolute)));
 
             // Заполняем очередь
 
