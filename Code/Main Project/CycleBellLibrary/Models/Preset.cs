@@ -222,7 +222,8 @@ namespace CycleBellLibrary.Repository
         {
             if (TimePoints.Count == 0) {
 
-                timePoint.BaseTime = StartTime;
+                if (timePoint.TimePointType == TimePointType.Relative)
+                    timePoint.BaseTime = StartTime;
             }
             else {
 

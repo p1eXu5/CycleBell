@@ -330,7 +330,7 @@ namespace CycleBellLibrary.NUnitTests.Repository.Tests
 
 
         [Test]
-        public void PresetTimePointBaseTime_TimePointEmptyRelativeTimePoint_SetsEqualStartTime()
+        public void PresetTimePointBaseTime_TimePointEmptyRelativeTimePoint_SetsBaseTimeEqualStartTime()
         {
             var preset = new Preset();
             var relTp = GetRelativeTimePoint(new TimeSpan(1, 1, 1));
@@ -339,6 +339,20 @@ namespace CycleBellLibrary.NUnitTests.Repository.Tests
             preset.AddTimePoint (relTp);
 
             Assert.AreEqual (preset.StartTime, relTp.BaseTime);
+        }
+
+
+        [Test]
+        public void PresetTimePointBaseTime_TimePointEmptyAbsoluteTimePoint_NoSetsBaseTime()
+        {
+            var preset = new Preset();
+            var relTp = GetAbsoluteTimePoint(new TimeSpan(1, 1, 1));
+            var initBaseTime = relTp.BaseTime;
+            var startTime = new TimeSpan(1, 2, 3);
+
+            preset.AddTimePoint (relTp);
+
+            Assert.AreEqual (initBaseTime, relTp.BaseTime);
         }
 
         #region Factory
