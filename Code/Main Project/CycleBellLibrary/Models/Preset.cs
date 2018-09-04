@@ -42,9 +42,16 @@ namespace CycleBellLibrary.Repository
             if (timePoints == null)
                 throw new ArgumentNullException();
 
+            var autoUpdt = AutoUpdateTimePointBaseTimes;
+
+            if (AutoUpdateTimePointBaseTimes)
+                AutoUpdateTimePointBaseTimes = false;
+
             foreach (var timePoint in timePoints) {
                 AddTimePoint (timePoint);
             }
+
+            AutoUpdateTimePointBaseTimes = autoUpdt;
         }
 
         #endregion

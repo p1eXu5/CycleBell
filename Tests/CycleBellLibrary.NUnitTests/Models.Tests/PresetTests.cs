@@ -83,6 +83,29 @@ namespace CycleBellLibrary.NUnitTests.Repository.Tests
             Assert.AreEqual (timePointId + 2, timePoint.Id);
         }
 
+        [Test]
+        public void AddTimePoint_AutoUpdateIsTrueByDefaultRelativeTimePoints_UpdatesTimePointBaseTime()
+        {
+            // Arrange
+            var timePoints = new TimePoint[]
+                {
+                    new TimePoint { Time = TimeSpan.Parse ("1:00:00"), LoopNumber = 1 },
+                    new TimePoint { Time = TimeSpan.Parse ("1:00:00"), LoopNumber = 3 }
+                };
+
+            var preset = new Preset(timePoints);
+
+            var addingTimePoint = new TimePoint { Time = TimeSpan.Parse ("1:00:00"), LoopNumber = 2 };
+
+            // Action
+            preset.AddTimePoint (addingTimePoint);
+
+            // Assert
+            Assert.AreEqual (TimeSpan.Parse ("0:00:00"), timePoints[0].BaseTime);
+            Assert.AreEqual (TimeSpan.Parse ("1:00:00"), addingTimePoint.BaseTime);
+            Assert.AreEqual (TimeSpan.Parse ("2:00:00"), timePoints[1].BaseTime);
+        }
+
         //[TestCase("0:00:00", "0:00:00", "0:00:00")]
         //[TestCase("23:59:59", "23:59:59", "00:00:00")]
         //[TestCase("0:00:10", "0:00:20", "0:00:10")]
@@ -249,12 +272,6 @@ namespace CycleBellLibrary.NUnitTests.Repository.Tests
 
         #endregion
 
-        [Test]
-        public void UpdateTimePointBaseTime_WheCalled_UpdatesTimePointBaseTime()
-        {
-
-        }
-
 
         [Test]
         public void GetDeepCopy_WhenCalled_CreatesDeepCopy()
@@ -339,7 +356,11 @@ namespace CycleBellLibrary.NUnitTests.Repository.Tests
             Assert.IsTrue (deepPreset.TimePoints.Count == 1);
         }
 
+        [Test]
+        public void GetOrderedTimePoints_WhenCalled_ReturnsOrderedByLoopNumberThanByIdTimePoints()
+        {
 
+        }
 
 
         #region Factory
