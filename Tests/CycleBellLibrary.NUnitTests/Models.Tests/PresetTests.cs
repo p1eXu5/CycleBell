@@ -442,10 +442,10 @@ namespace CycleBellLibrary.NUnitTests.Repository.Tests
             var resArray = preset.GetOrderedTimePoints().ToArray();
 
             // Assert
-            Assert.IsTrue (resArray[0].Id == 1);
-            Assert.IsTrue (resArray[1].Id == 3);
-            Assert.IsTrue (resArray[2].Id == 4);
-            Assert.IsTrue (resArray[3].Id == 2);
+            Assert.AreSame (timePoints[0], resArray[0]);
+            Assert.AreSame (timePoints[2], resArray[1]);
+            Assert.AreSame (timePoints[3], resArray[2]);
+            Assert.AreSame (timePoints[1], resArray[3]);
         }
 
 
