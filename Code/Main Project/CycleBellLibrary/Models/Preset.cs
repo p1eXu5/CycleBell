@@ -44,14 +44,17 @@ namespace CycleBellLibrary.Repository
 
             var autoUpdt = AutoUpdateTimePointBaseTimes;
 
-            if (AutoUpdateTimePointBaseTimes)
+            if (autoUpdt)
                 AutoUpdateTimePointBaseTimes = false;
 
             foreach (var timePoint in timePoints) {
                 AddTimePoint (timePoint);
             }
 
-            AutoUpdateTimePointBaseTimes = autoUpdt;
+            if (autoUpdt) {
+                AutoUpdateTimePointBaseTimes = true;
+                UpdateTimePointBaseTimes();
+            }
         }
 
         #endregion
@@ -127,9 +130,6 @@ namespace CycleBellLibrary.Repository
 
         public ReadOnlyObservableCollection<TimePoint> TimePoints => _readOnlyTimePointCollection;
 
-        public virtual IEnumerable<TimePoint> GetOrderedTimePoints(byte ln) => _timePoints.OrderBy (tp => tp.Id).Where (tp => tp.LoopNumber == ln);
-        public virtual IEnumerable<TimePoint> GetOrderedTimePoints() => _timePoints.OrderBy (tp => tp.Id).ThenBy (tp => tp.LoopNumber);
-
         /// <summary>
         /// # cycle - n times
         /// </summary>
@@ -140,6 +140,9 @@ namespace CycleBellLibrary.Repository
         #endregion
 
         #region Methods
+
+        public virtual IEnumerable<TimePoint> GetOrderedTimePoints(byte ln) => _timePoints.OrderBy (tp => tp.Id).Where (tp => tp.LoopNumber == ln);
+        public virtual IEnumerable<TimePoint> GetOrderedTimePoints() => _timePoints.OrderBy (tp => tp.LoopNumber).ThenBy (tp => tp.Id);
 
         /// <summary>
         /// Add NextTimePoint
@@ -168,6 +171,7 @@ namespace CycleBellLibrary.Repository
             if (AutoUpdateTimePointBaseTimes)
                 UpdateTimePointBaseTimes();
         }
+
         public virtual void PreAddTimePoint (TimePoint timePoint) { timePoint.BaseTime = null; }
         
         public void RemoveTimePoint(TimePoint timePoint)
@@ -192,9 +196,11 @@ namespace CycleBellLibrary.Repository
             if (AutoUpdateTimePointBaseTimes)
                 UpdateTimePointBaseTimes();
         }
+
         public virtual void PreRemoveTimePoint (TimePoint timePoint) { }
         
         public void SetInfiniteLoop() => _isInfiniteLoop |= 0x01;
+
         public void ResetInfiniteLoop() => _isInfiniteLoop ^= _isInfiniteLoop;
 
         public Preset GetDeepCopy()

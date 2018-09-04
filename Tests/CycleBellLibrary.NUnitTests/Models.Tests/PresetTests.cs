@@ -359,7 +359,25 @@ namespace CycleBellLibrary.NUnitTests.Repository.Tests
         [Test]
         public void GetOrderedTimePoints_WhenCalled_ReturnsOrderedByLoopNumberThanByIdTimePoints()
         {
+            // Arrange
+            var timePoints = new TimePoint[]
+                {
+                    new TimePoint { Time = TimeSpan.Parse ("1:00:00"), LoopNumber = 1 },
+                    new TimePoint { Time = TimeSpan.Parse ("1:00:00"), LoopNumber = 3 },
+                    new TimePoint { Time = TimeSpan.Parse ("1:00:00"), LoopNumber = 1 },
+                    new TimePoint { Time = TimeSpan.Parse ("1:00:00"), LoopNumber = 2 },
+                };
 
+            var preset = new Preset(timePoints);
+
+            // Action
+            var resArray = preset.GetOrderedTimePoints().ToArray();
+
+            // Assert
+            Assert.IsTrue (resArray[0].Id == 1);
+            Assert.IsTrue (resArray[1].Id == 3);
+            Assert.IsTrue (resArray[2].Id == 4);
+            Assert.IsTrue (resArray[3].Id == 2);
         }
 
 
