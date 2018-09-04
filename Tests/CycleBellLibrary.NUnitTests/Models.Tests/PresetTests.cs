@@ -237,7 +237,7 @@ namespace CycleBellLibrary.NUnitTests.Repository.Tests
         public void RemoveTimePoint_TimePointIsNull_Throws()
         {
             var preset = new Preset();
-            var timePoint = GetNewTestTimePoint();
+            var timePoint = GetNewTestRelativeTimePoint();
             preset.AddTimePoint (timePoint);
 
             Assert.That (() => preset.RemoveTimePoint (null), Throws.ArgumentNullException);
@@ -247,7 +247,8 @@ namespace CycleBellLibrary.NUnitTests.Repository.Tests
         public void RemoveTimePoint_ValidTimePoint_RemovesTimePoint()
         {
             var preset = new Preset();
-            var timePoint = GetNewTestTimePoint();
+            var timePoint = GetNewTestRelativeTimePoint();
+
             preset.AddTimePoint (timePoint);
 
             preset.RemoveTimePoint (timePoint);
@@ -261,10 +262,10 @@ namespace CycleBellLibrary.NUnitTests.Repository.Tests
             // Arrange
             var preset = new Preset();
 
-            var addedTimePoint = GetNewTestTimePoint();
+            var addedTimePoint = GetNewTestRelativeTimePoint();
             preset.AddTimePoint (addedTimePoint);
 
-            var notInCollectionTimePoint = GetNewTestTimePoint();
+            var notInCollectionTimePoint = GetNewTestRelativeTimePoint();
 
             // Action and Assertion
             Assert.That (() => preset.RemoveTimePoint (notInCollectionTimePoint), Throws.ArgumentException);
@@ -450,7 +451,7 @@ namespace CycleBellLibrary.NUnitTests.Repository.Tests
 
         #region Factory
 
-        private TimePoint GetNewTestTimePoint()
+        private TimePoint GetNewTestRelativeTimePoint()
         {
             var timePoint = new TimePoint("Test TimePoint", "0:00:30");
             timePoint.Name += timePoint.Id;

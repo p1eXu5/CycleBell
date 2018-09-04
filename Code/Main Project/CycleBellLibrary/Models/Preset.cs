@@ -183,16 +183,14 @@ namespace CycleBellLibrary.Repository
 
             PreRemoveTimePoint (timePoint);
 
-            if (_timePoints.Contains(timePoint)) {
-                _timePoints.Remove(timePoint);
-            }
+            _timePoints.Remove(timePoint);
 
             if (TimePoints.FirstOrDefault (t => t.LoopNumber == timePoint.LoopNumber) == null) {
 
                 TimerLoops.Remove(timePoint.LoopNumber);
             }
 
-            if (AutoUpdateTimePointBaseTimes)
+            if (TimePoints.Count > 0 && AutoUpdateTimePointBaseTimes)
                 UpdateTimePointBaseTimes();
         }
 
