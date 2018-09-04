@@ -71,6 +71,17 @@ namespace CycleBellLibrary.NUnitTests.Repository.Tests
             Assert.That(() => preset.AddTimePoint (tp), Throws.ArgumentException);
         }
 
+        [Test]
+        public void AddTimePoint__IdLessThenMaximumContained__AddTimePointLikeNewTimePoint()
+        {
+            var timePoint = TimePoint.DefaultTimePoint;
+            var timePointId = timePoint.Id;
+            var preset = new Preset(new []{new TimePoint {LoopNumber = 1}, });
+
+            preset.AddTimePoint (timePoint);
+
+            Assert.AreEqual (timePointId + 2, timePoint.Id);
+        }
 
         //[TestCase("0:00:00", "0:00:00", "0:00:00")]
         //[TestCase("23:59:59", "23:59:59", "00:00:00")]
@@ -194,12 +205,6 @@ namespace CycleBellLibrary.NUnitTests.Repository.Tests
 
         //    Assert.AreEqual(TimeSpan.Parse (expectedBaseTime), preset.TimePoints[1].BaseTime);
         //}
-
-        [Test]
-        public void AddTimePoint__IdLessThenMaximumContained__AddTimePointLikeNewTimePoint()
-        {
-
-        }
 
         #endregion
 

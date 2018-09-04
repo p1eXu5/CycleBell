@@ -144,40 +144,46 @@ namespace CycleBellLibrary.Repository
             if (timePoint == null)
                 throw new ArgumentNullException(nameof(timePoint), "timePoint can't be null");
          
-            PreAddTimePoint(timePoint);
-
             if (TimePoints.Contains (timePoint))
                 throw new ArgumentException("timePoint already exists", nameof(timePoint));
 
-            PresetTimePointId (timePoint);
+            PreAddTimePoint(timePoint);
+
+            if (TimePoints.Count > 0)
+                PrepareTimePointId (timePoint);
 
             _timePoints.Add(timePoint);
 
             AddLoopNumber(timePoint);
 
             timePoint.CollectionChanged += OnTimePointLoopNumberChanged;
+
+            if (AutoUpdateTimePointBaseTimes)
+                UpdateTimePointBaseTimes();
         }
         public virtual void PreAddTimePoint (TimePoint timePoint) { timePoint.BaseTime = null; }
         
         public void RemoveTimePoint(TimePoint timePoint)
         {
-            PreRemoveTimePoint (timePoint);
-
             if (timePoint == null)
                 throw new ArgumentNullException(nameof(timePoint), "timePoint can't be null");
 
             if (!_timePoints.Contains (timePoint))
                 throw new ArgumentException("timePoint not in collection", nameof(timePoint));
 
+            PreRemoveTimePoint (timePoint);
+
             if (_timePoints.Contains(timePoint)) {
                 _timePoints.Remove(timePoint);
             }
 
-            var points = TimePoints.Where(t => t.LoopNumber == timePoint.LoopNumber).ToList();
+            if (TimePoints.FirstOrDefault (t => t.LoopNumber == timePoint.LoopNumber) == null) {
 
-            if (points.Count == 0) {
                 TimerLoops.Remove(timePoint.LoopNumber);
             }
+
+            if (AutoUpdateTimePointBaseTimes)
+                UpdateTimePointBaseTimes();
         }
         public virtual void PreRemoveTimePoint (TimePoint timePoint) { }
         
@@ -218,7 +224,7 @@ namespace CycleBellLibrary.Repository
             }
         }
 
-        private void PresetTimePointId (TimePoint timePoint)
+        private void PrepareTimePointId (TimePoint timePoint)
         {
             var maxId = TimePoints.Max (tp => tp.Id);
 
@@ -278,6 +284,9 @@ namespace CycleBellLibrary.Repository
             return newStartTime;
         }
 
+        /// <summary>
+        /// Updates TimePoint BaseTimes
+        /// </summary>
         protected void UpdateTimePointBaseTimes()
         {
             var array = GetOrderedTimePoints().ToArray();
