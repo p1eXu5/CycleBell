@@ -24,7 +24,7 @@ namespace CycleBellLibrary.Models
 
         public static readonly TimeSpan InitialDefaultTime = TimeSpan.Zero;
 
-        private static byte _timePointNum = 1;
+        private static byte _timePointNum = Byte.MinValue + 1;
 
         private string _name;
         private TimeSpan _time;
@@ -81,6 +81,10 @@ namespace CycleBellLibrary.Models
 
             Time = time;
             TimePointType = timePointType;
+
+            if (timePointType == TimePointType.Absolute)
+                BaseTime = TimeSpan.Zero;
+
             LoopNumber = loopNumber == Byte.MaxValue ? (byte)(Byte.MaxValue - 1) : loopNumber;
         }
 
@@ -150,7 +154,7 @@ namespace CycleBellLibrary.Models
         public TimeSpan Time
         {
             get => _time; 
-            set => _time = value;
+            set { _time = value; }
         }
 
         public TimeSpan? BaseTime { get; set; } = null;
@@ -182,6 +186,7 @@ namespace CycleBellLibrary.Models
 
         #region Methods
 
+        // GetAbsolute
         /// <summary>
         /// Returns absolute time by baseTime
         /// </summary>
@@ -229,6 +234,7 @@ namespace CycleBellLibrary.Models
             return res;
         }
 
+        // GetRelative
         public TimeSpan GetRelativeTime()
         {
             if (TimePointType == TimePointType.Relative)
@@ -243,12 +249,17 @@ namespace CycleBellLibrary.Models
 
         public TimeSpan GetRelativeTime(TimeSpan baseTime)
         {
+            if (TimePointType == TimePointType.Relative) {       
+                return Time;
+            }
+
+            var oldBase = BaseTime;
             BaseTime = baseTime;
 
-            if (TimePointType == TimePointType.Relative)
-                return Time;
-            else
-                return _GetRelativeTime();
+            var res = _GetRelativeTime();
+
+            BaseTime = oldBase;
+            return res;
         }
 
         private TimeSpan _GetRelativeTime ()

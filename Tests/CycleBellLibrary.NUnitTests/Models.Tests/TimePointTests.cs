@@ -20,11 +20,11 @@ namespace CycleBellLibrary.NUnitTests.Models.Tests
         }
 
         [Test]
-        public void TimePoint_AbsoluteTimePoint_CreatesNoSetBaseTime()
+        public void TimePoint_AbsoluteTimePoint_CreatesZeroBaseTime()
         {
             var timePoint = GetAbsoluteTimePoint();
 
-            Assert.Null(timePoint.BaseTime);
+            Assert.AreEqual(TimeSpan.Zero, timePoint.BaseTime);
         }
 
         [Test]
@@ -75,6 +75,7 @@ namespace CycleBellLibrary.NUnitTests.Models.Tests
         public void GetRelativeTime_AbsoluteTimePointBaseTimeNotSet_Throws()
         {
             var timePoint = GetAbsoluteTimePoint();
+            timePoint.BaseTime = null;
 
             var ex = Assert.Catch<Exception>(() => timePoint.GetRelativeTime());
 

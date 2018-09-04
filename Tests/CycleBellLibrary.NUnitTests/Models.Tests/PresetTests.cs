@@ -270,8 +270,75 @@ namespace CycleBellLibrary.NUnitTests.Repository.Tests
             Assert.That (() => preset.RemoveTimePoint (notInCollectionTimePoint), Throws.ArgumentException);
         }
 
+        [Test]
+        public void RemoveTimePoint_AutoUpdateIsTrueByDefaultRelativeTimePoints_UpdatesTimePointBaseTime()
+        {
+            // Arrange
+            var timePoints = new TimePoint[]
+                {
+                    new TimePoint { Time = TimeSpan.Parse ("1:00:00"), LoopNumber = 1 },
+                    new TimePoint { Time = TimeSpan.Parse ("1:00:00"), LoopNumber = 2 },
+                    new TimePoint { Time = TimeSpan.Parse ("1:00:00"), LoopNumber = 3 }
+                };
+
+            var preset = new Preset(timePoints);
+
+            var removingingTimePoint = timePoints[1];
+
+            // Action
+            preset.RemoveTimePoint (removingingTimePoint);
+
+            // Assert
+            Assert.AreEqual (TimeSpan.Parse ("0:00:00"), timePoints[0].BaseTime);
+            Assert.AreEqual (TimeSpan.Parse ("1:00:00"), timePoints[2].BaseTime);
+        }
+
+        [Test]
+        public void RemoveTimePoint_AutoUpdateIsTrueByDefaultAbsoluteTimePoints_UpdatesTimePointBaseTime()
+        {
+            // Arrange
+            var timePoints = new TimePoint[]
+                {
+                    new TimePoint { Time = TimeSpan.Parse ("1:00:00"), LoopNumber = 1 },
+                    new TimePoint { Time = TimeSpan.Parse ("1:00:00"), LoopNumber = 3 },
+                    new TimePoint { Time = TimeSpan.Parse ("1:00:00"), LoopNumber = 2 }
+                };
+
+            var preset = new Preset(timePoints);
+
+            var removingingTimePoint = timePoints[1];
+
+            // Action
+            preset.RemoveTimePoint (removingingTimePoint);
+
+            // Assert
+            Assert.AreEqual (TimeSpan.Parse ("0:00:00"), timePoints[0].BaseTime);
+            Assert.AreEqual (TimeSpan.Parse ("1:00:00"), timePoints[2].BaseTime);
+        }
+
         #endregion
 
+        [Test]
+        public void StartTimeSetter_AutoUpdateIsTrueByDefaultRelativeTimePoints_UpdatesTimePointBaseTime()
+        {
+            // Arrange
+            var timePoints = new TimePoint[]
+                {
+                    new TimePoint { Time = TimeSpan.Parse ("1:00:00"), LoopNumber = 1 },
+                    new TimePoint { Time = TimeSpan.Parse ("1:00:00"), LoopNumber = 2 },
+                    new TimePoint { Time = TimeSpan.Parse ("1:00:00"), LoopNumber = 3 }
+                };
+
+            var preset = new Preset(timePoints);
+
+            // Action
+            preset.StartTime = TimeSpan.Parse ("1:00:00");
+
+            // Assert
+            Assert.AreEqual (TimeSpan.Parse ("1:00:00"), timePoints[0].BaseTime);
+            Assert.AreEqual (TimeSpan.Parse ("2:00:00"), timePoints[1].BaseTime);
+            Assert.AreEqual (TimeSpan.Parse ("3:00:00"), timePoints[2].BaseTime);
+        }
 
         [Test]
         public void GetDeepCopy_WhenCalled_CreatesDeepCopy()

@@ -141,7 +141,6 @@ namespace CycleBellLibrary.Repository
 
         #region Methods
 
-        public virtual IEnumerable<TimePoint> GetOrderedTimePoints(byte ln) => _timePoints.OrderBy (tp => tp.Id).Where (tp => tp.LoopNumber == ln);
         public virtual IEnumerable<TimePoint> GetOrderedTimePoints() => _timePoints.OrderBy (tp => tp.LoopNumber).ThenBy (tp => tp.Id);
 
         /// <summary>
