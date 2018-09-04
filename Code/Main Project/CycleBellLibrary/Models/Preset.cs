@@ -94,6 +94,12 @@ namespace CycleBellLibrary.Repository
         public static string StartTimePointName { get; set; } = "Start Time Point";
 
         /// <summary>
+        /// When true TimePoint BaseTimes updates automaticaly after adding TimePoint or setting StartTime.
+        /// </summary>
+        public static bool AutoUpdateTimePointBaseTimes { get; set; } = true;
+
+        // Instance:
+        /// <summary>
         /// Preset name
         /// </summary>
         public string PresetName { get; set; }
@@ -104,7 +110,7 @@ namespace CycleBellLibrary.Repository
         public TimeSpan StartTime
         {
             get => _startTime;
-            set => _startTime = value;
+            set => _startTime = AutoUpdateTimePointBaseTimes ? OnStartTimeChanged (value, _startTime) : value;
         }
 
         /// <summary>
@@ -114,7 +120,8 @@ namespace CycleBellLibrary.Repository
 
         public ReadOnlyObservableCollection<TimePoint> TimePoints => _readOnlyTimePointCollection;
 
-        public virtual IEnumerable<TimePoint> GetTimePoints(byte ln) => _timePoints.OrderBy (tp => tp.Id).Where (tp => tp.LoopNumber == ln);
+        public virtual IEnumerable<TimePoint> GetOrderedTimePoints(byte ln) => _timePoints.OrderBy (tp => tp.Id).Where (tp => tp.LoopNumber == ln);
+        public virtual IEnumerable<TimePoint> GetOrderedTimePoints() => _timePoints.OrderBy (tp => tp.Id).ThenBy (tp => tp.LoopNumber);
 
         /// <summary>
         /// # cycle - n times
@@ -223,11 +230,32 @@ namespace CycleBellLibrary.Repository
         }
 
         /// <summary>
-        /// 
+        /// Calls when TimePoint LoopNumber changed
+        /// </summary>
+        /// <param name="sender">TimePoint</param>
+        /// <param name="args">The new and old LoopNumbers</param>
+        private void OnTimePointLoopNumberChanged (object sender, NotifyCollectionChangedEventArgs args)
+        {
+            if (sender is TimePoint tp) {
+                
+                AddLoopNumber (tp);
+
+                if (TimePoints.FirstOrDefault (t => t.LoopNumber == (Byte) args.OldItems[0]) == null) {
+
+                    this.TimerLoops.Remove ((Byte) args.OldItems[0]);
+                }
+            }
+
+            if (AutoUpdateTimePointBaseTimes)
+                UpdateTimePointBaseTimes();
+        }
+
+        /// <summary>
+        /// Calls when StartTimeChanged.
         /// </summary>
         /// <param name="newStartTime"></param>
         /// <param name="oldStartTime"></param>
-        /// <returns>newStartTime</returns>
+        /// <returns>Returns newStartTime.</returns>
         private TimeSpan OnStartTimeChanged(TimeSpan newStartTime, TimeSpan oldStartTime)
         {
             if (TimePoints.Count == 0)
@@ -250,23 +278,22 @@ namespace CycleBellLibrary.Repository
             return newStartTime;
         }
 
-        /// <summary>
-        /// Calls when TimePoint LoopNumber changed
-        /// </summary>
-        /// <param name="sender">TimePoint</param>
-        /// <param name="args">The new and old LoopNumbers</param>
-        private void OnTimePointLoopNumberChanged (object sender, NotifyCollectionChangedEventArgs args)
+        protected void UpdateTimePointBaseTimes()
         {
-            if (sender is TimePoint tp) {
-                
-                AddLoopNumber (tp);
+            var array = GetOrderedTimePoints().ToArray();
 
-                if (TimePoints.FirstOrDefault (t => t.LoopNumber == (Byte) args.OldItems[0]) == null) {
+            if (array[0].TimePointType == TimePointType.Relative) {
+                array[0].BaseTime = StartTime;
+            }
 
-                    this.TimerLoops.Remove ((Byte) args.OldItems[0]);
+            for (int i = 1; i < array.Length; ++i) {
+
+                if (array[i].TimePointType == TimePointType.Relative) {
+                    array[i].BaseTime = array[i - 1].GetAbsoluteTime();
                 }
             }
         }
+
         #endregion
     }
 }
