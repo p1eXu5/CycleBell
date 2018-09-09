@@ -2,6 +2,7 @@
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.Globalization;
+using System.IO;
 using System.Linq;
 using System.Windows.Data;
 using System.Windows.Input;
@@ -24,6 +25,7 @@ namespace CycleBell.ViewModels
         private readonly ITimerManager _timerManager;
 
         private PresetViewModel _selectedPreset;
+        private string _initialDirectory = null;
 
         #endregion Private
 
@@ -151,7 +153,20 @@ namespace CycleBell.ViewModels
         // ---- Import/Export Presets
         private void ImportPresets(object obj)
         {
-            _manager.OpenPresets();
+            var ofd = new OpenFileDialog
+                {
+                    InitialDirectory = _initialDirectory ?? System.Environment.GetFolderPath (Environment.SpecialFolder.MyDocuments),
+                    Filter = "xml files (*.xml)|*.xml",
+                    RestoreDirectory = true
+                };
+
+            if (ofd.ShowDialog() != true)
+                return;
+
+            var fileName = ofd.FileName;
+            _initialDirectory = Path.GetDirectoryName (fileName);
+
+            _manager.OpenPresets(fileName);
         }
 
         private void ExportPresets(object obj)
