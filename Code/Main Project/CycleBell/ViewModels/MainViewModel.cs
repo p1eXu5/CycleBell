@@ -198,7 +198,7 @@ namespace CycleBell.ViewModels
         // ---- Exit
         private void Exit(object obj)
         {
-            _manager.SavePresets();
+            //_manager.SavePresets();
             System.Windows.Application.Current.Shutdown();
         }
 
