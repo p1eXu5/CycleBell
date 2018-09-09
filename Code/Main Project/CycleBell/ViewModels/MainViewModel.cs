@@ -36,6 +36,7 @@ namespace CycleBell.ViewModels
             _dialogRegistrator = dialogRegistrator ?? throw new ArgumentNullException(nameof(dialogRegistrator));
 
             _manager = cycleBellManager ?? throw new ArgumentNullException(nameof(cycleBellManager));
+            _manager.CantCreateNewPreset += () => SavePresetAs(null);
 
             _timerManager = cycleBellManager.TimerManager;
 
@@ -118,14 +119,7 @@ namespace CycleBell.ViewModels
         // ---- Save Preset
         private void CreateNewPreset (object obj)
         {
-            try {
-                _manager.CreateNewPreset();
-                OnPropertyChanged(nameof(IsSelectedPresetExists));
-            }
-            catch (InvalidOperationException) {
-
-                SavePresetAsCommand.Execute (null);
-            }
+            _manager.CreateNewPreset();
         }
 
         // ---- Save Preset
