@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
+using System.ComponentModel;
 using System.Globalization;
 using System.IO;
 using System.Linq;
@@ -27,6 +28,8 @@ namespace CycleBell.ViewModels
         private PresetViewModel _selectedPreset;
         private string _initialDirectory = null;
 
+        private bool _isNewPreset;
+
         #endregion Private
 
         #region Constructor
@@ -36,28 +39,16 @@ namespace CycleBell.ViewModels
             _dialogRegistrator = dialogRegistrator ?? throw new ArgumentNullException(nameof(dialogRegistrator));
 
             _manager = cycleBellManager ?? throw new ArgumentNullException(nameof(cycleBellManager));
-            _manager.CantCreateNewPreset += () => SavePresetAs(null);
+            _manager.CantCreateNewPresetEvent += () => SavePresetAs(null);
+
+            var presetManager = cycleBellManager.PresetsManager;
+            Presets = new ObservableCollection<PresetViewModel>(presetManager.Presets.Select(p => new PresetViewModel(p, _manager)));
+
+            ((INotifyCollectionChanged) (presetManager.Presets)).CollectionChanged += PresetCollectionEventHandler;
 
             _timerManager = cycleBellManager.TimerManager;
 
-            var presetManager = cycleBellManager.PresetsManager;
-
-            Presets = new ObservableCollection<PresetViewModel>(presetManager.Presets.Select(p => new PresetViewModel(p, _manager)));
-
-            ((INotifyCollectionChanged)(presetManager.Presets)).CollectionChanged += (s, e) =>
-                                                {
-                                                    if (e?.NewItems?[0] != null && e.OldItems?[0] == null)
-                                                        Presets.Add( new PresetViewModel((Preset)e.NewItems[0], _manager) );
-
-                                                    if (e?.OldItems?[0] != null && e?.NewItems?[0] == null)
-                                                    {
-                                                        var deletingPresetVm = Presets.First (pvm => pvm.Preset.Equals ((Preset) e.OldItems[0]));
-                                                        Presets.Remove (deletingPresetVm);
-                                                    }
-                                                };
-
-            AppDomain.CurrentDomain.ProcessExit += (s, e) => SavePresetsBeforeExitCommand.Execute (null);
-
+            AppDomain.CurrentDomain.ProcessExit += (s, e) => SavePresetsBeforeExit (null);
         }
 
         #endregion Constructor
@@ -90,6 +81,11 @@ namespace CycleBell.ViewModels
 
         public bool IsSelectedPresetExists => SelectedPreset != null;
 
+        public bool IsNewPreset
+        {
+            get => SelectedPreset?.IsNewPreset ?? false;
+        }
+
         #endregion CLR Properties
 
         #region Commands
@@ -116,10 +112,43 @@ namespace CycleBell.ViewModels
 
         #region Methods
 
+        private void PresetCollectionEventHandler(object s, NotifyCollectionChangedEventArgs e)
+        {
+            if (e?.NewItems?[0] != null && e.OldItems?[0] == null) {
+
+                Presets.Add(new PresetViewModel((Preset)e.NewItems[0], _manager));
+                SelectedPreset = Presets[Presets.Count - 1];
+                SelectedPreset.PropertyChanged += IsNewPresetChangedHandler;
+            }
+
+            if (e?.OldItems?[0] != null && e?.NewItems?[0] == null) {
+
+                var deletingPresetVm = Presets.First(pvm => pvm.Preset.Equals((Preset)e.OldItems[0]));
+
+                if (deletingPresetVm == SelectedPreset)
+                    SelectedPreset.PropertyChanged -= IsNewPresetChangedHandler;
+
+                Presets.Remove(deletingPresetVm);
+                SelectedPreset = Presets.Count > 0 ? Presets[0] : null;
+            }
+
+            OnPropertyChanged(nameof(SelectedPreset));
+            OnPropertyChanged(nameof(IsNewPreset));
+        }
+
+        private void IsNewPresetChangedHandler(object s, PropertyChangedEventArgs e)
+        {
+            if (e?.PropertyName == "IsNewPreset") {
+
+                OnPropertyChanged(nameof(IsNewPreset));
+            }
+        }
+
         // ---- Save Preset
         private void CreateNewPreset (object obj)
         {
             _manager.CreateNewPreset();
+            OnPropertyChanged(nameof(IsSelectedPresetExists));
         }
 
         // ---- Save Preset

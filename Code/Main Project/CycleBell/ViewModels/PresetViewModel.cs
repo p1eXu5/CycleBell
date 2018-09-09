@@ -5,6 +5,7 @@ using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Linq;
 using System.Runtime.CompilerServices;
+using System.Text;
 using System.Windows.Data;
 using System.Windows.Input;
 using CycleBell.Base;
@@ -28,6 +29,13 @@ namespace CycleBell.ViewModels
     /// </summary>
     public class PresetViewModel : ObservableObject
     {
+        #region Consts
+
+        private const string StarString = "*";
+        private const string NewString = "new";
+
+        #endregion
+
         #region Fields
 
         private readonly Preset _preset;
@@ -38,10 +46,12 @@ namespace CycleBell.ViewModels
         private TimePointViewModelBase _selectedTimePoint;
         private TimePointViewModel _addingTimePoint;
 
+        private bool _isModified;
         private bool _canBellOnStartTime;
 
         private readonly HashSet<byte> _settedLoopNumbers;
 
+        private StringBuilder _sb;
         #endregion
 
         #region Constructor
@@ -98,6 +108,10 @@ namespace CycleBell.ViewModels
                     CanBellOnStartTime = false;
             }
 
+            _sb = new StringBuilder();
+
+            _sb.Append(GetPresetName(_preset.PresetName));
+
             ResetAddingTimePoint();
         }
 
@@ -107,7 +121,7 @@ namespace CycleBell.ViewModels
 
         // Preset
         public Preset Preset => _preset;
-        public string Name => _preset.PresetName;
+        public string Name => _sb.ToString();
 
         public TimeSpan StartTime
         {
@@ -138,7 +152,14 @@ namespace CycleBell.ViewModels
             }
         }
 
-        public bool IsModified { get; set; }
+        public bool IsModified
+        {
+            get => _isModified;
+            set {
+                if (value == true)
+                    AddStarToName();
+            }
+        }
 
         public bool IsInfiniteLoop
         {
@@ -153,7 +174,6 @@ namespace CycleBell.ViewModels
                 OnPropertyChanged ();
             }
         }
-
         public bool CanBellOnStartTime
         {
             get => _canBellOnStartTime;
@@ -162,6 +182,9 @@ namespace CycleBell.ViewModels
                 OnPropertyChanged ();
             }
         }
+
+        public bool IsNewPreset => _preset.PresetName == Preset.PresetName;
+        
 
         // ITimerManager
         public bool IsRunning => _timerManager.IsRunning;
@@ -182,6 +205,28 @@ namespace CycleBell.ViewModels
         #endregion
 
         #region Methods
+
+        private void AddStarToName()
+        {
+            _sb.Clear();
+
+            if (IsNewPreset) {
+                _sb.Append(NewString);
+            }
+
+            _sb.Append(StarString);
+
+            OnPropertyChanged(nameof(Name));
+        }
+
+        private string GetPresetName(string presetName)
+        {
+            if (_preset.PresetName == Preset.DefaultName) {
+                return NewString;
+            }
+            else
+                return presetName;
+        }
 
         public PresetViewModel GetDeepCopy()
         {

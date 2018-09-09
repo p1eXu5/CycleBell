@@ -35,6 +35,6 @@ namespace CycleBellLibrary
 
         void SavePresets (string fileName);
 
-        event Action CantCreateNewPreset;
+        event Action CantCreateNewPresetEvent;
     }
 }
