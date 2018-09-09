@@ -22,6 +22,8 @@ namespace CycleBellLibrary
         /// <exception cref="InvalidOperationException"></exception>
         void CreateNewPreset();
 
+        void OpenPresets (string fileName);
+
         void DeletePreset (Preset preset);
 
         void RenamePreset (Preset preset, string newName);

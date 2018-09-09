@@ -12,7 +12,7 @@ namespace CycleBellLibrary.Context
         ReadOnlyObservableCollection<Preset> Presets { get; }
 
         void Clear();
-        void LoadFromFile(string fileName);
+        void OpenPresets(string fileName);
         void SavePresets(string fileName);
     }
 }

@@ -12,7 +12,7 @@ using CycleBellLibrary.Repository;
 
 namespace CycleBellLibrary.Context
 {
-    public sealed class PresetsManager : IEnumerable<Preset>, IInnerPresetsManager
+    public sealed class PresetsManager :  IPresetsManager, IInnerPresetsManager, IEnumerable<Preset>
     {
         #region Fields
 
@@ -51,7 +51,7 @@ namespace CycleBellLibrary.Context
         /// <summary>
         /// Deserializes or creates new empty preset
         /// </summary>
-        public void LoadFromFile(string fileName)
+        public void OpenPresets(string fileName)
         {
             CheckFileName (fileName);
             DeserializePresets(fileName);
@@ -106,7 +106,6 @@ namespace CycleBellLibrary.Context
                 throw new ArgumentException("Invalid file name or file doesn't exist", nameof(fileName));
         }
 
-
         /// <summary>
         /// Serializes presets
         /// </summary>
@@ -138,11 +137,15 @@ namespace CycleBellLibrary.Context
             }
         }
 
+        #endregion
+
+        #region IEnumerable Implementation
+
+        public IEnumerator<Preset> GetEnumerator() => _presets.GetEnumerator();
+        
+        IEnumerator IEnumerable.GetEnumerator() { return GetEnumerator(); }
 
         #endregion
 
-        public IEnumerator<Preset> GetEnumerator() => _presets.GetEnumerator();
-
-        IEnumerator IEnumerable.GetEnumerator() { return GetEnumerator(); }
     }
 }

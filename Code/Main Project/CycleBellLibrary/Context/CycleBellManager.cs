@@ -59,6 +59,11 @@ namespace CycleBellLibrary
             }
         }
 
+        public void OpenPresets (string fileName)
+        {
+            PresetsManager.OpenPresets(fileName);
+        }
+
         public void DeletePreset (Preset preset)
         {
             _presetsManager.Remove (preset);
