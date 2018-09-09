@@ -45,10 +45,10 @@ namespace CycleBell.ViewModels
 
             ((INotifyCollectionChanged)(presetManager.Presets)).CollectionChanged += (s, e) =>
                                                 {
-                                                    if (e?.NewItems[0] != null && e?.OldItems[0] == null)
+                                                    if (e?.NewItems?[0] != null && e.OldItems?[0] == null)
                                                         Presets.Add( new PresetViewModel((Preset)e.NewItems[0], _manager) );
 
-                                                    if (e?.OldItems[0] != null && e?.NewItems[0] == null)
+                                                    if (e?.OldItems?[0] != null && e?.NewItems?[0] == null)
                                                     {
                                                         var deletingPresetVm = Presets.First (pvm => pvm.Preset.Equals ((Preset) e.OldItems[0]));
                                                         Presets.Remove (deletingPresetVm);
@@ -132,7 +132,7 @@ namespace CycleBell.ViewModels
         }
         private bool CanSavePreset(object obj)
         {
-            return SelectedPreset.CanSave();
+            return SelectedPreset?.CanSave() ?? false;
         }
 
         private void SavePresetAs(object obj)
@@ -192,7 +192,7 @@ namespace CycleBell.ViewModels
         // ---- Save presets before exit
         private void SavePresetsBeforeExit(object obj)
         {
-            _manager.SavePresets();
+             _manager.SavePresets();
         }
 
         // ---- Exit

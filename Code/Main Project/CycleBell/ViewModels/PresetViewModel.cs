@@ -198,7 +198,7 @@ namespace CycleBell.ViewModels
 
         protected internal bool CanSave()
         {
-            throw new NotImplementedException();
+            return IsModified;
         }
 
         private static void PrepareTimePoint (TimePoint point)
