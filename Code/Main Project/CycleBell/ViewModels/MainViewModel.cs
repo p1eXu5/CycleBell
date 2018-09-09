@@ -10,6 +10,7 @@ using CycleBellLibrary;
 using CycleBell.Base;
 using CycleBellLibrary.Repository;
 using CycleBellLibrary.Timer;
+using Microsoft.Win32;
 
 namespace CycleBell.ViewModels
 {
@@ -52,7 +53,7 @@ namespace CycleBell.ViewModels
                                                     }
                                                 };
 
-            AppDomain.CurrentDomain.ProcessExit += (s, e) => SavePresetsCommand.Execute (null);
+            AppDomain.CurrentDomain.ProcessExit += (s, e) => SavePresetsBeforeExitCommand.Execute (null);
 
         }
 
@@ -90,22 +91,27 @@ namespace CycleBell.ViewModels
 
         // Done
         public ICommand CreateNewPresetCommand => new ActionCommand(CreateNewPreset);
-        public ICommand ExitCommand => new ActionCommand(Exit);
-        public ICommand AboutCommand => new ActionCommand(About);
+
+        public ICommand SavePresetCommand => new ActionCommand(SavePreset, CanSavePreset);
         public ICommand SavePresetAsCommand => new ActionCommand(SavePresetAs, CanSavePresetAs);
-        public ICommand SavePresetsCommand => new ActionCommand(SavePresets);
+
+        public ICommand ImportPresetsCommand => new ActionCommand(ImportPresets);
+        public ICommand ExportPresetsCommand => new ActionCommand(ExportPresets, CanExportPresets);
+
+        public ICommand ExitCommand => new ActionCommand(Exit);
+
+        public ICommand AboutCommand => new ActionCommand(About);
+
+        public ICommand SavePresetsBeforeExitCommand => new ActionCommand(SavePresetsBeforeExit);
 
         // In process
-        public ICommand NewCommand => new ActionCommand(NewPresets);
-        public ICommand OpenCommand => new ActionCommand(OpenPresets);
-        public ICommand ExportPresetsCommand => new ActionCommand(SavePresets);
         public ICommand ViewHelpCommand => new ActionCommand(About);
 
         #endregion Commands
 
         #region Methods
 
-        // CreateNewPresetCommand
+        // ---- Save Preset
         private void CreateNewPreset (object obj)
         {
             try {
@@ -117,7 +123,16 @@ namespace CycleBell.ViewModels
             }
         }
 
-        // SavePresetAsCommand
+        // ---- Save Preset
+        private void SavePreset(object obj)
+        {
+            SelectedPreset.Save();
+        }
+        private bool CanSavePreset(object obj)
+        {
+            return SelectedPreset.CanSave();
+        }
+
         private void SavePresetAs(object obj)
         {
             if (_selectedPreset.Name == Preset.DefaultName) {
@@ -133,28 +148,35 @@ namespace CycleBell.ViewModels
         }
         private bool CanSavePresetAs(object obj) => _selectedPreset?.IsModified ?? false;
 
-        private void NewPresets(object obj)
+        // ---- Import/Export Presets
+        private void ImportPresets(object obj)
         {
-            // TODO:
+            _manager.OpenPresets();
         }
 
-        private void OpenPresets(object obj)
+        private void ExportPresets(object obj)
         {
-            // TODO:
+            _manager.SavePresets();
+        }
+        private bool CanExportPresets(object obj)
+        {
+            return Presets.Count > 0;
         }
 
-        // SavePresetsCommand
-        private void SavePresets(object obj)
+        // ---- Save presets before exit
+        private void SavePresetsBeforeExit(object obj)
         {
-            // TODO:
-            SavePresetAsCommand.Execute (null);
-
             _manager.SavePresets();
         }
 
-        private void Exit(object obj) => System.Windows.Application.Current.Shutdown();
+        // ---- Exit
+        private void Exit(object obj)
+        {
+            _manager.SavePresets();
+            System.Windows.Application.Current.Shutdown();
+        }
 
-        // AboutCommand
+        // ---- About
         private void About(object obj)
         {
             var viewModel = new AboutDialogViewModel();

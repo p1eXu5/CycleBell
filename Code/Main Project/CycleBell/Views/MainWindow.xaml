@@ -4,7 +4,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:CycleBell"
+        xmlns:local="clr-namespace:CycleBell.Views"
         xmlns:vmodels="clr-namespace:CycleBell.ViewModels"
         xmlns:ctrl="clr-namespace:CycleBell.Controls"
         xmlns:Themes="clr-namespace:Microsoft.Windows.Themes;assembly=PresentationFramework.Aero2" x:Class="CycleBell.MainWindow"
@@ -36,23 +36,6 @@
                 <GradientStop Color="#FFECECEC" Offset="0"/>
                 <GradientStop Color="White" Offset="1"/>
             </LinearGradientBrush>
-
-            <Style  x:Key="myLBStyle" TargetType="ListBoxItem">
-                <Setter Property="Background" Value="Khaki" />
-                <Setter Property="Foreground" Value="DarkSlateGray" />
-                <Setter Property="Margin" Value="5" />
-                <Setter Property="FontStyle" Value="Italic" />
-                <Setter Property="FontSize" Value="14" />
-                <Setter Property="BorderBrush" Value="DarkGray" />
-                <Setter Property="Template">
-                    <Setter.Value>
-                        <ControlTemplate TargetType="ListBoxItem">
-                            <ContentPresenter Content="{TemplateBinding Content}" />
-                        </ControlTemplate>
-                    </Setter.Value>
-                </Setter>
-            </Style>
-
         </ResourceDictionary>
     </Window.Resources>
     <DockPanel>
@@ -65,11 +48,13 @@
                     <TextBlock VerticalAlignment="Center">File</TextBlock>
                 </MenuItem.Header>
                 
-                <MenuItem Header="_New..." Command="{Binding NewCommand}"></MenuItem>
-                <MenuItem Header="_Open..." Command="{Binding OpenCommand}"></MenuItem>
+                <MenuItem Header="_New Preset" Command="{Binding CreateNewPresetCommand}" />
                 <Separator></Separator>
-                <MenuItem Header="_Save" Command="{Binding ExportPresetsCommand}"></MenuItem>
-                <MenuItem Header="Save _As..." Command="{Binding SavePresetAsCommand}"></MenuItem>
+                <MenuItem Header="_Save Preset" Command="{Binding SavePresetCommand}"></MenuItem>
+                <MenuItem Header="Save Preset _As..." Command="{Binding SavePresetAsCommand}"></MenuItem>
+                <Separator></Separator>
+                <MenuItem Header="_Import Presets..." Command="{Binding ImportPresetsCommand}"></MenuItem>
+                <MenuItem Header="_Export Presets..." Command="{Binding ImportPresetsCommand}"></MenuItem>
                 <Separator></Separator>
                 <MenuItem Header="_Exit" Command="{Binding ExitCommand}"></MenuItem>
             </MenuItem>
@@ -142,12 +127,10 @@
                 <RowDefinition Height="auto"/>
                 <RowDefinition Height="auto"/>
                 <RowDefinition Height="auto"/>
-                <RowDefinition Height="auto"/>
-                <RowDefinition Height="auto"/>
             </Grid.RowDefinitions>
 
             <!-- Header -->
-            <TextBlock Text="Cycle Bell" 
+            <TextBlock Text="Cycle Bell" Grid.Row="0"
                        HorizontalAlignment="Center" VerticalAlignment="Center"
                        Margin="0,16,0,4"
                        Width="auto" 
@@ -157,7 +140,8 @@
                        />
 
             <!-- preset -->
-            <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,0">
+            <StackPanel Grid.Row="1" 
+                        Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,0">
                 <TextBlock Text="preset" 
                            VerticalAlignment="Center" HorizontalAlignment="Center"
                            Margin="0,0,10,0"
@@ -179,116 +163,7 @@
                 </ComboBox>
             </StackPanel>
 
-            <!-- start time -->
-            <StackPanel Grid.Row="2"
-                        Margin="0,48,0,38"
-                        Orientation="Vertical"
-                        HorizontalAlignment="Center"
-                        VerticalAlignment="Center" 
-                        TextElement.FontFamily="{StaticResource font_SuiGeneris}" >
-                <ctrl:TextBox2 Text="{Binding StartTime, StringFormat={}{0:%h}:{0:%mm}}" 
-                               HorizontalAlignment="Stretch"
-                               FontSize="18" BorderThickness="1" BorderBrush="DimGray"/>
-                <Label Content="start time"
-                       HorizontalAlignment="Center"/>
-            </StackPanel>
-
-            <!-- points list -->
-            <ListBox x:Name="m_pointsList"
-                     Grid.Row="3"
-                     Margin="38,0"
-                     MinHeight="150"
-                     BorderThickness="0"
-                     ScrollViewer.HorizontalScrollBarVisibility="Hidden"
-                     ItemContainerStyle="{StaticResource myLBStyle}">
-                <Grid>
-                    <Grid.RowDefinitions>
-                        <RowDefinition />
-                        <RowDefinition />
-                    </Grid.RowDefinitions>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition />
-                        <ColumnDefinition />
-                        <ColumnDefinition />
-                        <ColumnDefinition />
-                        <ColumnDefinition />
-                    </Grid.ColumnDefinitions>
-                    
-                    <!-- Point Data -->
-                    <TextBlock x:Name="m_pointName"
-                               Grid.Column="0" Grid.Row="0"
-                               HorizontalAlignment="Right" VerticalAlignment="Bottom"
-                               Text="Рабочее время"
-                               TextTrimming="CharacterEllipsis"
-                               FontSize="14" FontFamily="Segoe UI Semibold" 
-                                />
-                    <TextBlock x:Name="m_pointTime"
-                               Grid.Column="1" Grid.Row="0"
-                               HorizontalAlignment="Right" VerticalAlignment="Bottom"
-                               Margin="20,0"
-                               Text="18:00"
-                               TextTrimming="CharacterEllipsis"
-                               FontFamily="{StaticResource font_SuiGeneris}"
-                               FontSize="18" RenderTransformOrigin="0.5,0.5"
-                               >
-                        <TextBlock.RenderTransform>
-                            <TransformGroup>
-                                <ScaleTransform/>
-                                <SkewTransform/>
-                                <RotateTransform/>
-                                <TranslateTransform Y="2"/>
-                            </TransformGroup>
-                        </TextBlock.RenderTransform>
-
-                    </TextBlock>
-                    <!-- mute button -->
-                    <TextBlock Grid.Row="0" Grid.Column="2" Margin="0"
-                                Text="mute"
-                                TextTrimming="CharacterEllipsis"
-                                FontFamily="{StaticResource font_SuiGeneris}"
-                                FontSize="14" Height="13"
-                                >
-                        <Hyperlink Command="{Binding MuteCommand}">mute</Hyperlink>
-                    </TextBlock>
-
-                    <!-- add sound button -->
-                    <Button x:Name="m_addSoundButton"
-                            Grid.Column="3" Grid.Row="0" Grid.RowSpan="2"
-                            Margin="10,0"
-                            Width="30" Height="30"
-                            Content="{StaticResource Notes}"
-                            Command="{Binding SoundSelectCommand}">
-                    </Button>
-                    
-                    <ToggleButton x:Name="m_delTimePoint"
-                                  Grid.Column="4" Grid.Row="0" Grid.RowSpan="2"
-                                  Width="30" Height="30" Content="del" />
-                    <!-- sound name -->
-                    <TextBlock x:Name="m_soundName"
-                               Grid.Column="0" Grid.ColumnSpan="3" Grid.Row="1"
-                               Margin="0,0,6,0"
-                               HorizontalAlignment="Right"
-                               Text="default"
-                               TextTrimming="CharacterEllipsis"
-                               FontSize="10"
-                               />
-                </Grid>
-            </ListBox>
-
-            <!-- adding point -->
-            <Grid x:Name="border" Grid.Row="4"
-                  HorizontalAlignment="Center">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition/>
-                    <ColumnDefinition/>
-                    <ColumnDefinition/>
-                    <ColumnDefinition/>
-                </Grid.ColumnDefinitions>
-                <TextBox x:Name="m_addPointName"
-                         Grid.Column="0"
-                         MinWidth="100"
-                         />
-            </Grid>
+           <local:PresetUserControl Grid.Row="2" DataContext="{Binding SelectedPreset}" />
         </Grid>
     </DockPanel>
 </Window>

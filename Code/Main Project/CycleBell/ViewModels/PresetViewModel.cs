@@ -191,6 +191,16 @@ namespace CycleBell.ViewModels
             return null;
         }
 
+        protected internal void Save()
+        {
+            throw new NotImplementedException();
+        }
+
+        protected internal bool CanSave()
+        {
+            throw new NotImplementedException();
+        }
+
         private static void PrepareTimePoint (TimePoint point)
         {
             if (point.Time < TimeSpan.Zero)

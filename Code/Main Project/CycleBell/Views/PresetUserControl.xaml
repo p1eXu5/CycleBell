@@ -1,0 +1,75 @@
+﻿<UserControl x:Class="CycleBell.Views.PresetUserControl" 
+             x:Name="TimePointsUserControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:CycleBell.Views"
+             xmlns:r="clr-namespace:CycleBell"
+             xmlns:controls="clr-namespace:CycleBell.Controls"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800">
+    <UserControl.Resources>
+        <Style  x:Key="myLBStyle" TargetType="ListBoxItem">
+            <Setter Property="Background" Value="Khaki" />
+            <Setter Property="Foreground" Value="DarkSlateGray" />
+            <Setter Property="Margin" Value="5" />
+            <Setter Property="FontStyle" Value="Italic" />
+            <Setter Property="FontSize" Value="14" />
+            <Setter Property="BorderBrush" Value="DarkGray" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="ListBoxItem">
+                        <ContentPresenter Content="{TemplateBinding Content}" />
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </UserControl.Resources>
+    <Grid x:Name="PresetGrid" Width="auto">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="auto"/>
+        </Grid.RowDefinitions>
+
+        <!-- start time -->
+        <StackPanel Grid.Row="0"
+                    Margin="0,48,0,38"
+                    Orientation="Vertical"
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Center" 
+                    TextElement.FontFamily="{StaticResource font_SuiGeneris}" >
+            <controls:TextBox2 Text="{Binding StartTime, StringFormat={}{0:%h}:{0:%mm}}" 
+                               HorizontalAlignment="Stretch"
+                               FontSize="18" BorderThickness="1" BorderBrush="DimGray"/>
+            <Label Content="start time"
+                       HorizontalAlignment="Center"/>
+        </StackPanel>
+
+        <!-- points list -->
+        <ListBox x:Name="m_pointsList" Grid.Row="1"
+                 ItemsSource="{Binding TimePoints}"
+                 Margin="38,0" HorizontalAlignment="Center"
+                 MinHeight="150"
+                 BorderThickness="0"
+                 ScrollViewer.HorizontalScrollBarVisibility="Hidden"
+                 ItemContainerStyle="{StaticResource myLBStyle}">
+        </ListBox>
+
+        <!-- adding point -->
+        <Grid x:Name="border" Grid.Row="2"
+                  HorizontalAlignment="Center">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+            <TextBox x:Name="m_addPointName"
+                         Grid.Column="0"
+                         MinWidth="100"
+                         />
+        </Grid>
+    </Grid>
+</UserControl>
