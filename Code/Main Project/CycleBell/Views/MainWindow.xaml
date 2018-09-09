@@ -144,7 +144,8 @@
             <!-- preset -->
             <StackPanel Grid.Row="1" 
                         Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,0">
-                <TextBlock Text="preset" 
+                <TextBlock Text="preset"  
+                           Foreground="{Binding ElementName=m_presetComboBox, Path=Foreground, Mode=OneWay}"
                            VerticalAlignment="Center" HorizontalAlignment="Center"
                            Margin="0,0,10,0"
                            FontFamily="{StaticResource font_SuiGeneris}"
@@ -156,8 +157,8 @@
                     </TextBlock.RenderTransform>
                 </TextBlock>
                 <ComboBox x:Name="m_presetComboBox" Style="{DynamicResource MyComboBoxStyle1}"
-                          Foreground="{Binding IsSelectedPresetExists}"
-                          ItemsSource="{Binding Presets}"
+                          IsEnabled="{Binding IsSelectedPresetExists, Mode=OneWay}"
+                          ItemsSource="{Binding Presets, Mode=OneWay}"
                           VerticalContentAlignment="Center"
                           Width="146"
                           BorderThickness="0,0,0,1"
@@ -166,7 +167,9 @@
                 </ComboBox>
             </StackPanel>
 
-           <local:PresetUserControl Grid.Row="2" DataContext="{Binding SelectedPreset}" />
+           <local:PresetUserControl Grid.Row="2" DataContext="{Binding SelectedPreset}" 
+                                    Control.Foreground="{Binding ElementName=m_presetComboBox, Path=Foreground, Mode=OneWay}"
+                                    UIElement.IsEnabled="{Binding ElementName=m_presetComboBox, Path=IsEnabled, Mode=OneWay}"/>
         </Grid>
     </DockPanel>
 </Window>

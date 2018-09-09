@@ -8,7 +8,7 @@
              xmlns:r="clr-namespace:CycleBell"
              xmlns:controls="clr-namespace:CycleBell.Controls"
              mc:Ignorable="d" 
-             d:DesignHeight="450" d:DesignWidth="800">
+             d:DesignHeight="450" d:DesignWidth="400">
     <UserControl.Resources>
         <Style  x:Key="myLBStyle" TargetType="ListBoxItem">
             <Setter Property="Background" Value="Khaki" />
@@ -40,11 +40,14 @@
                     HorizontalAlignment="Center"
                     VerticalAlignment="Center" 
                     TextElement.FontFamily="{StaticResource font_SuiGeneris}" >
-            <controls:TextBox2 Text="{Binding StartTime, StringFormat={}{0:%h}:{0:%mm}}" 
+            <controls:TextBox2 Text="{Binding StartTime, StringFormat={}{0:%h}:{0:%mm}}"
+                               Foreground="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=Control}, Path=Foreground}"
+                               IsEnabled="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=Control}, Path=IsEnabled}"
                                HorizontalAlignment="Stretch"
                                FontSize="18" BorderThickness="1" BorderBrush="DimGray"/>
             <Label Content="start time"
-                       HorizontalAlignment="Center"/>
+                   Foreground="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=Control}, Path=Foreground}"
+                   HorizontalAlignment="Center"/>
         </StackPanel>
 
         <!-- points list -->
