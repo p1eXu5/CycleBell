@@ -120,6 +120,7 @@ namespace CycleBell.ViewModels
         {
             try {
                 _manager.CreateNewPreset();
+                OnPropertyChanged(nameof(IsSelectedPresetExists));
             }
             catch (InvalidOperationException) {
 
