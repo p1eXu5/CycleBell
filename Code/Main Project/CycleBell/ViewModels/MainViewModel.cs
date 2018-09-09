@@ -157,7 +157,6 @@ namespace CycleBell.ViewModels
                 {
                     InitialDirectory = _initialDirectory ?? System.Environment.GetFolderPath (Environment.SpecialFolder.MyDocuments),
                     Filter = "xml files (*.xml)|*.xml",
-                    RestoreDirectory = true
                 };
 
             if (ofd.ShowDialog() != true)
@@ -171,7 +170,19 @@ namespace CycleBell.ViewModels
 
         private void ExportPresets(object obj)
         {
-            _manager.SavePresets();
+            var sfd = new SaveFileDialog()
+                {
+                    Filter = "xml file (*.xml)|*.xml",
+                    InitialDirectory = _initialDirectory ?? System.Environment.GetFolderPath (Environment.SpecialFolder.MyDocuments),
+                };
+
+            if (sfd.ShowDialog() != true)
+                return;
+
+            var fileName = sfd.FileName;
+            _initialDirectory = Path.GetDirectoryName (fileName);
+
+            _manager.SavePresets(fileName);
         }
         private bool CanExportPresets(object obj)
         {

@@ -32,5 +32,7 @@ namespace CycleBellLibrary
         /// Serializes into xml file
         /// </summary>
         void SavePresets();
+
+        void SavePresets (string fileName);
     }
 }
