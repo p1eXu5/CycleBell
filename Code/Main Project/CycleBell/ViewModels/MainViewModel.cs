@@ -87,6 +87,8 @@ namespace CycleBell.ViewModels
             }
         }
 
+        public bool IsSelectedPresetExists => SelectedPreset != null;
+
         #endregion CLR Properties
 
         #region Commands

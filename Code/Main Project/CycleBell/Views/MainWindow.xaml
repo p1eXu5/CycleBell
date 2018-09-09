@@ -10,7 +10,7 @@
         
         mc:Ignorable="d"
         
-        d:DataContext="{d:DesignInstance vmodels:MainViewModel, IsDesignTimeCreatable=True}"
+        d:DataContext="{d:DesignInstance vmodels:MainViewModel}"
         
         Title="MainWindow" 
         Height="695" Width="444.125" 
@@ -156,6 +156,7 @@
                     </TextBlock.RenderTransform>
                 </TextBlock>
                 <ComboBox x:Name="m_presetComboBox" Style="{DynamicResource MyComboBoxStyle1}"
+                          Foreground="{Binding IsSelectedPresetExists}"
                           ItemsSource="{Binding Presets}"
                           VerticalContentAlignment="Center"
                           Width="146"
