@@ -4,9 +4,28 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:CycleBell.Views"
+             xmlns:controls="clr-namespace:CycleBell.Controls"
              mc:Ignorable="d" 
-             d:DesignHeight="450" d:DesignWidth="800">
+             d:DesignHeight="30" d:DesignWidth="400">
     <Grid>
-            
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition />
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="Auto"/>
+        </Grid.ColumnDefinitions>        
+        <TextBox Grid.Column="0" MinWidth="200" 
+                 BorderBrush="DimGray"
+                 BorderThickness="0,0,0,1"
+                 Margin="0,0,10,0"/>
+        <controls:TimerBox Grid.Column="1" Text="00:00"/>
+        <Button Grid.Column="2" Content="{StaticResource Notes}" />
+        <ToggleButton Grid.Column="3" Content="{StaticResource Notes}" />
+        <TextBlock Grid.Column="4"
+                   VerticalAlignment="Center"
+                   FontFamily="{StaticResource font_SuiGeneris}">
+            <Hyperlink >add</Hyperlink>
+        </TextBlock>
     </Grid>
 </UserControl>
