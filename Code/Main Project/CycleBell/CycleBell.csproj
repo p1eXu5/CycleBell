@@ -100,10 +100,17 @@
     <Compile Include="Views\AboutWindow.xaml.cs">
       <DependentUpon>AboutWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\AddingTimePointUserControl.xaml.cs">
+      <DependentUpon>AddingTimePointUserControl.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\PresetUserControl.xaml.cs">
       <DependentUpon>PresetUserControl.xaml</DependentUpon>
     </Compile>
     <Page Include="Resources\DataTemplates.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\AddingTimePointUserControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
