@@ -40,7 +40,7 @@
                     HorizontalAlignment="Center"
                     VerticalAlignment="Center" 
                     TextElement.FontFamily="{StaticResource font_SuiGeneris}" >
-            <controls:TextBox2 Text="{Binding StartTime, StringFormat={}{0:%h}:{0:%mm}}"
+            <controls:TimerBox Text="{Binding StartTime, StringFormat={}{0:%h}:{0:%mm}}"
                                Foreground="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=Control}, Path=Foreground}"
                                IsEnabled="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=Control}, Path=IsEnabled}"
                                HorizontalAlignment="Stretch"

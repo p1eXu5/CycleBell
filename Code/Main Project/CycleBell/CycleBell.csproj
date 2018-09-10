@@ -84,7 +84,7 @@
     <Compile Include="Base\ActionCommand.cs" />
     <Compile Include="Base\ObservableObject.cs" />
     <Compile Include="Base\DialogRegistrator.cs" />
-    <Compile Include="Controls\TextBox2.cs" />
+    <Compile Include="Controls\TimerBox.cs" />
     <Compile Include="ViewModels\AboutDialogViewModel.cs" />
     <Compile Include="ViewModels\DialogViewModelBase.cs" />
     <Compile Include="ViewModels\EndTimePointViewModel.cs" />

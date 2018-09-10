@@ -7,24 +7,26 @@ using System.Windows.Input;
 
 namespace CycleBell.Controls
 {
-    public class TextBox2 : TextBox
+    public class TimerBox : TextBox
     {
         private const sbyte MinutesTensLimit = 5;
         private const sbyte HoursTensLimit = 2;
         private const sbyte HoursOnesLimit = 3;
 
-        private bool nextOnes = false;
+        private bool _nextOnes = false;
 
-        public TextBox2() : base()
+        public TimerBox() : base()
         {
         }
 
         /// <summary>
-        /// TextBox2 OnPreviewKeyDown handler
+        /// TimerBox OnPreviewKeyDown handler
         /// </summary>
         /// <param name="e"></param>
         protected override void OnPreviewKeyDown(KeyEventArgs e)
         {
+            base.OnPreviewKeyDown(e);
+
             if (e.Key == Key.Enter) {
 
                 e.Handled = true;
@@ -84,11 +86,10 @@ namespace CycleBell.Controls
             if (e.Key == Key.Delete)
                 e.Handled = true;
 
-            base.OnPreviewKeyDown(e);
         }
 
         /// <summary>
-        /// TextBox2 OnPreviewTextInput handler
+        /// TimerBox OnPreviewTextInput handler
         /// </summary>
         /// <param name="e"></param>
         protected override void OnPreviewTextInput(TextCompositionEventArgs e)
@@ -207,19 +208,19 @@ namespace CycleBell.Controls
         /// <param name="num"></param>
         private void SetHourDecNum4(sbyte num)
         {
-            if (!nextOnes && num <= HoursTensLimit) {
+            if (!_nextOnes && num <= HoursTensLimit) {
 
                 if (num == 0) {
-                    nextOnes = true;
+                    _nextOnes = true;
                     return;
                 }
 
                 Text = "" + num + Text;
                 CaretIndex = 1;
             }
-            else if (nextOnes) {
+            else if (_nextOnes) {
 
-                nextOnes = false;
+                _nextOnes = false;
                 Text = "" + num + Text.Substring(1);
                 CaretIndex = 2;
             }
@@ -232,6 +233,7 @@ namespace CycleBell.Controls
                 case 0:
                     Text = Text.Substring(1);
                     CaretIndex = 0;
+                    _nextOnes = true;
                     break;
                 case 1:
                 case 2:
