@@ -46,7 +46,6 @@
                     HorizontalAlignment="Center"
                     VerticalAlignment="Center" 
                     TextElement.FontFamily="{StaticResource font_SuiGeneris}" >
-                <!--Text="{Binding StartTime, StringFormat={}{0:%h}:{0:%mm}}"-->
             <controls:TimerBox Text="{Binding StartTime, StringFormat={}{0:%h}:{0:%mm}, Mode=OneWay}"
                                Foreground="{Binding Foreground, RelativeSource={RelativeSource FindAncestor, AncestorType=Control}}"
                                IsEnabled="{Binding IsEnabled, RelativeSource={RelativeSource FindAncestor, AncestorType=Control}}"
@@ -116,7 +115,7 @@
                        Margin="10,0,20,0"
                        VerticalAlignment="Center"
                        FontFamily="{StaticResource font_SuiGeneris}">
-                <Hyperlink Command="{Binding AddTimePointCommand}">add</Hyperlink>
+                <Hyperlink Command="{Binding AddTimePointCommand}" IsEnabled="{Binding CanAddTimePoint}">add</Hyperlink>
             </TextBlock>
         </Grid>
     </Grid>

@@ -5,9 +5,13 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:CycleBell.Views"
              xmlns:controls="clr-namespace:CycleBell.Controls"
+             xmlns:conv="clr-namespace:CycleBell.Converters"
              mc:Ignorable="d" 
              d:DesignHeight="30" d:DesignWidth="400" 
              FontFamily="{StaticResource font_SuiGeneris}">
+    <UserControl.Resources>
+        <conv:FromTimeSpanToStringConverter x:Key="conv_TimeSpanToString" />
+    </UserControl.Resources>
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition />
@@ -28,8 +32,10 @@
                  Text="new_TimePoint"/>
 
         <!-- TimePoint Time -->
-        <controls:TimerBox Grid.Column="1"  Text="{Binding Time, StringFormat={}{0:%h}:{0:%mm}, 
-                                                    Mode=TwoWay}"
+        <controls:TimerBox Grid.Column="1"  
+                           Text="{Binding Time, 
+                                          Mode=TwoWay, 
+                                          Converter={StaticResource conv_TimeSpanToString}}"
                            />
 
         <!-- AddSound Button -->

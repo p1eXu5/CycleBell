@@ -194,7 +194,7 @@ namespace CycleBell.ViewModels
 
         #region Commands
 
-        public ICommand AddTimePointCommand => new ActionCommand (AddTimePoint, CanAddTimePoint);
+        public ICommand AddTimePointCommand => new ActionCommand (AddTimePoint);
         public ICommand PlayCommand => new ActionCommand (Play, CanPlay);
         public ICommand PouseCommand => new ActionCommand(Pouse, CanPouse);
         public ICommand ResumeCommand => new ActionCommand (Resume, CanResume);
@@ -207,6 +207,7 @@ namespace CycleBell.ViewModels
 
         #region Methods
 
+        // Service:
         private void AddStarToName()
         {
             _sb.Clear();
@@ -227,6 +228,11 @@ namespace CycleBell.ViewModels
             }
             else
                 return presetName;
+        }
+
+        private void OnTimePropertyChanged (object s, PropertyChangedEventArgs e)
+        {
+            OnPropertyChanged (nameof(CanAddTimePoint));
         }
 
         public PresetViewModel GetDeepCopy()
@@ -285,8 +291,12 @@ namespace CycleBell.ViewModels
             }
         }
 
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        private void ResetAddingTimePoint() => AddingTimePoint = new TimePointViewModel (TimePoint.DefaultTimePoint, _preset);
+        [MethodImpl (MethodImplOptions.AggressiveInlining)]
+        private void ResetAddingTimePoint()
+        {
+            AddingTimePoint = new TimePointViewModel (TimePoint.DefaultTimePoint, _preset);
+            ((INotifyPropertyChanged) AddingTimePoint).PropertyChanged += OnTimePropertyChanged;
+        }
 
         // AddTimePointCommand:
         private void AddTimePoint(object o)
@@ -295,13 +305,15 @@ namespace CycleBell.ViewModels
 
             ResetAddingTimePoint();
         }
-        private bool CanAddTimePoint(object obj)
+        public bool CanAddTimePoint
         {
-            if (_addingTimePoint.Time == TimeSpan.Zero && _addingTimePoint.TimePointType == TimePointType.Absolute 
-                || _addingTimePoint.Time > TimeSpan.Zero)
-                return true;
-
-            return false;
+            get =>
+             _addingTimePoint.Time == TimeSpan.Zero && _addingTimePoint.TimePointType == TimePointType.Absolute 
+                || _addingTimePoint.Time > TimeSpan.Zero;
+            set {
+                CanAddTimePoint = value;
+                OnPropertyChanged ();
+            }
         }
 
         // PlayCommand:

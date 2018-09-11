@@ -12,13 +12,23 @@ namespace CycleBell.Converters
     {
         public object Convert (object value, Type targetType, object parameter, CultureInfo culture)
         {
-            throw new NotImplementedException(); 
+            if (value is TimeSpan timeSpanValue) {
 
+                return timeSpanValue.ToString (@"h\:mm");
+            }
+
+            return "??:??";
         }
 
         public object ConvertBack (object value, Type targetType, object parameter, CultureInfo culture)
         {
-            throw new NotImplementedException();
+            string val = (string)value;
+
+            if (String.IsNullOrWhiteSpace (val))
+                return TimeSpan.Zero;
+
+            var res = TimeSpan.Parse (val);
+            return res;
         }
     }
 }
