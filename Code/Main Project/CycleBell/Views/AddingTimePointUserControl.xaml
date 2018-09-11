@@ -6,7 +6,8 @@
              xmlns:local="clr-namespace:CycleBell.Views"
              xmlns:controls="clr-namespace:CycleBell.Controls"
              mc:Ignorable="d" 
-             d:DesignHeight="30" d:DesignWidth="400">
+             d:DesignHeight="30" d:DesignWidth="400" 
+             FontFamily="{StaticResource font_SuiGeneris}">
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition />

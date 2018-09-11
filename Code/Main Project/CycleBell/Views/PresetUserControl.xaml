@@ -41,10 +41,9 @@
                     VerticalAlignment="Center" 
                     TextElement.FontFamily="{StaticResource font_SuiGeneris}" >
             <controls:TimerBox Text="{Binding StartTime, StringFormat={}{0:%h}:{0:%mm}}"
-                               Foreground="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=Control}, Path=Foreground}"
-                               IsEnabled="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=Control}, Path=IsEnabled}"
-                               HorizontalAlignment="Stretch"
-                               FontSize="18" BorderThickness="1" BorderBrush="DimGray"/>
+                               Foreground="{Binding Foreground, RelativeSource={RelativeSource FindAncestor, AncestorType=Control}}"
+                               IsEnabled="{Binding IsEnabled, RelativeSource={RelativeSource FindAncestor, AncestorType=Control}}"
+                               />
             <Label Content="start time"
                    Foreground="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=Control}, Path=Foreground}"
                    HorizontalAlignment="Center"/>
@@ -61,18 +60,6 @@
         </ListBox>
 
         <!-- adding point -->
-        <Grid x:Name="border" Grid.Row="2"
-                  HorizontalAlignment="Center">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition/>
-                <ColumnDefinition/>
-                <ColumnDefinition/>
-                <ColumnDefinition/>
-            </Grid.ColumnDefinitions>
-            <TextBox x:Name="m_addPointName"
-                         Grid.Column="0"
-                         MinWidth="100"
-                         />
-        </Grid>
+        <local:AddingTimePointUserControl Grid.Row="2"/>
     </Grid>
 </UserControl>
