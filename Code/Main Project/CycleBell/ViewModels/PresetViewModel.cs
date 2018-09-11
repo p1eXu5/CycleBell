@@ -184,7 +184,7 @@ namespace CycleBell.ViewModels
         }
 
         public bool IsNewPreset => _preset.PresetName == Preset.PresetName;
-        
+        public bool IsNoTimePoints => TimePointVmCollection.Count < 1;
 
         // ITimerManager
         public bool IsRunning => _timerManager.IsRunning;

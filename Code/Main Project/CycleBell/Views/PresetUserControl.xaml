@@ -7,8 +7,13 @@
              xmlns:local="clr-namespace:CycleBell.Views"
              xmlns:r="clr-namespace:CycleBell"
              xmlns:controls="clr-namespace:CycleBell.Controls"
-             mc:Ignorable="d" 
+             xmlns:viewModels="clr-namespace:CycleBell.ViewModels"
+             mc:Ignorable="d"
+
+             d:DataContext="{d:DesignInstance viewModels:PresetViewModel}"
+
              d:DesignHeight="450" d:DesignWidth="400">
+
     <UserControl.Resources>
         <Style  x:Key="myLBStyle" TargetType="ListBoxItem">
             <Setter Property="Background" Value="Khaki" />
@@ -26,6 +31,7 @@
             </Setter>
         </Style>
     </UserControl.Resources>
+
     <Grid x:Name="PresetGrid" Width="auto">
         <Grid.RowDefinitions>
             <RowDefinition Height="auto"/>
@@ -40,7 +46,8 @@
                     HorizontalAlignment="Center"
                     VerticalAlignment="Center" 
                     TextElement.FontFamily="{StaticResource font_SuiGeneris}" >
-            <controls:TimerBox Text="{Binding StartTime, StringFormat={}{0:%h}:{0:%mm}}"
+                <!--Text="{Binding StartTime, StringFormat={}{0:%h}:{0:%mm}}"-->
+            <controls:TimerBox Text="{Binding StartTime, StringFormat={}{0:%h}:{0:%mm}, Mode=OneWay}"
                                Foreground="{Binding Foreground, RelativeSource={RelativeSource FindAncestor, AncestorType=Control}}"
                                IsEnabled="{Binding IsEnabled, RelativeSource={RelativeSource FindAncestor, AncestorType=Control}}"
                                />
@@ -50,16 +57,53 @@
         </StackPanel>
 
         <!-- points list -->
-        <ListBox x:Name="m_pointsList" Grid.Row="1"
-                 ItemsSource="{Binding TimePoints}"
-                 Margin="38,0" HorizontalAlignment="Center"
-                 MinHeight="150"
-                 BorderThickness="0"
-                 ScrollViewer.HorizontalScrollBarVisibility="Hidden"
-                 ItemContainerStyle="{StaticResource myLBStyle}">
-        </ListBox>
+        <Grid Grid.Row="1">
+            
+            <!-- TimePointVmCollection -->
+            <ListBox x:Name="m_pointsList"
+                     ItemsSource="{Binding TimePointVmCollection}"
+                     Margin="38,0" HorizontalAlignment="Center"
+                     MinHeight="150"
+                     BorderThickness="0"
+                     ScrollViewer.HorizontalScrollBarVisibility="Hidden"
+                     ItemContainerStyle="{StaticResource myLBStyle}">
+                <ListBox.Style>
+                    <Style>
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding IsNoTimePoints}" Value="True">
+                                <Setter Property="UIElement.Visibility" Value="Hidden" />
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </ListBox.Style>
+            </ListBox>
+            
+            <!-- When NoTimePoints -->
+            <TextBlock HorizontalAlignment="Center">
+                <Bold>To create a new preset:</Bold>
+                <LineBreak /><LineBreak />
+                <Run Text="    "></Run><Run>1. Menu "File"</Run>
+                <LineBreak />
+                <Run Text="    "></Run><Run>2. Command "New Preset"</Run>
+                <LineBreak /><LineBreak /><LineBreak />
+                <Bold>To create TimePoints use form below:</Bold>
+                
+                <TextBlock.Style>
+                    <Style>
+                        <Setter Property="UIElement.Visibility" Value="Hidden" />
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding IsNoTimePoints}" Value="True">
+                                <Setter Property="UIElement.Visibility" Value="Visible" />
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </TextBlock.Style>
+            </TextBlock>
+
+        </Grid>
 
         <!-- adding point -->
-        <local:AddingTimePointUserControl Grid.Row="2" Height="30"/>
+        <local:AddingTimePointUserControl Grid.Row="2" Height="30" Width="Auto" Margin="20,50"
+                                          DataContext="{Binding AddingTimePoint}"/>
     </Grid>
 </UserControl>

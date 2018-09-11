@@ -94,6 +94,8 @@ namespace CycleBell.Controls
         /// <param name="e"></param>
         protected override void OnPreviewTextInput(TextCompositionEventArgs e)
         {
+            base.OnPreviewTextInput(e);
+
             Debug.WriteLine(this.CaretIndex);
 
             int currentIndex = CaretIndex;
@@ -250,6 +252,8 @@ namespace CycleBell.Controls
         /// <param name="e"></param>
         protected override void OnLostFocus(RoutedEventArgs e)
         {
+            base.OnLostFocus(e);
+
             Debug.WriteLine("Lost focus");
 
             if (Text.Length == 5) {
@@ -261,10 +265,6 @@ namespace CycleBell.Controls
                     }
                 }
             }
-
-            base.OnLostFocus(e);
         }
-
-        
     }
 }
