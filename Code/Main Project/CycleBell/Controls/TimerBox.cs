@@ -265,6 +265,8 @@ namespace CycleBell.Controls
                     }
                 }
             }
+
+            CaretIndex = 0;
         }
     }
 }

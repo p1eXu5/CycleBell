@@ -28,7 +28,9 @@
                  Text="new_TimePoint"/>
 
         <!-- TimePoint Time -->
-        <controls:TimerBox Grid.Column="1" Text="00:00"/>
+        <controls:TimerBox Grid.Column="1"  Text="{Binding Time, StringFormat={}{0:%h}:{0:%mm}, 
+                                                    Mode=TwoWay}"
+                           />
 
         <!-- AddSound Button -->
         <Button Grid.Column="2"
@@ -40,13 +42,7 @@
                       Content="1" 
                       IsEnabled="False"/>
 
-        <!-- AddTimePoint Hyperlink Button -->
-        <TextBlock Grid.Column="4"
-                   Margin="10,0"
-                   VerticalAlignment="Center"
-                   FontFamily="{StaticResource font_SuiGeneris}">
-            <Hyperlink >add</Hyperlink>
-        </TextBlock>
+        
 
     </Grid>
 </UserControl>

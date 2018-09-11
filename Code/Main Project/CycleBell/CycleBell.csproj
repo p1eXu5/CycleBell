@@ -85,6 +85,7 @@
     <Compile Include="Base\ObservableObject.cs" />
     <Compile Include="Base\DialogRegistrator.cs" />
     <Compile Include="Controls\TimerBox.cs" />
+    <Compile Include="Converters\FromTimeSpanToStringConverter.cs" />
     <Compile Include="ViewModels\AboutDialogViewModel.cs" />
     <Compile Include="ViewModels\DialogViewModelBase.cs" />
     <Compile Include="ViewModels\EndTimePointViewModel.cs" />
