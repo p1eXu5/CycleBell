@@ -30,7 +30,6 @@
                                Margin="20,0"
                                Text="18:00"
                                TextTrimming="CharacterEllipsis"
-                               FontFamily="{StaticResource font_SuiGeneris}"
                                FontSize="18" RenderTransformOrigin="0.5,0.5"
                                >
                 <TextBlock.RenderTransform>
@@ -47,10 +46,9 @@
             <TextBlock Grid.Row="0" Grid.Column="2" Margin="0"
                                 Text="mute"
                                 TextTrimming="CharacterEllipsis"
-                                FontFamily="{StaticResource font_SuiGeneris}"
                                 FontSize="14" Height="13"
                                 >
-                        <Hyperlink Command="{Binding MuteCommand}">mute</Hyperlink>
+                        <Hyperlink Command="{Binding MuteToggleCommand}">mute</Hyperlink>
             </TextBlock>
 
             <!-- add sound button -->
@@ -59,7 +57,7 @@
                             Margin="10,0"
                             Width="30" Height="30"
                             Content="{StaticResource Notes}"
-                            Command="{Binding SoundSelectCommand}">
+                            Command="{Binding AddSoundCommand}">
             </Button>
 
             <ToggleButton x:Name="m_delTimePoint"
