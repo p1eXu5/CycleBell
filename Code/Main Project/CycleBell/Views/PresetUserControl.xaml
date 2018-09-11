@@ -64,6 +64,7 @@
                      Margin="38,0" HorizontalAlignment="Center"
                      MinHeight="150"
                      BorderThickness="0"
+                     FontFamily="{StaticResource font_SuiGeneris}"
                      ScrollViewer.HorizontalScrollBarVisibility="Hidden"
                      ItemContainerStyle="{StaticResource myLBStyle}">
                 <ListBox.Style>

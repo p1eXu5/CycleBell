@@ -14,7 +14,7 @@
         
         Title="MainWindow" 
         Height="695" Width="444.125" 
-        ResizeMode="CanMinimize" WindowStartupLocation="CenterScreen">
+        ResizeMode="CanResize" WindowStartupLocation="CenterScreen">
 
     <Window.Resources>
         <ResourceDictionary>

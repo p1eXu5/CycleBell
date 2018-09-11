@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Media;
 using System.Windows;
@@ -23,7 +24,7 @@ namespace CycleBell.ViewModels
 
         #region Fields
 
-        private readonly TimePoint _timePoint;
+        private TimePoint _timePoint;
         private readonly Preset _preset;
 
         private SoundPlayer _soundPlayer;
@@ -91,7 +92,14 @@ namespace CycleBell.ViewModels
         /// <summary>
         /// Gets TimePointTime
         /// </summary>
-        public TimePointType TimePointType => _timePoint.TimePointType;
+        public TimePointType TimePointType
+        {
+            get => _timePoint.TimePointType;
+            set {
+                _timePoint.TimePointType = value;
+                OnPropertyChanged();
+            }
+        }
 
         public bool IsAbsoluteTime
         {
@@ -121,14 +129,8 @@ namespace CycleBell.ViewModels
 
         #region Commands
 
-        public ICommand RemoveTimePointCommand
-        {
-            get => new ActionCommand (RemoveTimePoint);
-        }
-        public ICommand MuteToggleCommand
-        {
-            get => new ActionCommand (MuteToggle, CanMuteToggle);
-        }
+        public ICommand RemoveTimePointCommand => new ActionCommand (RemoveTimePoint);
+        public ICommand MuteToggleCommand => new ActionCommand (MuteToggle, CanMuteToggle);
         public ICommand RingCommand => new ActionCommand (Ring, CanRing);
         
         // Calls std dialog
@@ -138,8 +140,18 @@ namespace CycleBell.ViewModels
 
         #region Methods
 
+        public void Reset()
+        {
+            Time = TimeSpan.Zero;
+        }
+
         public static implicit operator TimePoint(TimePointViewModel instance) => instance.TimePoint;
 
+        /// <summary>
+        /// Return TimePoint SoundPlayer or DefaultSoundPlayer
+        /// </summary>
+        /// <param name="timePoint"></param>
+        /// <returns></returns>
         private SoundPlayer GetSoundPlayer (TimePoint timePoint)
         {
             if (String.IsNullOrWhiteSpace ((string) timePoint.Tag)) {
@@ -156,6 +168,11 @@ namespace CycleBell.ViewModels
 
             return null;
         }
+        
+        /// <summary>
+        /// For Button in TimePoint List
+        /// </summary>
+        /// <param name="o"></param>
         private void RemoveTimePoint(object o)
         {
             _preset.RemoveTimePoint (_timePoint);

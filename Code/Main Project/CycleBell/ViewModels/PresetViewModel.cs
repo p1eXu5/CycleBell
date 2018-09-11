@@ -113,7 +113,8 @@ namespace CycleBell.ViewModels
 
             _sb.Append(GetPresetName(_preset.PresetName));
 
-            ResetAddingTimePoint();
+            AddingTimePoint = new TimePointViewModel (TimePoint.DefaultTimePoint, _preset);
+            ((INotifyPropertyChanged) AddingTimePoint).PropertyChanged += OnTimePropertyChanged;
         }
 
         #endregion
@@ -294,8 +295,9 @@ namespace CycleBell.ViewModels
         [MethodImpl (MethodImplOptions.AggressiveInlining)]
         private void ResetAddingTimePoint()
         {
-            AddingTimePoint = new TimePointViewModel (TimePoint.DefaultTimePoint, _preset);
-            ((INotifyPropertyChanged) AddingTimePoint).PropertyChanged += OnTimePropertyChanged;
+            AddingTimePoint.Reset();
+
+            OnPropertyChanged (nameof(IsNoTimePoints));
         }
 
         // AddTimePointCommand:
