@@ -60,6 +60,6 @@
         </ListBox>
 
         <!-- adding point -->
-        <local:AddingTimePointUserControl Grid.Row="2"/>
+        <local:AddingTimePointUserControl Grid.Row="2" Height="30"/>
     </Grid>
 </UserControl>

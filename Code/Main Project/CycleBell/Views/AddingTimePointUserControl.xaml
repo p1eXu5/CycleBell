@@ -15,18 +15,29 @@
             <ColumnDefinition Width="Auto"/>
             <ColumnDefinition Width="Auto"/>
             <ColumnDefinition Width="Auto"/>
-        </Grid.ColumnDefinitions>        
+        </Grid.ColumnDefinitions>     
+
+        <!-- TimePoint Name -->
         <TextBox Grid.Column="0" MinWidth="200" 
                  BorderBrush="DimGray"
                  BorderThickness="0,0,0,1"
-                 Margin="0,0,10,0"/>
+                 Margin="0,0,10,0"
+                 VerticalContentAlignment="Center"
+                 Text="new_TimePoint"/>
+
+        <!-- TimePoint Time -->
         <controls:TimerBox Grid.Column="1" Text="00:00"/>
+
+
         <Button Grid.Column="2" Content="{StaticResource Notes}" />
+
         <ToggleButton Grid.Column="3" Content="{StaticResource Notes}" />
+
         <TextBlock Grid.Column="4"
                    VerticalAlignment="Center"
                    FontFamily="{StaticResource font_SuiGeneris}">
             <Hyperlink >add</Hyperlink>
         </TextBlock>
+
     </Grid>
 </UserControl>

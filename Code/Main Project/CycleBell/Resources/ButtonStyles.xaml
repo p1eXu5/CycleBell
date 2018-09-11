@@ -47,6 +47,8 @@
         <Setter Property="Control.FontFamily" Value="{StaticResource font_SuiGeneris}" />
         <Setter Property="Control.Foreground" Value="{DynamicResource UncheckedStrokeBrush}"></Setter>
         <Setter Property="Control.FontSize" Value="1" />
+        <Setter Property="Control.Width" Value="30" />
+        <Setter Property="Control.Height" Value="30" />
         <Setter Property="Control.Template">
             <Setter.Value>
                 <StaticResource ResourceKey="BaseButtonTemplate" />
