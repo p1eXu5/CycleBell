@@ -30,8 +30,13 @@ namespace CycleBell.Base
             Execute(null);
         }
 
-        #pragma warning disable 0067
+        
         public event EventHandler CanExecuteChanged;
-        #pragma warning restore 0067
+
+        public void RaiseCanExecuteChanged()
+        {
+            CanExecuteChanged?.Invoke (this, EventArgs.Empty);
+        }
+        
     }
 }
