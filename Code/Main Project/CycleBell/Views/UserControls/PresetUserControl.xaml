@@ -20,13 +20,12 @@
         <dts:TimePointVmDataTemplateSelector x:Key="templsel_Selector" />
 
         <Style  x:Key="style_ListBoxItem" TargetType="ListBoxItem">
-            <Setter Property="Background" Value="Khaki" />
-            <Setter Property="Foreground" Value="DarkSlateGray" />
+            <Setter Property="Foreground" Value="Black" />
+            <Setter Property="Shape.Stroke" Value="{DynamicResource brush_Foreground}" />
             <Setter Property="Margin" Value="5" />
             <Setter Property="FontStyle" Value="Italic" />
             <Setter Property="FontSize" Value="14" />
             <Setter Property="BorderBrush" Value="DarkGray" />
-
         </Style>
     </UserControl.Resources>
 
