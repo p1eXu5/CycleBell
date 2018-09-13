@@ -35,7 +35,8 @@
         <controls:TimerBox Grid.Column="1"  
                            Text="{Binding Time, 
                                           Mode=TwoWay, 
-                                          Converter={StaticResource conv_TimeSpanToString}}"
+                                          Converter={StaticResource conv_TimeSpanToString},
+                                          UpdateSourceTrigger=PropertyChanged}"
                            />
 
         <!-- AddSound Button -->
