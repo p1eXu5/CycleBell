@@ -56,8 +56,8 @@
         <Grid Grid.Row="1">
             
             <!-- TimePointVmCollection -->
+                     <!--ItemTemplateSelector="{StaticResource templsel_Selector}"-->
             <ListBox x:Name="m_pointsList"
-                     ItemTemplateSelector="{StaticResource templsel_Selector}"
                      ItemsSource="{Binding TimePointVmCollection}"
                      Margin="38,0" HorizontalAlignment="Center"
                      MinHeight="150"
@@ -67,6 +67,7 @@
                      ItemContainerStyle="{StaticResource myLBStyle}">
                 <ListBox.Style>
                     <Style>
+                        <Setter Property="Control.Background" Value="White" />
                         <Style.Triggers>
                             <DataTrigger Binding="{Binding IsNoTimePoints}" Value="True">
                                 <Setter Property="UIElement.Visibility" Value="Hidden" />
