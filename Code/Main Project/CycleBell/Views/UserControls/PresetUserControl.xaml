@@ -8,6 +8,7 @@
              xmlns:r="clr-namespace:CycleBell"
              xmlns:controls="clr-namespace:CycleBell.Controls"
              xmlns:viewModels="clr-namespace:CycleBell.ViewModels"
+             xmlns:dts="clr-namespace:CycleBell.DataTemplateSelectors"
              mc:Ignorable="d"
 
              d:DataContext="{d:DesignInstance viewModels:PresetViewModel}"
@@ -15,6 +16,9 @@
              d:DesignHeight="450" d:DesignWidth="400">
 
     <UserControl.Resources>
+        
+        <dts:TimePointVmDataTemplateSelector x:Key="templsel_Selector" />
+
         <Style  x:Key="myLBStyle" TargetType="ListBoxItem">
             <Setter Property="Background" Value="Khaki" />
             <Setter Property="Foreground" Value="DarkSlateGray" />
@@ -22,13 +26,6 @@
             <Setter Property="FontStyle" Value="Italic" />
             <Setter Property="FontSize" Value="14" />
             <Setter Property="BorderBrush" Value="DarkGray" />
-            <Setter Property="Template">
-                <Setter.Value>
-                    <ControlTemplate TargetType="ListBoxItem">
-                        <ContentPresenter Content="{TemplateBinding Content}" />
-                    </ControlTemplate>
-                </Setter.Value>
-            </Setter>
         </Style>
     </UserControl.Resources>
 
@@ -60,6 +57,7 @@
             
             <!-- TimePointVmCollection -->
             <ListBox x:Name="m_pointsList"
+                     ItemTemplateSelector="{StaticResource templsel_Selector}"
                      ItemsSource="{Binding TimePointVmCollection}"
                      Margin="38,0" HorizontalAlignment="Center"
                      MinHeight="150"
