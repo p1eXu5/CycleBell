@@ -39,6 +39,7 @@
               a.57.57,0,0,1,.39-.16h5a.62.62,0,0,1,.6.63Z" />
 
     <Path x:Key="Notes" Fill="{DynamicResource UncheckedStrokeBrush}" Stroke="{x:Null}" 
+          x:Shared="True"
           VerticalAlignment="Center" HorizontalAlignment="Center"
           Data="M16,0L4.6,1.8v0v11.7c-0.3-0.3-0.8-0.3-1.4-0.3c-0.7,0-1.5,0.3-2.1,0.8
                 C0.5,14.4,0,15.1,0,15.7c0,0.4,0.2,0.7,0.5,1C0.8,16.9,1.2,17,1.7,17
