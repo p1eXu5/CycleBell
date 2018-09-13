@@ -18,5 +18,16 @@ namespace CycleBell.ViewModels
         }
 
         public override TimePoint TimePoint => throw new NotImplementedException();
+
+        public string CycleName => $"loop {LoopNumber}";
+
+        public int NumberOfLoops
+        {
+            get => _preset.TimerLoops[LoopNumber];
+            set {
+                _preset.TimerLoops[LoopNumber] = value;
+                OnPropertyChanged();
+            }
+        }
     }
 }
