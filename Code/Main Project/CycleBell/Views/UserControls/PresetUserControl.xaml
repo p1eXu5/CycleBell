@@ -19,14 +19,7 @@
         
         <dts:TimePointVmDataTemplateSelector x:Key="templsel_Selector" />
 
-        <Style  x:Key="style_ListBoxItem" TargetType="ListBoxItem">
-            <Setter Property="Foreground" Value="Black" />
-            <Setter Property="Shape.Stroke" Value="{DynamicResource brush_Foreground}" />
-            <Setter Property="Margin" Value="5" />
-            <Setter Property="FontStyle" Value="Italic" />
-            <Setter Property="FontSize" Value="14" />
-            <Setter Property="BorderBrush" Value="DarkGray" />
-        </Style>
+        
     </UserControl.Resources>
 
     <Grid x:Name="PresetGrid" Width="auto">
@@ -58,27 +51,13 @@
             <!-- TimePointVmCollection -->
                      <!--ItemTemplateSelector="{StaticResource templsel_Selector}"-->
             <ListBox x:Name="m_pointsList"
+                     Style="{StaticResource style_TimePointsListBox}"
                      ItemTemplateSelector="{StaticResource templsel_Selector}"
                      ItemsSource="{Binding TimePointVmCollection}"
                      FontFamily="{StaticResource font_SuiGeneris}"
                      ScrollViewer.HorizontalScrollBarVisibility="Hidden"
                      ItemContainerStyle="{StaticResource style_ListBoxItem}">
-                <ListBox.Style>
-                    <Style TargetType="ListBox">
-                        <Setter Property="ScrollViewer.HorizontalScrollBarVisibility" Value="Auto" />
-                        <Setter Property="SelectionMode" Value="Single" />
-                        <Setter Property="BorderThickness" Value="0" />
-                        <Setter Property="HorizontalAlignment" Value="Stretch" />
-                        <Setter Property="Margin" Value="20,0" />
-                        <Setter Property="MinHeight" Value="150"></Setter>
-                        <Setter Property="Control.Background" Value="White" />
-                        <Style.Triggers>
-                            <DataTrigger Binding="{Binding IsNoTimePoints}" Value="True">
-                                <Setter Property="UIElement.Visibility" Value="Hidden" />
-                            </DataTrigger>
-                        </Style.Triggers>
-                    </Style>
-                </ListBox.Style>
+
             </ListBox>
             
             <!-- When NoTimePoints -->

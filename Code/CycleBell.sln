@@ -21,6 +21,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SortedList", "..\Experiment
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CycleBell.NUnitTests", "..\Tests\CycleBell.NUnitTests\CycleBell.NUnitTests.csproj", "{1672C88B-236A-45A9-BD98-2CE1D70E1B9E}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WpfApp1", "..\Experiments\WpfApp1\WpfApp1.csproj", "{938CFDF8-AB56-4D2E-A44E-77CC6A39D296}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -51,6 +53,10 @@ Global
 		{1672C88B-236A-45A9-BD98-2CE1D70E1B9E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1672C88B-236A-45A9-BD98-2CE1D70E1B9E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1672C88B-236A-45A9-BD98-2CE1D70E1B9E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{938CFDF8-AB56-4D2E-A44E-77CC6A39D296}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{938CFDF8-AB56-4D2E-A44E-77CC6A39D296}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{938CFDF8-AB56-4D2E-A44E-77CC6A39D296}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{938CFDF8-AB56-4D2E-A44E-77CC6A39D296}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -62,6 +68,7 @@ Global
 		{B908E8D4-4C54-418E-AEF8-7F066A7E2A31} = {8782C54A-0F13-497E-A553-F376052F4C44}
 		{A0CB9F85-12F2-45A6-BD39-5DBE762491E9} = {0C611F4F-966B-4AD4-85E0-6F569D1FC0BF}
 		{1672C88B-236A-45A9-BD98-2CE1D70E1B9E} = {8782C54A-0F13-497E-A553-F376052F4C44}
+		{938CFDF8-AB56-4D2E-A44E-77CC6A39D296} = {0C611F4F-966B-4AD4-85E0-6F569D1FC0BF}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {DE09B9C7-86B8-415D-95C1-B30802D36079}

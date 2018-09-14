@@ -4,7 +4,7 @@
 
     <!-- BeginTimePointViewModel -->
     <DataTemplate x:Key="datatempl_BeginTimePointViewModel" DataType="vm:BeginTimePointViewModel">
-        <Grid Background="Red" SnapsToDevicePixels="True">
+        <Grid SnapsToDevicePixels="True" ShowGridLines="True">
             <Grid.RowDefinitions>
                 <RowDefinition Height="1" />
                 <RowDefinition Height="13" />
@@ -17,12 +17,14 @@
                 <ColumnDefinition Width="2" />
             </Grid.ColumnDefinitions>
             
-            <Path Grid.Column="0" Grid.Row="0" Grid.RowSpan="2" Stroke="{DynamicResource brush_Foreground}">
+            <Path Grid.Column="0" Grid.Row="0" Grid.RowSpan="2" 
+                  Stroke="{DynamicResource brush_Foreground}" Fill="{x:Null}">
                 <Path.Data>
-                    <PathGeometry   Figures="M 0,13 L 0,0 1,0 0,0 Z" />
+                    <PathGeometry   Figures="M 0,13 L 0,0 1,0 Z" />
                 </Path.Data>
             </Path>
-            <Path Grid.Column="1" Grid.Row="0">
+            <Path Grid.Column="1" Grid.Row="0"
+                  Stroke="{DynamicResource brush_Foreground}" Fill="{x:Null}">
                 <Path.Data>
                     <PathGeometry Figures="M 0,0 L 1,0 Z" />
                 </Path.Data>
@@ -31,17 +33,20 @@
                 <Label Content="{Binding CycleName}" />
                 <TextBox Text="{Binding NumberOfLoops, UpdateSourceTrigger=LostFocus, Mode=TwoWay}" Control.BorderBrush="{x:Null}"/>
             </StackPanel>
-            <Path Grid.Column="2" Grid.Row="0" Grid.RowSpan="2">
+            <Path Grid.Column="2" Grid.Row="0" Grid.RowSpan="2"
+                  Stroke="{DynamicResource brush_Foreground}" Fill="{x:Null}">
                 <Path.Data>
                     <PathGeometry Figures="M 0,0 L 1,0 1,7 2,7 Z" />
                 </Path.Data>
             </Path>
-            <Path Grid.Column="3" Grid.Row="1" >
+            <Path Grid.Column="3" Grid.Row="1" 
+                  Stroke="{DynamicResource brush_Foreground}" Fill="{x:Null}">
                 <Path.Data>
                     <PathGeometry Figures="M 0,6 L 1,6 Z" />
                 </Path.Data>
             </Path>
-            <Path Grid.Column="3" Grid.Row="0" Grid.RowSpan="2">
+            <Path Grid.Column="3" Grid.Row="0" Grid.RowSpan="2"
+                  Stroke="{DynamicResource brush_Foreground}" Fill="{x:Null}">
                 <Path.Data>
                     <PathGeometry Figures="M 0,7 L 1,7 1,13 Z" />
                 </Path.Data>

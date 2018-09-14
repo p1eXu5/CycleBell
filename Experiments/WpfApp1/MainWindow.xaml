@@ -6,13 +6,47 @@
         xmlns:local="clr-namespace:WpfApp1"
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="335.962">
-    <StackPanel>
-        <TextBox Margin="50" Height="50" IsEnabled="False"></TextBox>
-        <TextBox Margin="50" Height="50"></TextBox>
-        <ComboBox>
-            <ComboBoxItem>asd</ComboBoxItem>
-            <ComboBoxItem>111</ComboBoxItem>
-            <ComboBoxItem>r4tgfbfg</ComboBoxItem>
-        </ComboBox>
-    </StackPanel>
+    <Grid SnapsToDevicePixels="True" ShowGridLines="False" Width="100">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="1" />
+            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition Width="1" />
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="1" />
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="1" />
+            <RowDefinition Height="6" />
+            <RowDefinition Height="1" />
+            <RowDefinition Height="8" />
+        </Grid.RowDefinitions>
+
+        <Line Grid.Column="0" Grid.Row="0" Grid.RowSpan="4" 
+              Stroke="Black" Fill="{x:Null}" Stretch="Fill"
+              StrokeEndLineCap="Square" StrokeStartLineCap="Square"
+              X1="0" Y1="0" Y2="1" />
+
+        <Line Grid.Column="1" Grid.Row="0" 
+              Stroke="Black" Fill="{x:Null}" Stretch="Fill"
+              StrokeEndLineCap="Square" StrokeStartLineCap="Square"
+              VerticalAlignment="Center"
+              X1="0" Y1="0" X2="1" />
+
+        <StackPanel Grid.Column="1" Grid.Row="1" Grid.RowSpan="3"
+                    Orientation="Horizontal" 
+                    Height="13" Margin="5,0" TextElement.FontSize="8">
+            <Label Foreground="Black" VerticalContentAlignment="Center" Content="loop 1:" Padding="0"/>
+            <TextBox Text="5" Padding="0" VerticalContentAlignment="Center"
+                     Margin="5,0,0,0"
+                     BorderThickness="0,0,0,1"
+                     Control.BorderBrush="Black"/>
+        </StackPanel>
+
+
+        <Polyline Grid.Column="2" Grid.ColumnSpan="3" Grid.Row="0" Grid.RowSpan="4"
+              Stroke="Black" Fill="{x:Null}" Stretch="Fill"
+              StrokeEndLineCap="Square" StrokeStartLineCap="Square"
+              Points="0,0 0,1 1,1 1,2" />
+
+    </Grid>
 </Window>

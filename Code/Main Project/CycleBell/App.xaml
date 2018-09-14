@@ -18,6 +18,7 @@
                 <ResourceDictionary Source="Resources/DataTemplates.xaml" />
                 <ResourceDictionary Source="Resources/ButtonStyles.xaml" />
                 <ResourceDictionary Source="Resources/TimerBoxStyle.xaml" />
+                <ResourceDictionary Source="Resources/ListBoxStyles.xaml" />
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
 
