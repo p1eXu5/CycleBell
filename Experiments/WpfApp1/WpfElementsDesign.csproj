@@ -58,6 +58,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="EndTimePointViewModelDataTemplateDesign.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -68,6 +72,9 @@
     </Compile>
     <Compile Include="BeginTimePointViewModelDataTemplateDesign.xaml.cs">
       <DependentUpon>BeginTimePointViewModelDataTemplateDesign.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="EndTimePointViewModelDataTemplateDesign.xaml.cs">
+      <DependentUpon>EndTimePointViewModelDataTemplateDesign.xaml</DependentUpon>
     </Compile>
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
