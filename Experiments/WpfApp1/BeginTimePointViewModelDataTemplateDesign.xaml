@@ -1,0 +1,52 @@
+﻿<Window x:Class="WpfApp1.BeginTimePointViewModelDataTemplateDesign"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:WpfApp1"
+        mc:Ignorable="d"
+        Title="BeginTimePointViewModelDataTemplateDesign" Height="65.205" Width="181.287">
+    <Grid SnapsToDevicePixels="True" ShowGridLines="False" Margin="5">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="1" />
+            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition Width="1" />
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="1" />
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="1" />
+            <RowDefinition Height="6" />
+            <RowDefinition Height="1" />
+            <RowDefinition Height="8" />
+        </Grid.RowDefinitions>
+
+        <Line Grid.Column="0" Grid.Row="0" Grid.RowSpan="4" 
+              Stroke="DimGray" Fill="{x:Null}" Stretch="Fill"
+              StrokeEndLineCap="Square" StrokeStartLineCap="Square"
+              X1="0" Y1="0" Y2="1" />
+
+        <Line Grid.Column="1" Grid.Row="0" 
+              Stroke="DimGray" Fill="{x:Null}" Stretch="Fill"
+              StrokeEndLineCap="Square" StrokeStartLineCap="Square"
+              VerticalAlignment="Center"
+              X1="0" Y1="0" X2="1" />
+
+        <StackPanel Grid.Column="1" Grid.Row="1" Grid.RowSpan="3"
+                    Orientation="Horizontal" 
+                    Height="13" Margin="5,0" TextElement.FontSize="8">
+            <Label Foreground="Black" VerticalContentAlignment="Center" Content="loop 1:" Padding="0"/>
+            <TextBox Text="5" Padding="0" VerticalContentAlignment="Center"
+                     Margin="5,0,0,0"
+                     BorderThickness="0,0,0,1"
+                     Control.BorderBrush="Black"/>
+        </StackPanel>
+
+
+        <Polyline Grid.Column="2" Grid.ColumnSpan="3" Grid.Row="0" Grid.RowSpan="4"
+                  Stroke="DimGray" Fill="{x:Null}" Stretch="Fill"
+                  StrokeEndLineCap="Square" StrokeStartLineCap="Square"
+                  Points="0,0 0,1 1,1 1,2" />
+
+    </Grid>
+</Window>
