@@ -1,9 +1,17 @@
-﻿<Application x:Class="WpfApp1.App"
+﻿<Application x:Class="WpfElementsDesign.App"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:local="clr-namespace:WpfApp1"
-             StartupUri="MainWindow.xaml">
+             xmlns:cycle="clr-namespase:CycleBell;assembly:CycleBell"
+             StartupUri="MainWindow.xaml" >
     <Application.Resources>
-         
+
+        <ResourceDictionary>
+            <FontFamily x:Key="font_SuiGeneris">pack://application:,,,/../../Fonts/#Sui Generis Rg</FontFamily>
+
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="pack://application:,,,/CycleBell;component/Resources/Icons.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/CycleBell;component/Resources/TimerBoxStyle.xaml" />
+             </ResourceDictionary.MergedDictionaries>
+         </ResourceDictionary>
     </Application.Resources>
 </Application>

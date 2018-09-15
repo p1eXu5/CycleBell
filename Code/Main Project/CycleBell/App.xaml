@@ -5,14 +5,8 @@
              xmlns:Themes="clr-namespace:Microsoft.Windows.Themes;assembly=PresentationFramework.Aero" x:Class="CycleBell.App">
     <Application.Resources>
         <ResourceDictionary>
-
-            <FontFamily x:Key="font_FontAbuget">pack://application:,,,/../../fonts/#Abuget</FontFamily>
-            <FontFamily x:Key="res_prosto">pack://application:,,,/../../fonts/#Prosto</FontFamily>
-            <FontFamily x:Key="RussoOne">pack://application:,,,/../../fonts/#Russo One</FontFamily>
-            <FontFamily x:Key="font_SuiGeneris">pack://application:,,,/../../fonts/#Sui Generis Rg</FontFamily>
-
-
             <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="Resources/Fonts.xaml" />
                 <ResourceDictionary Source="MyComboBox.xaml" />
                 <ResourceDictionary Source="Resources/Icons.xaml" />
                 <ResourceDictionary Source="Resources/DataTemplates.xaml" />

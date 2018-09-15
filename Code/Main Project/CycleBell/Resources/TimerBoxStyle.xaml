@@ -3,6 +3,7 @@
                     xmlns:controls="clr-namespace:CycleBell.Controls">
 
     <Style TargetType="controls:TimerBox">
+
         <Setter Property="FontSize" Value="18" />
         <Setter Property="BorderThickness" Value="0,0,0,1" />
         <Setter Property="BorderBrush" Value="DimGray" />
