@@ -5,22 +5,44 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:WpfApp1"
         xmlns:controls="clr-namespace:CycleBell.Controls;assembly=CycleBell"
+        xmlns:viewModels="clr-namespace:CycleBell.ViewModels;assembly=CycleBell"
+        d:DataContext="{d:DesignInstance viewModels:TimePointViewModel}"
         mc:Ignorable="d"
-        Title="TimePointViewModelDataTemplateDesign" Height="168.129" Width="583.536">
+        Title="TimePointViewModelDataTemplateDesign" 
+        d:DesignHeight="120" d:DesignWidth="400">
+    <Window.Resources>
+
+        <Style TargetType="ToggleButton">
+            <Setter Property="FontWeight" Value="Normal" />
+            <Setter Property="FontFamily" Value="{StaticResource font_SuiGeneris}" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="ToggleButton">
+                        <TextBlock x:Name="Mute" Text="mute" VerticalAlignment="Bottom">
+                            <TextBlock.Foreground>
+                                <SolidColorBrush x:Name="txtb_Brush" Color="#FF002EAA" />
+                            </TextBlock.Foreground>
+                        </TextBlock>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+    </Window.Resources>
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition />
-            <ColumnDefinition />
-            <ColumnDefinition />
-            <ColumnDefinition />
-            <ColumnDefinition />
+            <ColumnDefinition Width="110"/>
+            <ColumnDefinition Width="40"/>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="Auto"/>
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
-            <RowDefinition />
-            <RowDefinition />
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
 
-        <!-- Point Data -->
+        <!-- Name -->
         <TextBlock x:Name="m_pointName"
                    Grid.Column="0" Grid.Row="0"
                    HorizontalAlignment="Right" VerticalAlignment="Bottom"
@@ -28,12 +50,31 @@
                    TextTrimming="CharacterEllipsis"
                    FontSize="14" FontFamily="Segoe UI Semibold" 
                     />
+
+        <StackPanel Grid.Column="0" Grid.Row="1"
+                    Orientation="Horizontal"
+                    VerticalAlignment="Top"
+                    HorizontalAlignment="Right">
+
+            <TextBlock x:Name="textBlock" VerticalAlignment="Top"
+                       HorizontalAlignment="Right">
+                <Run Text="(" />
+            </TextBlock>
+            <ToggleButton Height="{Binding ActualHeight, ElementName=textBlock}"
+                          Command="{Binding MuteToggleCommand}" />
+                <TextBlock VerticalAlignment="Top"
+                       HorizontalAlignment="Right">
+                <Run Text=")" />
+            </TextBlock>
+        </StackPanel>
         
         <!-- Time -->
-        <controls:TimerBox x:Name="m_pointTime"
+        <controls:TimerBox x:Name="m_pointTime" BorderThickness="0,0,0,1"
                            Grid.Column="1" Grid.Row="0"
-                           HorizontalAlignment="Right" VerticalAlignment="Bottom"
-                           Margin="20,0"
+                           HorizontalAlignment="Center" 
+                           VerticalAlignment="Bottom"
+                           HorizontalContentAlignment="Center"
+                           Margin="0"
                            Text="18:00"
                            FontSize="18" FontFamily="{DynamicResource font_SuiGeneris}"
                            RenderTransformOrigin="0.5,0.5"
@@ -49,35 +90,36 @@
 
         </controls:TimerBox>
 
-        <!-- mute button -->
-        <TextBlock Grid.Row="0" Grid.Column="2" Margin="0"
-                   Text="mute"
-                   TextTrimming="CharacterEllipsis"
-                   FontSize="14" Height="13"
-                   >
-            <Hyperlink Command="{Binding MuteToggleCommand}">mute</Hyperlink>
-        </TextBlock>
+        <!-- mute -->
+        <ToggleButton Grid.Column="2" Grid.Row="0"
+                      HorizontalAlignment="Right"
+                      FontSize="14"/>
 
-        <!-- add sound button -->
+        <!-- file location -->
+        <TextBlock x:Name="m_soundName"
+                   Grid.Column="1" Grid.ColumnSpan="2" Grid.Row="1"
+                   Margin="20,0,0,0"
+                   HorizontalAlignment="Right"
+                   VerticalAlignment="Bottom"
+                   Text="defaulthhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh"
+                   TextTrimming="CharacterEllipsis"
+                   TextWrapping="Wrap"
+                   FontSize="10"
+                   MaxHeight="28"
+                   />
+
+        <!-- sound -->
         <Button x:Name="m_addSoundButton"
-                                Grid.Column="3" Grid.Row="0" Grid.RowSpan="2"
-                                Margin="10,0"
-                                Width="30" Height="30"
-                                Content="{StaticResource Notes}"
-                                Command="{Binding AddSoundCommand}">
+                Grid.Column="3" Grid.Row="0" Grid.RowSpan="2"
+                Margin="25,0"
+                Width="30" Height="30"
+                Content="{StaticResource Notes}"
+                Command="{Binding AddSoundCommand}">
         </Button>
 
-        <ToggleButton x:Name="m_delTimePoint"
-                                      Grid.Column="4" Grid.Row="0" Grid.RowSpan="2"
-                                      Width="30" Height="30" Content="del" />
-        <!-- sound name -->
-        <TextBlock x:Name="m_soundName"
-                                   Grid.Column="0" Grid.ColumnSpan="3" Grid.Row="1"
-                                   Margin="0,0,6,0"
-                                   HorizontalAlignment="Right"
-                                   Text="default"
-                                   TextTrimming="CharacterEllipsis"
-                                   FontSize="10"
-                                   />
+        <!-- del -->
+        <Button x:Name="m_delTimePoint"
+                Grid.Column="4" Grid.Row="0" Grid.RowSpan="2"
+                Width="30" Height="30" Content="del" />
     </Grid>
 </Window>
