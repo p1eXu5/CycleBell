@@ -5,8 +5,9 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:CycleBell.Views.UserControls"
              mc:Ignorable="d" 
-             d:DesignHeight="50" d:DesignWidth="400">
-    <Grid Width="400" Height="44">
+             d:DesignHeight="100" d:DesignWidth="400">
+    <!--    -->
+    <Grid Width="280" Height="44">
         <Grid.ColumnDefinitions>
             <ColumnDefinition />
             <ColumnDefinition />
@@ -14,14 +15,17 @@
             <ColumnDefinition />
         </Grid.ColumnDefinitions>
 
+        <!-- infinite -->
         <ToggleButton Grid.Column="0"
                       Width="48" Height="38"
+                      Margin="0,0,20,0"
                       HorizontalAlignment="Center">
             <ToggleButton.Content>
-                <StaticResource ResourceKey="shape_Infinite" />
+                <Path Grid.Column="0" Style="{StaticResource style_Path}" Data="{StaticResource gmtry_Infinite}"/>
             </ToggleButton.Content>
         </ToggleButton>
 
+        <!-- play -->
         <ToggleButton Grid.Column="1"
                       Width="48" Height="38"
                       HorizontalAlignment="Center">
@@ -33,24 +37,31 @@
                         <ColumnDefinition Width="Auto"/>
                     </Grid.ColumnDefinitions>
                     <Path Grid.Column="0" Style="{StaticResource style_Path}" Data="{StaticResource gmtry_Play}"/>
-                    <Path Grid.Column="2" Style="{StaticResource style_Path}" Data="{StaticResource gmtry_Pause}" Path.Margin="5" />
+                    <Path Grid.Column="2" Style="{StaticResource style_Path}" Data="{StaticResource gmtry_Pause}" 
+                          Path.Margin="5,0,0,0" />
                 </Grid>
             </ToggleButton.Content>
         </ToggleButton>
 
+        <!-- stop -->
         <ToggleButton Grid.Column="2"
                       Width="48" Height="38"
                       HorizontalAlignment="Center">
             <ToggleButton.Content>
-                <StaticResource ResourceKey="shape_Stop" />
+                <Path Style="{StaticResource style_Path}" Data="{StaticResource gmtry_Stop}" Margin="3">
+                </Path>
             </ToggleButton.Content>
         </ToggleButton>
 
+        <!-- bell -->
         <ToggleButton Grid.Column="3"
                       Width="48" Height="38"
                       HorizontalAlignment="Center">
             <ToggleButton.Content>
-                <StaticResource ResourceKey="shape_Stop" />
+                <Grid Margin="2">
+                    <Path Style="{StaticResource style_Path}" Data="{StaticResource gmtry_BellIn}"/>
+                    <Path Style="{StaticResource style_Path}" Data="{StaticResource gmtry_BellOut}" />
+                </Grid>
             </ToggleButton.Content>
         </ToggleButton>
     </Grid>

@@ -41,7 +41,7 @@
         </ResourceDictionary>
     </Window.Resources>
 
-    <DockPanel>
+    <DockPanel VerticalAlignment="Stretch">
 
         <!-- Menu -->
         <Menu DockPanel.Dock="Top" Height="auto" Background="{StaticResource col_menuBackground}">
@@ -97,7 +97,7 @@
                 </MenuItem>
 
                 <!-- Infinite Loop menu -->
-                <MenuItem Header="_shape_Infinite Loop" Command="{Binding InfiniteLoopCommand}">
+                <MenuItem Header="_gmtry_Infinite Loop" Command="{Binding InfiniteLoopCommand}">
                     <MenuItem.Icon>
                         <Grid VerticalAlignment="Center" HorizontalAlignment="Right" 
                               RenderTransformOrigin="0.5,0.5"
@@ -126,12 +126,12 @@
         </Menu>
 
         <!-- Window Content -->
-        <Grid TextElement.FontSize="14">
+        <Grid TextElement.FontSize="14" VerticalAlignment="Stretch">
             <Grid.RowDefinitions>
                 <RowDefinition Height="auto"/>
                 <RowDefinition Height="auto"/>
                 <RowDefinition Height="auto"/>
-                <RowDefinition Height="Auto"/>
+                <RowDefinition />
             </Grid.RowDefinitions>
 
             <!-- Header -->
@@ -184,7 +184,8 @@
                                      Control.Foreground="{Binding ElementName=m_presetComboBox, Path=Foreground, Mode=OneWay}"
                                      UIElement.IsEnabled="{Binding ElementName=m_presetComboBox, Path=IsEnabled, Mode=OneWay}"/>
             
-            <userControls:TimerButtonsUserControl Grid.Row="3" DataContext="{Binding}"/>
+            <userControls:TimerButtonsUserControl Grid.Row="3" DataContext="{Binding}"
+                                                  VerticalAlignment="Bottom" Margin="0,0,0,34"/>
         </Grid>
 
     </DockPanel>
