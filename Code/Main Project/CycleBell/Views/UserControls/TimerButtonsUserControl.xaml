@@ -6,8 +6,15 @@
              xmlns:local="clr-namespace:CycleBell.Views.UserControls"
              mc:Ignorable="d" 
              d:DesignHeight="100" d:DesignWidth="400">
+    <UserControl.Resources>
+        <Style x:Key="style_Infinite" TargetType="{x:Type ToggleButton}" BasedOn="{StaticResource BaseButtonStyle}"/>
+
+
+
+    </UserControl.Resources>
     <!--    -->
-    <Grid Width="280" Height="44">
+    <!--    -->
+    <Grid Width="280">
         <Grid.ColumnDefinitions>
             <ColumnDefinition />
             <ColumnDefinition />
@@ -19,50 +26,41 @@
         <ToggleButton Grid.Column="0"
                       Width="48" Height="38"
                       Margin="0,0,20,0"
-                      HorizontalAlignment="Center">
-            <ToggleButton.Content>
-                <Path Grid.Column="0" Style="{StaticResource style_Path}" Data="{StaticResource gmtry_Infinite}"/>
-            </ToggleButton.Content>
+                      HorizontalAlignment="Center" Style="{DynamicResource style_Infinite}">
+            <Path Grid.Column="0" Style="{StaticResource style_Path}" Data="{StaticResource gmtry_Infinite}"/>
         </ToggleButton>
 
         <!-- play -->
         <ToggleButton Grid.Column="1"
                       Width="48" Height="38"
                       HorizontalAlignment="Center">
-            <ToggleButton.Content>
-                <Grid>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="Auto"/>
-                        <ColumnDefinition Width="4"/>
-                        <ColumnDefinition Width="Auto"/>
-                    </Grid.ColumnDefinitions>
-                    <Path Grid.Column="0" Style="{StaticResource style_Path}" Data="{StaticResource gmtry_Play}"/>
-                    <Path Grid.Column="2" Style="{StaticResource style_Path}" Data="{StaticResource gmtry_Pause}" 
-                          Path.Margin="5,0,0,0" />
-                </Grid>
-            </ToggleButton.Content>
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="4"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+                <Path Grid.Column="0" Style="{StaticResource style_Path}" Data="{StaticResource gmtry_Play}"/>
+                <Path Grid.Column="2" Style="{StaticResource style_Path}" Data="{StaticResource gmtry_Pause}" 
+                          Margin="5,0,0,0" />
+            </Grid>
         </ToggleButton>
 
         <!-- stop -->
-        <ToggleButton Grid.Column="2"
+        <Button Grid.Column="2"
                       Width="48" Height="38"
                       HorizontalAlignment="Center">
-            <ToggleButton.Content>
-                <Path Style="{StaticResource style_Path}" Data="{StaticResource gmtry_Stop}" Margin="3">
-                </Path>
-            </ToggleButton.Content>
-        </ToggleButton>
+            <Path Style="{StaticResource style_Path}" Data="{StaticResource gmtry_Stop}" Margin="3"/>
+        </Button>
 
         <!-- bell -->
         <ToggleButton Grid.Column="3"
                       Width="48" Height="38"
                       HorizontalAlignment="Center">
-            <ToggleButton.Content>
-                <Grid Margin="2">
-                    <Path Style="{StaticResource style_Path}" Data="{StaticResource gmtry_BellIn}"/>
-                    <Path Style="{StaticResource style_Path}" Data="{StaticResource gmtry_BellOut}" />
-                </Grid>
-            </ToggleButton.Content>
+            <Grid Margin="2">
+                <Path Style="{StaticResource style_Path}" Data="{StaticResource gmtry_BellIn}"/>
+                <Path Style="{StaticResource style_Path}" Data="{StaticResource gmtry_BellOut}" />
+            </Grid>
         </ToggleButton>
     </Grid>
 </UserControl>

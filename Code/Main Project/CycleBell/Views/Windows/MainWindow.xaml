@@ -183,9 +183,11 @@
             <local:PresetUserControl Grid.Row="2" DataContext="{Binding SelectedPreset}" 
                                      Control.Foreground="{Binding ElementName=m_presetComboBox, Path=Foreground, Mode=OneWay}"
                                      UIElement.IsEnabled="{Binding ElementName=m_presetComboBox, Path=IsEnabled, Mode=OneWay}"/>
-            
+
+            <!-- timer's buttons -->
             <userControls:TimerButtonsUserControl Grid.Row="3" DataContext="{Binding}"
-                                                  VerticalAlignment="Bottom" Margin="0,0,0,34"/>
+                                                  VerticalAlignment="Bottom" Margin="0,0,0,34" Height="44" >
+            </userControls:TimerButtonsUserControl>
         </Grid>
 
     </DockPanel>
