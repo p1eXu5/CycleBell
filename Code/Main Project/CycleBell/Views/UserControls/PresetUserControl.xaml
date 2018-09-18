@@ -87,7 +87,7 @@
 
         <!-- adding point -->
         <local:AddingTimePointUserControl Grid.Row="2" 
-                                          Height="30" Width="Auto" Margin="20,50"
+                                          Height="Auto" Width="Auto" Margin="20,50"
                                           DataContext="{Binding AddingTimePoint}"/>
 
     </Grid>

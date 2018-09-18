@@ -75,10 +75,7 @@
                            HorizontalContentAlignment="Center"
                            Padding="0"
                            Margin="0"
-                           Text="{Binding Time, 
-                                          Mode=TwoWay, 
-                                          Converter={StaticResource conv_TimeSpanToString},
-                                          UpdateSourceTrigger=PropertyChanged}"
+                           Text="00:00"
                            FontSize="18" FontFamily="{DynamicResource font_SuiGeneris}"
                            Foreground="{DynamicResource brush_NoSetTime}"
                            BorderBrush="{DynamicResource brush_Tip}"

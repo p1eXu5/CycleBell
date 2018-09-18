@@ -57,6 +57,7 @@
         <!-- Time -->
         <controls:TimerBox x:Name="m_pointTime" BorderThickness="0,0,0,1"
                            Grid.Column="1" Grid.Row="0"
+                           MinWidth="75"
                            HorizontalAlignment="Center" 
                            VerticalAlignment="Bottom"
                            HorizontalContentAlignment="Center"

@@ -7,7 +7,8 @@
         xmlns:local="clr-namespace:CycleBell.Views"
         xmlns:vmodels="clr-namespace:CycleBell.ViewModels;assembly="
         xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
-        
+        xmlns:userControls="clr-namespace:CycleBell.Views.UserControls"
+
         mc:Ignorable="d"
         
         d:DataContext="{d:DesignInstance vmodels:MainViewModel}"
@@ -41,6 +42,7 @@
     </Window.Resources>
 
     <DockPanel>
+
         <!-- Menu -->
         <Menu DockPanel.Dock="Top" Height="auto" Background="{StaticResource col_menuBackground}">
 
@@ -95,7 +97,7 @@
                 </MenuItem>
 
                 <!-- Infinite Loop menu -->
-                <MenuItem Header="_Infinite Loop" Command="{Binding InfiniteLoopCommand}">
+                <MenuItem Header="_shape_Infinite Loop" Command="{Binding InfiniteLoopCommand}">
                     <MenuItem.Icon>
                         <Grid VerticalAlignment="Center" HorizontalAlignment="Right" 
                               RenderTransformOrigin="0.5,0.5"
@@ -129,6 +131,7 @@
                 <RowDefinition Height="auto"/>
                 <RowDefinition Height="auto"/>
                 <RowDefinition Height="auto"/>
+                <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
 
             <!-- Header -->
@@ -141,7 +144,7 @@
                        TextWrapping="Wrap"
                        />
 
-            <!-- preset -->
+            <!-- preset combo box -->
             <StackPanel Grid.Row="1" 
                         Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,0">
                 <TextBlock Text="preset"  
@@ -176,9 +179,13 @@
                 </ComboBox>
             </StackPanel>
 
-           <local:PresetUserControl Grid.Row="2" DataContext="{Binding SelectedPreset}" 
-                                    Control.Foreground="{Binding ElementName=m_presetComboBox, Path=Foreground, Mode=OneWay}"
-                                    UIElement.IsEnabled="{Binding ElementName=m_presetComboBox, Path=IsEnabled, Mode=OneWay}"/>
+            <!-- preset and timePoints-->
+            <local:PresetUserControl Grid.Row="2" DataContext="{Binding SelectedPreset}" 
+                                     Control.Foreground="{Binding ElementName=m_presetComboBox, Path=Foreground, Mode=OneWay}"
+                                     UIElement.IsEnabled="{Binding ElementName=m_presetComboBox, Path=IsEnabled, Mode=OneWay}"/>
+            
+            <userControls:TimerButtonsUserControl Grid.Row="3" DataContext="{Binding}"/>
         </Grid>
+
     </DockPanel>
 </Window>
