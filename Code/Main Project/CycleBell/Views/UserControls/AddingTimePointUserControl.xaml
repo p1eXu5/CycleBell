@@ -6,50 +6,118 @@
              xmlns:local="clr-namespace:CycleBell.Views"
              xmlns:controls="clr-namespace:CycleBell.Controls"
              xmlns:conv="clr-namespace:CycleBell.Converters"
-             mc:Ignorable="d" 
-             d:DesignHeight="30" d:DesignWidth="400" 
-             FontFamily="{StaticResource font_SuiGeneris}">
+             mc:Ignorable="d" d:DesignWidth="400" 
+             FontFamily="{StaticResource font_SuiGeneris}" Height="64.755">
+
     <UserControl.Resources>
         <conv:FromTimeSpanToStringConverter x:Key="conv_TimeSpanToString" />
     </UserControl.Resources>
-    <Grid>
+
+    <Grid SnapsToDevicePixels="True">
         <Grid.ColumnDefinitions>
+            <!-- name -->
             <ColumnDefinition />
-            <ColumnDefinition Width="75"/>
+            <!-- time -->
+            <ColumnDefinition Width="96"/>
+            <!-- mute -->
+            <ColumnDefinition Width="51"/>
+            <!-- sound -->
             <ColumnDefinition Width="Auto"/>
+            <!-- add -->
             <ColumnDefinition Width="Auto"/>
-            <ColumnDefinition Width="Auto"/>
-        </Grid.ColumnDefinitions>     
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
 
-        <!-- TimePoint Name -->
-        <TextBox Grid.Column="0" MinWidth="200" 
-                 BorderBrush="DimGray"
-                 BorderThickness="0,0,0,1"
-                 Margin="10,0,10,0"
-                 FontSize="14"
-                 FontFamily="Segoe UI"
-                 VerticalContentAlignment="Bottom"
-                 Text="new_TimePoint"/>
+        <!-- Name -->
+        <TextBox x:Name="m_pointName" Grid.Column="0" Grid.Row="0"
+                 Margin="10,0,5,0"
+                    >
+            <TextBox.Style>
+                <Style TargetType="TextBox">
+                    <Setter Property="BorderThickness" Value="0,0,0,1" />
+                    <Setter Property="BorderBrush" Value="{DynamicResource brush_Tip}" />
+                    <Setter Property="MinWidth" Value="106" />
+                    <Setter Property="MinHeight" Value="17" />
+                    <Setter Property="HorizontalAlignment" Value="Stretch" />
+                    <Setter Property="VerticalAlignment" Value="Bottom" />
+                    <Setter Property="HorizontalContentAlignment" Value="Left" />
+                    <Setter Property="VerticalContentAlignment" Value="Top"></Setter>
+                    <Setter Property="Text" Value="new_time_point" />
+                    <Setter Property="Foreground" Value="{DynamicResource brush_Tip}" />
+                    <Setter Property="FontWeight" Value="SemiBold"></Setter>
+                    <Setter Property="FontStyle" Value="Italic" />
+                    <Setter Property="FontSize" Value="10" />
+                </Style>
+            </TextBox.Style>
+        </TextBox>
 
-        <!-- TimePoint Time -->
-        <controls:TimerBox Grid.Column="1"  
+        <!-- Time -->
+        <controls:TimerBox x:Name="m_pointTime" BorderThickness="0,0,0,1"
+                           Grid.Column="1" Grid.Row="0"
+                           HorizontalAlignment="Center" 
+                           VerticalAlignment="Bottom"
+                           HorizontalContentAlignment="Center"
+                           Padding="0"
+                           Margin="0"
                            Text="{Binding Time, 
                                           Mode=TwoWay, 
                                           Converter={StaticResource conv_TimeSpanToString},
-                                          UpdateSourceTrigger=PropertyChanged}"
-                           />
+                                          UpdateSourceTrigger=PropertyChanged,
+                                          TargetNullValue=00:00}"
+                           FontSize="18" FontFamily="{DynamicResource font_SuiGeneris}"
+                           Foreground="{DynamicResource brush_NoSetTime}"
+                           BorderBrush="{DynamicResource brush_Tip}"
+                           RenderTransformOrigin="0.5,0.5"
+                           >
+            <controls:TimerBox.RenderTransform>
+                <TransformGroup>
+                    <ScaleTransform/>
+                    <SkewTransform/>
+                    <RotateTransform/>
+                    <TranslateTransform Y="0"/>
+                </TransformGroup>
+            </controls:TimerBox.RenderTransform>
 
-        <!-- AddSound Button -->
-        <Button Grid.Column="2"
+        </controls:TimerBox>
+
+        <!-- mute -->
+        <ToggleButton x:Name="tgl_Mute" Grid.Column="2" Grid.Row="0"
+                      Style="{StaticResource style_MuteToggleButton}"
+                      HorizontalAlignment="Right"
+                      FontSize="14"/>
+
+        <!-- file location -->
+        <TextBlock x:Name="tbx_soundName"
+                   Grid.Column="1" Grid.ColumnSpan="2" Grid.Row="1"
+                   Margin="20,0,0,0"
+                   HorizontalAlignment="Right"
+                   VerticalAlignment="Bottom"
+                   Text="E:\Music\Stoner\111.wav"
+                   Foreground="{DynamicResource brush_Tip}"
+                   FontWeight="SemiBold"
+                   FontSize="10"
+                   TextTrimming="CharacterEllipsis"
+                   MaxHeight="28"
+                   />
+
+        <!-- sound -->
+        <Button x:Name="btn_addSoundButton"
+                Grid.Column="3" Grid.Row="0" Grid.RowSpan="2"
+                Margin="16,0,0,0"
+                Width="30" Height="30"
+                VerticalAlignment="Bottom"
+                Content="{StaticResource Notes}"
+                Command="{Binding AddSoundCommand}">
+        </Button>
+
+        <!-- add -->
+        <Button x:Name="btn_addTimePoint"
                 Margin="10,0"
-                Content="{StaticResource Notes}" />
-
-        <!-- TimerLoop Selector -->
-        <ToggleButton Grid.Column="3" 
-                      Content="1" 
-                      IsEnabled="False"/>
-
-        
-
+                Grid.Column="4" Grid.Row="0" Grid.RowSpan="2"
+                Width="30" Height="30" Content="add" 
+                VerticalAlignment="Bottom"/>
     </Grid>
 </UserControl>

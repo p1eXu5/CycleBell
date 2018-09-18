@@ -86,21 +86,9 @@
         </Grid>
 
         <!-- adding point -->
-        <Grid Grid.Row="2">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*" />
-                <ColumnDefinition Width="Auto" />
-            </Grid.ColumnDefinitions>
+        <local:AddingTimePointUserControl Grid.Row="2" 
+                                          Height="30" Width="Auto" Margin="20,50"
+                                          DataContext="{Binding AddingTimePoint}"/>
 
-            <local:AddingTimePointUserControl Grid.Column="0" Height="30" Width="Auto" Margin="20,50"
-                                              DataContext="{Binding AddingTimePoint}"/>
-            <!-- AddTimePoint Hyperlink Button -->
-            <TextBlock Grid.Column="1 "
-                       Margin="10,0,20,0"
-                       VerticalAlignment="Center"
-                       FontFamily="{StaticResource font_SuiGeneris}">
-                <Hyperlink Command="{Binding AddTimePointCommand}" IsEnabled="{Binding CanAddTimePoint}">add</Hyperlink>
-            </TextBlock>
-        </Grid>
     </Grid>
 </UserControl>

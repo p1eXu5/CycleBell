@@ -17,7 +17,7 @@ namespace CycleBell.Converters
                 return timeSpanValue.ToString (@"h\:mm");
             }
 
-            return "??:??";
+            return null;
         }
 
         public object ConvertBack (object value, Type targetType, object parameter, CultureInfo culture)

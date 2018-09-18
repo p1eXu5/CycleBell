@@ -101,9 +101,9 @@
                            HorizontalContentAlignment="Center"
                            Padding="0"
                            Margin="0"
-                           Text="00:00"
+                           Text="18:00"
                            FontSize="18" FontFamily="{DynamicResource font_SuiGeneris}"
-                           Foreground="{DynamicResource brush_NoSetTime}"
+                           Foreground="{DynamicResource brush_Tip}"
                            BorderBrush="{DynamicResource brush_Tip}"
                            RenderTransformOrigin="0.5,0.5"
                            >
