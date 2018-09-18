@@ -11,6 +11,7 @@
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="pack://application:,,,/CycleBell;component/Resources/Icons.xaml" />
                 <ResourceDictionary Source="pack://application:,,,/CycleBell;component/Resources/TimerBoxStyle.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/CycleBell;component/Resources/ButtonStyles.xaml" />
              </ResourceDictionary.MergedDictionaries>
          </ResourceDictionary>
     </Application.Resources>

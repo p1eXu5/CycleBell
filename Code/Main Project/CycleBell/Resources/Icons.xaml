@@ -74,14 +74,19 @@
           Data="M5,1.7C3.2,1.7,1.6,1,0.8,0C0.3,0.8,0,1.7,0,2.8C0,5.6,2.2,8,5,8s5-2.3,5-5.2c0-1-0.3-2-0.8-2.8
 	            C8.4,1,6.8,1.7,5,1.7z" />
 
-    <Color x:Key="BackgroundColor">#FFFFFF</Color>
+    <Color x:Key="col_Background">#FFFFFF</Color>
     <Color x:Key="col_Foreground">#000000</Color>
-    <Color x:Key="StrokeUncheckedColor">#939393</Color>
-    <Color x:Key="IconGreyColor">#C8C8C8</Color>
+    <Color x:Key="col_Tip">#939393</Color>
+    <Color x:Key="col_NoSetTime">#E0E0E0</Color>
+    <Color x:Key="col_StrokeUnchecked">#939393</Color>
+    <Color x:Key="col_IconGreyColor">#C8C8C8</Color>
 
-    <SolidColorBrush x:Key="BackgroundBrush" Color="{DynamicResource BackgroundColor}" />
+    <SolidColorBrush x:Key="BackgroundBrush" Color="{DynamicResource col_Background}" />
     <SolidColorBrush x:Key="brush_Foreground" Color="{DynamicResource col_Foreground}" />
-    <SolidColorBrush x:Key="UncheckedStrokeBrush" Color="{DynamicResource StrokeUncheckedColor}" />
+    <SolidColorBrush x:Key="brush_Tip" Color="{DynamicResource col_Tip}" />
+    <SolidColorBrush x:Key="brush_NoSetTime" Color="{DynamicResource col_NoSetTime}" />
+    <SolidColorBrush x:Key="UncheckedStrokeBrush" Color="{DynamicResource col_StrokeUnchecked}" />
+    <SolidColorBrush x:Key="brush_Marker" Color="#008900" />
 
     <LinearGradientBrush x:Key="CheckedIconBrush" StartPoint="0,0" EndPoint="0,1">
         <GradientStop Offset="0" Color="#7F7F7F" />
@@ -89,18 +94,18 @@
     </LinearGradientBrush>
 
     <LinearGradientBrush x:Key="UncheckedIconBrush" StartPoint="0,0" EndPoint="0,1">
-        <GradientStop Offset="0" Color="{DynamicResource BackgroundColor}" />
-        <GradientStop Offset="1" Color="{DynamicResource IconGreyColor}" />
+        <GradientStop Offset="0" Color="{DynamicResource col_Background}" />
+        <GradientStop Offset="1" Color="{DynamicResource col_IconGreyColor}" />
     </LinearGradientBrush>
 
     <LinearGradientBrush x:Key="MenuLineBrush" StartPoint="0,0" EndPoint="0,1">
-        <GradientStop Offset="0" Color="{DynamicResource IconGreyColor}" />
-        <GradientStop Offset="1" Color="{DynamicResource BackgroundColor}" />
+        <GradientStop Offset="0" Color="{DynamicResource col_IconGreyColor}" />
+        <GradientStop Offset="1" Color="{DynamicResource col_Background}" />
     </LinearGradientBrush>
 
     <LinearGradientBrush x:Key="StatusLineBrush" StartPoint="0,0" EndPoint="0,1">
-        <GradientStop Offset="0" Color="{DynamicResource BackgroundColor}" />
-        <GradientStop Offset="1" Color="{DynamicResource IconGreyColor}" />
+        <GradientStop Offset="0" Color="{DynamicResource col_Background}" />
+        <GradientStop Offset="1" Color="{DynamicResource col_IconGreyColor}" />
     </LinearGradientBrush>
 
 </ResourceDictionary>

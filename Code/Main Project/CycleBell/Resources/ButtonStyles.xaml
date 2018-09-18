@@ -25,7 +25,7 @@
                                 RadiusX="4" 
                                 RadiusY="4">
                 <Rectangle.Fill>
-                    <SolidColorBrush Color="{DynamicResource BackgroundColor}" />
+                    <SolidColorBrush Color="{DynamicResource col_Background}" />
                 </Rectangle.Fill>
                 <Rectangle.Effect>
                     <DropShadowEffect x:Name="m_shadow" Direction="-90" 

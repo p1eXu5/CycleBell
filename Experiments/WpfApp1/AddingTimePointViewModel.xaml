@@ -1,15 +1,13 @@
-﻿<Window x:Class="WpfElementsDesign.TimePointViewModelDataTemplateDesign"
+﻿<Window x:Class="WpfElementsDesign.AddingTimePointViewModel"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:WpfApp1"
+        xmlns:local="clr-namespace:WpfElementsDesign"
         xmlns:controls="clr-namespace:CycleBell.Controls;assembly=CycleBell"
-        xmlns:viewModels="clr-namespace:CycleBell.ViewModels;assembly=CycleBell"
-        d:DataContext="{d:DesignInstance viewModels:TimePointViewModel}"
         mc:Ignorable="d"
-        Title="TimePointViewModelDataTemplateDesign" 
-        d:DesignHeight="120" d:DesignWidth="400">
+        Title="AddingTimePointViewModel" 
+        d:DesignHeight="120" d:DesignWidth="350">
     <Window.Resources>
         <Style x:Key="style_MuteToggleButton" TargetType="ToggleButton">
             <Setter Property="FontWeight" Value="Normal" />
@@ -30,14 +28,12 @@
     </Window.Resources>
     <Grid SnapsToDevicePixels="True">
         <Grid.ColumnDefinitions>
-            <!-- marker -->
-            <ColumnDefinition  />
             <!-- name -->
-            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition />
             <!-- time -->
             <ColumnDefinition Width="96"/>
             <!-- mute -->
-            <ColumnDefinition Width="42"/>
+            <ColumnDefinition Width="51"/>
             <!-- sound -->
             <ColumnDefinition Width="Auto"/>
             <!-- add -->
@@ -48,54 +44,32 @@
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
 
-        <!-- marker -->
-        <Path Grid.Column="0" Grid.Row="0"
-              Fill="{DynamicResource brush_Marker}"
-              Stroke="{DynamicResource brush_Tip}"
-              StrokeThickness="1"
-              VerticalAlignment="Bottom"
-              HorizontalAlignment="Right"
-              Margin="5,0"
-              StrokeEndLineCap="Square"
-              Data="M 8.112,4.758 
-                    L 1.656,0.624 
-                    C 1.140,0.293 0.495,0.706 0.495,1.367 
-                    L 0.495,9.634 
-                    C 0.495,10.295 1.140,10.708 1.656,10.378 
-                    L 8.112,6.244 
-                    C 8.628,5.914 8.628,5.088 8.112,4.758 Z">
-            <Path.RenderTransform>
-                <TranslateTransform Y="-4" />
-            </Path.RenderTransform>
-        </Path>
-
         <!-- Name -->
-        <TextBox x:Name="m_pointName" Grid.Column="1" Grid.Row="0"
-                 Margin="0,0,5,0">
+        <TextBox x:Name="m_pointName" Grid.Column="0" Grid.Row="0"
+                 Margin="10,0,5,0"
+                    >
             <TextBox.Style>
                 <Style TargetType="TextBox">
-                    
-                    <Setter Property="BorderThickness" Value="0" />
+                    <Setter Property="BorderThickness" Value="0,0,0,1" />
+                    <Setter Property="BorderBrush" Value="{DynamicResource brush_Tip}" />
                     <Setter Property="MinWidth" Value="106" />
                     <Setter Property="MinHeight" Value="17" />
                     <Setter Property="HorizontalAlignment" Value="Stretch" />
                     <Setter Property="VerticalAlignment" Value="Bottom" />
                     <Setter Property="HorizontalContentAlignment" Value="Left" />
                     <Setter Property="VerticalContentAlignment" Value="Top"></Setter>
-
-                    <Setter Property="Text" Value="Рабочее время" />
-                    <Setter Property="Foreground" Value="{DynamicResource brush_Foreground}" />
-                    <Setter Property="FontFamily" Value="Segoe UI" />
-                    <Setter Property="FontWeight" Value="Bold"></Setter>
-                    <Setter Property="FontStyle" Value="Normal" />
-                    <Setter Property="FontSize" Value="14" />
+                    <Setter Property="Text" Value="new_time_point" />
+                    <Setter Property="Foreground" Value="{DynamicResource brush_Tip}" />
+                    <Setter Property="FontWeight" Value="SemiBold"></Setter>
+                    <Setter Property="FontStyle" Value="Italic" />
+                    <Setter Property="FontSize" Value="10" />
                 </Style>
             </TextBox.Style>
         </TextBox>
 
         <!-- Time -->
-        <controls:TimerBox x:Name="m_pointTime" Grid.Column="2" Grid.Row="0"
-                           BorderThickness="0"
+        <controls:TimerBox x:Name="m_pointTime" BorderThickness="0,0,0,1"
+                           Grid.Column="1" Grid.Row="0"
                            HorizontalAlignment="Center" 
                            VerticalAlignment="Bottom"
                            HorizontalContentAlignment="Center"
@@ -112,21 +86,21 @@
                     <ScaleTransform/>
                     <SkewTransform/>
                     <RotateTransform/>
-                    <TranslateTransform Y="2"/>
+                    <TranslateTransform Y="0"/>
                 </TransformGroup>
             </controls:TimerBox.RenderTransform>
 
         </controls:TimerBox>
 
         <!-- mute -->
-        <ToggleButton x:Name="tgl_Mute" Grid.Column="3" Grid.Row="0"
+        <ToggleButton x:Name="tgl_Mute" Grid.Column="2" Grid.Row="0"
                       Style="{StaticResource style_MuteToggleButton}"
                       HorizontalAlignment="Right"
                       FontSize="14"/>
 
         <!-- file location -->
         <TextBlock x:Name="tbx_soundName"
-                   Grid.Column="2" Grid.ColumnSpan="2" Grid.Row="1"
+                   Grid.Column="1" Grid.ColumnSpan="2" Grid.Row="1"
                    Margin="20,0,0,0"
                    HorizontalAlignment="Right"
                    VerticalAlignment="Bottom"
@@ -141,7 +115,7 @@
 
         <!-- sound -->
         <Button x:Name="btn_addSoundButton"
-                Grid.Column="4" Grid.Row="0" Grid.RowSpan="2"
+                Grid.Column="3" Grid.Row="0" Grid.RowSpan="2"
                 Margin="16,0,0,0"
                 Width="30" Height="30"
                 VerticalAlignment="Bottom"
@@ -150,9 +124,10 @@
         </Button>
 
         <!-- add -->
-        <Button x:Name="btn_addTimePoint" Grid.Column="5" Grid.Row="0" Grid.RowSpan="2"
+        <Button x:Name="btn_addTimePoint"
                 Margin="10,0"
-                Width="30" Height="30" Content="del" 
+                Grid.Column="4" Grid.Row="0" Grid.RowSpan="2"
+                Width="30" Height="30" Content="add" 
                 VerticalAlignment="Bottom"/>
     </Grid>
 </Window>

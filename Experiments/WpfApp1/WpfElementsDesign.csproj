@@ -54,9 +54,16 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="AddingTimePointViewModel.xaml.cs">
+      <DependentUpon>AddingTimePointViewModel.xaml</DependentUpon>
+    </Compile>
     <Compile Include="TimePointViewModelDataTemplateDesign.xaml.cs">
       <DependentUpon>TimePointViewModelDataTemplateDesign.xaml</DependentUpon>
     </Compile>
+    <Page Include="AddingTimePointViewModel.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="BeginTimePointViewModelDataTemplateDesign.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
