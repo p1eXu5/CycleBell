@@ -55,22 +55,7 @@
         </Grid>
     </DataTemplate>
 
-    <!-- style_MuteToggleButton -->
-    <Style x:Key="style_MuteToggleButton" TargetType="ToggleButton">
-        <Setter Property="FontWeight" Value="Normal" />
-        <Setter Property="FontFamily" Value="{StaticResource font_SuiGeneris}" />
-        <Setter Property="Template">
-            <Setter.Value>
-                <ControlTemplate TargetType="ToggleButton">
-                    <TextBlock x:Name="Mute" Text="mute" VerticalAlignment="Bottom">
-                        <TextBlock.Foreground>
-                            <SolidColorBrush x:Name="txtb_Brush" Color="#FF002EAA" />
-                        </TextBlock.Foreground>
-                    </TextBlock>
-                </ControlTemplate>
-            </Setter.Value>
-        </Setter>
-    </Style>
+
 
     <!-- TimePointViewModel --> 
     <DataTemplate x:Key="datatempl_TimePointViewModel" DataType="{x:Type vm:TimePointViewModel}">

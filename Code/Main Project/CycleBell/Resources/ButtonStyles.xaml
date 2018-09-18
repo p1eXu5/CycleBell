@@ -59,6 +59,22 @@
     <Style TargetType="Button" BasedOn="{StaticResource BaseButtonStyle}"></Style>
     <Style TargetType="ToggleButton" BasedOn="{StaticResource BaseButtonStyle}"></Style>
 
-    
+    <!-- style_MuteToggleButton -->
+    <Style x:Key="style_MuteToggleButton" TargetType="ToggleButton">
+        <Setter Property="FontWeight" Value="Normal" />
+        <Setter Property="FontFamily" Value="{StaticResource font_SuiGeneris}" />
+        <Setter Property="FontSize" Value="14" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="ToggleButton">
+                    <TextBlock x:Name="Mute" Text="mute" VerticalAlignment="Bottom">
+                        <TextBlock.Foreground>
+                            <SolidColorBrush x:Name="txtb_Brush" Color="#FF002EAA" />
+                        </TextBlock.Foreground>
+                    </TextBlock>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
 
 </ResourceDictionary>
