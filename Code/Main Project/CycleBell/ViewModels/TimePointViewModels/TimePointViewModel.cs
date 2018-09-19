@@ -24,8 +24,9 @@ namespace CycleBell.ViewModels
 
         #region Fields
 
+        protected readonly Preset _preset;
+
         private TimePoint _timePoint;
-        private readonly Preset _preset;
 
         private SoundPlayer _soundPlayer;
         private bool _muteFlag = false;

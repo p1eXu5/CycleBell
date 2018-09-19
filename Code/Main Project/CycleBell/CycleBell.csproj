@@ -94,16 +94,16 @@
     <Compile Include="DataTemplateSelectors\TimePointVmDataTemplateSelector.cs" />
     <Compile Include="ViewModels\AboutDialogViewModel.cs" />
     <Compile Include="ViewModels\DialogViewModelBase.cs" />
-    <Compile Include="ViewModels\EndTimePointViewModel.cs" />
+    <Compile Include="ViewModels\TimePointViewModels\AddingTimePointViewModel.cs" />
+    <Compile Include="ViewModels\TimePointViewModels\EndTimePointViewModel.cs" />
     <Compile Include="ViewModels\MainViewModel.cs" />
-    <Compile Include="ViewModels\BeginTimePointViewModel.cs" />
+    <Compile Include="ViewModels\TimePointViewModels\BeginTimePointViewModel.cs" />
     <Compile Include="ViewModels\PresetViewModel.cs" />
     <Compile Include="Properties\Annotations.cs" />
     <Compile Include="ViewModels\SavePresetAsDialogViewModel.cs" />
     <Compile Include="ViewModels\SavePresetAsViewModel.cs" />
-    <Compile Include="ViewModels\TimePointViewModel.cs" />
-    <Compile Include="ViewModels\TimePointViewModelBase.cs" />
-    <Compile Include="ViewModels\TimePointViewModelCollection.cs" />
+    <Compile Include="ViewModels\TimePointViewModels\TimePointViewModel.cs" />
+    <Compile Include="ViewModels\TimePointViewModels\TimePointViewModelBase.cs" />
     <Compile Include="Views\AttachedPropertyFactory.cs" />
     <Compile Include="Views\UserControls\TimerButtonsUserControl.xaml.cs">
       <DependentUpon>TimerButtonsUserControl.xaml</DependentUpon>

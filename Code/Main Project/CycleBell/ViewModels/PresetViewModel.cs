@@ -10,6 +10,7 @@ using System.Text;
 using System.Windows.Data;
 using System.Windows.Input;
 using CycleBell.Base;
+using CycleBell.ViewModels.TimePointViewModels;
 using CycleBellLibrary;
 using CycleBellLibrary.Context;
 using CycleBellLibrary.Models;
@@ -45,7 +46,7 @@ namespace CycleBell.ViewModels
 
         private readonly ObservableCollection<TimePointViewModelBase> _timePointVmCollection;
         private TimePointViewModelBase _selectedTimePoint;
-        private TimePointViewModel _addingTimePoint;
+        private AddingTimePointViewModel _addingTimePoint;
 
         private bool _isModified;
         private bool _canBellOnStartTime;
@@ -113,7 +114,8 @@ namespace CycleBell.ViewModels
 
             _sb.Append(GetPresetName(_preset.PresetName));
 
-            AddingTimePoint = new TimePointViewModel (TimePoint.DefaultTimePoint, _preset);
+            // AddingTimePoint
+            AddingTimePoint = new AddingTimePointViewModel (TimePoint.DefaultTimePoint, _preset, AddTimePointCommand);
             ((INotifyPropertyChanged) AddingTimePoint).PropertyChanged += OnTimePropertyChanged;
         }
 
