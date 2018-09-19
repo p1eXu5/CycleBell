@@ -2,6 +2,7 @@
 using System.Linq;
 using CycleBell.Base;
 using CycleBell.ViewModels;
+using CycleBell.ViewModels.TimePointViewModels;
 using CycleBellLibrary;
 using CycleBellLibrary.Context;
 using CycleBellLibrary.Models;
@@ -31,7 +32,7 @@ namespace CycleBell.NUnitTests.ViewModels
         public void AddTimePointCommand_NegativeOrZeroRelativeTimePoint_CanNotExecute(string time, TimePointType timePointType)
         {
             var pvm = GetPresetViewModel();
-            pvm.AddingTimePoint = new TimePointViewModel(new TimePoint(TimeSpan.Parse (time), timePointType), pvm.Preset);
+            pvm.AddingTimePoint = new AddingTimePointViewModel(new TimePoint(TimeSpan.Parse (time), timePointType), pvm.Preset, pvm.AddTimePointCommand);
 
             Assert.IsFalse(pvm.AddTimePointCommand.CanExecute(null));
         }
@@ -41,7 +42,7 @@ namespace CycleBell.NUnitTests.ViewModels
         public void AddTimePointCommand_PositiveOrZeroAbsoluteTimePoint_CanExecute(string time, TimePointType timePointType)
         {
             var pvm = GetPresetViewModel();
-            pvm.AddingTimePoint = new TimePointViewModel(new TimePoint(TimeSpan.Parse(time), timePointType), pvm.Preset);
+            pvm.AddingTimePoint = new AddingTimePointViewModel(new TimePoint(TimeSpan.Parse (time), timePointType), pvm.Preset, pvm.AddTimePointCommand);
 
             Assert.IsTrue(pvm.AddTimePointCommand.CanExecute(null));
         }
