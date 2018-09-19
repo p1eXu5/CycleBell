@@ -3,7 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:local="clr-namespace:CycleBell.Views.UserControls"
+             xmlns:local="clr-namespace:CycleBell.Views"
              mc:Ignorable="d" 
              d:DesignHeight="100" d:DesignWidth="400">
     <UserControl.Resources>
@@ -26,14 +26,17 @@
         <ToggleButton Grid.Column="0"
                       Width="48" Height="38"
                       Margin="0,0,20,0"
-                      HorizontalAlignment="Center" Style="{DynamicResource style_Infinite}">
+                      HorizontalAlignment="Center" Style="{DynamicResource style_Infinite}"
+                      local:AttachedPropertyFactory.BorderColor="Aqua">
             <Path Grid.Column="0" Style="{StaticResource style_Path}" Data="{StaticResource gmtry_Infinite}"/>
         </ToggleButton>
 
         <!-- play -->
         <ToggleButton Grid.Column="1"
                       Width="48" Height="38"
-                      HorizontalAlignment="Center">
+                      HorizontalAlignment="Center"
+                      local:AttachedPropertyFactory.BorderColor="DarkOrange"
+                      >
             <Grid>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="Auto"/>

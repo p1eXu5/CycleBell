@@ -1,5 +1,6 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:at="clr-namespace:CycleBell.Views">
 
     <!-- base button -->
     <ControlTemplate x:Key="ct_BaseButton" TargetType="ButtonBase" >
@@ -58,7 +59,7 @@
                 
                 <!-- stroke -->
                 <Rectangle.Stroke>
-                    <SolidColorBrush Color="Red" />
+                    <SolidColorBrush Color="{Binding Path=(at:AttachedPropertyFactory.BorderColor), RelativeSource={RelativeSource TemplatedParent}}" />
                 </Rectangle.Stroke>
             </Rectangle>
             <Viewbox Margin="5">

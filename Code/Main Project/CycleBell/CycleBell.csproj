@@ -104,6 +104,7 @@
     <Compile Include="ViewModels\TimePointViewModel.cs" />
     <Compile Include="ViewModels\TimePointViewModelBase.cs" />
     <Compile Include="ViewModels\TimePointViewModelCollection.cs" />
+    <Compile Include="Views\AttachedPropertyFactory.cs" />
     <Compile Include="Views\UserControls\TimerButtonsUserControl.xaml.cs">
       <DependentUpon>TimerButtonsUserControl.xaml</DependentUpon>
     </Compile>
