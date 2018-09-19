@@ -105,9 +105,9 @@ namespace CycleBell.NUnitTests.ViewModels
 
             pvm.AddTimePointCommand.Execute (null);
 
-            TimePointViewModel actual = (TimePointViewModel) pvm.TimePointVmCollection[1];
+            TimePointViewModel actual = (TimePointViewModel) pvm.TimePointVmCollection[0];
 
-            Assert.IsFalse (Object.ReferenceEquals (pvm.AddingTimePoint.TimePoint, pvm.TimePointVmCollection[1].TimePoint));
+            Assert.IsFalse (Object.ReferenceEquals (pvm.AddingTimePoint.TimePoint, actual.TimePoint));
             Assert.IsTrue (time == actual.Time);
             Assert.IsTrue (type == actual.TimePointType);
         }

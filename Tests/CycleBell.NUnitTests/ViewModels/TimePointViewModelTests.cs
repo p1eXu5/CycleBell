@@ -1,9 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Media;
-using CycleBell.ViewModels;
+using CycleBell.ViewModels.TimePointViewModels;
 using CycleBellLibrary.Models;
 using CycleBellLibrary.Repository;
-using Moq;
 using NUnit.Framework;
 
 namespace CycleBell.NUnitTests.ViewModels

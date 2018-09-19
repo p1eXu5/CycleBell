@@ -292,6 +292,8 @@ namespace CycleBellLibrary.Models
             var tp = TimePoint.DefaultTimePoint;
             tp.Time = this.Time;
             tp.TimePointType = this.TimePointType;
+            tp.Tag = this.Tag;
+            tp.BaseTime = this.BaseTime;
 
             return tp;
         }

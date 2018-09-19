@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using CycleBellLibrary.Models;
 
-namespace CycleBell.ViewModels
+namespace CycleBell.ViewModels.TimePointViewModels
 {
     public class EndTimePointViewModel : TimePointViewModelBase
     {

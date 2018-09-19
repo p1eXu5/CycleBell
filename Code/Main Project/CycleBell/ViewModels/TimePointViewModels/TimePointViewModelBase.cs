@@ -2,7 +2,7 @@
 using CycleBell.Base;
 using CycleBellLibrary.Models;
 
-namespace CycleBell.ViewModels 
+namespace CycleBell.ViewModels.TimePointViewModels
 {
     public abstract class TimePointViewModelBase : ObservableObject
     {

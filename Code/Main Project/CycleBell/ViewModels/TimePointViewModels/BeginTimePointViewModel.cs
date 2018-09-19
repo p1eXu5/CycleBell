@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using CycleBellLibrary.Models;
 using CycleBellLibrary.Repository;
 
-namespace CycleBell.ViewModels
+namespace CycleBell.ViewModels.TimePointViewModels
 {
     public class BeginTimePointViewModel : TimePointViewModelBase
     {

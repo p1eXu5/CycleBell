@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using CycleBell.ViewModels;
+using CycleBell.ViewModels.TimePointViewModels;
 
 namespace CycleBell.DataTemplateSelectors
 {
