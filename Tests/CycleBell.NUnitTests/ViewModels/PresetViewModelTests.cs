@@ -26,6 +26,9 @@ namespace CycleBell.NUnitTests.ViewModels
             Assert.AreEqual (typeof(PresetViewModel).BaseType, typeof(ObservableObject));
         }
 
+
+        // AddTimePointCommand
+
         [TestCase("-0:00:01", TimePointType.Relative)]
         [TestCase("-0:00:01", TimePointType.Absolute)]
         [TestCase("0:00:00", TimePointType.Relative)]
@@ -73,6 +76,34 @@ namespace CycleBell.NUnitTests.ViewModels
             var begin = pvm.TimePointVmCollection.OrderBy (tp => tp.Id).ThenBy (tp => tp.LoopNumber).Last();
 
             Assert.AreEqual (begin.GetType(), typeof(EndTimePointViewModel));
+        }
+
+        [Test]
+        public void AddTimePointCommand_CanExecuteKnownLoopNumber_AddsOnlyOneTimePointViewModel()
+        {
+            var pvm = GetPresetViewModel();
+
+            pvm.AddingTimePoint.Time = TimeSpan.FromSeconds (1);
+            pvm.AddingTimePoint.LoopNumber = 10;
+            pvm.AddTimePointCommand.Execute (null);
+
+            pvm.AddingTimePoint.Time = TimeSpan.FromSeconds (1);
+            pvm.AddingTimePoint.LoopNumber = 10;
+            pvm.AddTimePointCommand.Execute (null);
+
+            var tpvm = pvm.TimePointVmCollection.Where (t => t is TimePointViewModel).ToList();
+            Assert.IsTrue (tpvm.Count == 2);
+        }
+
+        [Test]
+        public void AddTimePointCommand_CanExecute_ResetAddingTimePointField()
+        {
+            var pvm = GetPresetViewModel();
+            pvm.AddingTimePoint.Time = TimeSpan.FromSeconds (1);
+
+            pvm.AddTimePointCommand.Execute (null);
+
+            Assert.IsFalse (Object.ReferenceEquals (pvm.AddingTimePoint.TimePoint, pvm.TimePointVmCollection[1].TimePoint));
         }
 
         [Test]
