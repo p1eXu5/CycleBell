@@ -124,7 +124,8 @@
         <Button x:Name="btn_AddTimePoint"
                 Margin="10,5,10,0"
                 Grid.Column="4" Grid.Row="0" Grid.RowSpan="2"
-                Width="40" Height="30" Content="add" 
+                Width="40" Height="30" Content="add"
+                Foreground="{DynamicResource brush_UncheckedStroke}"
                 VerticalAlignment="Center"/>
     </Grid>
 </UserControl>

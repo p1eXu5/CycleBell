@@ -186,7 +186,7 @@
 
             <!-- timer's buttons -->
             <userControls:TimerButtonsUserControl Grid.Row="3" DataContext="{Binding}"
-                                                  VerticalAlignment="Bottom" Margin="0,0,0,34" Height="44" >
+                                                  VerticalAlignment="Center" Margin="0,0,0,34" Height="44" >
             </userControls:TimerButtonsUserControl>
         </Grid>
 

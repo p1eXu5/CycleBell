@@ -87,6 +87,7 @@
         <Setter Property="Control.FontWeight" Value="Bold" />
         <Setter Property="Control.FontFamily" Value="{StaticResource font_SuiGeneris}" />
         <Setter Property="Control.Foreground" Value="{DynamicResource brush_UncheckedIcon}" />
+        <Setter Property="at:AttachedPropertyFactory.StrokeColor" Value="{DynamicResource col_UncheckedStroke}" />
         <Setter Property="Control.FontSize" Value="1" />
         <Setter Property="Control.Width" Value="30" />
         <Setter Property="Control.Height" Value="30" />
@@ -100,7 +101,6 @@
     <Style TargetType="Button" BasedOn="{StaticResource BaseButtonStyle}"></Style>
 
     <Style TargetType="ToggleButton" BasedOn="{StaticResource BaseButtonStyle}">
-        <Setter Property="at:AttachedPropertyFactory.StrokeColor" Value="{DynamicResource col_UncheckedStroke}" />
         <Style.Triggers>
             <Trigger Property="IsChecked" Value="True">
                 <Setter Property="Foreground" Value="{DynamicResource brush_CheckedIcon}" />
