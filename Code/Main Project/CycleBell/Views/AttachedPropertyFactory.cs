@@ -12,7 +12,7 @@ namespace CycleBell.Views
     public static class AttachedPropertyFactory
     {
 
-        public static readonly DependencyProperty BorderColorProperty = DependencyProperty.RegisterAttached("BorderColor", typeof(Color), typeof(AttachedPropertyFactory)
+        public static readonly DependencyProperty BorderColorProperty = DependencyProperty.RegisterAttached("BorderColor", typeof(Color), typeof(AttachedPropertyFactory)                                                                                                    
                                                                                                             , new FrameworkPropertyMetadata(Colors.DimGray, FrameworkPropertyMetadataOptions.Inherits));
 
         public static void SetBorderColor(DependencyObject d, Color value)
@@ -23,6 +23,19 @@ namespace CycleBell.Views
         public static Color GetBorderColor(DependencyObject d)
         {
             return (Color) d.GetValue(AttachedPropertyFactory.BorderColorProperty);
+        }
+
+        public static readonly DependencyProperty StrokeColorProperty = DependencyProperty.RegisterAttached("StrokeColor", typeof(Color), typeof(AttachedPropertyFactory)
+                                                                                                            , new FrameworkPropertyMetadata(Colors.DimGray, FrameworkPropertyMetadataOptions.Inherits));
+
+        public static void SetStrokeColor(DependencyObject d, Color value)
+        {
+            d.SetValue(AttachedPropertyFactory.StrokeColorProperty, value);
+        }
+
+        public static Color GetStrokeColor(DependencyObject d)
+        {
+            return (Color)d.GetValue(AttachedPropertyFactory.StrokeColorProperty);
         }
     }
 }

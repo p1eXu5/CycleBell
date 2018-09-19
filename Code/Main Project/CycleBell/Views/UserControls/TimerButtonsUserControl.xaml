@@ -7,7 +7,6 @@
              mc:Ignorable="d" 
              d:DesignHeight="100" d:DesignWidth="400">
     <UserControl.Resources>
-        <Style x:Key="style_Infinite" TargetType="{x:Type ToggleButton}" BasedOn="{StaticResource BaseButtonStyle}"/>
 
 
 
@@ -26,9 +25,11 @@
         <ToggleButton Grid.Column="0"
                       Width="48" Height="38"
                       Margin="0,0,20,0"
-                      HorizontalAlignment="Center" Style="{DynamicResource style_Infinite}"
-                      local:AttachedPropertyFactory.BorderColor="Aqua">
-            <Path Grid.Column="0" Style="{StaticResource style_Path}" Data="{StaticResource gmtry_Infinite}"/>
+                      HorizontalAlignment="Center" 
+                      local:AttachedPropertyFactory.BorderColor="DarkBlue"
+                      >
+            <Path Style="{StaticResource style_Path}" Data="{StaticResource gmtry_Infinite}"
+                  />
         </ToggleButton>
 
         <!-- play -->
@@ -50,16 +51,18 @@
         </ToggleButton>
 
         <!-- stop -->
-        <Button Grid.Column="2"
+        <ToggleButton Grid.Column="2"
                       Width="48" Height="38"
-                      HorizontalAlignment="Center">
+                      HorizontalAlignment="Center"
+                      local:AttachedPropertyFactory.BorderColor="DarkMagenta">
             <Path Style="{StaticResource style_Path}" Data="{StaticResource gmtry_Stop}" Margin="3"/>
-        </Button>
+        </ToggleButton>
 
         <!-- bell -->
         <ToggleButton Grid.Column="3"
                       Width="48" Height="38"
-                      HorizontalAlignment="Center">
+                      HorizontalAlignment="Center"
+                      local:AttachedPropertyFactory.BorderColor="DarkGreen">
             <Grid Margin="2">
                 <Path Style="{StaticResource style_Path}" Data="{StaticResource gmtry_BellIn}"/>
                 <Path Style="{StaticResource style_Path}" Data="{StaticResource gmtry_BellOut}" />

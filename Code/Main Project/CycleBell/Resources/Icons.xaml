@@ -28,7 +28,7 @@
     </Path>
 
 
-    <Path x:Key="Notes" Fill="{DynamicResource UncheckedStrokeBrush}" Stroke="{x:Null}" 
+    <Path x:Key="Notes" Fill="{DynamicResource brush_UncheckedStroke}" Stroke="{x:Null}" 
           x:Shared="True"
           VerticalAlignment="Center" HorizontalAlignment="Center"
           Data="M16,0L4.6,1.8v0v11.7c-0.3-0.3-0.8-0.3-1.4-0.3c-0.7,0-1.5,0.3-2.1,0.8
@@ -38,15 +38,6 @@
                 c0,0.4,0.2,0.7,0.5,1c0.3,0.2,0.7,0.4,1.2,0.4
 	            c0.7,0,1.6-0.3,2.2-0.7c0.7-0.5,1.1-1.1,1.1-1.8L16,0z" />
 
-
-    <Style x:Key="style_Path" TargetType="Path">
-        <Setter Property="Stroke" Value="{DynamicResource UncheckedStrokeBrush}" />
-        <Setter Property="Fill" Value="{DynamicResource UncheckedIconBrush}" />
-        <Setter Property="VerticalAlignment" Value="Center" />
-        <Setter Property="HorizontalAlignment" Value="Center" />
-    </Style>
-    
-    
     <PathGeometry x:Key="gmtry_Infinite" 
           Figures="M33.25.5h-5a4.16,4.16,0,0,0-2.79,1.1L19,7.46,12.55,1.6
               A4.16,4.16,0,0,0,9.76.5h-5A4.37,4.37,0,0,0,.5,5
@@ -82,22 +73,23 @@
     <Color x:Key="col_Foreground">#000000</Color>
     <Color x:Key="col_Tip">#939393</Color>
     <Color x:Key="col_NoSetTime">#E0E0E0</Color>
-    <Color x:Key="col_StrokeUnchecked">#939393</Color>
+    <Color x:Key="col_UncheckedStroke">#939393</Color>
     <Color x:Key="col_IconGreyColor">#C8C8C8</Color>
+    <Color x:Key="col_CheckedStroke">#00000000</Color>
 
     <SolidColorBrush x:Key="BackgroundBrush" Color="{DynamicResource col_Background}" />
     <SolidColorBrush x:Key="brush_Foreground" Color="{DynamicResource col_Foreground}" />
     <SolidColorBrush x:Key="brush_Tip" Color="{DynamicResource col_Tip}" />
     <SolidColorBrush x:Key="brush_NoSetTime" Color="{DynamicResource col_NoSetTime}" />
-    <SolidColorBrush x:Key="UncheckedStrokeBrush" Color="{DynamicResource col_StrokeUnchecked}" />
+    <SolidColorBrush x:Key="brush_UncheckedStroke" Color="{DynamicResource col_UncheckedStroke}" />
     <SolidColorBrush x:Key="brush_Marker" Color="#008900" />
 
-    <LinearGradientBrush x:Key="CheckedIconBrush" StartPoint="0,0" EndPoint="0,1">
+    <LinearGradientBrush x:Key="brush_CheckedIcon" StartPoint="0,0" EndPoint="0,1">
         <GradientStop Offset="0" Color="#7F7F7F" />
         <GradientStop Offset="1" Color="{DynamicResource col_Foreground}" />
     </LinearGradientBrush>
 
-    <LinearGradientBrush x:Key="UncheckedIconBrush" StartPoint="0,0" EndPoint="0,1">
+    <LinearGradientBrush x:Key="brush_UncheckedIcon" StartPoint="0,0" EndPoint="0,1">
         <GradientStop Offset="0" Color="{DynamicResource col_Background}" />
         <GradientStop Offset="1" Color="{DynamicResource col_IconGreyColor}" />
     </LinearGradientBrush>
