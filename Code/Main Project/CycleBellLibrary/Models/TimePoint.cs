@@ -191,7 +191,6 @@ namespace CycleBellLibrary.Models
         /// Returns absolute time by baseTime
         /// </summary>
         /// <param name="baseTime"></param>
-        /// <param name="convertToAbsolute"></param>
         /// <returns></returns>
         public TimeSpan GetAbsoluteTime(TimeSpan baseTime)
         {
@@ -202,7 +201,6 @@ namespace CycleBellLibrary.Models
             else
                 return _GetAbsoluteTime();
         }
-
         /// <summary>
         /// Gets absolute time
         /// </summary>
@@ -219,7 +217,6 @@ namespace CycleBellLibrary.Models
 
             return _GetAbsoluteTime();
         }
-
         private TimeSpan _GetAbsoluteTime ()
         {
             if (BaseTime == TimeSpan.Zero) 
@@ -235,18 +232,6 @@ namespace CycleBellLibrary.Models
         }
 
         // GetRelative
-        public TimeSpan GetRelativeTime()
-        {
-            if (TimePointType == TimePointType.Relative)
-                return Time;
-
-            if (!BaseTime.HasValue) {
-                throw new ArgumentException("BaseTime must be set");
-            }
-
-            return _GetRelativeTime();
-        }
-
         public TimeSpan GetRelativeTime(TimeSpan baseTime)
         {
             if (TimePointType == TimePointType.Relative) {       
@@ -261,7 +246,17 @@ namespace CycleBellLibrary.Models
             BaseTime = oldBase;
             return res;
         }
+        public TimeSpan GetRelativeTime()
+        {
+            if (TimePointType == TimePointType.Relative)
+                return Time;
 
+            if (!BaseTime.HasValue) {
+                throw new ArgumentException("BaseTime must be set");
+            }
+
+            return _GetRelativeTime();
+        }
         private TimeSpan _GetRelativeTime ()
         {
             if (BaseTime == TimeSpan.Zero) 
@@ -290,6 +285,15 @@ namespace CycleBellLibrary.Models
             timePoint.Id ^= this.Id;
             this.Id ^= timePoint.Id;
             timePoint.Id ^= this.Id;
+        }
+
+        public TimePoint Copy()
+        {
+            var tp = TimePoint.DefaultTimePoint;
+            tp.Time = this.Time;
+            tp.TimePointType = this.TimePointType;
+
+            return tp;
         }
 
         public override string ToString() => $"{Name}: {Time:h\\:mm\\:ss} ({TimePointType})"; 

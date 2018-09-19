@@ -96,14 +96,20 @@ namespace CycleBell.NUnitTests.ViewModels
         }
 
         [Test]
-        public void AddTimePointCommand_CanExecute_ResetAddingTimePointField()
+        public void AddTimePointCommand_CanExecute_AddsNewTimePointWithCopiedFields()
         {
             var pvm = GetPresetViewModel();
             pvm.AddingTimePoint.Time = TimeSpan.FromSeconds (1);
+            var time = pvm.AddingTimePoint.Time;
+            var type = pvm.AddingTimePoint.TimePointType;
 
             pvm.AddTimePointCommand.Execute (null);
 
+            TimePointViewModel actual = (TimePointViewModel) pvm.TimePointVmCollection[1];
+
             Assert.IsFalse (Object.ReferenceEquals (pvm.AddingTimePoint.TimePoint, pvm.TimePointVmCollection[1].TimePoint));
+            Assert.IsTrue (time == actual.Time);
+            Assert.IsTrue (type == actual.TimePointType);
         }
 
         [Test]

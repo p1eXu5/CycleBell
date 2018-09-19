@@ -305,10 +305,11 @@ namespace CycleBell.ViewModels
         // AddTimePointCommand:
         private void AddTimePoint(object o)
         {
-            _preset.AddTimePoint(_addingTimePoint.TimePoint);
+            _preset.AddTimePoint(_addingTimePoint.TimePoint.Copy());
 
             ResetAddingTimePoint();
         }
+
         public bool CanAddTimePoint (object o)
         {
             var res = _addingTimePoint.Time == TimeSpan.Zero && _addingTimePoint.TimePointType == TimePointType.Absolute 

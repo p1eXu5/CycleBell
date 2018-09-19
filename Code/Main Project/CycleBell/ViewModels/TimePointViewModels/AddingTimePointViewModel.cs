@@ -30,6 +30,9 @@ namespace CycleBell.ViewModels.TimePointViewModels
 
         public ICommand AddTimePointCommand { get; }
 
-
+        public void Reset()
+        {
+            Time = TimeSpan.Zero;
+        }
     }
 }

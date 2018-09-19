@@ -11,7 +11,7 @@ using CycleBellLibrary.Models;
 using CycleBellLibrary.Repository;
 using Microsoft.Win32;
 
-namespace CycleBell.ViewModels 
+namespace CycleBell.ViewModels.TimePointViewModels
 {
     public class TimePointViewModel : TimePointViewModelBase
     {
@@ -141,11 +141,6 @@ namespace CycleBell.ViewModels
 
         #region Methods
 
-        public void Reset()
-        {
-            Time = TimeSpan.Zero;
-        }
-
         public static implicit operator TimePoint(TimePointViewModel instance) => instance.TimePoint;
 
         /// <summary>
@@ -212,7 +207,6 @@ namespace CycleBell.ViewModels
                 _timePoint.Tag = ofd.FileName;
             }
         }
-
 
         #endregion
     }
