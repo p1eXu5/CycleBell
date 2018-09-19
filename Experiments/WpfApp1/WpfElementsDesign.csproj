@@ -54,13 +54,13 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="AddingTimePointViewModel.xaml.cs">
-      <DependentUpon>AddingTimePointViewModel.xaml</DependentUpon>
+    <Compile Include="AddingTimePointViewModelDesign.xaml.cs">
+      <DependentUpon>AddingTimePointViewModelDesign.xaml</DependentUpon>
     </Compile>
     <Compile Include="TimePointViewModelDataTemplateDesign.xaml.cs">
       <DependentUpon>TimePointViewModelDataTemplateDesign.xaml</DependentUpon>
     </Compile>
-    <Page Include="AddingTimePointViewModel.xaml">
+    <Page Include="AddingTimePointViewModelDesign.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

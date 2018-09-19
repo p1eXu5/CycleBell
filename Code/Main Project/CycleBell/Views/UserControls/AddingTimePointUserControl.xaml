@@ -116,8 +116,8 @@
                 Margin="16,5,0,0"
                 Width="30" Height="30"
                 VerticalAlignment="Center"
-                Content="{StaticResource Notes}"
                 Command="{Binding AddSoundCommand}">
+            <Path Style="{StaticResource style_PathOfButton}" Data="{StaticResource gmtry_Notes}" />
         </Button>
 
         <!-- add -->

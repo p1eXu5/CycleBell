@@ -68,8 +68,8 @@
         </Grid>
     </ControlTemplate>
 
-    <!-- style_Path -->
-    <Style x:Key="style_Path" TargetType="Path">
+    <!-- style_PathOfToggleButton -->
+    <Style x:Key="style_PathOfToggleButton" TargetType="Path">
         <Setter Property="Fill" Value="{Binding Foreground, RelativeSource={RelativeSource FindAncestor, AncestorType=ToggleButton}}" />
         <Setter Property="Stroke">
             <Setter.Value>
@@ -80,13 +80,25 @@
         <Setter Property="HorizontalAlignment" Value="Center" />
     </Style>
 
-    <Style x:Key="BaseButtonStyle">
+    <!-- style_PathOfButton -->
+    <Style x:Key="style_PathOfButton" TargetType="Path">
+        <Setter Property="Fill" Value="{Binding Foreground, RelativeSource={RelativeSource FindAncestor, AncestorType=Button}}" />
+        <Setter Property="Stroke">
+            <Setter.Value>
+                <SolidColorBrush Color="{Binding Path=(at:AttachedPropertyFactory.StrokeColor), RelativeSource={RelativeSource FindAncestor, AncestorType=Button}}" />
+            </Setter.Value>
+        </Setter>
+        <Setter Property="VerticalAlignment" Value="Center" />
+        <Setter Property="HorizontalAlignment" Value="Center" />
+    </Style>
+
+    <!-- style_BaseButton -->
+    <Style x:Key="style_BaseButton">
         <Setter Property="Control.BorderThickness" Value="0" />
         <Setter Property="Control.VerticalAlignment" Value="Center" />
         <Setter Property="Control.HorizontalAlignment" Value="Left" />
         <Setter Property="Control.FontWeight" Value="Bold" />
         <Setter Property="Control.FontFamily" Value="{StaticResource font_SuiGeneris}" />
-        <Setter Property="Control.Foreground" Value="{DynamicResource brush_UncheckedIcon}" />
         <Setter Property="at:AttachedPropertyFactory.StrokeColor" Value="{DynamicResource col_UncheckedStroke}" />
         <Setter Property="Control.FontSize" Value="1" />
         <Setter Property="Control.Width" Value="30" />
@@ -98,9 +110,19 @@
         </Setter>
     </Style>
     
-    <Style TargetType="Button" BasedOn="{StaticResource BaseButtonStyle}"></Style>
+    <Style TargetType="Button" BasedOn="{StaticResource style_BaseButton}">
+        <Setter Property="Foreground" Value="{DynamicResource brush_UnpressedButton}" />
+        <Style.Triggers>
+            <Trigger Property="IsPressed" Value="True">
+                <Setter Property="Foreground" Value="{DynamicResource brush_PressedButton}" />
+                <Setter Property="at:AttachedPropertyFactory.StrokeColor" Value="{DynamicResource col_PressedButton}" />
+            </Trigger>
+        </Style.Triggers>
+    </Style>
 
-    <Style TargetType="ToggleButton" BasedOn="{StaticResource BaseButtonStyle}">
+    <!-- ToggleButton Style -->
+    <Style TargetType="ToggleButton" BasedOn="{StaticResource style_BaseButton}">
+        <Setter Property="Control.Foreground" Value="{DynamicResource brush_UncheckedIcon}" />
         <Style.Triggers>
             <Trigger Property="IsChecked" Value="True">
                 <Setter Property="Foreground" Value="{DynamicResource brush_CheckedIcon}" />

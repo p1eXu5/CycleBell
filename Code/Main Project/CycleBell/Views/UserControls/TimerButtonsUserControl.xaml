@@ -28,8 +28,7 @@
                       HorizontalAlignment="Center" 
                       local:AttachedPropertyFactory.BorderColor="DarkBlue"
                       >
-            <Path Style="{StaticResource style_Path}" Data="{StaticResource gmtry_Infinite}"
-                  />
+            <Path Style="{StaticResource style_PathOfToggleButton}" Data="{StaticResource gmtry_Infinite}"/>
         </ToggleButton>
 
         <!-- play -->
@@ -44,8 +43,8 @@
                     <ColumnDefinition Width="4"/>
                     <ColumnDefinition Width="Auto"/>
                 </Grid.ColumnDefinitions>
-                <Path Grid.Column="0" Style="{StaticResource style_Path}" Data="{StaticResource gmtry_Play}"/>
-                <Path Grid.Column="2" Style="{StaticResource style_Path}" Data="{StaticResource gmtry_Pause}" 
+                <Path Grid.Column="0" Style="{StaticResource style_PathOfToggleButton}" Data="{StaticResource gmtry_Play}"/>
+                <Path Grid.Column="2" Style="{StaticResource style_PathOfToggleButton}" Data="{StaticResource gmtry_Pause}" 
                           Margin="5,0,0,0" />
             </Grid>
         </ToggleButton>
@@ -55,7 +54,7 @@
                       Width="48" Height="38"
                       HorizontalAlignment="Center"
                       local:AttachedPropertyFactory.BorderColor="DarkMagenta">
-            <Path Style="{StaticResource style_Path}" Data="{StaticResource gmtry_Stop}" Margin="3"/>
+            <Path Style="{StaticResource style_PathOfToggleButton}" Data="{StaticResource gmtry_Stop}" Margin="3"/>
         </ToggleButton>
 
         <!-- bell -->
@@ -64,8 +63,8 @@
                       HorizontalAlignment="Center"
                       local:AttachedPropertyFactory.BorderColor="DarkGreen">
             <Grid Margin="2">
-                <Path Style="{StaticResource style_Path}" Data="{StaticResource gmtry_BellIn}"/>
-                <Path Style="{StaticResource style_Path}" Data="{StaticResource gmtry_BellOut}" />
+                <Path Style="{StaticResource style_PathOfToggleButton}" Data="{StaticResource gmtry_BellIn}"/>
+                <Path Style="{StaticResource style_PathOfToggleButton}" Data="{StaticResource gmtry_BellOut}" />
             </Grid>
         </ToggleButton>
     </Grid>

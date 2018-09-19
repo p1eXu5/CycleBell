@@ -5,6 +5,7 @@
     <Style TargetType="controls:TimerBox">
 
         <Setter Property="FontSize" Value="18" />
+        <Setter Property="FontStyle" Value="Normal" />
         <Setter Property="BorderThickness" Value="0,0,0,1" />
         <Setter Property="BorderBrush" Value="DimGray" />
         <Setter Property="HorizontalAlignment" Value="Stretch" />

@@ -19,7 +19,6 @@
         
         <dts:TimePointVmDataTemplateSelector x:Key="templsel_Selector" />
 
-        
     </UserControl.Resources>
 
     <Grid x:Name="PresetGrid" Width="auto">
@@ -50,8 +49,8 @@
         <Grid Grid.Row="1">
             
             <!-- TimePointVmCollection -->
-                     <!--ItemTemplateSelector="{StaticResource templsel_Selector}"-->
             <ListBox x:Name="m_pointsList"
+                     
                      Style="{StaticResource style_TimePointsListBox}"
                      ItemTemplateSelector="{StaticResource templsel_Selector}"
                      ItemsSource="{Binding TimePointVmCollection}"

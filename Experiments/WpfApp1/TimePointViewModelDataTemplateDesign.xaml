@@ -145,7 +145,7 @@
                 Margin="16,0,0,0"
                 Width="30" Height="30"
                 VerticalAlignment="Bottom"
-                Content="{StaticResource Notes}"
+                Content="{StaticResource gmtry_Notes}"
                 Command="{Binding AddSoundCommand}">
         </Button>
 

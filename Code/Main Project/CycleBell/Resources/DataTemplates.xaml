@@ -5,53 +5,46 @@
 
     <!-- BeginTimePointViewModel -->
     <DataTemplate x:Key="datatempl_BeginTimePointViewModel" DataType="vm:BeginTimePointViewModel">
-        <Grid SnapsToDevicePixels="True" ShowGridLines="True">
+        <Grid SnapsToDevicePixels="True" ShowGridLines="False" Margin="5" TextElement.FontStyle="Normal">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="1" />
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="1" />
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="1" />
+            </Grid.ColumnDefinitions>
             <Grid.RowDefinitions>
                 <RowDefinition Height="1" />
-                <RowDefinition Height="13" />
+                <RowDefinition Height="6" />
+                <RowDefinition Height="1" />
+                <RowDefinition Height="8" />
             </Grid.RowDefinitions>
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="2" />
-                <ColumnDefinition Width="Auto" />
-                <ColumnDefinition Width="3" />
-                <ColumnDefinition Width="*" />
-                <ColumnDefinition Width="2" />
-            </Grid.ColumnDefinitions>
-            
-            <Path Grid.Column="0" Grid.Row="0" Grid.RowSpan="2" 
-                  Stroke="{DynamicResource brush_Foreground}" Fill="{x:Null}">
-                <Path.Data>
-                    <PathGeometry   Figures="M 0,13 L 0,0 1,0 Z" />
-                </Path.Data>
-            </Path>
-            <Path Grid.Column="1" Grid.Row="0"
-                  Stroke="{DynamicResource brush_Foreground}" Fill="{x:Null}">
-                <Path.Data>
-                    <PathGeometry Figures="M 0,0 L 1,0 Z" />
-                </Path.Data>
-            </Path>
-            <StackPanel Grid.Column="1" Grid.Row="1" Orientation="Horizontal" Height="13" Margin="5,0">
-                <Label Content="{Binding CycleName}" />
-                <TextBox Text="{Binding NumberOfLoops, UpdateSourceTrigger=LostFocus, Mode=TwoWay}" Control.BorderBrush="{x:Null}"/>
+
+            <Line Grid.Column="0" Grid.Row="0" Grid.RowSpan="4" 
+                  Stroke="DimGray" Fill="{x:Null}" Stretch="Fill"
+                  StrokeEndLineCap="Square" StrokeStartLineCap="Square"
+                  X1="0" Y1="0" Y2="1" />
+
+            <Line Grid.Column="1" Grid.Row="0" 
+                  Stroke="DimGray" Fill="{x:Null}" Stretch="Fill"
+                  StrokeEndLineCap="Square" StrokeStartLineCap="Square"
+                  VerticalAlignment="Center"
+                  X1="0" Y1="0" X2="1" />
+
+            <StackPanel Grid.Column="1" Grid.Row="1" Grid.RowSpan="3"
+                        Orientation="Horizontal" 
+                        Height="13" Margin="5,0" TextElement.FontSize="8" TextElement.FontStyle="Normal">
+                <Label Foreground="Black" VerticalContentAlignment="Center" Content="loop 1:" Padding="0"/>
+                <TextBox Text="5" Padding="0" VerticalContentAlignment="Bottom"
+                         Margin="5,0,0,0"
+                         BorderThickness="0,0,0,1"
+                         Control.BorderBrush="Black"/>
             </StackPanel>
-            <Path Grid.Column="2" Grid.Row="0" Grid.RowSpan="2"
-                  Stroke="{DynamicResource brush_Foreground}" Fill="{x:Null}">
-                <Path.Data>
-                    <PathGeometry Figures="M 0,0 L 1,0 1,7 2,7 Z" />
-                </Path.Data>
-            </Path>
-            <Path Grid.Column="3" Grid.Row="1" 
-                  Stroke="{DynamicResource brush_Foreground}" Fill="{x:Null}">
-                <Path.Data>
-                    <PathGeometry Figures="M 0,6 L 1,6 Z" />
-                </Path.Data>
-            </Path>
-            <Path Grid.Column="3" Grid.Row="0" Grid.RowSpan="2"
-                  Stroke="{DynamicResource brush_Foreground}" Fill="{x:Null}">
-                <Path.Data>
-                    <PathGeometry Figures="M 0,7 L 1,7 1,13 Z" />
-                </Path.Data>
-            </Path>
+
+            <Polyline Grid.Column="2" Grid.ColumnSpan="3" Grid.Row="0" Grid.RowSpan="4"
+                      Stroke="DimGray" Fill="{x:Null}" Stretch="Fill"
+                      StrokeEndLineCap="Square" StrokeStartLineCap="Square"
+                      Points="0,0 0,1 1,1 1,2" />
         </Grid>
     </DataTemplate>
 
@@ -59,7 +52,7 @@
 
     <!-- TimePointViewModel --> 
     <DataTemplate x:Key="datatempl_TimePointViewModel" DataType="{x:Type vm:TimePointViewModel}">
-        <Grid SnapsToDevicePixels="True">
+        <Grid SnapsToDevicePixels="True" >
             <Grid.ColumnDefinitions>
                 <!-- marker -->
                 <ColumnDefinition  />
@@ -166,53 +159,39 @@
                    FontWeight="SemiBold"
                    FontSize="10"
                    TextTrimming="CharacterEllipsis"
-                   TextWrapping="Wrap"
                    MaxHeight="28"
                    />
 
             <!-- sound -->
-            <Button x:Name="btn_addSoundButton"
-                Grid.Column="4" Grid.Row="0" Grid.RowSpan="2"
-                Margin="16,0,0,0"
-                Width="30" Height="30"
-                VerticalAlignment="Bottom"
-                Content="{StaticResource Notes}"
-                Command="{Binding AddSoundCommand}">
+            <Button x:Name="btn_AddSoundButton"
+                    Grid.Column="4" Grid.Row="0" Grid.RowSpan="2"
+                    Margin="16,5,0,0"
+                    Width="30" Height="30"
+                    VerticalAlignment="Center"
+                    Command="{Binding AddSoundCommand}">
+                <Path Style="{StaticResource style_PathOfButton}" Data="{StaticResource gmtry_Notes}" />
             </Button>
 
-            <!-- add -->
-            <Button x:Name="btn_addTimePoint" Grid.Column="5" Grid.Row="0" Grid.RowSpan="2"
-                Margin="10,0"
-                Width="30" Height="30" Content="del" 
-                VerticalAlignment="Bottom"/>
+            <!-- del -->
+            <Button x:Name="btn_AddTimePoint"
+                    Margin="10,5,10,0"
+                    Grid.Column="5" Grid.Row="0" Grid.RowSpan="2"
+                    Width="40" Height="30" 
+                    Content="del"
+                    Command="{Binding RemoveTimePointCommand}"
+                    VerticalAlignment="Center"/>
         </Grid>
 
     </DataTemplate>
     
      <!--EndTimePointViewModel-->
     <DataTemplate x:Key="datatempl_EndTimePointViewModel" DataType="vm:EndTimePointViewModel">
-        <Grid>
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="1" />
-                <ColumnDefinition />
-                <ColumnDefinition Width="1" />
-            </Grid.ColumnDefinitions>
-            
-            <Path Grid.Column="0">
-                <Path.Data>
-                    <PathGeometry Figures="M 0,0 L 0,7 Z" />
-                </Path.Data>
-            </Path>
-            <Path Grid.Column="1">
-                <Path.Data>
-                    <PathGeometry Figures="M 0,7 L 1,7 Z" />
-                </Path.Data>
-            </Path>
-            <Path Grid.Column="2">
-                <Path.Data>
-                    <PathGeometry Figures="M 0,0 L 0,7 Z" />
-                </Path.Data>
-            </Path>
+        <Grid SnapsToDevicePixels="True" Margin="5" Height="14">
+            <Polyline Stroke="DimGray" Fill="{x:Null}" Stretch="Fill"
+                      StrokeEndLineCap="Square" StrokeStartLineCap="Square"
+                      Points="0,0 0,1 1,1 1,0" >
+
+            </Polyline>
         </Grid>
     </DataTemplate>
 

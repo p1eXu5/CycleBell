@@ -28,10 +28,8 @@
     </Path>
 
 
-    <Path x:Key="Notes" Fill="{DynamicResource brush_UncheckedStroke}" Stroke="{x:Null}" 
-          x:Shared="True"
-          VerticalAlignment="Center" HorizontalAlignment="Center"
-          Data="M16,0L4.6,1.8v0v11.7c-0.3-0.3-0.8-0.3-1.4-0.3c-0.7,0-1.5,0.3-2.1,0.8
+    <PathGeometry x:Key="gmtry_Notes"
+          Figures="M16,0L4.6,1.8v0v11.7c-0.3-0.3-0.8-0.3-1.4-0.3c-0.7,0-1.5,0.3-2.1,0.8
                 C0.5,14.4,0,15.1,0,15.7c0,0.4,0.2,0.7,0.5,1C0.8,16.9,1.2,17,1.7,17
                 c0.7,0,1.6-0.3,2.2-0.7c0.7-0.5,1.1-1.1,1.1-1.8V3.2l10.5-1.7v10.3
 	            c-0.3-0.3-0.8-0.3-1.4-0.3c-0.7,0-1.5,0.3-2.1,0.8c-0.6,0.5-1.1,1.1-1.1,1.7
@@ -76,6 +74,7 @@
     <Color x:Key="col_UncheckedStroke">#939393</Color>
     <Color x:Key="col_IconGreyColor">#C8C8C8</Color>
     <Color x:Key="col_CheckedStroke">#00000000</Color>
+    <Color x:Key="col_PressedButton">#505050</Color>
 
     <SolidColorBrush x:Key="BackgroundBrush" Color="{DynamicResource col_Background}" />
     <SolidColorBrush x:Key="brush_Foreground" Color="{DynamicResource col_Foreground}" />
@@ -83,6 +82,8 @@
     <SolidColorBrush x:Key="brush_NoSetTime" Color="{DynamicResource col_NoSetTime}" />
     <SolidColorBrush x:Key="brush_UncheckedStroke" Color="{DynamicResource col_UncheckedStroke}" />
     <SolidColorBrush x:Key="brush_Marker" Color="#008900" />
+    <SolidColorBrush x:Key="brush_UnpressedButton" Color="{DynamicResource col_UncheckedStroke}" />
+    <SolidColorBrush x:Key="brush_PressedButton" Color="{DynamicResource col_PressedButton}" />
 
     <LinearGradientBrush x:Key="brush_CheckedIcon" StartPoint="0,0" EndPoint="0,1">
         <GradientStop Offset="0" Color="#7F7F7F" />
