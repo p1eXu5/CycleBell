@@ -26,10 +26,10 @@ namespace CycleBell.ViewModels
 
         protected readonly Preset _preset;
 
-        private TimePoint _timePoint;
+        protected TimePoint _timePoint;
 
-        private SoundPlayer _soundPlayer;
-        private bool _muteFlag = false;
+        protected SoundPlayer _soundPlayer;
+        protected bool _muteFlag = false;
 
         #endregion
 
@@ -81,7 +81,7 @@ namespace CycleBell.ViewModels
         /// <summary>
         /// Время 'ч' 
         /// </summary>
-        public TimeSpan Time
+        public virtual TimeSpan Time
         {
             get => _timePoint.Time;
             set {

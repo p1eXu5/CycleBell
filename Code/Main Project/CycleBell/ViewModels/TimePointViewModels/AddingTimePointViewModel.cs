@@ -18,6 +18,16 @@ namespace CycleBell.ViewModels.TimePointViewModels
             AddTimePointCommand = addTimePointCommand;
         }
 
+        public override TimeSpan Time
+        {
+            get => _timePoint.Time;
+            set {
+                _timePoint.Time = value;
+                OnPropertyChanged();
+                ((ActionCommand)AddTimePointCommand).RaiseCanExecuteChanged();
+            }
+        }
+
         public ICommand AddTimePointCommand { get; }
 
 

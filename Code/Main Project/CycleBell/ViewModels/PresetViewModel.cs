@@ -147,7 +147,7 @@ namespace CycleBell.ViewModels
                 OnPropertyChanged ();
             }
         }
-        public TimePointViewModel AddingTimePoint
+        public AddingTimePointViewModel AddingTimePoint
         {
             get => _addingTimePoint;
             set {
@@ -197,7 +197,7 @@ namespace CycleBell.ViewModels
 
         #region Commands
 
-        public ICommand AddTimePointCommand => new ActionCommand (AddTimePoint);
+        public ICommand AddTimePointCommand => new ActionCommand (AddTimePoint, CanAddTimePoint);
         public ICommand PlayCommand => new ActionCommand (Play, CanPlay);
         public ICommand PouseCommand => new ActionCommand(Pouse, CanPouse);
         public ICommand ResumeCommand => new ActionCommand (Resume, CanResume);
@@ -309,15 +309,12 @@ namespace CycleBell.ViewModels
 
             ResetAddingTimePoint();
         }
-        public bool CanAddTimePoint
+        public bool CanAddTimePoint (object o)
         {
-            get =>
-             _addingTimePoint.Time == TimeSpan.Zero && _addingTimePoint.TimePointType == TimePointType.Absolute 
-                || _addingTimePoint.Time > TimeSpan.Zero;
-            set {
-                CanAddTimePoint = value;
-                OnPropertyChanged ();
-            }
+            var res = _addingTimePoint.Time == TimeSpan.Zero && _addingTimePoint.TimePointType == TimePointType.Absolute 
+                        || _addingTimePoint.Time > TimeSpan.Zero;
+
+            return res;
         }
 
         // PlayCommand:
