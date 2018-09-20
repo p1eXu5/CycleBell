@@ -87,6 +87,14 @@
     <SolidColorBrush x:Key="brush_UnpressedButton" Color="{DynamicResource col_UncheckedStroke}" />
     <SolidColorBrush x:Key="brush_PressedButton" Color="{DynamicResource col_PressedButton}" />
 
+    <Color x:Key="col_TopForeground">#459F41</Color>
+    <Color x:Key="col_BottomForeground">#45F4F1</Color>
+
+    <LinearGradientBrush x:Key="brush_ForegroundGradient" StartPoint="0,0" EndPoint="0,1">
+        <GradientStop Color="{DynamicResource col_TopForeground}" Offset="0.0" />
+        <GradientStop Color="{DynamicResource col_BottomForeground}" Offset="0.5" />
+    </LinearGradientBrush>
+
     <LinearGradientBrush x:Key="brush_Play" StartPoint="0,0" EndPoint="0,1">
         <GradientStop Offset="0" Color="#00FF00" />
         <GradientStop Offset="1" Color="#008900" />

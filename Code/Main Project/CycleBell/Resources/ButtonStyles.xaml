@@ -4,7 +4,7 @@
 
     <!-- ct_BaseButton -->
     <ControlTemplate x:Key="ct_BaseButton" TargetType="ButtonBase" >
-        <Grid SnapsToDevicePixels="True">
+        <Grid>
             
             <!-- visual states -->
             <VisualStateManager.VisualStateGroups>
@@ -165,16 +165,23 @@
 
     <!-- style_PathBase -->
     <Style x:Key="style_PathBase" TargetType="Path">
+        <Setter Property="Fill" Value="{Binding Foreground, RelativeSource={RelativeSource FindAncestor, AncestorType=ButtonBase}}" />
         <Style.Triggers>
             <Trigger Property="IsEnabled" Value="False">
                 <Setter Property="Stroke" Value="#00000000"/>
+                <Trigger.EnterActions>
+                    <BeginStoryboard>
+                        <Storyboard>
+                            <ColorAnimation Storyboard.TargetProperty="(Fill).(LinearGradientBrush.GradientStops[0].Color)" To="AliceBlue"></ColorAnimation>
+                        </Storyboard>
+                    </BeginStoryboard>
+                </Trigger.EnterActions>
             </Trigger>
         </Style.Triggers>
     </Style>
 
     <!-- style_PathOfToggleButton -->
     <Style x:Key="style_PathOfToggleButton" TargetType="Path" BasedOn="{StaticResource style_PathBase}">
-        <Setter Property="Fill" Value="{Binding Foreground, RelativeSource={RelativeSource FindAncestor, AncestorType=ToggleButton}}" />
         <Setter Property="Stroke">
             <Setter.Value>
                 <SolidColorBrush Color="{Binding Path=(at:AttachedPropertyFactory.StrokeColor), RelativeSource={RelativeSource FindAncestor, AncestorType=ToggleButton}}" />
@@ -186,7 +193,6 @@
 
     <!-- style_PathOfButton -->
     <Style x:Key="style_PathOfButton" TargetType="Path" BasedOn="{StaticResource style_PathBase}">
-        <Setter Property="Fill" Value="{Binding Foreground, RelativeSource={RelativeSource FindAncestor, AncestorType=Button}}" />
         <Setter Property="Stroke">
             <Setter.Value>
                 <SolidColorBrush Color="{Binding Path=(at:AttachedPropertyFactory.StrokeColor), RelativeSource={RelativeSource FindAncestor, AncestorType=Button}}" />
