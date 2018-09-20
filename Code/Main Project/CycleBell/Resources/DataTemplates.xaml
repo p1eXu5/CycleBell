@@ -110,7 +110,7 @@
                         <Setter Property="Text" Value="Рабочее время" />
                         <Setter Property="Foreground" Value="{DynamicResource brush_Foreground}" />
                         <Setter Property="FontFamily" Value="Segoe UI" />
-                        <Setter Property="FontWeight" Value="Bold"></Setter>
+                        <Setter Property="FontWeight" Value="Bold" />
                         <Setter Property="FontStyle" Value="Normal" />
                         <Setter Property="FontSize" Value="14" />
                     </Style>
@@ -177,9 +177,12 @@
                     Margin="10,5,10,0"
                     Grid.Column="5" Grid.Row="0" Grid.RowSpan="2"
                     Width="40" Height="30" 
-                    Content="del"
                     Command="{Binding RemoveTimePointCommand}"
-                    VerticalAlignment="Center"/>
+                    VerticalAlignment="Center">
+                <TextBlock VerticalAlignment="Center" HorizontalAlignment="Center" 
+                           Foreground="{Binding Foreground, RelativeSource={RelativeSource FindAncestor, AncestorType=Button}}"
+                           Text="del" />
+            </Button>
         </Grid>
 
     </DataTemplate>

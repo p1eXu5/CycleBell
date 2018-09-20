@@ -37,14 +37,15 @@
                                              To="1.0" Duration="0"/>
                         </Storyboard>
                     </VisualState>
-                
+
                 </VisualStateGroup>
             </VisualStateManager.VisualStateGroups>
 
             <!-- visual tree -->
             <Rectangle x:Name="rectangle"
                        RadiusX="4" RadiusY="4"
-                       StrokeThickness="0">
+                       StrokeThickness="0"
+                       SnapsToDevicePixels="True">
                 <!-- fill -->
                 <Rectangle.Fill>
                     <SolidColorBrush Color="{DynamicResource col_Background}" />
@@ -68,32 +69,12 @@
         </Grid>
     </ControlTemplate>
 
-    <!-- style_PathOfToggleButton -->
-    <Style x:Key="style_PathOfToggleButton" TargetType="Path">
-        <Setter Property="Fill" Value="{Binding Foreground, RelativeSource={RelativeSource FindAncestor, AncestorType=ToggleButton}}" />
-        <Setter Property="Stroke">
-            <Setter.Value>
-                <SolidColorBrush Color="{Binding Path=(at:AttachedPropertyFactory.StrokeColor), RelativeSource={RelativeSource FindAncestor, AncestorType=ToggleButton}}" />
-            </Setter.Value>
-        </Setter>
-        <Setter Property="VerticalAlignment" Value="Center" />
-        <Setter Property="HorizontalAlignment" Value="Center" />
-    </Style>
 
-    <!-- style_PathOfButton -->
-    <Style x:Key="style_PathOfButton" TargetType="Path">
-        <Setter Property="Fill" Value="{Binding Foreground, RelativeSource={RelativeSource FindAncestor, AncestorType=Button}}" />
-        <Setter Property="Stroke">
-            <Setter.Value>
-                <SolidColorBrush Color="{Binding Path=(at:AttachedPropertyFactory.StrokeColor), RelativeSource={RelativeSource FindAncestor, AncestorType=Button}}" />
-            </Setter.Value>
-        </Setter>
-        <Setter Property="VerticalAlignment" Value="Center" />
-        <Setter Property="HorizontalAlignment" Value="Center" />
-    </Style>
+    
 
     <!-- style_BaseButton -->
     <Style x:Key="style_BaseButton">
+        <Setter Property="UIElement.SnapsToDevicePixels" Value="True" />
         <Setter Property="Control.BorderThickness" Value="0" />
         <Setter Property="Control.VerticalAlignment" Value="Center" />
         <Setter Property="Control.HorizontalAlignment" Value="Left" />
@@ -110,8 +91,10 @@
         </Setter>
     </Style>
     
+    <!-- Button Style -->
     <Style TargetType="Button" BasedOn="{StaticResource style_BaseButton}">
         <Setter Property="Foreground" Value="{DynamicResource brush_UnpressedButton}" />
+        <Setter Property="at:AttachedPropertyFactory.BorderColor" Value="DarkGray" />
         <Style.Triggers>
             <Trigger Property="IsPressed" Value="True">
                 <Setter Property="Foreground" Value="{DynamicResource brush_PressedButton}" />
@@ -123,11 +106,37 @@
     <!-- ToggleButton Style -->
     <Style TargetType="ToggleButton" BasedOn="{StaticResource style_BaseButton}">
         <Setter Property="Control.Foreground" Value="{DynamicResource brush_UncheckedIcon}" />
+        <Setter Property="at:AttachedPropertyFactory.FillColor1" Value="{DynamicResource brush_UncheckedIcon}"/>
+        <Setter Property="at:AttachedPropertyFactory.FillColor2" Value="{DynamicResource brush_UncheckedIcon}"/>
         <Style.Triggers>
-            <Trigger Property="IsChecked" Value="True">
+
+            <MultiTrigger>
+                <MultiTrigger.Conditions>
+                    <Condition Property="IsChecked" Value="True" />
+                    <Condition Property="IsThreeState" Value="False" />
+                </MultiTrigger.Conditions>
                 <Setter Property="Foreground" Value="{DynamicResource brush_CheckedIcon}" />
                 <Setter Property="at:AttachedPropertyFactory.StrokeColor" Value="{DynamicResource col_CheckedStroke}" />
-            </Trigger>
+            </MultiTrigger>
+
+            <MultiTrigger>
+                <MultiTrigger.Conditions>
+                    <Condition Property="IsChecked" Value="True" />
+                    <Condition Property="IsThreeState" Value="True" />
+                </MultiTrigger.Conditions>
+                <Setter Property="at:AttachedPropertyFactory.FillColor1" Value="{StaticResource brush_Play}" />
+                <Setter Property="at:AttachedPropertyFactory.StrokeColor" Value="{DynamicResource col_CheckedStroke}" />
+            </MultiTrigger>
+
+            <MultiTrigger>
+                <MultiTrigger.Conditions>
+                    <Condition Property="IsChecked" Value="{x:Null}" />
+                    <Condition Property="IsThreeState" Value="True" />
+                </MultiTrigger.Conditions>
+                <Setter Property="at:AttachedPropertyFactory.FillColor2" Value="{StaticResource brush_Pause}" />
+                <Setter Property="at:AttachedPropertyFactory.StrokeColor" Value="{DynamicResource col_CheckedStroke}" />
+            </MultiTrigger>
+
         </Style.Triggers>
     </Style>
 
@@ -148,5 +157,46 @@
             </Setter.Value>
         </Setter>
     </Style>
+    
+    
+    
+
+    <!-- Path -->
+
+    <!-- style_PathBase -->
+    <Style x:Key="style_PathBase" TargetType="Path">
+        <Style.Triggers>
+            <Trigger Property="IsEnabled" Value="False">
+                <Setter Property="Stroke" Value="#00000000"/>
+            </Trigger>
+        </Style.Triggers>
+    </Style>
+
+    <!-- style_PathOfToggleButton -->
+    <Style x:Key="style_PathOfToggleButton" TargetType="Path" BasedOn="{StaticResource style_PathBase}">
+        <Setter Property="Fill" Value="{Binding Foreground, RelativeSource={RelativeSource FindAncestor, AncestorType=ToggleButton}}" />
+        <Setter Property="Stroke">
+            <Setter.Value>
+                <SolidColorBrush Color="{Binding Path=(at:AttachedPropertyFactory.StrokeColor), RelativeSource={RelativeSource FindAncestor, AncestorType=ToggleButton}}" />
+            </Setter.Value>
+        </Setter>
+        <Setter Property="VerticalAlignment" Value="Center" />
+        <Setter Property="HorizontalAlignment" Value="Center" />
+    </Style>
+
+    <!-- style_PathOfButton -->
+    <Style x:Key="style_PathOfButton" TargetType="Path" BasedOn="{StaticResource style_PathBase}">
+        <Setter Property="Fill" Value="{Binding Foreground, RelativeSource={RelativeSource FindAncestor, AncestorType=Button}}" />
+        <Setter Property="Stroke">
+            <Setter.Value>
+                <SolidColorBrush Color="{Binding Path=(at:AttachedPropertyFactory.StrokeColor), RelativeSource={RelativeSource FindAncestor, AncestorType=Button}}" />
+            </Setter.Value>
+        </Setter>
+        <Setter Property="VerticalAlignment" Value="Center" />
+        <Setter Property="HorizontalAlignment" Value="Center" />
+    </Style>
+
+    
+    
 
 </ResourceDictionary>

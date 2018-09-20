@@ -100,6 +100,7 @@ namespace CycleBellLibrary.NUnitTests
             public event EventHandler TimerStopEvent;
             public ReadOnlyObservableCollection<Preset> Presets { get; }
             public bool IsRunning { get; }
+            public bool IsPaused { get; }
             public void AddPreset (Preset preset)
             {
                 throw new NotImplementedException();

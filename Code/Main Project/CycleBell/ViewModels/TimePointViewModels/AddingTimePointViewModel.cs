@@ -28,6 +28,17 @@ namespace CycleBell.ViewModels.TimePointViewModels
             }
         }
 
+        public override string Name
+        {
+            get => base.Name;
+            set {
+                base.Name = value;
+                OnPropertyChanged(nameof(HasNoName));
+            }
+        }
+
+        public bool HasNoName => String.IsNullOrWhiteSpace(Name);
+
         public ICommand AddTimePointCommand { get; }
 
         public void Reset()

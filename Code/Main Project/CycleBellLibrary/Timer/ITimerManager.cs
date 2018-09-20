@@ -12,6 +12,7 @@ namespace CycleBellLibrary.Timer
         event EventHandler TimerStopEvent;
 
         bool IsRunning { get; }
+        bool IsPaused { get; }
 
         /// <summary>
         /// Pause timer loop

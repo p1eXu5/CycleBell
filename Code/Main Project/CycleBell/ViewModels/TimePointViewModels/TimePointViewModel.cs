@@ -69,7 +69,7 @@ namespace CycleBell.ViewModels.TimePointViewModels
         /// <summary>
         /// Name of TimePoint
         /// </summary>
-        public string Name
+        public virtual string Name
         {
             get => _timePoint.Name;
             set {

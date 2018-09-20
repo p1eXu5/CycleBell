@@ -6,12 +6,10 @@
 
 using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Threading;
 using System.Threading.Tasks;
-using CycleBellLibrary.Context;
 using CycleBellLibrary.Models;
 using CycleBellLibrary.Repository;
 
@@ -48,7 +46,8 @@ namespace CycleBellLibrary.Timer
         /// </summary>
         private System.Threading.Timer _timer;
 
-        private byte _isRunning;
+        private bool _isRunning;
+        private bool _isPaused;
         private TimeSpan _deltaTime;
         private byte _isInfiniteLoop;
 
@@ -66,7 +65,6 @@ namespace CycleBellLibrary.Timer
         /// <summary>
         /// Gets instance of manager and if IPresetsManager.FileName is Exist loads presets or loads only one empty preset
         /// </summary>
-        /// <param name="presetsManager"></param>
         /// <returns></returns>
         public static TimerManager Instance 
             => _timerManager ?? (_timerManager = new TimerManager());
@@ -103,7 +101,8 @@ namespace CycleBellLibrary.Timer
 
         public static int Accuracy { get; set; } =300;
 
-        public bool IsRunning => _isRunning != 0;
+        public bool IsRunning => _isRunning;
+        public bool IsPaused => _isPaused;
 
         #endregion
 
@@ -125,7 +124,8 @@ namespace CycleBellLibrary.Timer
             if (!IsRunning) return; 
                 
             _timer.Change (Timeout.Infinite, Timeout.Infinite);
-            _isRunning ^= _isRunning;
+            _isRunning = false;
+            _isPaused = true;
         }
 
         /// <summary>
@@ -133,7 +133,7 @@ namespace CycleBellLibrary.Timer
         /// </summary>
         public void Resume()
         {
-            if (IsRunning || _queue == null) return;
+            if (_isRunning || !_isPaused) return;
 
             var currentTime = DateTime.Now.TimeOfDay;
             var foundedNextQueueElem = FindNextTimePoint(ref currentTime);
@@ -141,7 +141,9 @@ namespace CycleBellLibrary.Timer
             OnChangeTimePoint(_prevQueueElement.Item2, foundedNextQueueElem.Item2, LastTime(currentTime, foundedNextQueueElem.Item1));
 
             _timer.Change(GetDueTime (currentTime.Milliseconds), Timeout.Infinite);
-            _isRunning |= 0x01;
+
+            _isRunning = true;
+            _isPaused = false;
         }
 
         /// <summary>
@@ -172,8 +174,11 @@ namespace CycleBellLibrary.Timer
 
             _queue = null;
 
-            if (IsRunning)
-                _isRunning ^= _isRunning;
+            if (_isRunning)
+                _isRunning = false;
+
+            if (_isPaused)
+                _isPaused = false;
 
             OnTimerStop();
         }
@@ -200,7 +205,7 @@ namespace CycleBellLibrary.Timer
                 return;
             }
 
-            _isRunning |= 0x01;
+            _isRunning = true;
 
             var currentTime = DateTime.Now.TimeOfDay;
 

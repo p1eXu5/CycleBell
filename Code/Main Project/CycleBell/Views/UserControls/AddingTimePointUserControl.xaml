@@ -11,6 +11,7 @@
 
     <UserControl.Resources>
         <conv:FromTimeSpanToStringConverter x:Key="conv_TimeSpanToString" />
+        <BooleanToVisibilityConverter x:Key="conv_BooleanToVisibility"/>
     </UserControl.Resources>
 
     <Grid SnapsToDevicePixels="True">
@@ -32,28 +33,57 @@
         </Grid.RowDefinitions>
 
         <!-- Name -->
-        <TextBox x:Name="m_pointName" Grid.Column="0" Grid.Row="0"
-                 Margin="10,0,5,0"
-                 Height="{Binding ActualHeight, ElementName=tibx_PointTime}"
-                    >
-            <TextBox.Style>
-                <Style TargetType="TextBox">
-                    <Setter Property="BorderThickness" Value="0,0,0,1" />
-                    <Setter Property="BorderBrush" Value="{DynamicResource brush_Tip}" />
-                    <Setter Property="MinWidth" Value="106" />
-                    <Setter Property="MinHeight" Value="17" />
-                    <Setter Property="HorizontalAlignment" Value="Stretch" />
-                    <Setter Property="VerticalAlignment" Value="Bottom" />
-                    <Setter Property="HorizontalContentAlignment" Value="Left" />
-                    <Setter Property="VerticalContentAlignment" Value="Bottom"></Setter>
-                    <Setter Property="Text" Value="new_time_point" />
-                    <Setter Property="Foreground" Value="{DynamicResource brush_Tip}" />
-                    <Setter Property="FontWeight" Value="SemiBold"></Setter>
-                    <Setter Property="FontStyle" Value="Italic" />
-                    <Setter Property="FontSize" Value="10" />
-                </Style>
-            </TextBox.Style>
-        </TextBox>
+        <Grid Grid.Column="0" Grid.Row="0" Margin="10,0,5,0"
+              VerticalAlignment="Bottom">
+
+
+            <TextBox x:Name="m_pointName" 
+                     Height="{Binding ActualHeight, ElementName=tibx_PointTime}"
+                     Text="{Binding Name, Mode=TwoWay, UpdateSourceTrigger=LostFocus}">
+                <TextBox.Style>
+                    <Style TargetType="TextBox">
+                        <Setter Property="BorderThickness" Value="0,0,0,1" />
+                        <Setter Property="BorderBrush" Value="{DynamicResource brush_Tip}" />
+                        <Setter Property="MinWidth" Value="106" />
+                        <Setter Property="MinHeight" Value="17" />
+                        <Setter Property="HorizontalAlignment" Value="Stretch" />
+                        <Setter Property="VerticalAlignment" Value="Bottom" />
+                        <Setter Property="HorizontalContentAlignment" Value="Left" />
+                        <Setter Property="VerticalContentAlignment" Value="Bottom"></Setter>
+                        <Setter Property="Foreground" Value="{DynamicResource brush_Tip}" />
+                        <Setter Property="FontWeight" Value="SemiBold"></Setter>
+                        <Setter Property="FontStyle" Value="Normal" />
+                        <Setter Property="FontSize" Value="14" />
+                    </Style>
+                </TextBox.Style>
+            </TextBox>
+
+            <TextBlock x:Name="tbk_Tip" FontSize="10" FontStyle="Italic" Foreground="#CCCCCC" 
+                       VerticalAlignment="Center" Text="new_time_point" IsHitTestVisible="False"
+                       Visibility="{Binding HasNoName, Converter={StaticResource conv_BooleanToVisibility}}">
+            </TextBlock>
+
+            <Grid.Triggers>
+                <EventTrigger RoutedEvent="Grid.Loaded">
+                    <EventTrigger.EnterActions>
+                        <BeginStoryboard>
+                            <Storyboard TargetProperty="Opacity">
+                                <DoubleAnimation Storyboard.TargetName="tbk_Tip"
+                                                    To="0.0" Duration="0:0:.2"/>
+                            </Storyboard>
+                        </BeginStoryboard>
+                    </EventTrigger.EnterActions>
+                    <EventTrigger.ExitActions>
+                        <BeginStoryboard>
+                            <Storyboard TargetProperty="Opacity">
+                                <DoubleAnimation Storyboard.TargetName="tbk_Tip"
+                                                    To="1.0" Duration="0:0:.2"/>
+                            </Storyboard>
+                        </BeginStoryboard>
+                    </EventTrigger.ExitActions>
+                </EventTrigger>
+            </Grid.Triggers>
+        </Grid>
 
         <!-- Time -->
         <controls:TimerBox x:Name="tibx_PointTime" BorderThickness="0,0,0,1"
@@ -117,16 +147,19 @@
                 Width="30" Height="30"
                 VerticalAlignment="Center"
                 Command="{Binding AddSoundCommand}">
-            <Path Style="{StaticResource style_PathOfButton}" Data="{StaticResource gmtry_Notes}" />
+            <Path Style="{StaticResource style_PathOfButton}" 
+                  Data="{StaticResource gmtry_Notes}"
+                  Stroke="{x:Null}"/>
         </Button>
 
         <!-- add -->
-        <Button x:Name="btn_AddTimePoint"
-                Margin="10,5,10,0"
-                Grid.Column="4" Grid.Row="0" Grid.RowSpan="2"
-                Width="40" Height="30" Content="add"
-                Foreground="{DynamicResource brush_UncheckedStroke}"
+        <Button x:Name="btn_AddTimePoint" Grid.Column="4" Grid.Row="0" Grid.RowSpan="2"
+                Width="40" Height="30" Margin="10,5,10,0"
                 Command="{Binding AddTimePointCommand}"
-                VerticalAlignment="Center"/>
+                VerticalAlignment="Center">
+            <TextBlock VerticalAlignment="Center" HorizontalAlignment="Center" 
+                       Foreground="{Binding Foreground, RelativeSource={RelativeSource FindAncestor, AncestorType=Button}}"
+                       Text="add" />
+        </Button>
     </Grid>
 </UserControl>
