@@ -64,23 +64,21 @@
             </TextBlock>
 
             <Grid.Triggers>
-                <EventTrigger RoutedEvent="Grid.Loaded">
-                    <EventTrigger.EnterActions>
-                        <BeginStoryboard>
-                            <Storyboard TargetProperty="Opacity">
-                                <DoubleAnimation Storyboard.TargetName="tbk_Tip"
+                <EventTrigger RoutedEvent="Grid.GotFocus">
+                    <BeginStoryboard>
+                        <Storyboard TargetProperty="Opacity">
+                            <DoubleAnimation Storyboard.TargetName="tbk_Tip"
                                                     To="0.0" Duration="0:0:.2"/>
-                            </Storyboard>
-                        </BeginStoryboard>
-                    </EventTrigger.EnterActions>
-                    <EventTrigger.ExitActions>
+                        </Storyboard>
+                    </BeginStoryboard>
+                </EventTrigger>
+                <EventTrigger RoutedEvent="Grid.LostFocus">
                         <BeginStoryboard>
                             <Storyboard TargetProperty="Opacity">
                                 <DoubleAnimation Storyboard.TargetName="tbk_Tip"
                                                     To="1.0" Duration="0:0:.2"/>
                             </Storyboard>
                         </BeginStoryboard>
-                    </EventTrigger.ExitActions>
                 </EventTrigger>
             </Grid.Triggers>
         </Grid>
