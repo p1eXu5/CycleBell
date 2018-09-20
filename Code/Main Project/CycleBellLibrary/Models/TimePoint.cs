@@ -34,6 +34,7 @@ namespace CycleBellLibrary.Models
 
         #region Constructors
 
+        // Static!
         static TimePoint()
         {
             DefaultTime = InitialDefaultTime;
@@ -57,9 +58,10 @@ namespace CycleBellLibrary.Models
 
         }
 
+        // Instance
         public TimePoint()
             : this(
-                name: "Time point " + _timePointNum, 
+                name: "", 
                 time: DefaultTime, 
                 timePointType: DefaultTimePointType)
         { }
@@ -181,6 +183,8 @@ namespace CycleBellLibrary.Models
         /// Sound file location for example.
         /// </summary>
         public object Tag { get; set; } = null;
+
+        public string DefaultTimePointName => $"Time point {Id}";
 
         #endregion
 
