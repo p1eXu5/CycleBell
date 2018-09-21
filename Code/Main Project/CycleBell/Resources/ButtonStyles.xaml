@@ -16,7 +16,14 @@
                         <VisualTransition From="Pressed" To="MouseOver" GeneratedDuration="0" />
                     </VisualStateGroup.Transitions>
 
-                    <VisualState x:Name="Normal"/>
+                    <VisualState x:Name="Normal">
+                        <Storyboard>
+                            <ColorAnimation Storyboard.TargetName="col_Top" Storyboard.TargetProperty="Color" 
+                                            To="{DynamicResource col_TopForeground}" Duration="0:0:.2" />
+                            <ColorAnimation Storyboard.TargetName="col_Bottom" Storyboard.TargetProperty="Color" 
+                                            To="{DynamicResource col_BottomForeground}" Duration="0:0:.2" />
+                        </Storyboard>
+                    </VisualState>
                     
                     <VisualState x:Name="MouseOver" >
                         <Storyboard>
@@ -29,15 +36,27 @@
                     <VisualState x:Name="Pressed">
                         <Storyboard>
 
-                            <DoubleAnimation Storyboard.TargetProperty="(UIElement.Effect).(DropShadowEffect.ShadowDepth)" 
-                                             Storyboard.TargetName="rectangle"
+                            <DoubleAnimation Storyboard.TargetName="rectangle"
+                                             Storyboard.TargetProperty="(UIElement.Effect).(DropShadowEffect.ShadowDepth)" 
                                              To="1.0" Duration="0"/>
-                            <DoubleAnimation Storyboard.TargetProperty="(Shape.StrokeThickness)" 
-                                             Storyboard.TargetName="rectangle"
+                            <DoubleAnimation Storyboard.TargetName="rectangle"
+                                             Storyboard.TargetProperty="(Shape.StrokeThickness)" 
                                              To="1.0" Duration="0"/>
+                            <ColorAnimation Storyboard.TargetName="col_Top" Storyboard.TargetProperty="Color" 
+                                            To="{DynamicResource col_TopPressed}" Duration="0" />
+                            <ColorAnimation Storyboard.TargetName="col_Bottom" Storyboard.TargetProperty="Color" 
+                                            To="{DynamicResource col_BottomPressed}" Duration="0" />
                         </Storyboard>
                     </VisualState>
-
+                    
+                    <VisualState Name="Disabled">
+                        <Storyboard>
+                            <ColorAnimation Storyboard.TargetName="col_Top" Storyboard.TargetProperty="Color" 
+                                            To="{DynamicResource col_TopUncheckedIcon}" Duration="0:0:.2" />
+                            <ColorAnimation Storyboard.TargetName="col_Bottom" Storyboard.TargetProperty="Color" 
+                                            To="{DynamicResource col_BottomUncheckedIcon}" Duration="0:0:.2" />
+                        </Storyboard>
+                    </VisualState>
                 </VisualStateGroup>
             </VisualStateManager.VisualStateGroups>
 
@@ -58,13 +77,20 @@
                                       ShadowDepth="2" BlurRadius="2" />
                 </Rectangle.Effect>
                 
-                <!-- stroke -->
+                <!-- rectangle border -->
                 <Rectangle.Stroke>
                     <SolidColorBrush Color="{Binding Path=(at:AttachedPropertyFactory.BorderColor), RelativeSource={RelativeSource TemplatedParent}}" />
                 </Rectangle.Stroke>
             </Rectangle>
             <Viewbox Margin="5">
-                <ContentPresenter Content="{TemplateBinding Content}"/>
+                <ContentControl Content="{TemplateBinding Content}">
+                    <ContentControl.Foreground>
+                        <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+                            <GradientStop x:Name="col_Top" Color="{DynamicResource col_TopForeground}" Offset="0" />
+                            <GradientStop x:Name="col_Bottom" Color="{DynamicResource col_BottomForeground}" Offset="1" />
+                        </LinearGradientBrush>
+                    </ContentControl.Foreground>
+                </ContentControl>
             </Viewbox>
         </Grid>
     </ControlTemplate>
@@ -74,7 +100,6 @@
 
     <!-- style_BaseButton -->
     <Style x:Key="style_BaseButton">
-        <Setter Property="UIElement.SnapsToDevicePixels" Value="True" />
         <Setter Property="Control.BorderThickness" Value="0" />
         <Setter Property="Control.VerticalAlignment" Value="Center" />
         <Setter Property="Control.HorizontalAlignment" Value="Left" />
@@ -93,11 +118,9 @@
     
     <!-- Button Style -->
     <Style TargetType="Button" BasedOn="{StaticResource style_BaseButton}">
-        <Setter Property="Foreground" Value="{DynamicResource brush_UnpressedButton}" />
-        <Setter Property="at:AttachedPropertyFactory.BorderColor" Value="DarkGray" />
+        <Setter Property="at:AttachedPropertyFactory.BorderColor" Value="{DynamicResource col_PressedBorder}" />
         <Style.Triggers>
             <Trigger Property="IsPressed" Value="True">
-                <Setter Property="Foreground" Value="{DynamicResource brush_PressedButton}" />
                 <Setter Property="at:AttachedPropertyFactory.StrokeColor" Value="{DynamicResource col_PressedButton}" />
             </Trigger>
         </Style.Triggers>
@@ -169,13 +192,6 @@
         <Style.Triggers>
             <Trigger Property="IsEnabled" Value="False">
                 <Setter Property="Stroke" Value="#00000000"/>
-                <Trigger.EnterActions>
-                    <BeginStoryboard>
-                        <Storyboard>
-                            <ColorAnimation Storyboard.TargetProperty="(Fill).(LinearGradientBrush.GradientStops[0].Color)" To="AliceBlue"></ColorAnimation>
-                        </Storyboard>
-                    </BeginStoryboard>
-                </Trigger.EnterActions>
             </Trigger>
         </Style.Triggers>
     </Style>

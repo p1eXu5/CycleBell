@@ -87,8 +87,12 @@
     <SolidColorBrush x:Key="brush_UnpressedButton" Color="{DynamicResource col_UncheckedStroke}" />
     <SolidColorBrush x:Key="brush_PressedButton" Color="{DynamicResource col_PressedButton}" />
 
-    <Color x:Key="col_TopForeground">#459F41</Color>
-    <Color x:Key="col_BottomForeground">#45F4F1</Color>
+    <Color x:Key="col_TopForeground">#666666</Color>
+    <Color x:Key="col_BottomForeground">#444444</Color>
+    
+    <Color x:Key="col_TopPressed">#333333</Color>
+    <Color x:Key="col_BottomPressed">#000000</Color>
+    <Color x:Key="col_PressedBorder">#55888888</Color>
 
     <LinearGradientBrush x:Key="brush_ForegroundGradient" StartPoint="0,0" EndPoint="0,1">
         <GradientStop Color="{DynamicResource col_TopForeground}" Offset="0.0" />
@@ -110,9 +114,12 @@
         <GradientStop Offset="1" Color="{DynamicResource col_Foreground}" />
     </LinearGradientBrush>
 
+    <Color x:Key="col_TopUncheckedIcon">#FFFFFF</Color>
+    <Color x:Key="col_BottomUncheckedIcon">#C8C8C8</Color>
+
     <LinearGradientBrush x:Key="brush_UncheckedIcon" StartPoint="0,0" EndPoint="0,1">
-        <GradientStop Offset="0" Color="{DynamicResource col_Background}" />
-        <GradientStop Offset="1" Color="{DynamicResource col_IconGreyColor}" />
+        <GradientStop Offset="0" Color="{DynamicResource col_TopUncheckedIcon}" />
+        <GradientStop Offset="1" Color="{DynamicResource col_BottomUncheckedIcon}" />
     </LinearGradientBrush>
 
     <LinearGradientBrush x:Key="MenuLineBrush" StartPoint="0,0" EndPoint="0,1">

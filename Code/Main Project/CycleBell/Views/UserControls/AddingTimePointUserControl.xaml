@@ -11,6 +11,7 @@
 
     <UserControl.Resources>
         <conv:FromTimeSpanToStringConverter x:Key="conv_TimeSpanToString" />
+        <BooleanToVisibilityConverter x:Key="conv_BooleanToVisibility"/>
     </UserControl.Resources>
 
     <Grid SnapsToDevicePixels="True">
@@ -153,10 +154,7 @@
         <Button x:Name="btn_AddTimePoint" Grid.Column="4" Grid.Row="0" Grid.RowSpan="2"
                 Width="40" Height="30" Margin="10,5,10,0"
                 Command="{Binding AddTimePointCommand}"
-                VerticalAlignment="Center">
-            <TextBlock VerticalAlignment="Center" HorizontalAlignment="Center" 
-                       Foreground="{Binding Foreground, RelativeSource={RelativeSource FindAncestor, AncestorType=Button}}"
-                       Text="add" />
+                VerticalAlignment="Center" Content="add">
         </Button>
     </Grid>
 </UserControl>

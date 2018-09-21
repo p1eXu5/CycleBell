@@ -9,7 +9,7 @@
         <ResourceDictionary>
 
             
-            <BooleanToVisibilityConverter x:Key="conv_BooleanToVisibility"/>
+            
 
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="Resources/Fonts.xaml" />
