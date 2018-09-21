@@ -38,6 +38,7 @@ namespace CycleBell.ViewModels.TimePointViewModels
         }
 
         public bool HasNoName => String.IsNullOrWhiteSpace(Name);
+        public bool NoSetTime => Time == TimeSpan.Zero && TimePointType == TimePointType.Relative;
 
         public ICommand AddTimePointCommand { get; }
 

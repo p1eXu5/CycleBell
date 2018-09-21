@@ -188,7 +188,7 @@
 
     <!-- style_PathBase -->
     <Style x:Key="style_PathBase" TargetType="Path">
-        <Setter Property="Fill" Value="{Binding Foreground, RelativeSource={RelativeSource FindAncestor, AncestorType=ButtonBase}}" />
+        <Setter Property="Fill" Value="{Binding Path=Foreground, RelativeSource={RelativeSource FindAncestor, AncestorType=ContentControl}}" />
         <Style.Triggers>
             <Trigger Property="IsEnabled" Value="False">
                 <Setter Property="Stroke" Value="#00000000"/>

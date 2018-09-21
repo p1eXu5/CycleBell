@@ -6,7 +6,8 @@
              xmlns:local="clr-namespace:CycleBell.Views"
              xmlns:controls="clr-namespace:CycleBell.Controls"
              xmlns:conv="clr-namespace:CycleBell.Converters"
-             mc:Ignorable="d" d:DesignWidth="400" 
+             xmlns:timePointViewModels="clr-namespace:CycleBell.ViewModels.TimePointViewModels"
+             mc:Ignorable="d" d:DesignWidth="400"
              FontFamily="{StaticResource font_SuiGeneris}" Height="64.755">
 
     <UserControl.Resources>
@@ -86,22 +87,14 @@
         <!-- Time -->
         <controls:TimerBox x:Name="tibx_PointTime" BorderThickness="0,0,0,1"
                            Grid.Column="1" Grid.Row="0"
-                           MinWidth="75"
-                           HorizontalAlignment="Center" 
-                           VerticalAlignment="Bottom"
-                           HorizontalContentAlignment="Center"
-                           VerticalContentAlignment="Bottom"
-                           Padding="0"
                            Margin="0"
+                           VerticalAlignment="Bottom"
                            Text="{Binding Time, 
                                           Mode=TwoWay, 
                                           Converter={StaticResource conv_TimeSpanToString},
-                                          UpdateSourceTrigger=PropertyChanged,
-                                          TargetNullValue=00:00}"
-                           FontSize="18" FontFamily="{DynamicResource font_SuiGeneris}"
-                           Foreground="{DynamicResource brush_NoSetTime}"
+                                          UpdateSourceTrigger=PropertyChanged, TargetNullValue=00:00}"
+                           FontFamily="{DynamicResource font_SuiGeneris}"
                            BorderBrush="{DynamicResource brush_Tip}"
-                           RenderTransformOrigin="0.5,0.5"
                            >
             <controls:TimerBox.RenderTransform>
                 <TransformGroup>
@@ -112,6 +105,15 @@
                 </TransformGroup>
             </controls:TimerBox.RenderTransform>
 
+            <!--<controls:TimerBox.Style>
+                <Style TargetType="controls:TimerBox" BasedOn="{StaticResource {x:Type controls:TimerBox}}">
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding NoSetTime}" Value="False">
+                            <Setter Property="Foreground" Value="{StaticResource brush_Foreground}"></Setter>
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </controls:TimerBox.Style>-->
         </controls:TimerBox>
 
         <!-- mute -->
@@ -147,7 +149,8 @@
                 Command="{Binding AddSoundCommand}">
             <Path Style="{StaticResource style_PathOfButton}" 
                   Data="{StaticResource gmtry_Notes}"
-                  Stroke="{x:Null}"/>
+                  Stroke="{x:Null}"
+                  />
         </Button>
 
         <!-- add -->

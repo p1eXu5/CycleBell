@@ -3,15 +3,18 @@
                     xmlns:controls="clr-namespace:CycleBell.Controls">
 
     <Style TargetType="controls:TimerBox">
-
+        <Setter Property="Foreground" Value="{StaticResource brush_NoSetTime}" />
+        <Setter Property="Padding" Value="0" />
+        <Setter Property="MinWidth" Value="75" />
         <Setter Property="FontSize" Value="18" />
         <Setter Property="FontStyle" Value="Normal" />
         <Setter Property="BorderThickness" Value="0,0,0,1" />
-        <Setter Property="BorderBrush" Value="DimGray" />
-        <Setter Property="HorizontalAlignment" Value="Stretch" />
+        <Setter Property="BorderBrush" Value="{DynamicResource brush_Tip}" />
+        <Setter Property="HorizontalAlignment" Value="Center" />
         <Setter Property="HorizontalContentAlignment" Value="Center" />
         <Setter Property="VerticalAlignment" Value="Bottom" />
-        <Setter Property="VerticalContentAlignment" Value="Stretch" />
+        <Setter Property="VerticalContentAlignment" Value="Bottom" />
+        <Setter Property="RenderTransformOrigin" Value=".5,.5" />
     </Style>
 
 </ResourceDictionary>
