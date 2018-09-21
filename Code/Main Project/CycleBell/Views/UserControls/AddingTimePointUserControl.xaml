@@ -7,7 +7,11 @@
              xmlns:controls="clr-namespace:CycleBell.Controls"
              xmlns:conv="clr-namespace:CycleBell.Converters"
              xmlns:timePointViewModels="clr-namespace:CycleBell.ViewModels.TimePointViewModels"
-             mc:Ignorable="d" d:DesignWidth="400"
+             mc:Ignorable="d" 
+             
+             d:DataContext="{d:DesignInstance timePointViewModels:AddingTimePointViewModel}"
+
+             d:DesignWidth="400"
              FontFamily="{StaticResource font_SuiGeneris}" Height="64.755">
 
     <UserControl.Resources>
@@ -34,15 +38,15 @@
         </Grid.RowDefinitions>
 
         <!-- Name -->
-        <Grid Grid.Column="0" Grid.Row="0" Margin="10,0,5,0"
-              VerticalAlignment="Bottom">
-
+        <Grid x:Name="grid_TimePointName" Grid.Column="0" Grid.Row="0" Margin="10,0,5,0"
+              VerticalAlignment="Bottom" Height="{Binding ElementName=tibx_PointTime, Path=ActualHeight}">
 
             <TextBox x:Name="m_pointName" 
-                     Height="{Binding ActualHeight, ElementName=tibx_PointTime}"
+                     Height="{Binding ActualHeight, ElementName=grid_TimePointName}"
                      Text="{Binding Name, Mode=TwoWay, UpdateSourceTrigger=LostFocus}">
                 <TextBox.Style>
                     <Style TargetType="TextBox">
+                        <Setter Property="VerticalContentAlignment" Value="Bottom" />
                         <Setter Property="BorderThickness" Value="0,0,0,1" />
                         <Setter Property="BorderBrush" Value="{DynamicResource brush_Tip}" />
                         <Setter Property="MinWidth" Value="106" />
@@ -50,8 +54,7 @@
                         <Setter Property="HorizontalAlignment" Value="Stretch" />
                         <Setter Property="VerticalAlignment" Value="Bottom" />
                         <Setter Property="HorizontalContentAlignment" Value="Left" />
-                        <Setter Property="VerticalContentAlignment" Value="Bottom"></Setter>
-                        <Setter Property="Foreground" Value="{DynamicResource brush_Tip}" />
+                        <Setter Property="Foreground" Value="{DynamicResource brush_Foreground}" />
                         <Setter Property="FontWeight" Value="SemiBold"></Setter>
                         <Setter Property="FontStyle" Value="Normal" />
                         <Setter Property="FontSize" Value="14" />
@@ -89,6 +92,8 @@
                            Grid.Column="1" Grid.Row="0"
                            Margin="0"
                            VerticalAlignment="Bottom"
+                           VerticalContentAlignment="Bottom"
+                           Height="22"
                            Text="{Binding Time, 
                                           Mode=TwoWay, 
                                           Converter={StaticResource conv_TimeSpanToString},
@@ -105,7 +110,7 @@
                 </TransformGroup>
             </controls:TimerBox.RenderTransform>
 
-            <!--<controls:TimerBox.Style>
+            <controls:TimerBox.Style>
                 <Style TargetType="controls:TimerBox" BasedOn="{StaticResource {x:Type controls:TimerBox}}">
                     <Style.Triggers>
                         <DataTrigger Binding="{Binding NoSetTime}" Value="False">
@@ -113,16 +118,17 @@
                         </DataTrigger>
                     </Style.Triggers>
                 </Style>
-            </controls:TimerBox.Style>-->
+            </controls:TimerBox.Style>
         </controls:TimerBox>
 
         <!-- mute -->
         <ToggleButton x:Name="tgl_Mute" Grid.Column="2" Grid.Row="0"
                       Style="{StaticResource style_MuteToggleButton}"
-                      HorizontalAlignment="Right"
+                      HorizontalAlignment="Center"
+                      IsEnabled="{Binding ElementName=btn_AddTimePoint, Path=IsEnabled}"
                       >
             <ToggleButton.RenderTransform>
-                <TranslateTransform Y="-2"></TranslateTransform>
+                <TranslateTransform Y="-2" X="8"></TranslateTransform>
             </ToggleButton.RenderTransform>
         </ToggleButton>
 
@@ -132,7 +138,7 @@
                    Margin="20,5,0,0"
                    HorizontalAlignment="Right"
                    VerticalAlignment="Bottom"
-                   Text="E:\Music\Stoner\111.wav"
+                   Text="{Binding SoundLocation}"
                    Foreground="{DynamicResource brush_Tip}"
                    FontWeight="SemiBold"
                    FontSize="10"
@@ -142,6 +148,7 @@
 
         <!-- sound -->
         <Button x:Name="btn_AddSoundButton"
+                IsEnabled="{Binding ElementName=btn_AddTimePoint, Path=IsEnabled}"
                 Grid.Column="3" Grid.Row="0" Grid.RowSpan="2"
                 Margin="16,5,0,0"
                 Width="30" Height="30"

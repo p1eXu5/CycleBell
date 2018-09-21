@@ -24,6 +24,7 @@ namespace CycleBell.ViewModels.TimePointViewModels
             set {
                 _timePoint.Time = value;
                 OnPropertyChanged();
+                OnPropertyChanged(nameof(NoSetTime));
                 ((ActionCommand)AddTimePointCommand).RaiseCanExecuteChanged();
             }
         }

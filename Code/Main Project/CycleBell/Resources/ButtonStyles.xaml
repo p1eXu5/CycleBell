@@ -171,11 +171,84 @@
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="ToggleButton">
-                    <TextBlock x:Name="Mute" Text="mute" VerticalAlignment="Bottom">
-                        <TextBlock.Foreground>
-                            <SolidColorBrush x:Name="txtb_Brush" Color="#FF002EAA" />
-                        </TextBlock.Foreground>
-                    </TextBlock>
+                    
+                    <Border x:Name="border"
+                            BorderThickness="0">
+                        <VisualStateManager.VisualStateGroups>
+                            <VisualStateGroup x:Name="CommonState">
+
+                                <!--<VisualStateGroup.Transitions>
+                                    <VisualTransition GeneratedDuration="0:0:.2"></VisualTransition>
+                                </VisualStateGroup.Transitions>-->
+
+                                <VisualState x:Name="Normal" >
+                                </VisualState>
+
+                                <VisualState x:Name="Pressed">
+                                    <Storyboard TargetName="tbk_Mute">
+                                        <DoubleAnimation Storyboard.TargetProperty="FontSize" To="12" Duration="0"/>
+                                        <ColorAnimation Storyboard.TargetName="col_Top" Storyboard.TargetProperty="Color" 
+                                                                To="{DynamicResource col_TopPressed}" Duration="0" />
+                                        <ColorAnimation Storyboard.TargetName="col_Bottom" Storyboard.TargetProperty="Color" 
+                                                                To="{DynamicResource col_BottomPressed}" Duration="0" />
+                                        <ThicknessAnimationUsingKeyFrames Storyboard.TargetName="border" Storyboard.TargetProperty="BorderThickness">
+                                            <LinearThicknessKeyFrame Value="0,0,0,1" KeyTime="0" />
+                                        </ThicknessAnimationUsingKeyFrames> 
+                                    </Storyboard>
+                                </VisualState>
+                                
+                                <VisualState x:Name="MouseOver">
+                                    <Storyboard TargetName="tbk_Mute">
+                                        <DoubleAnimation Storyboard.TargetProperty="FontSize" To="14" Duration="0"/>
+                                        <ThicknessAnimationUsingKeyFrames Storyboard.TargetName="border" Storyboard.TargetProperty="BorderThickness">
+                                            <LinearThicknessKeyFrame Value="0,0,0,1" KeyTime="0" />
+                                        </ThicknessAnimationUsingKeyFrames>
+                                    </Storyboard>
+                                </VisualState>
+                            
+                                <VisualState x:Name="Disabled">
+                                    <Storyboard TargetName="tbk_Mute">
+                                        <ColorAnimation Storyboard.TargetName="col_Top" Storyboard.TargetProperty="Color" 
+                                                        To="{DynamicResource col_TopUncheckedIcon}" Duration="0:0:.2" />
+                                        <ColorAnimation Storyboard.TargetName="col_Bottom" Storyboard.TargetProperty="Color" 
+                                                        To="{DynamicResource col_BottomUncheckedIcon}" Duration="0:0:.2" />
+                                    </Storyboard>
+                                </VisualState>
+
+                            </VisualStateGroup>
+
+                            <VisualStateGroup x:Name="CheckStates">
+                                <VisualState x:Name="Unchecked" />
+
+                                <VisualState x:Name="Checked">
+                                    <Storyboard>
+                                        <ColorAnimation Storyboard.TargetName="col_Top" Storyboard.TargetProperty="Color" 
+                                                        To="{DynamicResource col_TopCheckedMute}" Duration="0:0:.2" />
+                                        <ColorAnimation Storyboard.TargetName="col_Bottom" Storyboard.TargetProperty="Color" 
+                                                        To="{DynamicResource col_BottomCheckedMute}" Duration="0:0:.2" />
+                                        <ColorAnimation Storyboard.TargetName="col_Border" Storyboard.TargetProperty="Color" 
+                                                        To="{DynamicResource col_BottomCheckedMute}" Duration="0:0:.2" />
+                                    </Storyboard>
+                                </VisualState>
+                            </VisualStateGroup>
+                        </VisualStateManager.VisualStateGroups>
+
+                        <TextBlock x:Name="tbk_Mute" Text="mute" 
+                                   VerticalAlignment="Bottom"
+                                   HorizontalAlignment="Center"
+                                   RenderTransformOrigin=".5,.5">
+                            <TextBlock.Foreground>
+                                <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+                                    <GradientStop x:Name="col_Top" Color="{DynamicResource col_TopForeground}" Offset="0" />
+                                    <GradientStop x:Name="col_Bottom" Color="{DynamicResource col_BottomForeground}" Offset="1" />
+                                </LinearGradientBrush>
+                            </TextBlock.Foreground>
+                        </TextBlock>
+
+                        <Border.BorderBrush>
+                            <SolidColorBrush x:Name="col_Border" Color="{StaticResource col_UncheckedStroke}" />
+                        </Border.BorderBrush>
+                    </Border>
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
