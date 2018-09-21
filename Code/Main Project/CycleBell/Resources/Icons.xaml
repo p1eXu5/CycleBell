@@ -76,7 +76,11 @@
     <Color x:Key="col_CheckedStroke">#00000000</Color>
     <Color x:Key="col_PressedButton">#905000</Color>
     <Color x:Key="col_Play">#00FF00</Color>
+    <Color x:Key="col_TopPlay">#00FF00</Color>
+    <Color x:Key="col_BottomPlay">#00AA00</Color>
     <Color x:Key="col_Pause">#FFFF00</Color>
+    <Color x:Key="col_TopPause">#FFFF00</Color>
+    <Color x:Key="col_BottomPause">#AAAA00</Color>
 
     <SolidColorBrush x:Key="BackgroundBrush" Color="{DynamicResource col_Background}" />
     <SolidColorBrush x:Key="brush_Foreground" Color="{DynamicResource col_Foreground}" />

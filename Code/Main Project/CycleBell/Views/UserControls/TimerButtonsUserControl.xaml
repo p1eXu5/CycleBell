@@ -23,7 +23,7 @@
                       Width="48" Height="38"
                       Margin="0,0,20,0"
                       HorizontalAlignment="Center" 
-                      local:AttachedPropertyFactory.BorderColor="#8800008B"
+                      local:AttachedPropertyFactory.BorderColor="#33000055"
                       >
             <Path Style="{StaticResource style_PathOfToggleButton}" Data="{StaticResource gmtry_Infinite}"/>
         </ToggleButton>
@@ -33,8 +33,8 @@
                       Width="48" Height="38"
                       HorizontalAlignment="Center"
                       IsThreeState="True"
-                      local:AttachedPropertyFactory.BorderColor="#88FF8C00"
-
+                      local:AttachedPropertyFactory.BorderColor="#33553300"
+                      Style="{StaticResource style_ThreeStateToggleButton}"
                       >
             <Grid>
                 <Grid.ColumnDefinitions>
@@ -43,13 +43,15 @@
                     <ColumnDefinition Width="Auto"/>
                 </Grid.ColumnDefinitions>
 
-                <Path Grid.Column="0" Style="{StaticResource style_PathOfToggleButton}" Data="{StaticResource gmtry_Play}"
-                      Fill="{Binding Path=(local:AttachedPropertyFactory.FillColor1), 
+                <Path Grid.Column="0" 
+                      Style="{StaticResource style_PathOfToggleButton}" 
+                      Data="{StaticResource gmtry_Play}"
+                      Fill="{Binding Path=(local:AttachedPropertyFactory.FillBrush1), 
                                      RelativeSource={RelativeSource FindAncestor, AncestorType=ToggleButton}}"/>
 
                 <Path Grid.Column="2" Style="{StaticResource style_PathOfToggleButton}" Data="{StaticResource gmtry_Pause}" 
                       Margin="5,0,0,0" 
-                      Fill="{Binding Path=(local:AttachedPropertyFactory.FillColor2), 
+                      Fill="{Binding Path=(local:AttachedPropertyFactory.FillBrush2), 
                                      RelativeSource={RelativeSource FindAncestor, AncestorType=ToggleButton}}"/>
 
             </Grid>
@@ -59,7 +61,7 @@
         <ToggleButton Grid.Column="2"
                       Width="48" Height="38"
                       HorizontalAlignment="Center"
-                      local:AttachedPropertyFactory.BorderColor="#888B008B">
+                      local:AttachedPropertyFactory.BorderColor="#33330033">
             <Path Style="{StaticResource style_PathOfToggleButton}" Data="{StaticResource gmtry_Stop}" Margin="3"/>
         </ToggleButton>
 
@@ -67,7 +69,7 @@
         <ToggleButton Grid.Column="3"
                       Width="48" Height="38"
                       HorizontalAlignment="Center"
-                      local:AttachedPropertyFactory.BorderColor="#88006400">
+                      local:AttachedPropertyFactory.BorderColor="#33005500">
             <Grid Margin="2">
                 <Path Style="{StaticResource style_PathOfToggleButton}" Data="{StaticResource gmtry_BellIn}"/>
                 <Path Style="{StaticResource style_PathOfToggleButton}" Data="{StaticResource gmtry_BellOut}" />

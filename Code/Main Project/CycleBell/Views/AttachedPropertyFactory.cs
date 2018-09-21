@@ -39,23 +39,23 @@ namespace CycleBell.Views
 
         #region FillColor1
 
-        public static readonly DependencyProperty FillColor1Property = DependencyProperty.RegisterAttached("FillColor1", typeof(Brush), typeof(AttachedPropertyFactory)
+        public static readonly DependencyProperty FillBrush1Property = DependencyProperty.RegisterAttached("FillBrush1", typeof(Brush), typeof(AttachedPropertyFactory)
                                                                                                             , new FrameworkPropertyMetadata(Brushes.DimGray, FrameworkPropertyMetadataOptions.Inherits));
 
-        public static void SetFillColor1(DependencyObject d, Color value) => d.SetValue(AttachedPropertyFactory.FillColor1Property, value);
+        public static void SetFillBrush1(DependencyObject d, Brush value) => d.SetValue(AttachedPropertyFactory.FillBrush1Property, value);
 
-        public static Color GetFillColor1(DependencyObject d) => (Color)d.GetValue(AttachedPropertyFactory.FillColor1Property);
+        public static Brush GetFillBrush1(DependencyObject d) => (Brush)d.GetValue(AttachedPropertyFactory.FillBrush1Property);
 
         #endregion
 
         #region FillColor2
 
-        public static readonly DependencyProperty FillColor2Property = DependencyProperty.RegisterAttached("FillColor2", typeof(Brush), typeof(AttachedPropertyFactory)
+        public static readonly DependencyProperty FillBrush2Property = DependencyProperty.RegisterAttached("FillBrush2", typeof(Brush), typeof(AttachedPropertyFactory)
                                                                                                            , new FrameworkPropertyMetadata(Brushes.DimGray, FrameworkPropertyMetadataOptions.Inherits));
 
-        public static void SetFillColor2(DependencyObject d, Brush value) => d.SetValue(AttachedPropertyFactory.FillColor2Property, value);
+        public static void SetFillBrush2(DependencyObject d, Brush value) => d.SetValue(AttachedPropertyFactory.FillBrush2Property, value);
 
-        public static Brush GetFillColor2(DependencyObject d) => (Brush)d.GetValue(AttachedPropertyFactory.FillColor2Property);
+        public static Brush GetFillBrush2(DependencyObject d) => (Brush)d.GetValue(AttachedPropertyFactory.FillBrush2Property);
 
         #endregion
     }
