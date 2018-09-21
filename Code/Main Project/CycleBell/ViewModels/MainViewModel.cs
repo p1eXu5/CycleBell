@@ -53,7 +53,7 @@ namespace CycleBell.ViewModels
 
         #endregion Constructor
 
-        #region CLR Properties
+        #region Properties
 
         public ObservableCollection<PresetViewModel> Presets { get; set; }
 
@@ -85,6 +85,7 @@ namespace CycleBell.ViewModels
         {
             get => SelectedPreset?.IsNewPreset ?? false;
         }
+
 
         #endregion CLR Properties
 

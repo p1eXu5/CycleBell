@@ -19,6 +19,8 @@
 
     <Window.Resources>
         <ResourceDictionary>
+            
+            <BooleanToVisibilityConverter x:Key="conv_BoolToVisibility" />
 
             <sys:Double x:Key="SeparatorSpaseKey">15</sys:Double>
 
@@ -180,9 +182,74 @@
             </StackPanel>
 
             <!-- preset and timePoints-->
-            <local:PresetUserControl Grid.Row="2" DataContext="{Binding SelectedPreset}" 
-                                     Control.Foreground="{Binding ElementName=m_presetComboBox, Path=Foreground, Mode=OneWay}"
-                                     UIElement.IsEnabled="{Binding ElementName=m_presetComboBox, Path=IsEnabled, Mode=OneWay}"/>
+            <Grid Grid.Row="2">
+                <local:PresetUserControl x:Name="preset" DataContext="{Binding SelectedPreset}"
+                                         Control.Foreground="{Binding ElementName=m_presetComboBox, Path=Foreground, Mode=OneWay}"
+                                         UIElement.IsEnabled="{Binding ElementName=m_presetComboBox, Path=IsEnabled, Mode=OneWay}">
+                    <local:PresetUserControl.Style>
+                        <Style>
+                            <Setter Property="UIElement.Opacity" Value="0.0" />
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding Path=DataContext.IsSelectedPresetExists, 
+                                                              RelativeSource={RelativeSource FindAncestor, AncestorType=Window}}" Value="True">
+                                    <DataTrigger.EnterActions>
+                                        <BeginStoryboard>
+                                            <Storyboard>
+                                                <DoubleAnimation Storyboard.TargetProperty="Opacity" To="1.0" Duration="0:0:.4"/>
+                                            </Storyboard>
+                                        </BeginStoryboard>
+                                    </DataTrigger.EnterActions>
+                                    <DataTrigger.ExitActions>
+                                        <BeginStoryboard>
+                                            <Storyboard>
+                                                <DoubleAnimation Storyboard.TargetProperty="Opacity" To="0.0" Duration="0:0:.4"/>
+                                            </Storyboard>
+                                        </BeginStoryboard>
+                                    </DataTrigger.ExitActions>
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </local:PresetUserControl.Style>
+                </local:PresetUserControl>
+
+                <!-- When NoTimePoints -->
+                <Grid Height="{Binding ElementName=preset, Path=ActualHeight}"> 
+                    <TextBlock HorizontalAlignment="Center"
+                               VerticalAlignment="Center"
+                               >
+                        <Bold>To create a new preset:</Bold>
+                        <LineBreak /><LineBreak />
+                        <Run Text="    "></Run><Run>1. Menu "File"</Run>
+                        <LineBreak />
+                        <Run Text="    "></Run><Run>2. Command "New Preset"</Run>
+                        <LineBreak /><LineBreak /><LineBreak />
+
+                        <TextBlock.Style>
+                            <Style>
+                                <Setter Property="UIElement.Opacity" Value="0.0" />
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding IsSelectedPresetExists}" Value="False">
+                                        <DataTrigger.EnterActions>
+                                            <BeginStoryboard>
+                                                <Storyboard>
+                                                    <DoubleAnimation Storyboard.TargetProperty="Opacity" To="1.0" Duration="0:0:.4"/>
+                                                </Storyboard>
+                                            </BeginStoryboard>
+                                        </DataTrigger.EnterActions>
+                                        <DataTrigger.ExitActions>
+                                            <BeginStoryboard>
+                                                <Storyboard>
+                                                    <DoubleAnimation Storyboard.TargetProperty="Opacity" To="0.0" Duration="0:0:.4"/>
+                                                </Storyboard>
+                                            </BeginStoryboard>
+                                        </DataTrigger.ExitActions>
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </TextBlock.Style>
+                    </TextBlock>
+                </Grid>
+            </Grid>
 
             <!-- timer's buttons -->
             <userControls:TimerButtonsUserControl Grid.Row="3" DataContext="{Binding}"

@@ -12,7 +12,7 @@
 
              d:DataContext="{d:DesignInstance viewModels:PresetViewModel}"
 
-             d:DesignHeight="450" d:DesignWidth="400">
+             d:DesignHeight="450" d:DesignWidth="400" MinHeight="450">
 
     <UserControl.Resources>
         
@@ -50,36 +50,74 @@
             <!-- TimePointVmCollection -->
             <ListBox x:Name="m_pointsList"
                      
-                     Style="{StaticResource style_TimePointsListBox}"
                      ItemTemplateSelector="{StaticResource templsel_Selector}"
                      ItemsSource="{Binding TimePointVmCollection}"
                      FontFamily="{StaticResource font_SuiGeneris}"
                      ScrollViewer.HorizontalScrollBarVisibility="Hidden"
                      ItemContainerStyle="{StaticResource style_ListBoxItem}">
-
-            </ListBox>
-            
-            <!-- When NoTimePoints -->
-            <TextBlock HorizontalAlignment="Center">
-                <Bold>To create a new preset:</Bold>
-                <LineBreak /><LineBreak />
-                <Run Text="    "></Run><Run>1. Menu "File"</Run>
-                <LineBreak />
-                <Run Text="    "></Run><Run>2. Command "New Preset"</Run>
-                <LineBreak /><LineBreak /><LineBreak />
-                <Bold>To create TimePoints use form below:</Bold>
-                
-                <TextBlock.Style>
-                    <Style>
-                        <Setter Property="UIElement.Visibility" Value="Hidden" />
+                <ListBox.Style>
+                    <Style TargetType="ListBox" BasedOn="{StaticResource style_TimePointsListBox}">
+                        <Setter Property="UIElement.Opacity" Value="0.0" />
                         <Style.Triggers>
-                            <DataTrigger Binding="{Binding IsNoTimePoints}" Value="True">
-                                <Setter Property="UIElement.Visibility" Value="Visible" />
+                            <DataTrigger Binding="{Binding IsNoTimePoints}" Value="False">
+                                <DataTrigger.EnterActions>
+                                    <BeginStoryboard>
+                                        <Storyboard>
+                                            <DoubleAnimation Storyboard.TargetProperty="Opacity" To="1.0" Duration="0:0:.4"/>
+                                        </Storyboard>
+                                    </BeginStoryboard>
+                                </DataTrigger.EnterActions>
+                                <DataTrigger.ExitActions>
+                                    <BeginStoryboard>
+                                        <Storyboard>
+                                            <DoubleAnimation Storyboard.TargetProperty="Opacity" To="0.0" Duration="0:0:.4"/>
+                                        </Storyboard>
+                                    </BeginStoryboard>
+                                </DataTrigger.ExitActions>
                             </DataTrigger>
                         </Style.Triggers>
                     </Style>
-                </TextBlock.Style>
-            </TextBlock>
+                </ListBox.Style>
+            </ListBox>
+
+            <!-- When NoTimePoints -->
+            <StackPanel Orientation="Vertical">
+                <StackPanel.Style>
+                    <Style>
+                        <Setter Property="UIElement.Opacity" Value="1.0" />
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding IsNoTimePoints}" Value="False">
+                                <DataTrigger.EnterActions>
+                                    <BeginStoryboard>
+                                        <Storyboard>
+                                            <DoubleAnimation Storyboard.TargetProperty="Opacity" To="0.0" Duration="0:0:.4"/>
+                                        </Storyboard>
+                                    </BeginStoryboard>
+                                </DataTrigger.EnterActions>
+                                <DataTrigger.ExitActions>
+                                    <BeginStoryboard>
+                                        <Storyboard>
+                                            <DoubleAnimation Storyboard.TargetProperty="Opacity" To="1.0" Duration="0:0:.4"/>
+                                        </Storyboard>
+                                    </BeginStoryboard>
+                                </DataTrigger.ExitActions>
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </StackPanel.Style>
+
+                <TextBlock HorizontalAlignment="Center">
+                    <Bold>To create a new preset:</Bold>
+                    <LineBreak /><LineBreak />
+                    <Run Text="    "></Run><Run>1. Menu "File"</Run>
+                    <LineBreak />
+                    <Run Text="    "></Run><Run>2. Command "New Preset"</Run>
+                    <LineBreak /><LineBreak /><LineBreak />
+                </TextBlock>
+                <TextBlock HorizontalAlignment="Center">
+                    <Bold>To create TimePoints use form below:</Bold>
+                </TextBlock>
+            </StackPanel>
 
         </Grid>
 
