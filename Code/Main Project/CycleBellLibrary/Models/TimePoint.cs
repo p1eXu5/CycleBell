@@ -61,7 +61,7 @@ namespace CycleBellLibrary.Models
         // Instance
         public TimePoint()
             : this(
-                name: "", 
+                name: DefaultTimePointNameFunc(), 
                 time: DefaultTime, 
                 timePointType: DefaultTimePointType)
         { }
@@ -132,6 +132,8 @@ namespace CycleBellLibrary.Models
         public static Int64 MinId { get; }
 
         public static TimePoint DefaultTimePoint => new TimePoint();
+
+        public static Func<String> DefaultTimePointNameFunc = () => $"TimePoint {_timePointNum}";
 
         // Instance:_______________________________________________________________________
 

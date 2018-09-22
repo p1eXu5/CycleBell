@@ -20,14 +20,25 @@ namespace CycleBell.NUnitTests.ViewModels
         private Mock<IPresetsManager> _mockPresetCollection;
         private readonly Mock<ICycleBellManager> _mockCycleBellManager = new Mock<ICycleBellManager>();
 
+        #region Class & ctor
+
         [Test]
         public void class_DerivedToObservableObject()
         {
             Assert.AreEqual (typeof(PresetViewModel).BaseType, typeof(ObservableObject));
         }
 
+        [Test]
+        public void ctor_WhenCreated_CreatesEmptyNamedTimePoint()
+        {
+            var pvm = GetPresetViewModel();
 
-        // AddTimePointCommand
+            Assert.AreEqual (String.Empty, pvm.AddingTimePoint.Name);
+        }
+
+        #endregion
+
+        #region AddTimePointCommand
 
         [TestCase("-0:00:01", TimePointType.Relative)]
         [TestCase("-0:00:01", TimePointType.Absolute)]
@@ -51,52 +62,33 @@ namespace CycleBell.NUnitTests.ViewModels
         }
 
         [Test]
-        public void AddTimePointCommand_CanExecuteLoopNumUnknown_AddsBeginTimePointViewModels()
+        public void UpdateTimePointVmCollection_EventRaisedByNewTimePoint_Adds()
         {
+            // Arrange
             var pvm = GetPresetViewModel();
-            pvm.AddingTimePoint.Time = TimeSpan.FromSeconds (1);
-            pvm.AddingTimePoint.LoopNumber = 10;
+            var preset = pvm.Preset;
 
-            pvm.AddTimePointCommand.Execute (null);
+            // Action
+             preset.AddTimePoint (TimePoint.DefaultTimePoint);
 
-            var begin = pvm.TimePointVmCollection.OrderBy (tp => tp.Id).ThenBy (tp => tp.LoopNumber).First();
-
-            Assert.AreEqual (begin.GetType(), typeof(BeginTimePointViewModel));
+            // Assert
+            Assert.IsTrue (pvm.TimePointVmCollection.Count == 3);
         }
 
         [Test]
-        public void AddTimePointCommand_CanExecuteLoopNumUnknown_AddsEndTimePointViewModels()
-        {
-            var pvm = GetPresetViewModel();
-            pvm.AddingTimePoint.Time = TimeSpan.FromSeconds (1);
-            pvm.AddingTimePoint.LoopNumber = 10;
-
-            pvm.AddTimePointCommand.Execute (null);
-
-            var begin = pvm.TimePointVmCollection.OrderBy (tp => tp.Id).ThenBy (tp => tp.LoopNumber).Last();
-
-            Assert.AreEqual (begin.GetType(), typeof(EndTimePointViewModel));
-        }
-
-        [Test]
-        public void AddTimePointCommand_CanExecuteKnownLoopNumber_AddsOnlyOneTimePointViewModel()
+        public void AddTimePointCommand_TimePointNameless_AddsDefaultedNameTimePoint()
         {
             var pvm = GetPresetViewModel();
 
-            pvm.AddingTimePoint.Time = TimeSpan.FromSeconds (1);
-            pvm.AddingTimePoint.LoopNumber = 10;
             pvm.AddTimePointCommand.Execute (null);
 
-            pvm.AddingTimePoint.Time = TimeSpan.FromSeconds (1);
-            pvm.AddingTimePoint.LoopNumber = 10;
-            pvm.AddTimePointCommand.Execute (null);
-
-            var tpvm = pvm.TimePointVmCollection.Where (t => t is TimePointViewModel).ToList();
-            Assert.IsTrue (tpvm.Count == 2);
+            Assert.AreEqual (TimePoint.DefaultTimePointNameFunc(), pvm.TimePointVmCollection[0].TimePoint.Name);
         }
+        
+        // WhenExecuted
 
         [Test]
-        public void AddTimePointCommand_CanExecute_AddsNewTimePointWithCopiedFields()
+        public void AddTimePointCommand_WhenExecuted_AddsNewTimePointWithCopiedFields()
         {
             var pvm = GetPresetViewModel();
             pvm.AddingTimePoint.Time = TimeSpan.FromSeconds (1);
@@ -112,8 +104,57 @@ namespace CycleBell.NUnitTests.ViewModels
             Assert.IsTrue (type == actual.TimePointType);
         }
 
+        // KnownLoop
+
         [Test]
-        public void AddTimePointCommand_CanExecuteLoopUnknown_AddsTimePointViewModels()
+        public void AddTimePointCommand_KnownLoop_AddsOnlyOneTimePointViewModel()
+        {
+            var pvm = GetPresetViewModel();
+
+            pvm.AddingTimePoint.Time = TimeSpan.FromSeconds (1);
+            pvm.AddingTimePoint.LoopNumber = 10;
+            pvm.AddTimePointCommand.Execute (null);
+
+            pvm.AddingTimePoint.Time = TimeSpan.FromSeconds (1);
+            pvm.AddingTimePoint.LoopNumber = 10;
+            pvm.AddTimePointCommand.Execute (null);
+
+            var tpvm = pvm.TimePointVmCollection.Where (t => t is TimePointViewModel).ToList();
+            Assert.IsTrue (tpvm.Count == 2);
+        }
+
+        // LoopUnknown
+
+        [Test]
+        public void AddTimePointCommand_LoopUnknown_AddsBeginTimePointViewModels()
+        {
+            var pvm = GetPresetViewModel();
+            pvm.AddingTimePoint.Time = TimeSpan.FromSeconds (1);
+            pvm.AddingTimePoint.LoopNumber = 10;
+
+            pvm.AddTimePointCommand.Execute (null);
+
+            var begin = pvm.TimePointVmCollection.OrderBy (tp => tp.Id).ThenBy (tp => tp.LoopNumber).First();
+
+            Assert.AreEqual (begin.GetType(), typeof(BeginTimePointViewModel));
+        }
+
+        [Test]
+        public void AddTimePointCommand_LoopUnknown_AddsEndTimePointViewModels()
+        {
+            var pvm = GetPresetViewModel();
+            pvm.AddingTimePoint.Time = TimeSpan.FromSeconds (1);
+            pvm.AddingTimePoint.LoopNumber = 10;
+
+            pvm.AddTimePointCommand.Execute (null);
+
+            var begin = pvm.TimePointVmCollection.OrderBy (tp => tp.Id).ThenBy (tp => tp.LoopNumber).Last();
+
+            Assert.AreEqual (begin.GetType(), typeof(EndTimePointViewModel));
+        }
+
+        [Test]
+        public void AddTimePointCommand_LoopUnknown_AddsTimePointViewModels()
         {
             var pvm = GetPresetViewModel();
 
@@ -133,22 +174,9 @@ namespace CycleBell.NUnitTests.ViewModels
             Assert.AreEqual (sortedTimePoints[3].GetType(), typeof(EndTimePointViewModel));
         }
 
-        [Test]
-        public void UpdateTimePointVmCollection_EventRaisedByNewTimePoint_Adds()
-        {
-            // Arrange
-            var pvm = GetPresetViewModel();
-            var preset = pvm.Preset;
+        #endregion
 
-            // Action
-             preset.AddTimePoint (TimePoint.DefaultTimePoint);
-
-            // Assert
-            Assert.IsTrue (pvm.TimePointVmCollection.Count == 3);
-        }
-
-
-        // PlayCommand
+        #region PlayCommand
 
         [Test]
         public void PlayCommand_TimePointsIsEmpty_CanNotExecuted()
@@ -178,6 +206,7 @@ namespace CycleBell.NUnitTests.ViewModels
             _mockTimerManager.Verify(tm => tm.Play (It.IsAny<Preset>()));
         }
 
+        #endregion
 
         // PouseCommand
 
