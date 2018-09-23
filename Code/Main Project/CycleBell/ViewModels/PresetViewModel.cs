@@ -5,6 +5,7 @@ using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Linq;
+using System.Media;
 using System.Runtime.CompilerServices;
 using System.Text;
 using System.Windows.Data;
@@ -28,7 +29,7 @@ namespace CycleBell.ViewModels
     /// <summary>
     /// Timer preset
     /// </summary>
-    public class PresetViewModel : ObservableObject
+    public class PresetViewModel : ObservableObject, IPresetViewModel
     {
         #region Consts
 
@@ -56,18 +57,13 @@ namespace CycleBell.ViewModels
 
         #region Constructor
 
-        public PresetViewModel(Preset preset, IMan manager)
+        public PresetViewModel(Preset preset, IMainViewModel mainViewModel)
         {
-            // _preset
+            // _presetViewModel
             _preset = preset ?? throw new ArgumentNullException(nameof(preset));
 
-            if (manager == null)
-                throw new ArgumentNullException(nameof(manager));
-
             // _presetCollectionManager
-            _presetCollectionManager = manager.PresetCollectionManager ?? throw new ArgumentNullException(nameof(PresetCollectionManager));
-
-
+            _mainViewModel = mainViewModel ?? throw new ArgumentNullException(nameof(mainViewModel));
 
             // _settedLoopNumbers
             _settedLoopNumbers = new HashSet<byte>();
@@ -175,34 +171,39 @@ namespace CycleBell.ViewModels
         public bool IsNewPreset => _preset.PresetName == Preset.PresetName;
         public bool IsNoTimePoints => TimePointVmCollection.Count < 1;
 
-        // ITimerManager
-        public bool IsRunning => _timerManager.IsRunning;
-
         #endregion
 
         #region Commands
 
         public ICommand AddTimePointCommand => new ActionCommand (AddTimePoint, CanAddTimePoint);
-        
-        public ICommand BellOnStartTimeToggleCommand => new ActionCommand (BellOnStartTime);
-
 
         #endregion
 
         #region Methods
 
+        public bool AddTimePoint (TimePoint timePoint)
+        {
+            var res = CanAddTimePoint (timePoint);
+
+            if (res)
+                _preset.AddTimePoint (timePoint);
+
+            return res;
+        }
+        public void RemoveTimePoint (TimePoint timePoint)
+        {
+            _preset.RemoveTimePoint (timePoint);
+        }
+
+        public void UpdateSoundBank (TimePoint timePoint)
+        {
+            _mainViewModel.SoundMap[timePoint.Id] = new SoundPlayer((string)timePoint.Tag);
+        }
+
         public void Save() { throw new NotImplementedException(); }
 
         // Service:
-        private ITimerManager GetTimerManager (ICycleBellManager manager)
-        {
-            var timerManager = manager.TimerManager ?? throw new ArgumentNullException(nameof(TimerManager));
-            timerManager.TimerSecondPassedEvent += OnSecondPassed;
-            timerManager.ChangeTimePointEvent += OnTimePointChanged;
-            timerManager.TimerStopEvent += OnStop;
 
-            return timerManager;
-        }
         private ObservableCollection<TimePointViewModelBase> GetTimePointViewModelCollection (Preset preset)
         {
             var timePointVmCollection = new ObservableCollection<TimePointViewModelBase>();
@@ -302,7 +303,7 @@ namespace CycleBell.ViewModels
         public PresetViewModel GetDeepCopy()
         {
             var presetVm = (PresetViewModel) this.MemberwiseClone();
-            //presetVm._preset = _preset.GetDeepCopy();
+            //presetVm._presetViewModel = _presetViewModel.GetDeepCopy();
 
             return null;
         }
@@ -319,33 +320,35 @@ namespace CycleBell.ViewModels
 
             ResetAddingTimePoint();
         }
-        public bool CanAddTimePoint (object o)
+        private bool CanAddTimePoint (object o)
         {
             var res = _addingTimePoint.Time == TimeSpan.Zero && _addingTimePoint.TimePointType == TimePointType.Absolute 
                         || _addingTimePoint.Time > TimeSpan.Zero;
 
             return res;
         }
+        private bool CanAddTimePoint (TimePoint timePoint)
+        {
+            var res = timePoint.Time == TimeSpan.Zero && timePoint.TimePointType == TimePointType.Absolute 
+                      || timePoint.Time > TimeSpan.Zero;
 
-
-
-        // BellOnStartTimeCommand
-        private void BellOnStartTime (object o) => CanBellOnStartTime = (CanBellOnStartTime != true);
+            return res;
+        }
 
 
 
         // TimerManager handlers:
-        private void OnSecondPassed(object s, TimerEventArgs e)
+        internal void OnSecondPassed(object s, TimerEventArgs e)
         {
             throw new NotImplementedException();
         }
 
-        private void OnTimePointChanged(object s, TimerEventArgs e)
+        internal void OnTimePointChanged(object s, TimerEventArgs e)
         {
             throw new NotImplementedException();
         }
 
-        private void OnStop(object s, EventArgs e)
+        internal void OnStop(object s, EventArgs e)
         {
             throw new NotImplementedException();
         }

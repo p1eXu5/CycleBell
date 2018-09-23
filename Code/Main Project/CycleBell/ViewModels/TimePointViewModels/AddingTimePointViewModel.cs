@@ -8,7 +8,7 @@ namespace CycleBell.ViewModels.TimePointViewModels
 {
     public class AddingTimePointViewModel : TimePointViewModel
     {
-        public AddingTimePointViewModel(Preset selectedPreset) : base(new TimePoint { Name = "" }, selectedPreset)
+        public AddingTimePointViewModel(IPresetViewModel presetViewModel) : base(new TimePoint { Name = "" }, presetViewModel)
         { }
 
         public override TimeSpan Time
@@ -34,7 +34,7 @@ namespace CycleBell.ViewModels.TimePointViewModels
         public bool HasNoName => String.IsNullOrWhiteSpace(Name);
         public bool NoSetTime => Time == TimeSpan.Zero && TimePointType == TimePointType.Relative;
 
-        public ICommand AddTimePointCommand { get; }
+        public ICommand AddTimePointCommand => _presetViewModel.AddTimePointCommand;
 
         public void Reset()
         {

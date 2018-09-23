@@ -17,13 +17,13 @@ namespace CycleBell.ViewModels.TimePointViewModels
     {
         #region Const
 
-
+        private const string DefaultSoundLocation = "defualt sound";
 
         #endregion
 
         #region Fields
 
-        protected readonly Preset _preset;
+        protected readonly IPresetViewModel _presetViewModel;
 
         protected TimePoint _timePoint;
 
@@ -34,19 +34,19 @@ namespace CycleBell.ViewModels.TimePointViewModels
 
         #region Constructor
 
-        static TimePointViewModel()
-        {
-            // TODO дебажить фолдеры
-
-                DefaultSoundPlayer = new SoundPlayer(CycleBell.Properties.Resources._default);
-        }
-
-        public TimePointViewModel(TimePoint timePoint, Preset preset) : base(timePoint.Id, timePoint.LoopNumber)
+        public TimePointViewModel(TimePoint timePoint, IPresetViewModel presetViewModel) : base(timePoint.Id, timePoint.LoopNumber)
         {
             _timePoint = timePoint;
-            _preset = preset;
+            _presetViewModel = presetViewModel;
 
-            _soundPlayer = GetSoundPlayer(_timePoint);
+            if (_timePoint.Tag is string str) {
+
+                if (String.IsNullOrWhiteSpace (str) || !File.Exists (str))
+                    _timePoint.Tag = DefaultSoundLocation;
+                else {
+                    _presetViewModel.UpdateSoundBank (this);
+                }
+            }
         }
 
         #endregion
@@ -115,15 +115,7 @@ namespace CycleBell.ViewModels.TimePointViewModels
             }
         }
 
-        public SoundPlayer SoundPlayer
-        {
-            get => _soundPlayer;
-            set  {
-                _soundPlayer = value;
-                OnPropertyChanged ();
-            }
-        }
-        public string SoundLocation => _soundPlayer?.SoundLocation;
+        public string SoundLocation => (String)TimePoint.Tag;
 
         #endregion
 
@@ -131,9 +123,6 @@ namespace CycleBell.ViewModels.TimePointViewModels
 
         public ICommand RemoveTimePointCommand => new ActionCommand (RemoveTimePoint);
         public ICommand MuteToggleCommand => new ActionCommand (MuteToggle, CanMuteToggle);
-        public ICommand RingCommand => new ActionCommand (Ring, CanRing);
-        
-        // Calls std dialog
         public ICommand AddSoundCommand => new ActionCommand (AddSound);
 
         #endregion
@@ -141,28 +130,6 @@ namespace CycleBell.ViewModels.TimePointViewModels
         #region Methods
 
         public static implicit operator TimePoint(TimePointViewModel instance) => instance.TimePoint;
-
-        /// <summary>
-        /// Return TimePoint SoundPlayer or DefaultSoundPlayer
-        /// </summary>
-        /// <param name="timePoint"></param>
-        /// <returns></returns>
-        private SoundPlayer GetSoundPlayer (TimePoint timePoint)
-        {
-            if (String.IsNullOrWhiteSpace ((string) timePoint.Tag)) {
-
-                timePoint.Tag = DefaultSoundName;
-                return DefaultSoundPlayer;
-            }
-
-            if ((string) timePoint.Tag == DefaultSoundName)
-                return DefaultSoundPlayer;
-
-            if (File.Exists ((string)timePoint.Tag))
-                return new SoundPlayer((string)timePoint.Tag);
-
-            return null;
-        }
         
         /// <summary>
         /// For Button in TimePoint List
@@ -170,7 +137,7 @@ namespace CycleBell.ViewModels.TimePointViewModels
         /// <param name="o"></param>
         private void RemoveTimePoint(object o)
         {
-            _preset.RemoveTimePoint (_timePoint);
+            _presetViewModel.RemoveTimePoint (_timePoint);
         }
 
         private void MuteToggle (object o)
@@ -194,6 +161,7 @@ namespace CycleBell.ViewModels.TimePointViewModels
         private void AddSound (object o)
         {
             OpenWavFile (_soundPlayer);
+            _presetViewModel.UpdateSoundBank (this);
         }
 
         private void OpenWavFile(SoundPlayer sound)

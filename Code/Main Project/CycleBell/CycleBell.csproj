@@ -95,6 +95,7 @@
     <Compile Include="ViewModels\AboutDialogViewModel.cs" />
     <Compile Include="ViewModels\DialogViewModelBase.cs" />
     <Compile Include="ViewModels\IMainViewModel.cs" />
+    <Compile Include="ViewModels\IPresetViewModel.cs" />
     <Compile Include="ViewModels\TimePointViewModels\AddingTimePointViewModel.cs" />
     <Compile Include="ViewModels\TimePointViewModels\EndTimePointViewModel.cs" />
     <Compile Include="ViewModels\MainViewModel.cs" />
