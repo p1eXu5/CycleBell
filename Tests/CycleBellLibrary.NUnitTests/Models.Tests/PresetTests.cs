@@ -347,12 +347,12 @@ namespace CycleBellLibrary.NUnitTests.Models.Tests
             preset.AddTimePoint (tpoint1);
 
             var tpoint2 = GetRelativeTimePoint (TimeSpan.FromSeconds (1));
-            tpoint1.LoopNumber = 12;
-            preset.AddTimePoint (tpoint1);
+            tpoint2.LoopNumber = 12;
+            preset.AddTimePoint (tpoint2);
 
             var tpoint3 = GetRelativeTimePoint (TimeSpan.FromSeconds (1));
-            tpoint1.LoopNumber = 11;
-            preset.AddTimePoint (tpoint1);
+            tpoint3.LoopNumber = 11;
+            preset.AddTimePoint (tpoint3);
 
             // Action
             preset.RemoveTimePoint (tpoint1);
