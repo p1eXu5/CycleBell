@@ -79,10 +79,11 @@ namespace CycleBell.NUnitTests.ViewModels
         public void AddTimePointCommand_TimePointNameless_AddsDefaultedNameTimePoint()
         {
             var pvm = GetPresetViewModel();
+            pvm.AddingTimePoint.Time = TimeSpan.FromSeconds (1);
 
             pvm.AddTimePointCommand.Execute (null);
 
-            Assert.AreEqual (TimePoint.DefaultTimePointNameFunc(), pvm.TimePointVmCollection[0].TimePoint.Name);
+            Assert.AreEqual (pvm.TimePointVmCollection[0].TimePoint.GetDefaultTimePointName(), pvm.TimePointVmCollection[0].TimePoint.Name);
         }
         
         // WhenExecuted

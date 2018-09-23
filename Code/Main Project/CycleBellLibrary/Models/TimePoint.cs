@@ -30,6 +30,8 @@ namespace CycleBellLibrary.Models
         private TimeSpan _time;
         private byte _loopNumber;
 
+        private static Func<TimePoint, String> _defaultTimePointNameFunc;
+
         #endregion
 
         #region Constructors
@@ -38,6 +40,7 @@ namespace CycleBellLibrary.Models
         static TimePoint()
         {
             DefaultTime = InitialDefaultTime;
+            DefaultTimePointNameFunc = (tp) => $"TimePoint {tp.Id}";
 
             // Да хуй его, прикольно было попробовать
             Type type = MaxId.GetType();
@@ -61,7 +64,7 @@ namespace CycleBellLibrary.Models
         // Instance
         public TimePoint()
             : this(
-                name: DefaultTimePointNameFunc(), 
+                name: null, 
                 time: DefaultTime, 
                 timePointType: DefaultTimePointType)
         { }
@@ -78,7 +81,6 @@ namespace CycleBellLibrary.Models
             if (_timePointNum == MaxId)
                 throw new OverflowException ("Reached the maximum number of TimePoints");
 
-            Name = name;
             Id = _timePointNum++;
 
             Time = time;
@@ -88,6 +90,13 @@ namespace CycleBellLibrary.Models
                 BaseTime = TimeSpan.Zero;
 
             LoopNumber = loopNumber == Byte.MaxValue ? (byte)(Byte.MaxValue - 1) : loopNumber;
+
+            if (String.IsNullOrWhiteSpace (name)) {
+                Name = DefaultTimePointNameFunc?.Invoke (this);
+            }
+            else {
+                Name = name;
+            }
         }
 
         #region Linked
@@ -133,9 +142,15 @@ namespace CycleBellLibrary.Models
 
         public static TimePoint DefaultTimePoint => new TimePoint();
 
-        public static Func<String> DefaultTimePointNameFunc = () => $"TimePoint {_timePointNum}";
+        public static Func<TimePoint, String> DefaultTimePointNameFunc
+        {
+            get => _defaultTimePointNameFunc;
+            set => _defaultTimePointNameFunc = new Func<TimePoint, string>(value);
+        }
 
         // Instance:_______________________________________________________________________
+
+        public string GetDefaultTimePointName() { return DefaultTimePointNameFunc?.Invoke(this); }
 
         /// <summary>
         /// Уникальный порядковый номер временной точки
@@ -185,8 +200,6 @@ namespace CycleBellLibrary.Models
         /// Sound file location for example.
         /// </summary>
         public object Tag { get; set; } = null;
-
-        public string DefaultTimePointName => $"Time point {Id}";
 
         #endregion
 

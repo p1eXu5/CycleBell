@@ -101,12 +101,10 @@ namespace CycleBell.ViewModels
             }
 
             // _name
-            _name = new StringBuilder();
-            _name.Append(GetPresetName(_preset.PresetName));
+            _name = new StringBuilder(GetPresetName(_preset.PresetName));
 
             // AddingTimePoint
-            AddingTimePoint = new AddingTimePointViewModel (TimePoint.DefaultTimePoint, _preset, AddTimePointCommand);
-            ((INotifyPropertyChanged) AddingTimePoint).PropertyChanged += OnTimePropertyChanged;
+            AddingTimePoint = GetAddingTimePointViewModel(_preset);
         }
 
         #endregion
@@ -210,7 +208,6 @@ namespace CycleBell.ViewModels
 
             return timerManager;
         }
-
         private ObservableCollection<TimePointViewModelBase> GetTimePointViewModelCollection (Preset preset)
         {
             var timePointVmCollection = new ObservableCollection<TimePointViewModelBase>();
@@ -228,7 +225,25 @@ namespace CycleBell.ViewModels
 
             return timePointVmCollection;
         }
+        private AddingTimePointViewModel GetAddingTimePointViewModel (Preset preset)
+        {
+            var timePoint = TimePoint.DefaultTimePoint;
+            timePoint.Name = "";
+            var addingTimePoint = new AddingTimePointViewModel (timePoint, preset, AddTimePointCommand);
+            ((INotifyPropertyChanged) addingTimePoint).PropertyChanged += OnTimePropertyChanged;
 
+            return addingTimePoint;
+        }
+
+        [MethodImpl (MethodImplOptions.AggressiveInlining)]
+        private void ResetAddingTimePoint()
+        {
+            AddingTimePoint.Reset();
+
+            // Update TimePoint list trigger
+            OnPropertyChanged (nameof(IsNoTimePoints));
+        }
+        
         private void AddStarToName()
         {
             _name.Clear();
@@ -256,32 +271,6 @@ namespace CycleBell.ViewModels
             OnPropertyChanged (nameof(CanAddTimePoint));
         }
 
-        public PresetViewModel GetDeepCopy()
-        {
-            var presetVm = (PresetViewModel) this.MemberwiseClone();
-            //presetVm._preset = _preset.GetDeepCopy();
-
-            return null;
-        }
-
-        protected internal void Save()
-        {
-            throw new NotImplementedException();
-        }
-
-        protected internal bool CanSave()
-        {
-            return IsModified;
-        }
-
-        private static void PrepareTimePoint (TimePoint point)
-        {
-            if (point.Time < TimeSpan.Zero)
-                point.Time = point.Time.Negate();
-
-            if (point.Time == TimeSpan.Zero && point.TimePointType == TimePointType.Relative)
-                point.TimePointType = TimePointType.Absolute;
-        }
         private void UpdateTimePointVmCollection (Object sender, NotifyCollectionChangedEventArgs e)
         {
             if (e.NewItems?[0] != null) {
@@ -311,19 +300,35 @@ namespace CycleBell.ViewModels
                 }
             }
         }
-
-        [MethodImpl (MethodImplOptions.AggressiveInlining)]
-        private void ResetAddingTimePoint()
+     
+        public PresetViewModel GetDeepCopy()
         {
-            AddingTimePoint.Reset();
+            var presetVm = (PresetViewModel) this.MemberwiseClone();
+            //presetVm._preset = _preset.GetDeepCopy();
 
-            OnPropertyChanged (nameof(IsNoTimePoints));
+            return null;
+        }
+
+        
+        // SaveCommand
+        protected internal void Save()
+        {
+            throw new NotImplementedException();
+        }
+        protected internal bool CanSave()
+        {
+            return IsModified;
         }
 
         // AddTimePointCommand:
         private void AddTimePoint(object o)
         {
-            _preset.AddTimePoint(_addingTimePoint.TimePoint.Clone());
+            var timePoint = _addingTimePoint.TimePoint.Clone();
+
+            if (String.IsNullOrWhiteSpace (timePoint.Name))
+                timePoint.Name = timePoint.GetDefaultTimePointName();
+
+            _preset.AddTimePoint(timePoint);
 
             ResetAddingTimePoint();
         }
@@ -377,7 +382,13 @@ namespace CycleBell.ViewModels
             throw new NotImplementedException();
         }
 
+
         // Checkers:
+
+        /// <summary>
+        /// Used in UpdateTimePointVmCollection
+        /// </summary>
+        /// <param name="timePoint"></param>
         private void CheckBounds(TimePoint timePoint)
         {
             if (_settedLoopNumbers.Contains (timePoint.LoopNumber))
@@ -389,6 +400,19 @@ namespace CycleBell.ViewModels
             _settedLoopNumbers.Add (timePoint.LoopNumber);
         }
 
+        /// <summary>
+        /// Checks TimePoint conditions
+        /// </summary>
+        /// <param name="point"></param>
+        private static void PrepareTimePoint (TimePoint point)
+        {
+            if (point.Time < TimeSpan.Zero)
+                point.Time = point.Time.Negate();
+
+            if (point.Time == TimeSpan.Zero && point.TimePointType == TimePointType.Relative)
+                point.TimePointType = TimePointType.Absolute;
+        }
+        
         #endregion
     }
 }
