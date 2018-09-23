@@ -4,7 +4,6 @@ using CycleBell.Base;
 using CycleBell.ViewModels;
 using CycleBell.ViewModels.TimePointViewModels;
 using CycleBellLibrary;
-using CycleBellLibrary.Context;
 using CycleBellLibrary.Models;
 using CycleBellLibrary.Repository;
 using CycleBellLibrary.Timer;
@@ -17,7 +16,7 @@ namespace CycleBell.NUnitTests.ViewModels
     public class PresetViewModelTests
     {
         private Mock<ITimerManager> _mockTimerManager;
-        private Mock<IPresetsManager> _mockPresetCollection;
+        private Mock<IPresetCollectionManager> _mockPresetCollection;
         private readonly Mock<ICycleBellManager> _mockCycleBellManager = new Mock<ICycleBellManager>();
 
         #region Class & ctor
@@ -95,6 +94,7 @@ namespace CycleBell.NUnitTests.ViewModels
             pvm.AddingTimePoint.Time = TimeSpan.FromSeconds (1);
             var time = pvm.AddingTimePoint.Time;
             var type = pvm.AddingTimePoint.TimePointType;
+            var id = pvm.AddingTimePoint.Id;
 
             pvm.AddTimePointCommand.Execute (null);
 
@@ -103,6 +103,7 @@ namespace CycleBell.NUnitTests.ViewModels
             Assert.IsFalse (Object.ReferenceEquals (pvm.AddingTimePoint.TimePoint, actual.TimePoint));
             Assert.IsTrue (time == actual.Time);
             Assert.IsTrue (type == actual.TimePointType);
+            Assert.IsTrue (id != actual.Id);
         }
 
         // KnownLoop
@@ -246,10 +247,10 @@ namespace CycleBell.NUnitTests.ViewModels
         {
             var preset = GetEmptyTestPreset();
 
-            _mockPresetCollection = _mockCycleBellManager.As<IPresetsManager>();
+            _mockPresetCollection = _mockCycleBellManager.As<IPresetCollectionManager>();
             _mockTimerManager = _mockCycleBellManager.As<ITimerManager>();
 
-            _mockCycleBellManager.Setup (c => c.PresetsManager).Returns(_mockPresetCollection.Object);
+            _mockCycleBellManager.Setup (c => c.PresetCollectionManager).Returns(_mockPresetCollection.Object);
             _mockCycleBellManager.Setup (c => c.TimerManager).Returns (_mockTimerManager.Object);
 
             return new PresetViewModel(preset, _mockCycleBellManager.Object);

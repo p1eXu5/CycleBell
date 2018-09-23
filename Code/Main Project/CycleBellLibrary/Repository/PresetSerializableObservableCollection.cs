@@ -11,7 +11,7 @@ namespace CycleBellLibrary.Repository
     /// For serialization <see cref="Preset"/><seealso cref="ObservableCollection{T}"/>
     /// </summary>
     [XmlRoot("Presets")]
-    public class PresetObservableCollection : ObservableCollection<Preset>, IXmlSerializable
+    public class PresetSerializableObservableCollection : ObservableCollection<Preset>, IXmlSerializable
     {
         public virtual XmlSchema GetSchema() => null;
 

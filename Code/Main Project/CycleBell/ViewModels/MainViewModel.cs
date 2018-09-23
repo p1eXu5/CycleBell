@@ -41,7 +41,7 @@ namespace CycleBell.ViewModels
             _manager = cycleBellManager ?? throw new ArgumentNullException(nameof(cycleBellManager));
             _manager.CantCreateNewPresetEvent += () => SavePresetAs(null);
 
-            var presetManager = cycleBellManager.PresetsManager;
+            var presetManager = cycleBellManager.PresetCollectionManager;
             Presets = new ObservableCollection<PresetViewModel>(presetManager.Presets.Select(p => new PresetViewModel(p, _manager)));
 
             ((INotifyCollectionChanged) (presetManager.Presets)).CollectionChanged += PresetCollectionEventHandler;

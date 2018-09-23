@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Linq;
-using CycleBellLibrary.Context;
 using CycleBellLibrary.Repository;
 using CycleBellLibrary.Timer;
 
@@ -10,28 +9,28 @@ namespace CycleBellLibrary
     {
         #region Fields
 
-        private readonly IInnerPresetsManager _presetsManager;
+        private readonly IInnerPresetCollectionManager _presetCollectionManager;
 
         #endregion
 
         #region Constructors
 
-        public CycleBellManager (string fileName, IInnerPresetsManager presetsManager, ITimerManager timerManager)
+        public CycleBellManager (string fileName, IInnerPresetCollectionManager presetCollectionManager, ITimerManager timerManager)
         {
             FileName = fileName;
-           _presetsManager = presetsManager ?? throw new ArgumentNullException(nameof(presetsManager), "presetsManager can't be null");
+           _presetCollectionManager = presetCollectionManager ?? throw new ArgumentNullException(nameof(presetCollectionManager), "presetCollectionManager can't be null");
             TimerManager = timerManager ?? throw new ArgumentNullException(nameof(timerManager), "timerManager can't be null");
         }
 
-        public CycleBellManager (IInnerPresetsManager presetsManager, ITimerManager timerManager)
-            : this (null, presetsManager, timerManager)
+        public CycleBellManager (IInnerPresetCollectionManager presetCollectionManager, ITimerManager timerManager)
+            : this (null, presetCollectionManager, timerManager)
         {}
 
         #endregion
 
         #region Properties
 
-        public IPresetsManager PresetsManager => _presetsManager;
+        public IPresetCollectionManager PresetCollectionManager => _presetCollectionManager;
         public ITimerManager TimerManager { get; }
 
         public string FileName { get; }
@@ -46,10 +45,10 @@ namespace CycleBellLibrary
         /// <exception cref="InvalidOperationException">Throws when empty preset already exists and it is particulary filled</exception>
         public void CreateNewPreset()
         {
-            var existEmptyPreset = PresetsManager.Presets.FirstOrDefault (p => p.PresetName == Preset.DefaultName);
+            var existEmptyPreset = PresetCollectionManager.Presets.FirstOrDefault (p => p.PresetName == Preset.DefaultName);
 
             if (existEmptyPreset == null) {
-                _presetsManager.Add (Preset.EmptyPreset);
+                _presetCollectionManager.Add (Preset.EmptyPreset);
             }
             else {
                 // TODO if existing EmptyPreset does not equal Preset.EmptyPreset than throw, else - do nothing
@@ -68,12 +67,12 @@ namespace CycleBellLibrary
 
         public void OpenPresets (string fileName)
         {
-            PresetsManager.OpenPresets(fileName);
+            PresetCollectionManager.OpenPresets(fileName);
         }
 
         public void DeletePreset (Preset preset)
         {
-            _presetsManager.Remove (preset);
+            _presetCollectionManager.Remove (preset);
         }
 
         /// <summary>
@@ -82,7 +81,7 @@ namespace CycleBellLibrary
         /// <param name="preset"></param>
         public void AddPreset(Preset preset)
         {
-            _presetsManager.Add (preset);
+            _presetCollectionManager.Add (preset);
         }
 
         /// <summary>
@@ -91,25 +90,25 @@ namespace CycleBellLibrary
         /// <param name="preset"></param>
         public void RemovePreset (Preset preset)
         {
-            _presetsManager.Remove (preset);
+            _presetCollectionManager.Remove (preset);
         }
 
         /// <summary>
         /// Serialize presets
         /// </summary>
-        public void SavePresets() => PresetsManager.SavePresets(FileName);
+        public void SavePresets() => PresetCollectionManager.SavePresets(FileName);
 
         public void SavePresets (string fileName)
         {
-            PresetsManager.SavePresets (fileName);
+            PresetCollectionManager.SavePresets (fileName);
         }
 
         public void RenamePreset (Preset preset, string newName)
         {
-            if (preset == null || !_presetsManager.Contains (preset) || newName == null)
+            if (preset == null || !_presetCollectionManager.Contains (preset) || newName == null)
                 return;
 
-            var presetWithSameNewName = _presetsManager.FirstOrDefault (p => p.PresetName == newName);
+            var presetWithSameNewName = _presetCollectionManager.FirstOrDefault (p => p.PresetName == newName);
 
             if (presetWithSameNewName == null)
                 preset.PresetName = newName;

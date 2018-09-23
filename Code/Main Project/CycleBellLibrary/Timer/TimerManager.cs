@@ -63,7 +63,7 @@ namespace CycleBellLibrary.Timer
         private TimerManager() { }
 
         /// <summary>
-        /// Gets instance of manager and if IPresetsManager.FileName is Exist loads presets or loads only one empty preset
+        /// Gets instance of manager and if IPresetCollectionManager.FileName is Exist loads presets or loads only one empty preset
         /// </summary>
         /// <returns></returns>
         public static TimerManager Instance 

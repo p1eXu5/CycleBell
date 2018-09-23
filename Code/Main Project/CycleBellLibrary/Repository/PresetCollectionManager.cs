@@ -10,22 +10,22 @@ using System.Xml;
 using System.Xml.Serialization;
 using CycleBellLibrary.Repository;
 
-namespace CycleBellLibrary.Context
+namespace CycleBellLibrary.Repository
 {
-    public sealed class PresetsManager :  IPresetsManager, IInnerPresetsManager, IEnumerable<Preset>
+    public sealed class PresetCollectionManager :  IPresetCollectionManager, IInnerPresetCollectionManager, IEnumerable<Preset>
     {
         #region Fields
 
-        private readonly PresetObservableCollection _presets;
+        private readonly PresetSerializableObservableCollection _presetsSerializable;
 
         #endregion
 
         #region Constructor
 
-        public PresetsManager()
+        public PresetCollectionManager()
         {
-            _presets = new PresetObservableCollection();
-            Presets = new ReadOnlyObservableCollection<Preset>(_presets);
+            _presetsSerializable = new PresetSerializableObservableCollection();
+            Presets = new ReadOnlyObservableCollection<Preset>(_presetsSerializable);
         }
 
         #endregion
@@ -43,8 +43,8 @@ namespace CycleBellLibrary.Context
         /// </summary>
         public void Clear()
         {
-            if (_presets.Count > 0) {
-                _presets.Clear();
+            if (_presetsSerializable.Count > 0) {
+                _presetsSerializable.Clear();
             }
         }
 
@@ -69,10 +69,10 @@ namespace CycleBellLibrary.Context
             if (preset.PresetName == null)
                 throw new ArgumentNullException (nameof(preset.PresetName), "PresetName can't be null");
 
-            if (_presets.Any (p => p.PresetName == preset.PresetName)) 
+            if (_presetsSerializable.Any (p => p.PresetName == preset.PresetName)) 
                 preset.PresetName += "_copy";
 
-            _presets.Add (preset);
+            _presetsSerializable.Add (preset);
         }
 
         public void Remove (Preset preset)
@@ -80,7 +80,7 @@ namespace CycleBellLibrary.Context
             if (preset == null)
                 throw new ArgumentNullException (nameof(preset), "preset can't be null");
 
-            var res = _presets.Remove (preset);
+            var res = _presetsSerializable.Remove (preset);
 
             if (!res)
                 throw new ArgumentException("preset doesn't exists", nameof(preset));
@@ -121,8 +121,8 @@ namespace CycleBellLibrary.Context
         {
             using (FileStream fs = File.Open(fileName, FileMode.Create)) {
 
-                XmlSerializer xmlSerializer = new XmlSerializer(typeof(PresetObservableCollection));
-                xmlSerializer.Serialize(fs, _presets);
+                XmlSerializer xmlSerializer = new XmlSerializer(typeof(PresetSerializableObservableCollection));
+                xmlSerializer.Serialize(fs, _presetsSerializable);
             }
         }
 
@@ -131,15 +131,15 @@ namespace CycleBellLibrary.Context
         /// </summary>
         private void DeserializePresets(string fileName)
         {
-            XmlSerializer xmlSerializer = new XmlSerializer(typeof(PresetObservableCollection));
+            XmlSerializer xmlSerializer = new XmlSerializer(typeof(PresetSerializableObservableCollection));
             using (FileStream fStream = File.OpenRead(fileName)) {
 
-                var presets = (PresetObservableCollection)xmlSerializer.Deserialize(fStream);
+                var presets = (PresetSerializableObservableCollection)xmlSerializer.Deserialize(fStream);
 
                 if (presets.Count > 0) {
-                    _presets.Clear();
+                    _presetsSerializable.Clear();
                     foreach (var preset in presets) {
-                        _presets.Add (preset);
+                        _presetsSerializable.Add (preset);
                     }
                 }
             }
@@ -149,7 +149,7 @@ namespace CycleBellLibrary.Context
 
         #region IEnumerable Implementation
 
-        public IEnumerator<Preset> GetEnumerator() => _presets.GetEnumerator();
+        public IEnumerator<Preset> GetEnumerator() => _presetsSerializable.GetEnumerator();
         
         IEnumerator IEnumerable.GetEnumerator() { return GetEnumerator(); }
 

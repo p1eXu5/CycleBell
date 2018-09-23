@@ -1,13 +1,9 @@
 ﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Collections.Specialized;
-using System.Text;
-using System.Threading.Tasks;
-using CycleBellLibrary.Repository;
 
-namespace CycleBellLibrary.Context
+namespace CycleBellLibrary.Repository
 {
-    public interface IPresetsManager : IEnumerable<Preset>
+    public interface IPresetCollectionManager : IEnumerable<Preset>
     {
         ReadOnlyObservableCollection<Preset> Presets { get; }
 

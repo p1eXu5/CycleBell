@@ -12,7 +12,6 @@ using System.Windows.Input;
 using CycleBell.Base;
 using CycleBell.ViewModels.TimePointViewModels;
 using CycleBellLibrary;
-using CycleBellLibrary.Context;
 using CycleBellLibrary.Models;
 using CycleBellLibrary.Repository;
 using CycleBellLibrary.Timer;
@@ -42,7 +41,7 @@ namespace CycleBell.ViewModels
 
         private readonly Preset _preset;
         private readonly ITimerManager _timerManager;
-        private readonly IPresetsManager _presetsManager;
+        private readonly IPresetCollectionManager _presetCollectionManager;
 
         private readonly ObservableCollection<TimePointViewModelBase> _timePointVmCollection;
         private TimePointViewModelBase _selectedTimePoint;
@@ -66,8 +65,8 @@ namespace CycleBell.ViewModels
             if (manager == null)
                 throw new ArgumentNullException(nameof(manager));
 
-            // _presetsManager
-            _presetsManager = manager.PresetsManager ?? throw new ArgumentNullException(nameof(PresetsManager));
+            // _presetCollectionManager
+            _presetCollectionManager = manager.PresetCollectionManager ?? throw new ArgumentNullException(nameof(PresetCollectionManager));
 
             // _timerManager and handlers
             _timerManager = GetTimerManager(manager);
