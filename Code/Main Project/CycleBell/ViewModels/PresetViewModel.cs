@@ -40,8 +40,7 @@ namespace CycleBell.ViewModels
         #region Fields
 
         private readonly Preset _preset;
-        private readonly ITimerManager _timerManager;
-        private readonly IPresetCollectionManager _presetCollectionManager;
+        private readonly IMainViewModel _mainViewModel;
 
         private readonly ObservableCollection<TimePointViewModelBase> _timePointVmCollection;
         private TimePointViewModelBase _selectedTimePoint;
@@ -57,7 +56,7 @@ namespace CycleBell.ViewModels
 
         #region Constructor
 
-        public PresetViewModel(Preset preset, ICycleBellManager manager)
+        public PresetViewModel(Preset preset, IMan manager)
         {
             // _preset
             _preset = preset ?? throw new ArgumentNullException(nameof(preset));
@@ -68,8 +67,7 @@ namespace CycleBell.ViewModels
             // _presetCollectionManager
             _presetCollectionManager = manager.PresetCollectionManager ?? throw new ArgumentNullException(nameof(PresetCollectionManager));
 
-            // _timerManager and handlers
-            _timerManager = GetTimerManager(manager);
+
 
             // _settedLoopNumbers
             _settedLoopNumbers = new HashSet<byte>();

@@ -94,6 +94,7 @@
     <Compile Include="DataTemplateSelectors\TimePointVmDataTemplateSelector.cs" />
     <Compile Include="ViewModels\AboutDialogViewModel.cs" />
     <Compile Include="ViewModels\DialogViewModelBase.cs" />
+    <Compile Include="ViewModels\IMainViewModel.cs" />
     <Compile Include="ViewModels\TimePointViewModels\AddingTimePointViewModel.cs" />
     <Compile Include="ViewModels\TimePointViewModels\EndTimePointViewModel.cs" />
     <Compile Include="ViewModels\MainViewModel.cs" />
