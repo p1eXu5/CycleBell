@@ -119,7 +119,7 @@ namespace CycleBellLibrary.Timer
         /// <summary>
         /// Pause timer loop
         /// </summary>
-        public void Pouse()
+        public void Pause()
         {
             if (!IsRunning) return; 
                 

@@ -185,17 +185,15 @@ namespace CycleBell.ViewModels
         #region Commands
 
         public ICommand AddTimePointCommand => new ActionCommand (AddTimePoint, CanAddTimePoint);
-        public ICommand PlayCommand => new ActionCommand (Play, CanPlay);
-        public ICommand PouseCommand => new ActionCommand(Pouse, CanPouse);
-        public ICommand ResumeCommand => new ActionCommand (Resume, CanResume);
-        public ICommand StopCommand => new ActionCommand(Stop, CanStop);
-        public ICommand InfiniteToggleCommand => new ActionCommand (ToggleInfinite, CanToggleInfinite);
+        
         public ICommand BellOnStartTimeToggleCommand => new ActionCommand (BellOnStartTime);
-        public ICommand RingCommand => new ActionCommand(Ring);
+
 
         #endregion
 
         #region Methods
+
+        public void Save() { throw new NotImplementedException(); }
 
         // Service:
         private ITimerManager GetTimerManager (ICycleBellManager manager)
@@ -224,11 +222,12 @@ namespace CycleBell.ViewModels
 
             return timePointVmCollection;
         }
+
         private AddingTimePointViewModel GetAddingTimePointViewModel (Preset preset)
         {
             var timePoint = TimePoint.DefaultTimePoint;
             timePoint.Name = "";
-            var addingTimePoint = new AddingTimePointViewModel (timePoint, preset, AddTimePointCommand);
+            var addingTimePoint = new AddingTimePointViewModel (preset);
             ((INotifyPropertyChanged) addingTimePoint).PropertyChanged += OnTimePropertyChanged;
 
             return addingTimePoint;
@@ -310,17 +309,6 @@ namespace CycleBell.ViewModels
             return null;
         }
 
-        
-        // SaveCommand
-        protected internal void Save()
-        {
-            throw new NotImplementedException();
-        }
-        protected internal bool CanSave()
-        {
-            return IsModified;
-        }
-
         // AddTimePointCommand:
         private void AddTimePoint(object o)
         {
@@ -341,31 +329,12 @@ namespace CycleBell.ViewModels
             return res;
         }
 
-        // PlayCommand:
-        private void Play(object o) => _timerManager.Play(_preset);
-        private bool CanPlay(object o) => TimePointVmCollection.Count > 0;
 
-        // PouseCommand
-        private void Pouse (object o) => _timerManager.Pouse();
-        private bool CanPouse (object o) => IsRunning;
-
-        // StopCommand
-        private void Stop (object o) => _timerManager.Stop();
-        private bool CanStop (object o) => IsRunning;
-
-        // StopReset
-        private void Resume (object o) => _timerManager.Resume();
-        private bool CanResume (object o) => IsRunning;
-
-        // StopReset
-        private void ToggleInfinite (object o) => IsInfiniteLoop = (IsInfiniteLoop != true);
-        private bool CanToggleInfinite (object o) => !IsRunning;
 
         // BellOnStartTimeCommand
         private void BellOnStartTime (object o) => CanBellOnStartTime = (CanBellOnStartTime != true);
 
-        // RingCommand
-        private void Ring (object o) => TimePointViewModel.DefaultSoundPlayer.Play();
+
 
         // TimerManager handlers:
         private void OnSecondPassed(object s, TimerEventArgs e)

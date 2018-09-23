@@ -17,8 +17,7 @@ namespace CycleBell.ViewModels.TimePointViewModels
     {
         #region Const
 
-        public const string DefaultSoundName = "default";
-        public static readonly SoundPlayer DefaultSoundPlayer; 
+
 
         #endregion
 

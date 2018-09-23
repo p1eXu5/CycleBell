@@ -106,7 +106,7 @@ namespace CycleBellLibrary.NUnitTests.Context.Tests
                 throw new NotImplementedException();
             }
 
-            public void Pouse()
+            public void Pause()
             {
                 throw new NotImplementedException();
             }

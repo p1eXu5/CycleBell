@@ -8,6 +8,7 @@ namespace CycleBellLibrary.Context
     {
         IPresetCollectionManager PresetCollectionManager { get; }
         ITimerManager TimerManager { get; }
+
         string FileName { get; }
 
         /// <summary>

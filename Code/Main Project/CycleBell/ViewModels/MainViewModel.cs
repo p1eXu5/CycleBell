@@ -5,6 +5,7 @@ using System.ComponentModel;
 using System.Globalization;
 using System.IO;
 using System.Linq;
+using System.Media;
 using System.Windows.Data;
 using System.Windows.Input;
 
@@ -19,6 +20,7 @@ namespace CycleBell.ViewModels
     public class MainViewModel : ObservableObject
     {
         #region Private
+        public static SoundPlayer DefaultSoundPlayer = new SoundPlayer(); 
 
         private readonly IDialogRegistrator _dialogRegistrator;
 
@@ -86,12 +88,22 @@ namespace CycleBell.ViewModels
             get => SelectedPreset?.IsNewPreset ?? false;
         }
 
+        public bool IsInfinite
+        {
+            get => SelectedPreset?.IsInfiniteLoop == true;
+            set {
+                if (SelectedPreset != null) {
+
+                    SelectedPreset.IsInfiniteLoop = value;
+                }
+            }
+        }
 
         #endregion CLR Properties
 
         #region Commands
 
-        // Done
+        // Menu
         public ICommand CreateNewPresetCommand => new ActionCommand(CreateNewPreset);
 
         public ICommand SavePresetCommand => new ActionCommand(SavePreset, CanSavePreset);
@@ -101,13 +113,19 @@ namespace CycleBell.ViewModels
         public ICommand ExportPresetsCommand => new ActionCommand(ExportPresets, CanExportPresets);
 
         public ICommand ExitCommand => new ActionCommand(Exit);
-
         public ICommand AboutCommand => new ActionCommand(About);
 
         public ICommand SavePresetsBeforeExitCommand => new ActionCommand(SavePresetsBeforeExit);
 
         // In process
         public ICommand ViewHelpCommand => new ActionCommand(About);
+
+        // Media
+        public ICommand PlayCommand => new ActionCommand (Play, CanPlay);
+        public ICommand StopCommand => new ActionCommand (Stop, CanStop);
+        public ICommand PauseCommand => new ActionCommand (Pause, CanPause);
+        public ICommand ResumeCommand => new ActionCommand (Resume, CanResume);
+        public ICommand RingCommand => new ActionCommand(Ring);
 
         #endregion Commands
 
@@ -145,21 +163,21 @@ namespace CycleBell.ViewModels
             }
         }
 
-        // ---- Save Preset
+        //  Save Preset
         private void CreateNewPreset (object obj)
         {
             _manager.CreateNewPreset();
             OnPropertyChanged(nameof(IsSelectedPresetExists));
         }
 
-        // ---- Save Preset
+        //  Save Preset
         private void SavePreset(object obj)
         {
             SelectedPreset.Save();
         }
         private bool CanSavePreset(object obj)
         {
-            return SelectedPreset?.CanSave() ?? false;
+            return SelectedPreset?.IsModified == true;
         }
 
         private void SavePresetAs(object obj)
@@ -177,7 +195,7 @@ namespace CycleBell.ViewModels
         }
         private bool CanSavePresetAs(object obj) => _selectedPreset?.IsModified ?? false;
 
-        // ---- Import/Export Presets
+        //  Import/Export Presets
         private void ImportPresets(object obj)
         {
             var ofd = new OpenFileDialog
@@ -216,25 +234,71 @@ namespace CycleBell.ViewModels
             return Presets.Count > 0;
         }
 
-        // ---- Save presets before exit
+        //  Save presets before exit
         private void SavePresetsBeforeExit(object obj)
         {
              _manager.SavePresets();
         }
 
-        // ---- Exit
+        //  Exit
         private void Exit(object obj)
         {
             //_manager.SavePresets();
             System.Windows.Application.Current.Shutdown();
         }
 
-        // ---- About
+        //  About
         private void About(object obj)
         {
             var viewModel = new AboutDialogViewModel();
             _dialogRegistrator.ShowDialog(viewModel);
         }
+
+        // ---- Play
+        private void Play (object o)
+        {
+            _timerManager.PlayAsync (SelectedPreset.Preset);
+        }
+        private bool CanPlay (object o)
+        {
+            return (SelectedPreset?.TimePointVmCollection.Count > 0)
+                && !_timerManager.IsRunning;
+        }
+
+        // ---- Stop
+        private void Stop (object o)
+        {
+            _timerManager.Stop();
+        }
+        private bool CanStop (object o)
+        {
+            return _timerManager.IsRunning;
+        }
+        
+        // ---- Pause
+        private void Pause (object o)
+        {
+            _timerManager.Pause();
+        }
+        private bool CanPause (object o)
+        {
+            return _timerManager.IsRunning;
+        }
+        
+        // ---- Resume
+        private void Resume (object o)
+        {
+            _timerManager.Resume();
+        }
+        private bool CanResume (object o)
+        {
+            return _timerManager.IsPaused;
+        }
+
+        // RingCommand
+        private void Ring (object o) => DefaultSoundPlayer.Play();
+
+
 
         #endregion Methods
 

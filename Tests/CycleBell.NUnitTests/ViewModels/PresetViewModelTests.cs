@@ -238,7 +238,7 @@ namespace CycleBell.NUnitTests.ViewModels
 
             pvm.PouseCommand.Execute (null);
 
-            _mockTimerManager.Verify (tm => tm.Pouse());
+            _mockTimerManager.Verify (tm => tm.Pause());
         }
 
         #region Factory

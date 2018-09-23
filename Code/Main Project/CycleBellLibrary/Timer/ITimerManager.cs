@@ -17,7 +17,7 @@ namespace CycleBellLibrary.Timer
         /// <summary>
         /// Pause timer loop
         /// </summary>
-        void Pouse();
+        void Pause();
 
         /// <summary>
         /// Resume timer loop

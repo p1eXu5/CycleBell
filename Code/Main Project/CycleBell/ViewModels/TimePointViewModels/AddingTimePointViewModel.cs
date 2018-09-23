@@ -8,11 +8,8 @@ namespace CycleBell.ViewModels.TimePointViewModels
 {
     public class AddingTimePointViewModel : TimePointViewModel
     {
-        public AddingTimePointViewModel(TimePoint timePoint, Preset preset, ICommand addTimePointCommand) :
-            base(timePoint, preset)
-        {
-            AddTimePointCommand = addTimePointCommand;
-        }
+        public AddingTimePointViewModel(Preset selectedPreset) : base(new TimePoint { Name = "" }, selectedPreset)
+        { }
 
         public override TimeSpan Time
         {

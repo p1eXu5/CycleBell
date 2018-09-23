@@ -183,10 +183,10 @@
 
             <!-- preset and timePoints-->
             <Grid Grid.Row="2">
-                <local:PresetUserControl x:Name="preset" DataContext="{Binding SelectedPreset}"
+                <userControls:PresetUserControl x:Name="preset" DataContext="{Binding SelectedPreset}"
                                          Control.Foreground="{Binding ElementName=m_presetComboBox, Path=Foreground, Mode=OneWay}"
                                          UIElement.IsEnabled="{Binding ElementName=m_presetComboBox, Path=IsEnabled, Mode=OneWay}">
-                    <local:PresetUserControl.Style>
+                    <userControls:PresetUserControl.Style>
                         <Style>
                             <Setter Property="UIElement.Opacity" Value="0.0" />
                             <Style.Triggers>
@@ -209,8 +209,8 @@
                                 </DataTrigger>
                             </Style.Triggers>
                         </Style>
-                    </local:PresetUserControl.Style>
-                </local:PresetUserControl>
+                    </userControls:PresetUserControl.Style>
+                </userControls:PresetUserControl>
 
                 <!-- When NoTimePoints -->
                 <Grid Height="{Binding ElementName=preset, Path=ActualHeight}"> 
@@ -259,3 +259,6 @@
 
     </DockPanel>
 </Window>
+
+
+

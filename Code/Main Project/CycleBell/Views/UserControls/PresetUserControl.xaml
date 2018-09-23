@@ -1,13 +1,13 @@
-﻿<UserControl x:Class="CycleBell.Views.PresetUserControl" 
+﻿<UserControl x:Class="CycleBell.Views.UserControls.PresetUserControl" 
              x:Name="TimePointsUserControl"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:local="clr-namespace:CycleBell.Views"
              xmlns:controls="clr-namespace:CycleBell.Controls"
              xmlns:viewModels="clr-namespace:CycleBell.ViewModels"
              xmlns:dts="clr-namespace:CycleBell.DataTemplateSelectors"
+             xmlns:userControls="clr-namespace:CycleBell.Views.UserControls"
              mc:Ignorable="d"
 
              d:DataContext="{d:DesignInstance viewModels:PresetViewModel}"
@@ -122,9 +122,10 @@
         </Grid>
 
         <!-- adding point -->
-        <local:AddingTimePointUserControl Grid.Row="2" 
+        <userControls:AddingTimePointUserControl Grid.Row="2" 
                                           Height="Auto" Width="Auto" Margin="20,50"
                                           DataContext="{Binding AddingTimePoint}"/>
+        
 
     </Grid>
 </UserControl>
