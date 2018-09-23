@@ -122,7 +122,7 @@ namespace CycleBell.ViewModels.TimePointViewModels
         #region Commands
 
         public ICommand RemoveTimePointCommand => new ActionCommand (RemoveTimePoint);
-        public ICommand MuteToggleCommand => new ActionCommand (MuteToggle, CanMuteToggle);
+        public ICommand MuteToggleCommand => new ActionCommand (MuteToggle);
         public ICommand AddSoundCommand => new ActionCommand (AddSound);
 
         #endregion
@@ -144,10 +144,7 @@ namespace CycleBell.ViewModels.TimePointViewModels
         {
             MuteFlag = (MuteFlag != true);
         }
-        private bool CanMuteToggle (object o)
-        {
-            return _soundPlayer != null;
-        }
+
 
         private void Ring (object o)
         {

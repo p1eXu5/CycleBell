@@ -53,14 +53,6 @@ namespace CycleBell.NUnitTests.ViewModels
             Assert.IsTrue (tpvm.MuteFlag);
         }
 
-        [Test]
-        public void MuteToggleCommand_SoundPlayerIsNull_CanExecute()
-        {
-            var tpvm = GetTimePointViewModel();
-
-            Assert.IsFalse (tpvm.MuteToggleCommand.CanExecute(null));
-        }
-
         #endregion
 
         #region ChangeTimpePointTypeCommand
