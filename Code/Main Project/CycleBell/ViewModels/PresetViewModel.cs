@@ -53,7 +53,7 @@ namespace CycleBell.ViewModels
 
         private readonly HashSet<byte> _settedLoopNumbers;
 
-        private StringBuilder _sb;
+        private StringBuilder _name;
         #endregion
 
         #region Constructor
@@ -70,25 +70,14 @@ namespace CycleBell.ViewModels
             _presetsManager = manager.PresetsManager ?? throw new ArgumentNullException(nameof(PresetsManager));
 
             // _timerManager and handlers
-            _timerManager = manager.TimerManager ?? throw new ArgumentNullException(nameof(TimerManager));
-            _timerManager.TimerSecondPassedEvent += OnSecondPassed;
-            _timerManager.ChangeTimePointEvent += OnTimePointChanged;
-            _timerManager.TimerStopEvent += OnStop;
+            _timerManager = GetTimerManager(manager);
 
             // _settedLoopNumbers
             _settedLoopNumbers = new HashSet<byte>();
 
             // _timePointVmCollection
-            _timePointVmCollection = new ObservableCollection<TimePointViewModelBase>();
-
-            foreach (var point in _preset.TimePoints) {
-
-                PrepareTimePoint(point);
-                _timePointVmCollection.Add (new TimePointViewModel (point, _preset));
-
-                CheckBounds(point);
-            }
-
+            _timePointVmCollection = GetTimePointViewModelCollection(_preset);
+            
             // TimePointVmCollection
             TimePointVmCollection = new ReadOnlyObservableCollection<TimePointViewModelBase>(_timePointVmCollection);
 
@@ -99,9 +88,10 @@ namespace CycleBell.ViewModels
             view.SortDescriptions.Add (new SortDescription ("Id", ListSortDirection.Ascending));
             view.SortDescriptions.Add (new SortDescription("LoopNumber", ListSortDirection.Ascending));
 
-            //TimePoints INotifyCollectionChanged
+            // TimePoints INotifyCollectionChanged
             ((INotifyCollectionChanged) _preset.TimePoints).CollectionChanged += UpdateTimePointVmCollection;
 
+            // CanBellOnStartTime
             if (_preset.Tag is string str) {
 
                 if (str == "true")
@@ -110,9 +100,9 @@ namespace CycleBell.ViewModels
                     CanBellOnStartTime = false;
             }
 
-            _sb = new StringBuilder();
-
-            _sb.Append(GetPresetName(_preset.PresetName));
+            // _name
+            _name = new StringBuilder();
+            _name.Append(GetPresetName(_preset.PresetName));
 
             // AddingTimePoint
             AddingTimePoint = new AddingTimePointViewModel (TimePoint.DefaultTimePoint, _preset, AddTimePointCommand);
@@ -125,7 +115,7 @@ namespace CycleBell.ViewModels
 
         // Preset
         public Preset Preset => _preset;
-        public string Name => _sb.ToString();
+        public string Name => _name.ToString();
 
         public TimeSpan StartTime
         {
@@ -211,15 +201,43 @@ namespace CycleBell.ViewModels
         #region Methods
 
         // Service:
-        private void AddStarToName()
+        private ITimerManager GetTimerManager (ICycleBellManager manager)
         {
-            _sb.Clear();
+            var timerManager = manager.TimerManager ?? throw new ArgumentNullException(nameof(TimerManager));
+            timerManager.TimerSecondPassedEvent += OnSecondPassed;
+            timerManager.ChangeTimePointEvent += OnTimePointChanged;
+            timerManager.TimerStopEvent += OnStop;
 
-            if (IsNewPreset) {
-                _sb.Append(NewString);
+            return timerManager;
+        }
+
+        private ObservableCollection<TimePointViewModelBase> GetTimePointViewModelCollection (Preset preset)
+        {
+            var timePointVmCollection = new ObservableCollection<TimePointViewModelBase>();
+
+            if (preset.TimePoints.Count > 0) {
+
+                foreach (var point in preset.TimePoints) {
+
+                    PrepareTimePoint (point);
+                    timePointVmCollection.Add (new TimePointViewModel (point, preset));
+
+                    CheckBounds (point);
+                }
             }
 
-            _sb.Append(StarString);
+            return timePointVmCollection;
+        }
+
+        private void AddStarToName()
+        {
+            _name.Clear();
+
+            if (IsNewPreset) {
+                _name.Append(NewString);
+            }
+
+            _name.Append(StarString);
 
             OnPropertyChanged(nameof(Name));
         }
