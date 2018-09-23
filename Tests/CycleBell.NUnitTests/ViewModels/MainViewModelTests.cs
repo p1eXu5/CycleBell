@@ -1,7 +1,11 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using CycleBell.Base;
 using CycleBell.ViewModels;
+using CycleBell.ViewModels.TimePointViewModels;
 using CycleBellLibrary.Context;
+using CycleBellLibrary.Models;
 using CycleBellLibrary.Repository;
 using CycleBellLibrary.Timer;
 using Moq;
@@ -34,12 +38,12 @@ namespace CycleBell.NUnitTests.ViewModels
         [Test]
         public void PlayCommand_SelectedPresetIsExistsTimerIsNotRunning_CanExecute()
         {
-            var pvm = GetMainViewModel();
+            var mvm = GetMainViewModel();
 
-            pvm.CreateNewPresetCommand.Execute (null);
+            mvm.SelectedPreset = GetPresetViewModel(mvm);
             _mockTimerManager.Setup (tm => tm.IsRunning).Returns (false);
 
-            Assert.IsTrue (pvm.PlayCommand.CanExecute(null));
+            Assert.IsTrue (mvm.PlayCommand.CanExecute(null));
         }
 
         [Test]
@@ -102,9 +106,22 @@ namespace CycleBell.NUnitTests.ViewModels
             _mockCycleBellManager.Setup (cbm => cbm.TimerManager).Returns (_mockTimerManager.Object);
             _mockCycleBellManager.Setup (cbm => cbm.PresetCollectionManager).Returns (_mockPresetCollectionManager.Object);
 
+            _mockPresetCollectionManager.Setup (pcm => pcm.Presets).Returns (new ReadOnlyObservableCollection<Preset>(new ObservableCollection<Preset>()));
+
             var mainViewModel = new MainViewModel (_mockDialogRegistrator.Object, _mockCycleBellManager.Object);
 
             return mainViewModel;
+        }
+
+        private PresetViewModel GetPresetViewModel(MainViewModel mainViewModel)
+        {
+            var preset = new Preset ("Test Preset");
+            var timePoint = new TimePoint("0:00:01");
+            preset.AddTimePoint (timePoint);
+
+            var tpvm = new PresetViewModel(preset, mainViewModel);
+
+            return tpvm;
         }
 
         #endregion

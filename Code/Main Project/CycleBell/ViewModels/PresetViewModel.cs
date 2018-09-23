@@ -69,7 +69,8 @@ namespace CycleBell.ViewModels
             _settedLoopNumbers = new HashSet<byte>();
 
             // _timePointVmCollection
-            _timePointVmCollection = GetTimePointViewModelCollection(_preset);
+            _timePointVmCollection = new ObservableCollection<TimePointViewModelBase>();
+            LoadTimePointViewModelCollection(_preset);
             
             // TimePointVmCollection
             TimePointVmCollection = new ReadOnlyObservableCollection<TimePointViewModelBase>(_timePointVmCollection);
@@ -204,22 +205,18 @@ namespace CycleBell.ViewModels
 
         // Service:
 
-        private ObservableCollection<TimePointViewModelBase> GetTimePointViewModelCollection (Preset preset)
+        private void LoadTimePointViewModelCollection (Preset preset)
         {
-            var timePointVmCollection = new ObservableCollection<TimePointViewModelBase>();
-
             if (preset.TimePoints.Count > 0) {
 
                 foreach (var point in preset.TimePoints) {
 
                     PrepareTimePoint (point);
-                    timePointVmCollection.Add (new TimePointViewModel (point, this));
+                    _timePointVmCollection.Add (new TimePointViewModel (point, this));
 
                     CheckBounds (point);
                 }
             }
-
-            return timePointVmCollection;
         }
 
         private AddingTimePointViewModel GetAddingTimePointViewModel (Preset preset)
