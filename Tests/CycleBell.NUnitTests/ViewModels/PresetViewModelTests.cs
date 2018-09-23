@@ -3,7 +3,7 @@ using System.Linq;
 using CycleBell.Base;
 using CycleBell.ViewModels;
 using CycleBell.ViewModels.TimePointViewModels;
-using CycleBellLibrary;
+using CycleBellLibrary.Context;
 using CycleBellLibrary.Models;
 using CycleBellLibrary.Repository;
 using CycleBellLibrary.Timer;

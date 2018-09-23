@@ -7,9 +7,9 @@ using System.IO;
 using System.Linq;
 using System.Windows.Data;
 using System.Windows.Input;
-using CycleBellLibrary;
 
 using CycleBell.Base;
+using CycleBellLibrary.Context;
 using CycleBellLibrary.Repository;
 using CycleBellLibrary.Timer;
 using Microsoft.Win32;

@@ -2,7 +2,7 @@
 using CycleBellLibrary.Repository;
 using CycleBellLibrary.Timer;
 
-namespace CycleBellLibrary
+namespace CycleBellLibrary.Context
 {
     public interface ICycleBellManager
     {

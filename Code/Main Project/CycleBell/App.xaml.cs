@@ -8,8 +8,8 @@ using System.Windows;
 using CycleBell.Base;
 using CycleBell.ViewModels;
 using CycleBell.Views;
-using CycleBellLibrary;
 using CycleBellLibrary.Context;
+using CycleBellLibrary.Repository;
 using CycleBellLibrary.Timer;
 using Unity;
 

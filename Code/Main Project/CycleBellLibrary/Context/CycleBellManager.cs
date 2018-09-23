@@ -3,7 +3,7 @@ using System.Linq;
 using CycleBellLibrary.Repository;
 using CycleBellLibrary.Timer;
 
-namespace CycleBellLibrary
+namespace CycleBellLibrary.Context
 {
     public class CycleBellManager : ICycleBellManager
     {

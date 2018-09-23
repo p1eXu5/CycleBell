@@ -5,13 +5,14 @@ using System.Collections.Specialized;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using CycleBellLibrary.Context;
 using CycleBellLibrary.Models;
 using CycleBellLibrary.Repository;
 using CycleBellLibrary.Timer;
 using Moq;
 using NUnit.Framework;
 
-namespace CycleBellLibrary.NUnitTests
+namespace CycleBellLibrary.NUnitTests.Context.Tests
 {
     [TestFixture]
     public class CycleBellManagerTests

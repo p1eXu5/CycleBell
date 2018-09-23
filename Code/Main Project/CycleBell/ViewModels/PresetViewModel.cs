@@ -11,7 +11,7 @@ using System.Windows.Data;
 using System.Windows.Input;
 using CycleBell.Base;
 using CycleBell.ViewModels.TimePointViewModels;
-using CycleBellLibrary;
+using CycleBellLibrary.Context;
 using CycleBellLibrary.Models;
 using CycleBellLibrary.Repository;
 using CycleBellLibrary.Timer;
