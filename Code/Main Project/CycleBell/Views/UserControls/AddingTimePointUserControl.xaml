@@ -101,17 +101,9 @@
                            FontFamily="{DynamicResource font_SuiGeneris}"
                            BorderBrush="{DynamicResource brush_Tip}"
                            >
-            <controls:TimerBox.RenderTransform>
-                <TransformGroup>
-                    <ScaleTransform/>
-                    <SkewTransform/>
-                    <RotateTransform/>
-                    <TranslateTransform Y="0"/>
-                </TransformGroup>
-            </controls:TimerBox.RenderTransform>
 
             <controls:TimerBox.Style>
-                <Style TargetType="controls:TimerBox" BasedOn="{StaticResource {x:Type controls:TimerBox}}">
+                <Style TargetType="controls:TimerBox" BasedOn="{StaticResource style_TimerBox}">
                     <Style.Triggers>
                         <DataTrigger Binding="{Binding NoSetTime}" Value="False">
                             <Setter Property="Foreground" Value="{StaticResource brush_Foreground}"></Setter>

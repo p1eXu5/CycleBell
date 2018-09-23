@@ -35,7 +35,8 @@
                     VerticalAlignment="Center" 
                     TextElement.FontFamily="{StaticResource font_SuiGeneris}" >
 
-            <controls:TimerBox Text="{Binding StartTime, StringFormat={}{0:%h}:{0:%mm}, Mode=OneWay}"
+            <controls:TimerBox Style="{StaticResource style_TimerBox}"
+                               Text="{Binding StartTime, StringFormat={}{0:%h}:{0:%mm}, Mode=OneWay}"
                                Foreground="{Binding Foreground, RelativeSource={RelativeSource FindAncestor, AncestorType=Control}}"
                                IsEnabled="{Binding IsEnabled, RelativeSource={RelativeSource FindAncestor, AncestorType=Control}}"
                                />

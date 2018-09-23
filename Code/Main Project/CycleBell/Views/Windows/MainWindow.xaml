@@ -5,6 +5,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:CycleBell.Views"
+        xmlns:controls="clr-namespace:CycleBell.Controls"
         xmlns:vmodels="clr-namespace:CycleBell.ViewModels;assembly="
         xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
         xmlns:userControls="clr-namespace:CycleBell.Views.UserControls"
@@ -19,6 +20,7 @@
 
     <Window.Resources>
         <ResourceDictionary>
+            
             
             <BooleanToVisibilityConverter x:Key="conv_BoolToVisibility" />
 
@@ -40,6 +42,7 @@
                 <GradientStop Color="#FFECECEC" Offset="0"/>
                 <GradientStop Color="White" Offset="1"/>
             </LinearGradientBrush>
+
         </ResourceDictionary>
     </Window.Resources>
 
@@ -212,7 +215,7 @@
                     </userControls:PresetUserControl.Style>
                 </userControls:PresetUserControl>
 
-                <!-- When NoTimePoints -->
+                <!-- When NoTimePoints --> 
                 <Grid Height="{Binding ElementName=preset, Path=ActualHeight}"> 
                     <TextBlock HorizontalAlignment="Center"
                                VerticalAlignment="Center"
@@ -251,6 +254,7 @@
                 </Grid>
             </Grid>
 
+            
             <!-- timer's buttons -->
             <userControls:TimerButtonsUserControl Grid.Row="3" DataContext="{Binding}"
                                                   VerticalAlignment="Center" Margin="0,0,0,34" Height="44" >

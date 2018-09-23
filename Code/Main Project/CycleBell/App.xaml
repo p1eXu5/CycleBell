@@ -12,11 +12,11 @@
             
 
             <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="Resources/Icons.xaml" />
+                <ResourceDictionary Source="Resources/TimerBoxStyle.xaml" />
                 <ResourceDictionary Source="Resources/Fonts.xaml" />
                 <ResourceDictionary Source="MyComboBox.xaml" />
-                <ResourceDictionary Source="Resources/Icons.xaml" />
                 <ResourceDictionary Source="Resources/ButtonStyles.xaml" />
-                <ResourceDictionary Source="Resources/TimerBoxStyle.xaml" />
                 <ResourceDictionary Source="Resources/ListBoxStyles.xaml" />
                 <ResourceDictionary Source="Resources/DataTemplates.xaml" />
             </ResourceDictionary.MergedDictionaries>
