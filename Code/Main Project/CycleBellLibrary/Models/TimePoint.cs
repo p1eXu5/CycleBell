@@ -293,7 +293,7 @@ namespace CycleBellLibrary.Models
             timePoint.Id ^= this.Id;
         }
 
-        public TimePoint Copy()
+        public TimePoint Clone()
         {
             var tp = TimePoint.DefaultTimePoint;
             tp.Time = this.Time;
