@@ -47,14 +47,15 @@ namespace CycleBell.NUnitTests.ViewModels
         }
 
         [Test]
-        public void PlayCommand_WhenExecuted_CallsITimerManager()
+        public void PlayCommand_WhenExecuted_CallsITimerManagerPlayAsync()
         {
-            var pvm = GetMainViewModel();
-            pvm.CreateNewPresetCommand.Execute (null);
+            var mvm = GetMainViewModel();
+            mvm.SelectedPreset = GetPresetViewModel(mvm);
+            _mockTimerManager.Setup (tm => tm.IsRunning).Returns (false);
 
-            pvm.PlayCommand.Execute (null);
+            mvm.PlayCommand.Execute (null);
 
-            _mockTimerManager.Verify(tm => tm.Play (It.IsAny<Preset>()));
+            _mockTimerManager.Verify(tm => tm.PlayAsync (It.IsAny<Preset>()));
         }
 
         #endregion
