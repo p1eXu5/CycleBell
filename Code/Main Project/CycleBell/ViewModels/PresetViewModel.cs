@@ -272,6 +272,7 @@ namespace CycleBell.ViewModels
 
         private void UpdateTimePointVmCollection (Object sender, NotifyCollectionChangedEventArgs e)
         {
+            // Add
             if (e.NewItems?[0] != null) {
 
                 var newTimePoint = (TimePoint) e.NewItems[0];
@@ -280,23 +281,24 @@ namespace CycleBell.ViewModels
                 _timePointVmCollection.Add (new TimePointViewModel (newTimePoint, _preset));
 
                 CheckBounds (newTimePoint);
+
+                return;
             }
 
+            // Remove
             if (e.OldItems?[0] != null && e.NewItems?[0] == null) {
 
                 var loopNumber = ((TimePoint) e.OldItems[0]).LoopNumber;
-                var removingTimePointVm = _timePointVmCollection.First (tpvm => tpvm.TimePoint.Equals ((TimePoint) e.OldItems[0]));
+                var timePoints = _timePointVmCollection.Where (tpvm => tpvm.LoopNumber == loopNumber).ToArray();
 
-                _timePointVmCollection.Remove (removingTimePointVm);
+                if (timePoints.Length == 3) {
 
-                if (!_preset.TimerLoops.Keys.Contains (loopNumber)) {
-
-                    var begin = _timePointVmCollection.First (tpvm => tpvm.LoopNumber == loopNumber && tpvm.Id == TimePoint.MinId);
-                    _timePointVmCollection.Remove (begin);
-
-                    var end = _timePointVmCollection.First (tpvm => tpvm.LoopNumber == loopNumber && tpvm.Id == TimePoint.MaxId);
-                    _timePointVmCollection.Remove (end);
+                    _timePointVmCollection.Clear();
+                    return;
                 }
+
+                var removingTimePointVm = timePoints.First (tpvm => tpvm.TimePoint.Equals ((TimePoint) e.OldItems[0]));
+                _timePointVmCollection.Remove (removingTimePointVm);
             }
         }
      
