@@ -11,7 +11,7 @@
                 <VisualStateGroup x:Name="CommonStates">
                     
                     <VisualStateGroup.Transitions>
-                        
+                        <VisualTransition From="Disabled" To="Normal" GeneratedDuration="0:0:.2" />
                         <VisualTransition From="MouseOver" To="Normal" GeneratedDuration="0:0:.2" />
                         <VisualTransition From="Normal" To="MouseOver" GeneratedDuration="0:0:.2" />
                         <VisualTransition From="Pressed" To="MouseOver" GeneratedDuration="0" />
@@ -101,8 +101,8 @@
                 <ContentControl Content="{TemplateBinding Content}">
                     <ContentControl.Foreground>
                         <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
-                            <GradientStop x:Name="col_Top" Color="{DynamicResource col_TopUncheckedIcon}" Offset="0" />
-                            <GradientStop x:Name="col_Bottom" Color="{DynamicResource col_BottomUncheckedIcon}" Offset="1" />
+                            <GradientStop x:Name="col_Top" Color="{DynamicResource col_TopCheckedIcon}" Offset="0" />
+                            <GradientStop x:Name="col_Bottom" Color="{DynamicResource col_BottomCheckedIcon}" Offset="1" />
                         </LinearGradientBrush>
                     </ContentControl.Foreground>
                 </ContentControl>
@@ -110,8 +110,6 @@
         </Grid>
     </ControlTemplate>
 
-
-    
 
     <!-- style_BaseButton -->
     <Style x:Key="style_BaseButton">
