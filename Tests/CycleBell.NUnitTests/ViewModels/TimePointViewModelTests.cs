@@ -1,8 +1,10 @@
 ﻿using System.Collections.Generic;
 using System.Media;
+using CycleBell.ViewModels;
 using CycleBell.ViewModels.TimePointViewModels;
 using CycleBellLibrary.Models;
 using CycleBellLibrary.Repository;
+using Moq;
 using NUnit.Framework;
 
 namespace CycleBell.NUnitTests.ViewModels
@@ -10,27 +12,6 @@ namespace CycleBell.NUnitTests.ViewModels
     [TestFixture]
     class TimePointViewModelTests
     {
-        #region Fields
-
-        private readonly FakePreset mockPreset = new FakePreset();
-    
-        #endregion
-
-
-        #region ctor
-
-        [Test]
-        public void ctor_WhenCalledInTests_CreatsValidSoundPlayer()
-        {
-            // Arrange and Action:
-            var tpvm = GetTimePointViewModel();
-
-            // Assert:
-            Assert.NotNull (tpvm.SoundPlayer);
-        }
-
-        #endregion
-
         #region RemoveTimePointCommand
 
         [Test]
@@ -54,7 +35,6 @@ namespace CycleBell.NUnitTests.ViewModels
         public void MuteToggleCommand_MuteFlagIsTrue_SetsMuteFlagInFalse()
         {
             var tpvm = GetTimePointViewModel();
-            tpvm.SoundPlayer = new SoundPlayer();
             tpvm.MuteFlag = true;
 
             tpvm.MuteToggleCommand.Execute (null);
@@ -66,7 +46,6 @@ namespace CycleBell.NUnitTests.ViewModels
         public void MuteToggleCommand_MuteFlagIsFalse_SetsMuteFlagInTrue()
         {
             var tpvm = GetTimePointViewModel();
-            tpvm.SoundPlayer = new SoundPlayer();
             tpvm.MuteFlag = false;
 
             tpvm.MuteToggleCommand.Execute (null);
@@ -78,31 +57,8 @@ namespace CycleBell.NUnitTests.ViewModels
         public void MuteToggleCommand_SoundPlayerIsNull_CanExecute()
         {
             var tpvm = GetTimePointViewModel();
-            tpvm.SoundPlayer = null;
 
             Assert.IsFalse (tpvm.MuteToggleCommand.CanExecute(null));
-        }
-
-        #endregion
-
-        #region Ring
-
-        [Test]
-        public void RingCommand_SoundPlayerNotNullMuteIsFalse_CanExecute()
-        {
-            var tpvm = GetTimePointViewModel();
-            tpvm.MuteFlag = false;
-
-            Assert.IsTrue (tpvm.RingCommand.CanExecute(null));
-        }
-
-        [Test]
-        public void RingCommand_SoundPlayerNotNullMuteIsTrue_CanNotExecute()
-        {
-            var tpvm = GetTimePointViewModel();
-            tpvm.MuteFlag = true;
-
-            Assert.IsFalse (tpvm.RingCommand.CanExecute(null));
         }
 
         #endregion
@@ -116,12 +72,14 @@ namespace CycleBell.NUnitTests.ViewModels
 
         #region Factory
 
+        private readonly Mock<IPresetViewModel> _mockPresetViewModel = new Mock<IPresetViewModel>();
+        private readonly FakePreset mockPreset = new FakePreset();
+
         private TimePointViewModel GetTimePointViewModel()
         {
             TimePoint tp = TimePoint.DefaultTimePoint;
-            mockPreset.AddTimePoint (tp);
 
-            return new TimePointViewModel (tp, mockPreset);
+            return new TimePointViewModel (tp, _mockPresetViewModel.Object);
         }
 
         #endregion

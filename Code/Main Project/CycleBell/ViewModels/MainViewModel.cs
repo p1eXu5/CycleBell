@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Concurrent;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.ComponentModel;
@@ -17,7 +19,7 @@ using Microsoft.Win32;
 
 namespace CycleBell.ViewModels
 {
-    public class MainViewModel : ObservableObject
+    public class MainViewModel : ObservableObject, IMainViewModel
     {
         #region Private
         public static SoundPlayer DefaultSoundPlayer = new SoundPlayer(); 
@@ -44,7 +46,7 @@ namespace CycleBell.ViewModels
             _manager.CantCreateNewPresetEvent += () => SavePresetAs(null);
 
             var presetManager = cycleBellManager.PresetCollectionManager;
-            Presets = new ObservableCollection<PresetViewModel>(presetManager.Presets.Select(p => new PresetViewModel(p, _manager)));
+            Presets = new ObservableCollection<PresetViewModel>(presetManager.Presets.Select(p => new PresetViewModel(p, this)));
 
             ((INotifyCollectionChanged) (presetManager.Presets)).CollectionChanged += PresetCollectionEventHandler;
 
@@ -135,7 +137,7 @@ namespace CycleBell.ViewModels
         {
             if (e?.NewItems?[0] != null && e.OldItems?[0] == null) {
 
-                Presets.Add(new PresetViewModel((Preset)e.NewItems[0], _manager));
+                Presets.Add(new PresetViewModel((Preset)e.NewItems[0], this));
                 SelectedPreset = Presets[Presets.Count - 1];
                 SelectedPreset.PropertyChanged += IsNewPresetChangedHandler;
             }
@@ -302,6 +304,12 @@ namespace CycleBell.ViewModels
 
         #endregion Methods
 
+        #region IMainViewModel impl
+
+        public IDictionary<int, SoundPlayer> SoundMap { get; } = new Dictionary<int, SoundPlayer>();
+        public void Ring (int id) { throw new NotImplementedException(); }
+
+        #endregion
     }
 
     #region Converters

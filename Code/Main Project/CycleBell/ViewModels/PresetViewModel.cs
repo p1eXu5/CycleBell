@@ -213,7 +213,7 @@ namespace CycleBell.ViewModels
                 foreach (var point in preset.TimePoints) {
 
                     PrepareTimePoint (point);
-                    timePointVmCollection.Add (new TimePointViewModel (point, preset));
+                    timePointVmCollection.Add (new TimePointViewModel (point, this));
 
                     CheckBounds (point);
                 }
@@ -226,7 +226,7 @@ namespace CycleBell.ViewModels
         {
             var timePoint = TimePoint.DefaultTimePoint;
             timePoint.Name = "";
-            var addingTimePoint = new AddingTimePointViewModel (preset);
+            var addingTimePoint = new AddingTimePointViewModel (this);
             ((INotifyPropertyChanged) addingTimePoint).PropertyChanged += OnTimePropertyChanged;
 
             return addingTimePoint;
@@ -276,7 +276,7 @@ namespace CycleBell.ViewModels
                 var newTimePoint = (TimePoint) e.NewItems[0];
 
                 PrepareTimePoint(newTimePoint);
-                _timePointVmCollection.Add (new TimePointViewModel (newTimePoint, _preset));
+                _timePointVmCollection.Add (new TimePointViewModel (newTimePoint, this));
 
                 CheckBounds (newTimePoint);
 

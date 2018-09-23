@@ -15,9 +15,7 @@ namespace CycleBell.NUnitTests.ViewModels
     [TestFixture]
     public class PresetViewModelTests
     {
-        private Mock<ITimerManager> _mockTimerManager;
-        private Mock<IPresetCollectionManager> _mockPresetCollection;
-        private readonly Mock<ICycleBellManager> _mockCycleBellManager = new Mock<ICycleBellManager>();
+        
 
         #region Class & ctor
 
@@ -45,7 +43,9 @@ namespace CycleBell.NUnitTests.ViewModels
         public void AddTimePointCommand_NegativeOrZeroRelativeTimePoint_CanNotExecute(string time, TimePointType timePointType)
         {
             var pvm = GetPresetViewModel();
-            pvm.AddingTimePoint = new AddingTimePointViewModel(new TimePoint(TimeSpan.Parse (time), timePointType), pvm.Preset, pvm.AddTimePointCommand);
+
+            pvm.AddingTimePoint.Time = TimeSpan.Parse (time);
+            pvm.AddingTimePoint.TimePointType = timePointType;
 
             Assert.IsFalse(pvm.AddTimePointCommand.CanExecute(null));
         }
@@ -55,7 +55,9 @@ namespace CycleBell.NUnitTests.ViewModels
         public void AddTimePointCommand_PositiveOrZeroAbsoluteTimePoint_CanExecute(string time, TimePointType timePointType)
         {
             var pvm = GetPresetViewModel();
-            pvm.AddingTimePoint = new AddingTimePointViewModel(new TimePoint(TimeSpan.Parse (time), timePointType), pvm.Preset, pvm.AddTimePointCommand);
+
+            pvm.AddingTimePoint.Time = TimeSpan.Parse (time);
+            pvm.AddingTimePoint.TimePointType = timePointType;
 
             Assert.IsTrue(pvm.AddTimePointCommand.CanExecute(null));
         }
@@ -178,82 +180,17 @@ namespace CycleBell.NUnitTests.ViewModels
 
         #endregion
 
-        #region PlayCommand
 
-        [Test]
-        public void PlayCommand_TimePointsIsEmpty_CanNotExecuted()
-        {
-            var pvm = GetPresetViewModel();
-
-            Assert.IsFalse (pvm.PlayCommand.CanExecute (null));
-        }
-
-        [Test]
-        public void PlayCommand_TimePointsNotEmpty_CanExecuted()
-        {
-            var pvm = GetPresetViewModel();
-            pvm.Preset.AddTimePoint (GetTestTimePoint());
-
-            Assert.IsTrue (pvm.PlayCommand.CanExecute(null));
-        }
-
-        [Test]
-        public void PlayCommand_WhenExecuted_CallsITimerManager()
-        {
-            var pvm = GetPresetViewModel();
-            pvm.Preset.AddTimePoint (GetTestTimePoint());
-
-            pvm.PlayCommand.Execute (null);
-
-            _mockTimerManager.Verify(tm => tm.Play (It.IsAny<Preset>()));
-        }
-
-        #endregion
-
-        // PouseCommand
-
-        [Test]
-        public void PouseCommand_TimerIsNotRunning_CanNotExecuted()
-        {
-            var pvm = GetPresetViewModel();
-            _mockTimerManager.Setup (tm => tm.IsRunning).Returns (false);
-
-            Assert.IsFalse (pvm.PouseCommand.CanExecute (null));
-        }
-
-        [Test]
-        public void PouseCommand_TimerIsRunning_CanExecuted()
-        {
-            var pvm = GetPresetViewModel();
-            _mockTimerManager.Setup (tm => tm.IsRunning).Returns (true);
-
-            Assert.IsTrue (pvm.PouseCommand.CanExecute(null));
-        }
-
-        [Test]
-        public void PouseCommand_WhenExecuted_CallsITimerManager()
-        {
-            var pvm = GetPresetViewModel();
-            _mockTimerManager.Setup (tm => tm.IsRunning).Returns (true);
-
-            pvm.PouseCommand.Execute (null);
-
-            _mockTimerManager.Verify (tm => tm.Pause());
-        }
 
         #region Factory
+
+        private readonly Mock<IMainViewModel> _mockMainViewModel = new Mock<IMainViewModel>();
 
         private PresetViewModel GetPresetViewModel()
         {
             var preset = GetEmptyTestPreset();
 
-            _mockPresetCollection = _mockCycleBellManager.As<IPresetCollectionManager>();
-            _mockTimerManager = _mockCycleBellManager.As<ITimerManager>();
-
-            _mockCycleBellManager.Setup (c => c.PresetCollectionManager).Returns(_mockPresetCollection.Object);
-            _mockCycleBellManager.Setup (c => c.TimerManager).Returns (_mockTimerManager.Object);
-
-            return new PresetViewModel(preset, _mockCycleBellManager.Object);
+            return new PresetViewModel(preset, _mockMainViewModel.Object);
         }
 
         private Preset GetEmptyTestPreset() => new Preset("Test preset");
