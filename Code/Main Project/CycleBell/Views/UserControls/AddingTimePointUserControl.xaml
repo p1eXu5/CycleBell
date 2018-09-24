@@ -117,9 +117,10 @@
         <ToggleButton x:Name="tgl_Mute" Grid.Column="2" Grid.Row="0"
                       Style="{StaticResource style_MuteToggleButton}"
                       HorizontalAlignment="Center"
+                      Content="mute" Margin="0,0,12,0"
                       >
             <ToggleButton.RenderTransform>
-                <TranslateTransform Y="-2" X="8"></TranslateTransform>
+                <TranslateTransform Y="-1" X="13"></TranslateTransform>
             </ToggleButton.RenderTransform>
         </ToggleButton>
 
@@ -137,7 +138,7 @@
                    MaxHeight="28"
                    />
 
-        <!-- sound -->
+        <!-- add sound -->
         <Button x:Name="btn_AddSoundButton"
                 Grid.Column="3" Grid.Row="0" Grid.RowSpan="2"
                 Margin="16,5,0,0"

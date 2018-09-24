@@ -55,10 +55,10 @@
 
     <!-- TimePointViewModel --> 
     <DataTemplate x:Key="datatempl_TimePointViewModel" DataType="{x:Type vm:TimePointViewModel}">
-        <Grid SnapsToDevicePixels="True" >
+        <Grid>
             <Grid.ColumnDefinitions>
                 <!-- marker -->
-                <ColumnDefinition  />
+                <ColumnDefinition  Width="*"/>
                 <!-- name -->
                 <ColumnDefinition Width="Auto"/>
                 <!-- time -->
@@ -98,19 +98,15 @@
 
             <!-- Name -->
             <TextBox x:Name="m_pointName" Grid.Column="1" Grid.Row="0"
+                     HorizontalAlignment="Right"
                      Margin="0,0,5,0"
                      Text="{Binding Name}">
                 <TextBox.Style>
                     <Style TargetType="TextBox">
-
                         <Setter Property="BorderThickness" Value="0" />
-                        <Setter Property="MinWidth" Value="106" />
                         <Setter Property="MinHeight" Value="17" />
-                        <Setter Property="HorizontalAlignment" Value="Stretch" />
                         <Setter Property="VerticalAlignment" Value="Bottom" />
-                        <Setter Property="HorizontalContentAlignment" Value="Left" />
                         <Setter Property="VerticalContentAlignment" Value="Top"></Setter>
-
                         <Setter Property="Foreground" Value="{DynamicResource brush_Foreground}" />
                         <Setter Property="FontFamily" Value="Segoe UI" />
                         <Setter Property="FontWeight" Value="Bold" />
@@ -118,76 +114,66 @@
                         <Setter Property="FontSize" Value="14" />
                     </Style>
                 </TextBox.Style>
+
+                <TextBox.RenderTransform>
+                    <TranslateTransform Y="-2"></TranslateTransform>
+                </TextBox.RenderTransform>
             </TextBox>
 
             <!-- Time -->
-            <Button x:Name="m_pointTime" Grid.Column="2" Grid.Row="0"
-                    FontSize="18" FontFamily="{DynamicResource font_SuiGeneris}"
-                    Foreground="{DynamicResource brush_Tip}"
-                    BorderBrush="{DynamicResource brush_Tip}"
-                    RenderTransformOrigin="0.5,0.5"
-                    >
-                <Button.Style>
-                    <Style TargetType="Button">
-                        <Setter Property="Width" Value="75" />
-                        <Setter Property="HorizontalAlignment" Value="Center" />
-                        <Setter Property="VerticalAlignment" Value="Bottom" />
-                        <Setter Property="Template">
-                            <Setter.Value>
-                                <ControlTemplate>
-                                    <Border BorderThickness="0">
-                                        <ContentPresenter />
-                                    </Border>
-                                </ControlTemplate>
-                            </Setter.Value>
-                        </Setter>
-                    </Style>
-                </Button.Style>
-                <TextBlock Text="{Binding Time, Converter={StaticResource conv_TimeSpanToString}, Mode=OneWay}" 
-                           HorizontalAlignment="Center" VerticalAlignment="Center"/>
-            </Button>
+            <ToggleButton Grid.Column="2" Grid.Row="0"
+                          Margin="0"
+                          Height="22" Width="75"
+                          FontSize="18"
+                          Style="{StaticResource style_MuteToggleButton}"
+                          Content="{Binding Time, Converter={StaticResource conv_TimeSpanToString}, Mode=OneWay}"
+            />
 
             <!-- mute -->
             <ToggleButton x:Name="tgl_Mute" Grid.Column="3" Grid.Row="0"
-                      Style="{StaticResource style_MuteToggleButton}"
-                      HorizontalAlignment="Right"
-                      FontSize="14"/>
+                          Style="{StaticResource style_MuteToggleButton}"
+                          Content="mute"
+                          HorizontalAlignment="Center"
+            >
+                <ToggleButton.RenderTransform>
+                    <TranslateTransform Y="-1" X="2" />
+                </ToggleButton.RenderTransform>
+            </ToggleButton>
 
-            <!-- file location -->
+            <!-- sound location -->
             <TextBlock x:Name="tbx_soundName"
-                   Grid.Column="2" Grid.ColumnSpan="2" Grid.Row="1"
-                   Margin="20,0,0,0"
-                   HorizontalAlignment="Right"
-                   VerticalAlignment="Bottom"
-                   Text="E:\Music\Stoner\111.wav"
-                   Foreground="{DynamicResource brush_Tip}"
-                   FontWeight="SemiBold"
-                   FontSize="10"
-                   TextTrimming="CharacterEllipsis"
-                   MaxHeight="28"
+                       Grid.Column="2" Grid.ColumnSpan="2" Grid.Row="1"
+                       Margin="20,0,0,0"
+                       HorizontalAlignment="Right"
+                       VerticalAlignment="Bottom"
+                       Text="{Binding SoundLocation}"
+                       Foreground="{DynamicResource brush_Tip}"
+                       FontWeight="SemiBold"
+                       FontSize="10"
+                       FontStyle="Normal"
+                       TextTrimming="CharacterEllipsis"
+                       MaxHeight="28"
                    />
 
-            <!-- sound -->
+            <!-- add sound -->
             <Button x:Name="btn_AddSoundButton"
                     Grid.Column="4" Grid.Row="0" Grid.RowSpan="2"
                     Margin="16,5,0,0"
                     Width="30" Height="30"
                     VerticalAlignment="Center"
-                    Command="{Binding AddSoundCommand}"
-                    Foreground="{DynamicResource brush_ForegroundGradient}">
-                <Path Style="{StaticResource style_PathOfButton}" Data="{StaticResource gmtry_Notes}" />
+                    Command="{Binding AddSoundCommand}">
+                <Path Style="{StaticResource style_PathOfButton}" 
+                      Data="{StaticResource gmtry_Notes}"
+                      Stroke="{x:Null}"
+                />
             </Button>
 
             <!-- del -->
-            <Button x:Name="btn_AddTimePoint"
-                    Margin="10,5,10,0"
-                    Grid.Column="5" Grid.Row="0" Grid.RowSpan="2"
-                    Width="40" Height="30" 
+            <Button x:Name="btn_RemoveTimePoint" Grid.Column="5" Grid.Row="0" Grid.RowSpan="2"
+                    Width="40" Height="30" Margin="10,5,10,0" 
                     Command="{Binding RemoveTimePointCommand}"
-                    VerticalAlignment="Center">
-                <TextBlock VerticalAlignment="Center" HorizontalAlignment="Center" 
-                           Foreground="{Binding Foreground, RelativeSource={RelativeSource FindAncestor, AncestorType=Button}}"
-                           Text="del" />
+                    VerticalAlignment="Center"
+                    Content="del" Padding="6">
             </Button>
         </Grid>
 

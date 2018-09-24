@@ -5,7 +5,6 @@
     <!-- ct_BaseButton -->
     <ControlTemplate x:Key="ct_BaseButton" TargetType="ButtonBase" >
         <Grid>
-            
             <!-- visual states -->
             <VisualStateManager.VisualStateGroups>
                 <VisualStateGroup x:Name="CommonStates">
@@ -97,8 +96,8 @@
                     <SolidColorBrush Color="{Binding Path=(at:AttachedPropertyFactory.BorderColor), RelativeSource={RelativeSource TemplatedParent}}" />
                 </Rectangle.Stroke>
             </Rectangle>
-            <Viewbox Margin="5">
-                <ContentControl Content="{TemplateBinding Content}">
+            <Viewbox Margin="{TemplateBinding Padding}" SnapsToDevicePixels="True">
+                <ContentControl Content="{TemplateBinding Content}" >
                     <ContentControl.Foreground>
                         <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
                             <GradientStop x:Name="col_Top" Color="{DynamicResource col_TopCheckedIcon}" Offset="0" />
@@ -117,6 +116,7 @@
         <Setter Property="Control.VerticalAlignment" Value="Center" />
         <Setter Property="Control.HorizontalAlignment" Value="Left" />
         <Setter Property="Control.FontWeight" Value="Bold" />
+        <Setter Property="Control.FontStyle" Value="Normal" />
         <Setter Property="Control.FontFamily" Value="{StaticResource font_SuiGeneris}" />
         <Setter Property="at:AttachedPropertyFactory.StrokeColor" Value="{DynamicResource col_UncheckedStroke}" />
         <Setter Property="Control.FontSize" Value="1" />
@@ -131,12 +131,28 @@
     
     <!-- Button Style -->
     <Style TargetType="Button" BasedOn="{StaticResource style_BaseButton}">
+        <Setter Property="Padding" Value="5" />
         <Setter Property="at:AttachedPropertyFactory.BorderColor" Value="{DynamicResource col_PressedBorder}" />
         <Style.Triggers>
             <Trigger Property="IsPressed" Value="True">
                 <Setter Property="at:AttachedPropertyFactory.StrokeColor" Value="{DynamicResource col_PressedButton}" />
             </Trigger>
         </Style.Triggers>
+    </Style>
+
+    <Style x:Key="style_TimerButton" TargetType="Button">
+        <Setter Property="Width" Value="75" />
+        <Setter Property="HorizontalAlignment" Value="Center" />
+        <Setter Property="VerticalAlignment" Value="Bottom" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="Button">
+                    <Border BorderThickness="0">
+                        <ContentPresenter Content="{TemplateBinding Content}"/>
+                    </Border>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
     </Style>
 
     <!-- ToggleButton Style -->
@@ -179,15 +195,18 @@
 
     <!-- style_MuteToggleButton -->
     <Style x:Key="style_MuteToggleButton" TargetType="ToggleButton">
+        <Setter Property="VerticalAlignment" Value="Bottom" />
         <Setter Property="FontWeight" Value="Normal" />
         <Setter Property="FontFamily" Value="{StaticResource font_SuiGeneris}" />
         <Setter Property="FontSize" Value="14" />
+        <Setter Property="FontStyle" Value="Normal" />
+        <Setter Property="BorderThickness" Value="0" />
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="ToggleButton">
                     
                     <Border x:Name="border"
-                            BorderThickness="0">
+                            BorderThickness="{TemplateBinding BorderThickness}">
                         <VisualStateManager.VisualStateGroups>
                             <VisualStateGroup x:Name="CommonState">
 
@@ -247,10 +266,16 @@
                             </VisualStateGroup>
                         </VisualStateManager.VisualStateGroups>
 
-                        <TextBlock x:Name="tbk_Mute" Text="mute" 
-                                   VerticalAlignment="Bottom"
+                        <TextBlock x:Name="tbk_Mute"
+                                   VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
                                    HorizontalAlignment="Center"
-                                   RenderTransformOrigin=".5,.5">
+                                   RenderTransformOrigin=".5,.5"
+                                   FontSize="{TemplateBinding FontSize}"
+                                   FontStyle="{TemplateBinding FontStyle}"
+                                   FontFamily="{TemplateBinding FontFamily}"
+                                   Text="{TemplateBinding Content}"
+                                   >
+
                             <TextBlock.Foreground>
                                 <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
                                     <GradientStop x:Name="col_Top" Color="{DynamicResource col_TopForeground}" Offset="0" />
