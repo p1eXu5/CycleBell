@@ -143,6 +143,7 @@
                 <RowDefinition Height="100"/>
             </Grid.RowDefinitions>
 
+
             <!-- Header -->
             <TextBlock Text="Cycle Bell" Grid.Row="0"
                        HorizontalAlignment="Center" VerticalAlignment="Center"

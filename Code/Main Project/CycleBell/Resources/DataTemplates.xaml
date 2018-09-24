@@ -130,14 +130,27 @@
             />
 
             <!-- mute -->
-            <ToggleButton x:Name="tgl_Mute" Grid.Column="3" Grid.Row="0"
-                          Style="{StaticResource style_MuteToggleButton}"
+            <ToggleButton Grid.Column="3" Grid.Row="0"
+                          IsEnabled="True"
+                          Style="{x:Null}"
                           Content="mute"
                           HorizontalAlignment="Center"
-            >
+                          Width="20"
+                          >
                 <ToggleButton.RenderTransform>
                     <TranslateTransform Y="-1" X="2" />
                 </ToggleButton.RenderTransform>
+                <ToggleButton.Triggers>
+                    <EventTrigger RoutedEvent="ToggleButton.MouseEnter">
+                        <EventTrigger.Actions>
+                            <BeginStoryboard>
+                                <Storyboard>
+                                    <DoubleAnimation Storyboard.TargetProperty="(FrameworkElement.Width)" To="300" Duration="0:0:.4" />
+                                </Storyboard>
+                            </BeginStoryboard>
+                        </EventTrigger.Actions>
+                    </EventTrigger>
+                </ToggleButton.Triggers>
             </ToggleButton>
 
             <!-- sound location -->

@@ -51,16 +51,24 @@
         <!-- points list -->
         <Grid Grid.Row="1">
             
-            <!-- TimePointVmCollection -->
-            <ListBox x:Name="m_pointsList"
-                     ItemTemplateSelector="{StaticResource templsel_Selector}"
+                     <!--ItemTemplateSelector="{StaticResource templsel_Selector}"
                      ItemsSource="{Binding TimePointVmCollection}"
                      FontFamily="{StaticResource font_SuiGeneris}"
-                     ScrollViewer.HorizontalScrollBarVisibility="Hidden"
-                     ItemContainerStyle="{StaticResource style_ListBoxItem}">
+                     ScrollViewer.HorizontalScrollBarVisibility="Hidden"-->
+
+            <!-- TimePointVmCollection -->
+            <ListBox x:Name="m_pointsList" Opacity="0.0"
+                     >
+                <ToggleButton Width="200" Height="200" Style="{StaticResource style_MuteToggleButton}" Content="mute"/>
                 <ListBox.Style>
-                    <Style TargetType="ListBox" BasedOn="{StaticResource style_TimePointsListBox}">
-                        <Setter Property="UIElement.Opacity" Value="0.0" />
+                    <Style TargetType="ListBox">
+                        <Setter Property="ScrollViewer.HorizontalScrollBarVisibility" Value="Auto" />
+                        <Setter Property="BorderThickness" Value="0" />
+                        <Setter Property="HorizontalAlignment" Value="Stretch" />
+                        <Setter Property="Background" Value="White" />
+                        <!--<Setter Property="Margin" Value="20,0" />-->
+                        <Setter Property="MinHeight" Value="100"></Setter>
+                        <Setter Property="SelectionMode" Value="Single" />
                         <Style.Triggers>
                             <DataTrigger Binding="{Binding IsNoTimePoints}" Value="False">
                                 <DataTrigger.EnterActions>
