@@ -60,6 +60,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ViewModels\AddingTimePointViewModelTests.cs" />
     <Compile Include="ViewModels\MainViewModelTests.cs" />
     <Compile Include="ViewModels\PresetViewModelTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

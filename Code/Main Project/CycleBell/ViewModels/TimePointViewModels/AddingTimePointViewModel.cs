@@ -40,7 +40,23 @@ namespace CycleBell.ViewModels.TimePointViewModels
 
         public void Reset()
         {
+            Name = "";
             Time = TimeSpan.Zero;
+            TimePointType = TimePointType.Absolute;
+            LoopNumber = 0;
+        }
+
+        public void CopyFrom(TimePoint timePoint)
+        {
+            _timePoint.Name = timePoint.Name;
+            _timePoint.Time = timePoint.Time;
+            _timePoint.TimePointType = timePoint.TimePointType;
+            _timePoint.LoopNumber = timePoint.LoopNumber;
+
+            OnPropertyChanged(nameof(Name));
+            OnPropertyChanged(nameof(Time));
+            OnPropertyChanged(nameof(TimePointType));
+            OnPropertyChanged(nameof(LoopNumber));
         }
     }
 }

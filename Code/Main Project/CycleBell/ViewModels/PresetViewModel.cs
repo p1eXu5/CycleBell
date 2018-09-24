@@ -83,7 +83,7 @@ namespace CycleBell.ViewModels
             view.SortDescriptions.Add (new SortDescription("LoopNumber", ListSortDirection.Ascending));
 
             // TimePoints INotifyCollectionChanged
-            ((INotifyCollectionChanged) _preset.TimePoints).CollectionChanged += UpdateTimePointVmCollection;
+            ((INotifyCollectionChanged) _preset.TimePoints).CollectionChanged += OnTimePointCollectionChanged;
 
             // CanBellOnStartTime
             if (_preset.Tag is string str) {
@@ -98,7 +98,7 @@ namespace CycleBell.ViewModels
             _name = new StringBuilder(GetPresetName(_preset.PresetName));
 
             // AddingTimePoint
-            AddingTimePoint = GetAddingTimePointViewModel(_preset);
+            AddingTimePoint = GetAddingTimePointViewModel();
         }
 
         #endregion
@@ -219,11 +219,11 @@ namespace CycleBell.ViewModels
             }
         }
 
-        private AddingTimePointViewModel GetAddingTimePointViewModel (Preset preset)
+        private AddingTimePointViewModel GetAddingTimePointViewModel ()
         {
-            var timePoint = TimePoint.DefaultTimePoint;
-            timePoint.Name = "";
             var addingTimePoint = new AddingTimePointViewModel (this);
+            addingTimePoint.Reset();
+
             ((INotifyPropertyChanged) addingTimePoint).PropertyChanged += OnTimePropertyChanged;
 
             return addingTimePoint;
@@ -265,7 +265,7 @@ namespace CycleBell.ViewModels
             OnPropertyChanged (nameof(CanAddTimePoint));
         }
 
-        private void UpdateTimePointVmCollection (Object sender, NotifyCollectionChangedEventArgs e)
+        private void OnTimePointCollectionChanged (Object sender, NotifyCollectionChangedEventArgs e)
         {
             // Add
             if (e.NewItems?[0] != null) {
@@ -288,7 +288,9 @@ namespace CycleBell.ViewModels
 
                 if (timePoints.Length == 3) {
 
-                    _timePointVmCollection.Clear();
+                    _timePointVmCollection.Remove(timePoints[0]);
+                    _timePointVmCollection.Remove(timePoints[1]);
+                    _timePointVmCollection.Remove(timePoints[2]);
                     return;
                 }
 
@@ -317,6 +319,7 @@ namespace CycleBell.ViewModels
 
             ResetAddingTimePoint();
         }
+
         private bool CanAddTimePoint (object o)
         {
             var res = _addingTimePoint.Time == TimeSpan.Zero && _addingTimePoint.TimePointType == TimePointType.Absolute 
@@ -354,7 +357,7 @@ namespace CycleBell.ViewModels
         // Checkers:
 
         /// <summary>
-        /// Used in UpdateTimePointVmCollection
+        /// Used in OnTimePointCollectionChanged
         /// </summary>
         /// <param name="timePoint"></param>
         private void CheckBounds(TimePoint timePoint)

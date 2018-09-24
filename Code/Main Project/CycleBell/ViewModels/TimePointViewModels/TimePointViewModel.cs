@@ -56,7 +56,15 @@ namespace CycleBell.ViewModels.TimePointViewModels
         #region TimePointViewModelBase Overrides
 
         public override int Id => _timePoint.Id;
-        public override byte LoopNumber => _timePoint.LoopNumber;
+
+        public override byte LoopNumber
+        {
+            get => _timePoint.LoopNumber;
+            set {
+                _timePoint.LoopNumber = value;
+                OnPropertyChanged();
+            }
+        }
 
         #endregion
 

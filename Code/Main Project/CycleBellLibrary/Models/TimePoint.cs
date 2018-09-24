@@ -104,8 +104,8 @@ namespace CycleBellLibrary.Models
         public TimePoint(TimeSpan time, TimePointType timePointType)
             : this("Time point " + _timePointNum, time, timePointType)
         { }
-        public TimePoint(string time, TimePointType timePointType)
-            : this("Time point " + _timePointNum, TimeSpan.Parse(time), timePointType)
+        public TimePoint(string time, TimePointType timePointType, byte loopNumber = 0)
+            : this("Time point " + _timePointNum, TimeSpan.Parse(time), timePointType, loopNumber)
         { }
         public TimePoint(string time)
             :this("Time point " + _timePointNum, TimeSpan.Parse(time), DefaultTimePointType)
@@ -113,8 +113,8 @@ namespace CycleBellLibrary.Models
         public TimePoint(string name, string time)
             :this(name, TimeSpan.Parse(time), DefaultTimePointType)
         { }
-        public TimePoint(string name, string time, TimePointType timePointType)
-            :this(name, TimeSpan.Parse(time), timePointType)
+        public TimePoint(string name, string time, TimePointType timePointType, byte loopNumber = 0)
+            :this(name, TimeSpan.Parse(time), timePointType, loopNumber)
         { }
 
         #endregion
@@ -309,15 +309,17 @@ namespace CycleBellLibrary.Models
         public TimePoint Clone()
         {
             var tp = TimePoint.DefaultTimePoint;
+            tp.Name = this.Name;
             tp.Time = this.Time;
             tp.TimePointType = this.TimePointType;
+            tp.LoopNumber = this.LoopNumber;
             tp.Tag = this.Tag;
             tp.BaseTime = this.BaseTime;
 
             return tp;
         }
 
-        public override string ToString() => $"{Name}: {Time:h\\:mm\\:ss} ({TimePointType})"; 
+        public override string ToString() => $"{Name}: {Time:h\\:mm\\:ss} ({TimePointType}) (l#: {LoopNumber})"; 
 
         #endregion
 

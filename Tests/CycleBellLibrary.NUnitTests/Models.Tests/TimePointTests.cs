@@ -11,6 +11,8 @@ namespace CycleBellLibrary.NUnitTests.Models.Tests
     [TestFixture]
     public class TimePointTests
     {
+        #region ctor
+
         [Test]
         public void ctor_ParameterlessCalled_CreatsTimePointWithNullBaseTime()
         {
@@ -20,7 +22,7 @@ namespace CycleBellLibrary.NUnitTests.Models.Tests
         }
 
         [Test]
-        public void TimePoint_AbsoluteTimePoint_CreatesZeroBaseTime()
+        public void ctor_AbsoluteTimePoint_CreatesZeroBaseTime()
         {
             var timePoint = GetAbsoluteTimePoint();
 
@@ -28,12 +30,14 @@ namespace CycleBellLibrary.NUnitTests.Models.Tests
         }
 
         [Test]
-        public void TimePoint_RelativeTimePoint_CreatesNoSetBaseTime()
+        public void ctor_RelativeTimePoint_CreatesNoSetBaseTime()
         {
             var timePoint = GetRelativeTimePoint();
 
             Assert.Null(timePoint.BaseTime);
         }
+
+        #endregion ctor
 
         [Test]
         public void GetAbsoluteTime_RelativeTimePointBaseTimeNotSet_Throws()
@@ -124,6 +128,21 @@ namespace CycleBellLibrary.NUnitTests.Models.Tests
         }
 
         [Test]
+        public void Clone_WhenCalled_GetsClone()
+        {
+            var timePoint = GetRelativeTimePoint(7);
+
+            var timePointClone = timePoint.Clone();
+
+            Assert.AreNotSame(timePoint, timePointClone);
+            Assert.AreNotEqual(timePoint.Id, timePointClone.Id);
+            Assert.AreEqual(timePoint.Name, timePointClone.Name);
+            Assert.AreEqual(timePoint.TimePointType, timePointClone.TimePointType);
+            Assert.AreEqual(timePoint.LoopNumber, timePointClone.LoopNumber);
+            Assert.AreEqual(timePoint.BaseTime, timePointClone.BaseTime);
+        }
+
+        [Test]
         public void TimePointInLinqTest()
         {
             TimePoint[] points = new[]
@@ -160,6 +179,8 @@ namespace CycleBellLibrary.NUnitTests.Models.Tests
         {
             return new TimePoint("0:00:30") {TimePointType = TimePointType.Relative};
         }
+
+        private TimePoint GetRelativeTimePoint(byte loopNumber) => new TimePoint("Test Relative TimePoint", "0:00:07", TimePointType.Relative, loopNumber);
 
         private TimePoint GetAbsoluteTimePoint()
         {
