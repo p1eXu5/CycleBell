@@ -7,7 +7,7 @@
         <Setter Property="BorderThickness" Value="0" />
         <Setter Property="HorizontalAlignment" Value="Stretch" />
         <Setter Property="Margin" Value="20,0" />
-        <Setter Property="MinHeight" Value="150"></Setter>
+        <Setter Property="MinHeight" Value="100"></Setter>
         <Setter Property="Control.Background" Value="White" />
         <Style.Triggers>
             <DataTrigger Binding="{Binding IsNoTimePoints}" Value="True">

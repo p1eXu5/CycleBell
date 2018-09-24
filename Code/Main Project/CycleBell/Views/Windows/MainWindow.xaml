@@ -15,7 +15,7 @@
         d:DataContext="{d:DesignInstance vmodels:MainViewModel}"
         
         Title="MainWindow" 
-        Height="726" Width="444.125" 
+        Height="806" Width="444.125" 
         ResizeMode="CanResize" WindowStartupLocation="CenterScreen">
 
     <Window.Resources>
