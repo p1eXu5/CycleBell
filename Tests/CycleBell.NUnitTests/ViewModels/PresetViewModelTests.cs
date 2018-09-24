@@ -261,6 +261,25 @@ namespace CycleBell.NUnitTests.ViewModels
             Assert.IsTrue(pvm.TimePointVmCollection.Count == 0);
         }
 
+        [Test]
+        public void RemoveTimePointCommand_MultiTimePoint_RemovesNestedLoopNumberSet()
+        {
+            var pvm = GetPresetViewModel();
+            var tp = GetTestRelativeTimePoint(7);
+
+            pvm.AddingTimePoint.CopyFrom(tp);
+            pvm.AddTimePointCommand.Execute(null);
+
+            pvm.RemoveTimePoint(pvm.TimePointVmCollection[0].TimePoint);
+
+            Assert.IsTrue(pvm.TimePointVmCollection.Count == 0);
+
+            pvm.AddingTimePoint.CopyFrom(tp);
+            pvm.AddTimePointCommand.Execute(null);
+
+            Assert.IsTrue(pvm.TimePointVmCollection.Count == 3);
+        }
+
         #endregion
 
 

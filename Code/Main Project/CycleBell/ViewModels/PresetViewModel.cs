@@ -182,15 +182,6 @@ namespace CycleBell.ViewModels
 
         #region Methods
 
-        public bool AddTimePoint (TimePoint timePoint)
-        {
-            var res = CanAddTimePoint (timePoint);
-
-            if (res)
-                _preset.AddTimePoint (timePoint);
-
-            return res;
-        }
         public void RemoveTimePoint (TimePoint timePoint)
         {
             _preset.RemoveTimePoint (timePoint);
@@ -291,20 +282,14 @@ namespace CycleBell.ViewModels
                     _timePointVmCollection.Remove(timePoints[0]);
                     _timePointVmCollection.Remove(timePoints[1]);
                     _timePointVmCollection.Remove(timePoints[2]);
+
+                    _settedLoopNumbers.Remove(loopNumber);
                     return;
                 }
 
                 var removingTimePointVm = timePoints.First (tpvm => tpvm.TimePoint.Equals ((TimePoint) e.OldItems[0]));
                 _timePointVmCollection.Remove (removingTimePointVm);
             }
-        }
-     
-        public PresetViewModel GetDeepCopy()
-        {
-            var presetVm = (PresetViewModel) this.MemberwiseClone();
-            //presetVm._presetViewModel = _presetViewModel.GetDeepCopy();
-
-            return null;
         }
 
         // AddTimePointCommand:
