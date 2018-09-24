@@ -123,8 +123,8 @@ namespace CycleBell.NUnitTests.ViewModels
             Assert.AreNotEqual(afterAddingTimePoint.Id, timePoint.Id);
             Assert.AreNotEqual(afterAddingTimePoint.Name, timePoint.Name);
             Assert.AreNotEqual(afterAddingTimePoint.Time, timePoint.Time);
-            Assert.AreNotEqual(afterAddingTimePoint.TimePointType, timePoint.TimePointType);
-            Assert.AreNotEqual(afterAddingTimePoint.LoopNumber, timePoint.LoopNumber);
+            Assert.AreEqual(afterAddingTimePoint.TimePointType, TimePointType.Relative);
+            Assert.AreEqual(afterAddingTimePoint.LoopNumber, 0);
         }
 
         // KnownLoop

@@ -24,17 +24,17 @@ namespace CycleBell.NUnitTests.ViewModels
 
             avm.CopyFrom(GetTestRelativeTimePoint(7));
 
-            var beforeResetClonedTimePoint = avm.TimePoint.Clone();
+            var beforeResetTimePointId = avm.TimePoint.Id;
 
             avm.Reset();
 
             var afterResetTimePoint = avm.TimePoint;
 
-            Assert.AreNotEqual(beforeResetClonedTimePoint.Id, afterResetTimePoint.Id);
-            Assert.AreNotEqual(beforeResetClonedTimePoint.Name, afterResetTimePoint.Name);
-            Assert.AreNotEqual(beforeResetClonedTimePoint.Time, afterResetTimePoint.Time);
-            Assert.AreNotEqual(beforeResetClonedTimePoint.TimePointType, afterResetTimePoint.TimePointType);
-            Assert.AreNotEqual(beforeResetClonedTimePoint.LoopNumber, afterResetTimePoint.LoopNumber);
+            Assert.AreEqual(beforeResetTimePointId, afterResetTimePoint.Id);
+            Assert.AreEqual(afterResetTimePoint.Name, String.Empty);
+            Assert.AreEqual(afterResetTimePoint.Time, TimeSpan.Zero);
+            Assert.AreEqual(afterResetTimePoint.TimePointType, TimePointType.Relative);
+            Assert.AreEqual(afterResetTimePoint.LoopNumber, 0);
         }
 
         #region Factory

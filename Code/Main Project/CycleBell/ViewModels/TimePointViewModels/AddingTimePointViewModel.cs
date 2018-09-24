@@ -42,7 +42,7 @@ namespace CycleBell.ViewModels.TimePointViewModels
         {
             Name = "";
             Time = TimeSpan.Zero;
-            TimePointType = TimePointType.Absolute;
+            TimePointType = TimePointType.Relative;
             LoopNumber = 0;
         }
 
