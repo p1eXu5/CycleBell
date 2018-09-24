@@ -21,6 +21,7 @@
         <Setter Property="HorizontalContentAlignment" Value="Stretch" />
         <Setter Property="Foreground" Value="Black" />
         <Setter Property="Background" Value="Transparent" />
+        <Setter Property="IsHitTestVisible" Value="True" />
         <Setter Property="Shape.Stroke" Value="{DynamicResource brush_Foreground}" />
         <Setter Property="Margin" Value="5" />
         <Setter Property="FontStyle" Value="Normal" />
