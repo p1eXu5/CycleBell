@@ -133,10 +133,14 @@
         <!-- Window Content -->
         <Grid TextElement.FontSize="14" VerticalAlignment="Stretch">
             <Grid.RowDefinitions>
+                <!-- header -->
                 <RowDefinition Height="auto"/>
+                <!-- preset combo box -->
                 <RowDefinition Height="auto"/>
-                <RowDefinition Height="auto"/>
-                <RowDefinition />
+                <!-- selected preset -->
+                <RowDefinition Height="*"/>
+                <!-- timer buttons -->
+                <RowDefinition Height="100"/>
             </Grid.RowDefinitions>
 
             <!-- Header -->
