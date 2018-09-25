@@ -5,6 +5,45 @@
     <!-- ct_BaseButton -->
     <ControlTemplate x:Key="ct_BaseButton" TargetType="ButtonBase" >
         <Grid>
+            <!-- visual tree -->
+            <Rectangle x:Name="rectangle"
+                       RadiusX="4" RadiusY="4"
+                       StrokeThickness="{TemplateBinding BorderThickness}"
+                       SnapsToDevicePixels="True">
+                <!--fill--> 
+                <Rectangle.Fill>
+                    <SolidColorBrush Color="{DynamicResource col_Background}" />
+                </Rectangle.Fill>
+                
+                <!-- rectangle border -->
+                <Rectangle.Stroke>
+                    <LinearGradientBrush>
+                        <GradientStop x:Name="col_TopStroke" Color="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=Control}, 
+                                                                             Path=BorderBrush.(LinearGradientBrush.GradientStops)[0].Color}" Offset="0" />
+                        <GradientStop x:Name="col_BottomStroke" Color="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=Control}, 
+                                                                             Path=BorderBrush.(LinearGradientBrush.GradientStops)[1].Color}" Offset="1" />
+                    </LinearGradientBrush>
+                </Rectangle.Stroke>
+
+                <!-- shadow -->
+                <Rectangle.Effect>
+                    <DropShadowEffect x:Name="m_shadow" Direction="-90" 
+                                      Opacity=".0" 
+                                      ShadowDepth="2" BlurRadius="2" />
+                </Rectangle.Effect>
+                
+            </Rectangle>
+            <Viewbox Margin="{TemplateBinding Padding}" SnapsToDevicePixels="True">
+                <ContentControl Content="{TemplateBinding Content}" >
+                    <ContentControl.Foreground>
+                        <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+                            <GradientStop x:Name="col_TopForeground" Color="{DynamicResource col_TopCheckedIcon}" Offset="0" />
+                            <GradientStop x:Name="col_BottomForeground" Color="{DynamicResource col_BottomCheckedIcon}" Offset="1" />
+                        </LinearGradientBrush>
+                    </ContentControl.Foreground>
+                </ContentControl>
+            </Viewbox>
+
             <!-- visual states -->
             <VisualStateManager.VisualStateGroups>
                 <VisualStateGroup x:Name="CommonStates">
@@ -34,21 +73,21 @@
                             <DoubleAnimation Storyboard.TargetName="rectangle"
                                              Storyboard.TargetProperty="(UIElement.Effect).(DropShadowEffect.ShadowDepth)" 
                                              To="1.0" Duration="0"/>
-                            <DoubleAnimation Storyboard.TargetName="rectangle"
-                                             Storyboard.TargetProperty="(Shape.StrokeThickness)" 
-                                             To="1.0" Duration="0"/>
-                            <ColorAnimation Storyboard.TargetName="col_Top" Storyboard.TargetProperty="Color" 
+
+                            <ColorAnimation Storyboard.TargetName="col_TopForeground" Storyboard.TargetProperty="Color" 
                                             To="{DynamicResource col_TopPressed}" Duration="0" />
-                            <ColorAnimation Storyboard.TargetName="col_Bottom" Storyboard.TargetProperty="Color" 
+                            <ColorAnimation Storyboard.TargetName="col_BottomForeground" Storyboard.TargetProperty="Color" 
                                             To="{DynamicResource col_BottomPressed}" Duration="0" />
+                            
+
                         </Storyboard>
                     </VisualState>
                     
                     <VisualState Name="Disabled">
                         <Storyboard>
-                            <ColorAnimation Storyboard.TargetName="col_Top" Storyboard.TargetProperty="Color" 
+                            <ColorAnimation Storyboard.TargetName="col_TopForeground" Storyboard.TargetProperty="Color" 
                                             To="{DynamicResource col_TopUncheckedIcon}" Duration="0:0:.2" />
-                            <ColorAnimation Storyboard.TargetName="col_Bottom" Storyboard.TargetProperty="Color" 
+                            <ColorAnimation Storyboard.TargetName="col_BottomForeground" Storyboard.TargetProperty="Color" 
                                             To="{DynamicResource col_BottomUncheckedIcon}" Duration="0:0:.2" />
                         </Storyboard>
                     </VisualState>
@@ -57,61 +96,37 @@
                 <VisualStateGroup x:Name="CheckStates">
                     <VisualState x:Name="Unchecked" >
                         <Storyboard>
-                            <ColorAnimation Storyboard.TargetName="col_Top" Storyboard.TargetProperty="Color" 
+                            <ColorAnimation Storyboard.TargetName="col_TopForeground" Storyboard.TargetProperty="Color" 
                                             To="{DynamicResource col_TopUncheckedIcon}" Duration="0:0:.2" />
-                            <ColorAnimation Storyboard.TargetName="col_Bottom" Storyboard.TargetProperty="Color" 
+                            <ColorAnimation Storyboard.TargetName="col_BottomForeground" Storyboard.TargetProperty="Color" 
                                             To="{DynamicResource col_BottomUncheckedIcon}" Duration="0:0:.2" />
                         </Storyboard>
                     </VisualState>
                     <VisualState x:Name="Checked">
                         <Storyboard>
-                            <ColorAnimation Storyboard.TargetName="col_Top" Storyboard.TargetProperty="Color" 
+                            <ColorAnimation Storyboard.TargetName="col_TopForeground" Storyboard.TargetProperty="Color" 
                                             To="{DynamicResource col_TopCheckedIcon}" Duration="0:0:.2" />
-                            <ColorAnimation Storyboard.TargetName="col_Bottom" Storyboard.TargetProperty="Color" 
+                            <ColorAnimation Storyboard.TargetName="col_BottomForeground" Storyboard.TargetProperty="Color" 
                                             To="{DynamicResource col_BottomCheckedIcon}" Duration="0:0:.2" />
                         </Storyboard>
                     </VisualState>
                 </VisualStateGroup>
             </VisualStateManager.VisualStateGroups>
 
-            <!-- visual tree -->
-            <Rectangle x:Name="rectangle"
-                       RadiusX="4" RadiusY="4"
-                       StrokeThickness="0"
-                       SnapsToDevicePixels="True">
-                <!-- fill -->
-                <Rectangle.Fill>
-                    <SolidColorBrush Color="{DynamicResource col_Background}" />
-                </Rectangle.Fill>
-
-                <!-- shadow -->
-                <Rectangle.Effect>
-                    <DropShadowEffect x:Name="m_shadow" Direction="-90" 
-                                      Opacity=".0" 
-                                      ShadowDepth="2" BlurRadius="2" />
-                </Rectangle.Effect>
-                
-                <!-- rectangle border -->
-                <Rectangle.Stroke>
-                    <SolidColorBrush Color="{Binding Path=(at:AttachedPropertyFactory.BorderColor), RelativeSource={RelativeSource TemplatedParent}}" />
-                </Rectangle.Stroke>
-            </Rectangle>
-            <Viewbox Margin="{TemplateBinding Padding}" SnapsToDevicePixels="True">
-                <ContentControl Content="{TemplateBinding Content}" >
-                    <ContentControl.Foreground>
-                        <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
-                            <GradientStop x:Name="col_Top" Color="{DynamicResource col_TopCheckedIcon}" Offset="0" />
-                            <GradientStop x:Name="col_Bottom" Color="{DynamicResource col_BottomCheckedIcon}" Offset="1" />
-                        </LinearGradientBrush>
-                    </ContentControl.Foreground>
-                </ContentControl>
-            </Viewbox>
         </Grid>
     </ControlTemplate>
 
 
     <!-- style_BaseButton -->
     <Style x:Key="style_BaseButton">
+        <Setter Property="Control.BorderBrush">
+            <Setter.Value>
+                <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+                    <GradientStop Color="{DynamicResource col_BottomUncheckedIcon}" Offset="0" />
+                    <GradientStop Color="{DynamicResource col_BottomUncheckedIcon}" Offset="1" />
+                </LinearGradientBrush>
+            </Setter.Value>
+        </Setter>
         <Setter Property="Control.BorderThickness" Value="0" />
         <Setter Property="Control.VerticalAlignment" Value="Center" />
         <Setter Property="Control.HorizontalAlignment" Value="Left" />
@@ -132,10 +147,25 @@
     <!-- Button Style -->
     <Style TargetType="Button" BasedOn="{StaticResource style_BaseButton}">
         <Setter Property="Padding" Value="5" />
-        <Setter Property="at:AttachedPropertyFactory.BorderColor" Value="{DynamicResource col_PressedBorder}" />
+        <Setter Property="at:AttachedPropertyFactory.BorderBrush" >
+            <Setter.Value>
+                <LinearGradientBrush>
+                    <GradientStop Color="{DynamicResource col_BottomUncheckedIcon}" Offset="0" />
+                    <GradientStop Color="{DynamicResource col_BottomUncheckedIcon}" Offset="1" />
+                </LinearGradientBrush>
+            </Setter.Value>
+        </Setter>
         <Style.Triggers>
             <Trigger Property="IsPressed" Value="True">
                 <Setter Property="at:AttachedPropertyFactory.StrokeColor" Value="{DynamicResource col_PressedButton}" />
+                
+                <Trigger.EnterActions>
+                    <BeginStoryboard>
+                        <ColorAnimation Storyboard.TargetProperty="BorderBrush.(LinearGradientBrush.GradientStops)[0].Color" 
+                                        To="at:AttachedPropertyFactory.BorderBrush"></ColorAnimation>
+                    </BeginStoryboard>
+                </Trigger.EnterActions>
+                
             </Trigger>
         </Style.Triggers>
     </Style>
@@ -156,39 +186,16 @@
     </Style>
 
     <!-- ToggleButton Style -->
-    <Style TargetType="ToggleButton" BasedOn="{StaticResource style_BaseButton}">
+    <Style x:Key="style_TwoStatesToggleButton" TargetType="ToggleButton" BasedOn="{StaticResource style_BaseButton}">
         <Setter Property="Control.Foreground" Value="{DynamicResource brush_UncheckedIcon}" />
         <Setter Property="at:AttachedPropertyFactory.FillBrush1" Value="{DynamicResource brush_UncheckedIcon}"/>
         <Setter Property="at:AttachedPropertyFactory.FillBrush2" Value="{DynamicResource brush_UncheckedIcon}"/>
 
         <Style.Triggers>
-            <MultiTrigger>
-                <MultiTrigger.Conditions>
-                    <Condition Property="IsChecked" Value="True" />
-                    <Condition Property="IsThreeState" Value="False" />
-                </MultiTrigger.Conditions>
+            <Trigger Property="IsChecked" Value="True" >
                 <Setter Property="Foreground" Value="{DynamicResource brush_CheckedIcon}" />
                 <Setter Property="at:AttachedPropertyFactory.StrokeColor" Value="{DynamicResource col_CheckedStroke}" />
-            </MultiTrigger>
-
-            <MultiTrigger>
-                <MultiTrigger.Conditions>
-                    <Condition Property="IsChecked" Value="True" />
-                    <Condition Property="IsThreeState" Value="True" />
-                </MultiTrigger.Conditions>
-
-                <Setter Property="at:AttachedPropertyFactory.FillBrush1" Value="{StaticResource brush_Play}" />
-                <Setter Property="at:AttachedPropertyFactory.StrokeColor" Value="{DynamicResource col_CheckedStroke}" />
-            </MultiTrigger>
-
-            <MultiTrigger>
-                <MultiTrigger.Conditions>
-                    <Condition Property="IsChecked" Value="{x:Null}" />
-                    <Condition Property="IsThreeState" Value="True" />
-                </MultiTrigger.Conditions>
-                <Setter Property="at:AttachedPropertyFactory.FillBrush2" Value="{StaticResource brush_Pause}" />
-                <Setter Property="at:AttachedPropertyFactory.StrokeColor" Value="{DynamicResource col_CheckedStroke}" />
-            </MultiTrigger>
+            </Trigger>
 
         </Style.Triggers>
     </Style>

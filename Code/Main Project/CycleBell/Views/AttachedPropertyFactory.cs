@@ -26,6 +26,18 @@ namespace CycleBell.Views
 
         #endregion
 
+        #region BorderBrush
+
+        public static readonly DependencyProperty BorderBrushProperty = DependencyProperty.RegisterAttached("BorderBrush", typeof(Brush), typeof(AttachedPropertyFactory)
+            , new FrameworkPropertyMetadata(Brushes.DimGray, FrameworkPropertyMetadataOptions.Inherits));
+
+        public static void SetBorderBrush(DependencyObject d, Brush value) => d.SetValue(AttachedPropertyFactory.BorderBrushProperty, value);
+
+        public static Brush GetBorderBrush(DependencyObject d) => (Brush)d.GetValue(AttachedPropertyFactory.BorderBrushProperty);
+
+        #endregion
+
+
         #region StrokeColor
 
         public static readonly DependencyProperty StrokeColorProperty = DependencyProperty.RegisterAttached("StrokeColor", typeof(Color), typeof(AttachedPropertyFactory)
