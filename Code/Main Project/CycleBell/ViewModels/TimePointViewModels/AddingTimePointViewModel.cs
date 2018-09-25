@@ -10,14 +10,14 @@ namespace CycleBell.ViewModels.TimePointViewModels
     {
         public AddingTimePointViewModel (IPresetViewModel presetViewModel) : base (new TimePoint { Name = "" }, presetViewModel)
         {
-            AddTimePointCommand = new ActionCommand (_presetViewModel.AddTimePointCommand.Execute, _presetViewModel.AddTimePointCommand.CanExecute);
+            AddTimePointCommand = new ActionCommand (_PresetViewModel.AddTimePointCommand.Execute, _PresetViewModel.AddTimePointCommand.CanExecute);
         }
 
         public override TimeSpan Time
         {
-            get => _timePoint.Time;
+            get => _TimePoint.Time;
             set {
-                _timePoint.Time = value;
+                _TimePoint.Time = value;
                 OnPropertyChanged();
                 OnPropertyChanged(nameof(NoSetTime));
                 ((ActionCommand)AddTimePointCommand).RaiseCanExecuteChanged();
@@ -48,10 +48,10 @@ namespace CycleBell.ViewModels.TimePointViewModels
 
         public void CopyFrom(TimePoint timePoint)
         {
-            _timePoint.Name = timePoint.Name;
-            _timePoint.Time = timePoint.Time;
-            _timePoint.TimePointType = timePoint.TimePointType;
-            _timePoint.LoopNumber = timePoint.LoopNumber;
+            _TimePoint.Name = timePoint.Name;
+            _TimePoint.Time = timePoint.Time;
+            _TimePoint.TimePointType = timePoint.TimePointType;
+            _TimePoint.LoopNumber = timePoint.LoopNumber;
 
             OnPropertyChanged(nameof(Name));
             OnPropertyChanged(nameof(Time));

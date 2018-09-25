@@ -25,6 +25,8 @@ namespace CycleBell.ViewModels.TimePointViewModels
 
         #region Properties
 
+        public abstract TimePoint TimePoint { get; }
+
         public virtual int Id
         {
             get => _id;
@@ -43,7 +45,6 @@ namespace CycleBell.ViewModels.TimePointViewModels
             }
         }
 
-        public abstract TimePoint TimePoint { get; }
         
         #endregion
     }

@@ -13,7 +13,7 @@ namespace CycleBell.ViewModels.TimePointViewModels
             _preset = preset;
         }
 
-        public override TimePoint TimePoint => throw new NotImplementedException();
+        public override TimePoint TimePoint => null;
 
         public string CycleName => $"loop {LoopNumber}";
 

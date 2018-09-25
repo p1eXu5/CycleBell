@@ -59,7 +59,7 @@ namespace CycleBell.ViewModels
 
         public PresetViewModel(Preset preset, IMainViewModel mainViewModel)
         {
-            // _presetViewModel
+            // _PresetViewModel
             _preset = preset ?? throw new ArgumentNullException(nameof(preset));
 
             // _presetCollectionManager
@@ -259,9 +259,9 @@ namespace CycleBell.ViewModels
         private void OnTimePointCollectionChanged (Object sender, NotifyCollectionChangedEventArgs e)
         {
             // Add
-            if (e.NewItems?[0] != null) {
+            if (e.NewItems?[0] is TimePoint newTimePoint) {
 
-                var newTimePoint = (TimePoint) e.NewItems[0];
+                //var newTimePoint = (TimePoint) e.NewItems[0];
 
                 PrepareTimePoint(newTimePoint);
                 _timePointVmCollection.Add (new TimePointViewModel (newTimePoint, this));
@@ -272,9 +272,9 @@ namespace CycleBell.ViewModels
             }
 
             // Remove
-            if (e.OldItems?[0] != null && e.NewItems?[0] == null) {
+            if (e.OldItems?[0] is TimePoint oldTimePoint) {
 
-                var loopNumber = ((TimePoint) e.OldItems[0]).LoopNumber;
+                var loopNumber = oldTimePoint.LoopNumber;
                 var timePoints = _timePointVmCollection.Where (tpvm => tpvm.LoopNumber == loopNumber).ToArray();
 
                 if (timePoints.Length == 3) {
@@ -287,7 +287,7 @@ namespace CycleBell.ViewModels
                     return;
                 }
 
-                var removingTimePointVm = timePoints.First (tpvm => tpvm.TimePoint.Equals ((TimePoint) e.OldItems[0]));
+                var removingTimePointVm = timePoints.First (tpvm => tpvm.Id == oldTimePoint.Id);
                 _timePointVmCollection.Remove (removingTimePointVm);
             }
         }

@@ -107,9 +107,6 @@
     <Compile Include="ViewModels\TimePointViewModels\TimePointViewModel.cs" />
     <Compile Include="ViewModels\TimePointViewModels\TimePointViewModelBase.cs" />
     <Compile Include="Views\AttachedPropertyFactory.cs" />
-    <Compile Include="Views\UserControls\TimePointUserControl.xaml.cs">
-      <DependentUpon>TimePointUserControl.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Views\UserControls\TimerButtonsUserControl.xaml.cs">
       <DependentUpon>TimerButtonsUserControl.xaml</DependentUpon>
     </Compile>
@@ -139,10 +136,6 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\UserControls\AddingTimePointUserControl.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Views\UserControls\TimePointUserControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
