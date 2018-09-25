@@ -10,9 +10,9 @@ using System.Windows;
 [assembly: AssemblyTitle("WpfApp1")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("HP Inc.")]
+[assembly: AssemblyCompany("")]
 [assembly: AssemblyProduct("WpfApp1")]
-[assembly: AssemblyCopyright("Copyright © HP Inc. 2018")]
+[assembly: AssemblyCopyright("Copyright ©  2018")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 

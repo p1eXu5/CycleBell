@@ -160,8 +160,8 @@
         <Setter Property="Control.Foreground" Value="{DynamicResource brush_UncheckedIcon}" />
         <Setter Property="at:AttachedPropertyFactory.FillBrush1" Value="{DynamicResource brush_UncheckedIcon}"/>
         <Setter Property="at:AttachedPropertyFactory.FillBrush2" Value="{DynamicResource brush_UncheckedIcon}"/>
-        <Style.Triggers>
 
+        <Style.Triggers>
             <MultiTrigger>
                 <MultiTrigger.Conditions>
                     <Condition Property="IsChecked" Value="True" />
@@ -201,12 +201,14 @@
         <Setter Property="FontSize" Value="14" />
         <Setter Property="FontStyle" Value="Normal" />
         <Setter Property="BorderThickness" Value="0" />
+        
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="ToggleButton">
-                    
                     <Border x:Name="border"
+                            Height="Auto" Width="Auto"
                             BorderThickness="{TemplateBinding BorderThickness}">
+
                         <VisualStateManager.VisualStateGroups>
                             <VisualStateGroup x:Name="CommonState">
 
@@ -232,7 +234,7 @@
                                 
                                 <VisualState x:Name="MouseOver">
                                     <Storyboard TargetName="tbk_Mute">
-                                        <DoubleAnimation Storyboard.TargetProperty="FontSize" To="14" Duration="0"/>
+                                        <!--<DoubleAnimation Storyboard.TargetProperty="FontSize" To="14" Duration="0"/>-->
                                         <ThicknessAnimationUsingKeyFrames Storyboard.TargetName="border" Storyboard.TargetProperty="BorderThickness">
                                             <LinearThicknessKeyFrame Value="0,0,0,1" KeyTime="0" />
                                         </ThicknessAnimationUsingKeyFrames>

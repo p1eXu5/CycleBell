@@ -51,22 +51,24 @@
         <!-- points list -->
         <Grid Grid.Row="1">
             
-                     <!--ItemTemplateSelector="{StaticResource templsel_Selector}"
-                     ItemsSource="{Binding TimePointVmCollection}"
-                     FontFamily="{StaticResource font_SuiGeneris}"
-                     ScrollViewer.HorizontalScrollBarVisibility="Hidden"-->
+
 
             <!-- TimePointVmCollection -->
             <ListBox x:Name="m_pointsList" Opacity="0.0"
+                     ItemTemplateSelector="{StaticResource templsel_Selector}"
+                     ItemsSource="{Binding TimePointVmCollection}"
+                     ItemContainerStyle="{StaticResource style_ListBoxItem}"
+                     FontFamily="{StaticResource font_SuiGeneris}"
+                     ScrollViewer.HorizontalScrollBarVisibility="Hidden"
                      >
-                <ToggleButton Width="200" Height="200" Style="{StaticResource style_MuteToggleButton}" Content="mute"/>
+                <!--<ToggleButton Width="200" Height="200" Style="{x:Null}" />-->
                 <ListBox.Style>
                     <Style TargetType="ListBox">
                         <Setter Property="ScrollViewer.HorizontalScrollBarVisibility" Value="Auto" />
                         <Setter Property="BorderThickness" Value="0" />
                         <Setter Property="HorizontalAlignment" Value="Stretch" />
                         <Setter Property="Background" Value="White" />
-                        <!--<Setter Property="Margin" Value="20,0" />-->
+                        <Setter Property="Margin" Value="20,0" />
                         <Setter Property="MinHeight" Value="100"></Setter>
                         <Setter Property="SelectionMode" Value="Single" />
                         <Style.Triggers>
@@ -91,12 +93,26 @@
                 </ListBox.Style>
             </ListBox>
 
-            <!-- When NoTimePoints -->
-            <StackPanel Orientation="Vertical">
+            <!-- info table -->
+            <StackPanel Orientation="Vertical" ZIndex="-1">
+
+                <TextBlock HorizontalAlignment="Center">
+                    <Bold>To create a new preset:</Bold>
+                    <LineBreak /><LineBreak />
+                    <Run Text="    "></Run><Run>1. Menu "File"</Run>
+                    <LineBreak />
+                    <Run Text="    "></Run><Run>2. Command "New Preset"</Run>
+                    <LineBreak /><LineBreak /><LineBreak />
+                </TextBlock>
+                <TextBlock HorizontalAlignment="Center">
+                    <Bold>To create TimePoints use form below:</Bold>
+                </TextBlock>
+
                 <StackPanel.Style>
-                    <Style>
+                    <Style TargetType="StackPanel">
                         <Setter Property="UIElement.Opacity" Value="1.0" />
                         <Style.Triggers>
+
                             <DataTrigger Binding="{Binding IsNoTimePoints}" Value="False">
                                 <DataTrigger.EnterActions>
                                     <BeginStoryboard>
@@ -113,21 +129,10 @@
                                     </BeginStoryboard>
                                 </DataTrigger.ExitActions>
                             </DataTrigger>
+
                         </Style.Triggers>
                     </Style>
                 </StackPanel.Style>
-
-                <TextBlock HorizontalAlignment="Center">
-                    <Bold>To create a new preset:</Bold>
-                    <LineBreak /><LineBreak />
-                    <Run Text="    "></Run><Run>1. Menu "File"</Run>
-                    <LineBreak />
-                    <Run Text="    "></Run><Run>2. Command "New Preset"</Run>
-                    <LineBreak /><LineBreak /><LineBreak />
-                </TextBlock>
-                <TextBlock HorizontalAlignment="Center">
-                    <Bold>To create TimePoints use form below:</Bold>
-                </TextBlock>
             </StackPanel>
 
         </Grid>

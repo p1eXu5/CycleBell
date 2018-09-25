@@ -51,11 +51,12 @@
         </Grid>
     </DataTemplate>
 
-
+    <!--DataType="{x:Type vm:TimePointViewModel}"-->
 
     <!-- TimePointViewModel --> 
-    <DataTemplate x:Key="datatempl_TimePointViewModel" DataType="{x:Type vm:TimePointViewModel}">
+    <DataTemplate x:Key="datatempl_TimePointViewModel" >
         <Grid>
+            <!--<ToggleButton Width="200" Height="200" Content="mute" Style="{x:Null}" />-->
             <Grid.ColumnDefinitions>
                 <!-- marker -->
                 <ColumnDefinition  Width="*"/>
@@ -132,25 +133,14 @@
             <!-- mute -->
             <ToggleButton Grid.Column="3" Grid.Row="0"
                           IsEnabled="True"
-                          Style="{x:Null}"
+                          Style="{StaticResource style_MuteToggleButton}"
                           Content="mute"
-                          HorizontalAlignment="Center"
-                          Width="20"
-                          >
+                          HorizontalAlignment="Center" >
+
                 <ToggleButton.RenderTransform>
                     <TranslateTransform Y="-1" X="2" />
                 </ToggleButton.RenderTransform>
-                <ToggleButton.Triggers>
-                    <EventTrigger RoutedEvent="ToggleButton.MouseEnter">
-                        <EventTrigger.Actions>
-                            <BeginStoryboard>
-                                <Storyboard>
-                                    <DoubleAnimation Storyboard.TargetProperty="(FrameworkElement.Width)" To="300" Duration="0:0:.4" />
-                                </Storyboard>
-                            </BeginStoryboard>
-                        </EventTrigger.Actions>
-                    </EventTrigger>
-                </ToggleButton.Triggers>
+
             </ToggleButton>
 
             <!-- sound location -->
