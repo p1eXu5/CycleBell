@@ -47,12 +47,18 @@
                       Style="{StaticResource style_PathOfToggleButton}" 
                       Data="{StaticResource gmtry_Play}"
                       Fill="{Binding Path=(local:AttachedPropertyFactory.FillBrush1), 
-                                     RelativeSource={RelativeSource FindAncestor, AncestorType=ToggleButton}}"/>
+                                     RelativeSource={RelativeSource FindAncestor, AncestorType=ToggleButton}}"
+                      Stroke="{Binding Path=(local:AttachedPropertyFactory.StrokeBrush1),
+                                       RelativeSource={RelativeSource FindAncestor, AncestorType=ToggleButton}}"
+                      />
 
                 <Path Grid.Column="2" Style="{StaticResource style_PathOfToggleButton}" Data="{StaticResource gmtry_Pause}" 
                       Margin="5,0,0,0" 
                       Fill="{Binding Path=(local:AttachedPropertyFactory.FillBrush2), 
-                                     RelativeSource={RelativeSource FindAncestor, AncestorType=ToggleButton}}"/>
+                                     RelativeSource={RelativeSource FindAncestor, AncestorType=ToggleButton}}"
+                      Stroke="{Binding Path=(local:AttachedPropertyFactory.StrokeBrush2),
+                                       RelativeSource={RelativeSource FindAncestor, AncestorType=ToggleButton}}"
+                      />
 
             </Grid>
         </ToggleButton>
