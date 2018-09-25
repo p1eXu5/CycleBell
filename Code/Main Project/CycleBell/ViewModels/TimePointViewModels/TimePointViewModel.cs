@@ -18,7 +18,6 @@ namespace CycleBell.ViewModels.TimePointViewModels
 
         #region Fields
 
-        protected readonly IPresetViewModel _PresetViewModel;
         protected readonly TimePoint _TimePoint;
 
         protected SoundPlayer _SoundPlayer;
@@ -28,10 +27,9 @@ namespace CycleBell.ViewModels.TimePointViewModels
 
         #region Constructor
 
-        public TimePointViewModel(TimePoint timePoint, IPresetViewModel presetViewModel) : base(timePoint.Id, timePoint.LoopNumber)
+        public TimePointViewModel(TimePoint timePoint, IPresetViewModel presetViewModel) : base(timePoint.Id, timePoint.LoopNumber, presetViewModel)
         {
             _TimePoint = timePoint;
-            _PresetViewModel = presetViewModel;
 
             if (_TimePoint.Tag is string str) {
 

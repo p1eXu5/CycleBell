@@ -138,6 +138,8 @@ namespace CycleBell.ViewModels
             }
         }
 
+        public bool IsRunning => _mainViewModel.IsRunning;
+
         public bool IsModified
         {
             get => _isModified;
@@ -350,7 +352,7 @@ namespace CycleBell.ViewModels
             if (_settedLoopNumbers.Contains (timePoint.LoopNumber))
                 return;
 
-            _timePointVmCollection.Add (new BeginTimePointViewModel (timePoint.LoopNumber, _preset));
+            _timePointVmCollection.Add (new BeginTimePointViewModel (timePoint.LoopNumber, this));
             _timePointVmCollection.Add (new EndTimePointViewModel (timePoint.LoopNumber));
 
             _settedLoopNumbers.Add (timePoint.LoopNumber);

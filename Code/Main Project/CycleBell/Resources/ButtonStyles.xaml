@@ -206,7 +206,8 @@
             <Setter.Value>
                 <ControlTemplate TargetType="ToggleButton">
                     <Border x:Name="border"
-                            Height="Auto" Width="Auto"
+                            HorizontalAlignment="{TemplateBinding HorizontalAlignment}"
+                            Height="{TemplateBinding Height}" Width="{TemplateBinding Width}"
                             BorderThickness="{TemplateBinding BorderThickness}">
 
                         <VisualStateManager.VisualStateGroups>

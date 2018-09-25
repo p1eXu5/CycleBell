@@ -7,5 +7,6 @@ namespace CycleBell.ViewModels
     {
         IDictionary<int,SoundPlayer> SoundMap { get; }
         void Ring (int id);
+        bool IsRunning { get; }
     }
 }

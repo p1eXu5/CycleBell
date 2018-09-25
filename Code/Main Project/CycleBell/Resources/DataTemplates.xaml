@@ -95,6 +95,38 @@
                 <Path.RenderTransform>
                     <TranslateTransform Y="-4" />
                 </Path.RenderTransform>
+                
+                <Path.Style>
+                    <Style TargetType="Path">
+                    <Setter Property="Opacity" Value="0.0" />
+                        <Style.Triggers>
+
+                            <MultiDataTrigger>
+                                <MultiDataTrigger.Conditions>
+                                    <Condition Binding="{Binding IsRunning}" Value="True" />
+                                    <Condition Binding="{Binding IsEnabled}" Value="True"/>
+                                </MultiDataTrigger.Conditions>
+                                
+                                <MultiDataTrigger.EnterActions>
+                                    <BeginStoryboard>
+                                        <Storyboard>
+                                            <DoubleAnimation Storyboard.TargetProperty="Opacity" To="1.0" Duration="0:0:.2" />
+                                        </Storyboard>
+                                    </BeginStoryboard>
+                                </MultiDataTrigger.EnterActions>
+                                <MultiDataTrigger.ExitActions>
+                                    <BeginStoryboard>
+                                        <Storyboard>
+                                            <DoubleAnimation Storyboard.TargetProperty="Opacity" To="0.0" Duration="0:0:.2" />
+                                        </Storyboard>
+                                    </BeginStoryboard>
+                                </MultiDataTrigger.ExitActions>
+                            </MultiDataTrigger>
+
+                        </Style.Triggers>
+                    </Style>
+                </Path.Style>
+
             </Path>
 
             <!-- Name -->
@@ -124,7 +156,7 @@
             <!-- Time -->
             <ToggleButton Grid.Column="2" Grid.Row="0"
                           Margin="0"
-                          Height="22" Width="75"
+                          Height="22" HorizontalAlignment="Center"
                           FontSize="18"
                           Style="{StaticResource style_MuteToggleButton}"
                           Content="{Binding Time, Converter={StaticResource conv_TimeSpanToString}, Mode=OneWay}"

@@ -60,7 +60,6 @@ namespace CycleBell.ViewModels
         #region Properties
 
         public ObservableCollection<PresetViewModel> Presets { get; set; }
-
         public PresetViewModel SelectedPreset
         {
             get => _selectedPreset;
@@ -71,7 +70,6 @@ namespace CycleBell.ViewModels
                 OnPropertyChanged ();
             }
         }
-
         public string Name
         {
             get => _selectedPreset?.Name;
@@ -82,13 +80,13 @@ namespace CycleBell.ViewModels
                 OnPropertyChanged ();
             }
         }
-
         public bool IsSelectedPresetExists => SelectedPreset != null;
-
         public bool IsNewPreset
         {
             get => SelectedPreset?.IsNewPreset ?? false;
         }
+
+        public bool IsRunning => _timerManager.IsRunning;
 
         public bool IsInfinite
         {

@@ -6,22 +6,18 @@ namespace CycleBell.ViewModels.TimePointViewModels
 {
     public class BeginTimePointViewModel : TimePointViewModelBase
     {
-        private readonly Preset _preset;
+        public BeginTimePointViewModel(byte loopNumber, IPresetViewModel presetViewModel) : base((int)TimePoint.MinId, loopNumber, presetViewModel)
+        { }
 
-        public BeginTimePointViewModel(byte loopNumber, Preset preset) : base((int)TimePoint.MinId, loopNumber)
-        {
-            _preset = preset;
-        }
-
-        public override TimePoint TimePoint => null;
+        public override TimePoint TimePoint => throw new NotImplementedException();
 
         public string CycleName => $"loop {LoopNumber}";
 
         public int NumberOfLoops
         {
-            get => _preset.TimerLoops[LoopNumber];
+            get => _PresetViewModel.Preset.TimerLoops[LoopNumber];
             set {
-                _preset.TimerLoops[LoopNumber] = value;
+                _PresetViewModel.Preset.TimerLoops[LoopNumber] = value;
                 OnPropertyChanged();
             }
         }

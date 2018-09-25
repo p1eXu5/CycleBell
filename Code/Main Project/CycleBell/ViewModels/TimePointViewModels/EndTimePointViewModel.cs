@@ -9,7 +9,7 @@ namespace CycleBell.ViewModels.TimePointViewModels
 {
     public class EndTimePointViewModel : TimePointViewModelBase
     {
-        public EndTimePointViewModel(byte loopNumber) : base((int)TimePoint.MaxId, loopNumber)
+        public EndTimePointViewModel(byte loopNumber) : base((int)TimePoint.MaxId, loopNumber, null)
         {
         }
 
