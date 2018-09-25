@@ -302,8 +302,8 @@
         <Setter Property="at:AttachedPropertyFactory.FillBrush1">
             <Setter.Value>
                 <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
-                    <GradientStop x:Name="col_TopBrush1" Offset="0" Color="{DynamicResource col_TopUncheckedIcon}" />
-                    <GradientStop x:Name="col_BottomBrush1" Offset="1" Color="{DynamicResource col_BottomUncheckedIcon}" />
+                    <GradientStop Offset="0" Color="{DynamicResource col_TopUncheckedIcon}" />
+                    <GradientStop Offset="1" Color="{DynamicResource col_BottomUncheckedIcon}" />
                 </LinearGradientBrush>
             </Setter.Value>
         </Setter>
@@ -312,6 +312,22 @@
                 <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
                     <GradientStop Offset="0" Color="{DynamicResource col_TopUncheckedIcon}" />
                     <GradientStop Offset="1" Color="{DynamicResource col_BottomUncheckedIcon}" />
+                </LinearGradientBrush>
+            </Setter.Value>
+        </Setter>
+        <Setter Property="at:AttachedPropertyFactory.StrokeBrush1">
+            <Setter.Value>
+                <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+                    <GradientStop Offset="0" Color="{DynamicResource col_UncheckedStroke}" />
+                    <GradientStop Offset="1" Color="{DynamicResource col_UncheckedStroke}" />
+                </LinearGradientBrush>
+            </Setter.Value>
+        </Setter>
+        <Setter Property="at:AttachedPropertyFactory.StrokeBrush2">
+            <Setter.Value>
+                <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+                    <GradientStop Offset="0" Color="{DynamicResource col_UncheckedStroke}" />
+                    <GradientStop Offset="1" Color="{DynamicResource col_UncheckedStroke}" />
                 </LinearGradientBrush>
             </Setter.Value>
         </Setter>
@@ -327,6 +343,7 @@
                         <Storyboard>
                             <ColorAnimation Storyboard.TargetProperty="(at:AttachedPropertyFactory.StrokeColor)"
                                             To="{StaticResource col_TopPlay}" Duration="0:0:.2" />
+
                             <ColorAnimation Storyboard.TargetProperty="(at:AttachedPropertyFactory.FillBrush1)
                                                                                     .(LinearGradientBrush.GradientStops)[0]
                                                                                     .(GradientStop.Color)"
@@ -335,6 +352,15 @@
                                                                                     .(LinearGradientBrush.GradientStops)[1]
                                                                                     .(GradientStop.Color)"
                                                         To="{StaticResource col_BottomPlay}" Duration="0:0:.2" />
+
+                            <ColorAnimation Storyboard.TargetProperty="(at:AttachedPropertyFactory.StrokeBrush1)
+                                                                                    .(LinearGradientBrush.GradientStops)[1]
+                                                                                    .(GradientStop.Color)"
+                                            To="{StaticResource col_TopPlay}" Duration="0:0:.2" />
+                            <ColorAnimation Storyboard.TargetProperty="(at:AttachedPropertyFactory.StrokeBrush1)
+                                                                                    .(LinearGradientBrush.GradientStops)[0]
+                                                                                    .(GradientStop.Color)"
+                                            To="{StaticResource col_BottomPlay}" Duration="0:0:.2" />
                         </Storyboard>
                     </BeginStoryboard>
                 </MultiTrigger.EnterActions>
@@ -351,6 +377,15 @@
                                                                                     .(LinearGradientBrush.GradientStops)[1]
                                                                                     .(GradientStop.Color)"
                                                         To="{StaticResource col_BottomUncheckedIcon}" Duration="0:0:.2" />
+
+                            <ColorAnimation Storyboard.TargetProperty="(at:AttachedPropertyFactory.StrokeBrush1)
+                                                                                    .(LinearGradientBrush.GradientStops)[0]
+                                                                                    .(GradientStop.Color)"
+                                            To="{StaticResource col_UncheckedStroke}" Duration="0:0:.2" />
+                            <ColorAnimation Storyboard.TargetProperty="(at:AttachedPropertyFactory.StrokeBrush1)
+                                                                                    .(LinearGradientBrush.GradientStops)[1]
+                                                                                    .(GradientStop.Color)"
+                                            To="{StaticResource col_UncheckedStroke}" Duration="0:0:.2" />
                         </Storyboard>
                     </BeginStoryboard>
                 </MultiTrigger.ExitActions>
@@ -367,6 +402,7 @@
                         <Storyboard>
                             <ColorAnimation Storyboard.TargetProperty="(at:AttachedPropertyFactory.StrokeColor)"
                                             To="{StaticResource col_BottomPause}" Duration="0:0:.2" />
+
                             <ColorAnimation Storyboard.TargetProperty="(at:AttachedPropertyFactory.FillBrush2)
                                                                                     .(LinearGradientBrush.GradientStops)[0]
                                                                                     .(GradientStop.Color)"
@@ -375,6 +411,15 @@
                                                                                     .(LinearGradientBrush.GradientStops)[1]
                                                                                     .(GradientStop.Color)"
                                                         To="{StaticResource col_BottomPause}" Duration="0:0:.2" />
+
+                            <ColorAnimation Storyboard.TargetProperty="(at:AttachedPropertyFactory.StrokeBrush2)
+                                                                                    .(LinearGradientBrush.GradientStops)[1]
+                                                                                    .(GradientStop.Color)"
+                                            To="{StaticResource col_BottomPause}" Duration="0:0:.2" />
+                            <ColorAnimation Storyboard.TargetProperty="(at:AttachedPropertyFactory.StrokeBrush2)
+                                                                                    .(LinearGradientBrush.GradientStops)[0]
+                                                                                    .(GradientStop.Color)"
+                                            To="{StaticResource col_BottomPause}" Duration="0:0:.2" />
                         </Storyboard>
                     </BeginStoryboard>
                 </MultiTrigger.EnterActions>
@@ -383,6 +428,7 @@
                         <Storyboard>
                             <ColorAnimation Storyboard.TargetProperty="(at:AttachedPropertyFactory.StrokeColor)"
                                             To="{StaticResource col_UncheckedStroke}" Duration="0:0:.2" />
+
                             <ColorAnimation Storyboard.TargetProperty="(at:AttachedPropertyFactory.FillBrush2)
                                                                                     .(LinearGradientBrush.GradientStops)[0]
                                                                                     .(GradientStop.Color)"
@@ -391,6 +437,15 @@
                                                                                     .(LinearGradientBrush.GradientStops)[1]
                                                                                     .(GradientStop.Color)"
                                                         To="{StaticResource col_BottomUncheckedIcon}" Duration="0:0:.2" />
+
+                            <ColorAnimation Storyboard.TargetProperty="(at:AttachedPropertyFactory.StrokeBrush2)
+                                                                                    .(LinearGradientBrush.GradientStops)[0]
+                                                                                    .(GradientStop.Color)"
+                                            To="{StaticResource col_UncheckedStroke}" Duration="0:0:.2" />
+                            <ColorAnimation Storyboard.TargetProperty="(at:AttachedPropertyFactory.StrokeBrush2)
+                                                                                    .(LinearGradientBrush.GradientStops)[1]
+                                                                                    .(GradientStop.Color)"
+                                            To="{StaticResource col_UncheckedStroke}" Duration="0:0:.2" />
                         </Storyboard>
                     </BeginStoryboard>
                 </MultiTrigger.ExitActions>

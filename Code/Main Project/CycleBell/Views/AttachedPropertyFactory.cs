@@ -58,5 +58,27 @@ namespace CycleBell.Views
         public static Brush GetFillBrush2(DependencyObject d) => (Brush)d.GetValue(AttachedPropertyFactory.FillBrush2Property);
 
         #endregion
+
+        #region FillColor1
+
+        public static readonly DependencyProperty StrokeBrush1Property = DependencyProperty.RegisterAttached("StrokeBrush1", typeof(Brush), typeof(AttachedPropertyFactory)
+            , new FrameworkPropertyMetadata(Brushes.DimGray, FrameworkPropertyMetadataOptions.Inherits));
+
+        public static void SetStrokeBrush1(DependencyObject d, Brush value) => d.SetValue(AttachedPropertyFactory.StrokeBrush1Property, value);
+
+        public static Brush GetStrokeBrush1(DependencyObject d) => (Brush)d.GetValue(AttachedPropertyFactory.StrokeBrush1Property);
+
+        #endregion
+
+        #region FillColor2
+
+        public static readonly DependencyProperty StrokeBrush2Property = DependencyProperty.RegisterAttached("StrokeBrush2", typeof(Brush), typeof(AttachedPropertyFactory)
+            , new FrameworkPropertyMetadata(Brushes.DimGray, FrameworkPropertyMetadataOptions.Inherits));
+
+        public static void SetStrokeBrush2(DependencyObject d, Brush value) => d.SetValue(AttachedPropertyFactory.StrokeBrush2Property, value);
+
+        public static Brush GetStrokeBrush2(DependencyObject d) => (Brush)d.GetValue(AttachedPropertyFactory.StrokeBrush2Property);
+
+        #endregion
     }
 }
