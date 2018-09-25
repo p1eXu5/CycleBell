@@ -170,7 +170,7 @@
                     </TextBlock.RenderTransform>
                 </TextBlock>
                 <ComboBox x:Name="m_presetComboBox" Style="{DynamicResource MyComboBoxStyle1}"
-                          IsEnabled="{Binding IsSelectedPresetExists, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"
+                          IsEnabled="{Binding IsSelectedPreset, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"
                           ItemsSource="{Binding Presets, Mode=OneWay}"
                           VerticalContentAlignment="Center"
                           SelectedItem="{Binding SelectedPreset, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
@@ -201,7 +201,7 @@
 
                             <Style.Triggers>
 
-                                <DataTrigger Binding="{Binding Path=DataContext.IsSelectedPresetExists, 
+                                <DataTrigger Binding="{Binding Path=DataContext.IsSelectedPreset, 
                                                                RelativeSource={RelativeSource FindAncestor, AncestorType=Window}}" 
                                              Value="True">
                                     <DataTrigger.EnterActions>
@@ -243,7 +243,7 @@
                         <Style>
                             <Setter Property="UIElement.Opacity" Value="0.0" />
                             <Style.Triggers>
-                                <DataTrigger Binding="{Binding IsSelectedPresetExists}" Value="False">
+                                <DataTrigger Binding="{Binding IsSelectedPreset}" Value="False">
                                     <DataTrigger.EnterActions>
                                         <BeginStoryboard>
                                             <Storyboard>
