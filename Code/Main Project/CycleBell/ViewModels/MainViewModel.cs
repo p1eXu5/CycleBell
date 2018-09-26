@@ -67,18 +67,9 @@ namespace CycleBell.ViewModels
         {
             get => _selectedPreset;
             set {
-                if (_selectedPreset != null) {
-                    _selectedPreset.PropertyChanged -= OnSelectedPresetTimePointsCollectionChanged;
-                }
                 _selectedPreset = value;
-                _selectedPreset.PropertyChanged += OnSelectedPresetTimePointsCollectionChanged;
                 OnPropertyChanged ();
             }
-        }
-
-        private void OnSelectedPresetTimePointsCollectionChanged (object sender, PropertyChangedEventArgs e)
-        {
-            OnPropertyChanged (nameof(IsPlayable));
         }
 
         public string Name
@@ -92,10 +83,7 @@ namespace CycleBell.ViewModels
             }
         }
         public bool IsSelectedPreset => SelectedPreset != null;
-        public bool IsNewPreset
-        {
-            get => SelectedPreset?.IsNewPreset ?? false;
-        }
+        public bool IsNewPreset => SelectedPreset?.IsNewPreset ?? false;
 
         public bool IsRunning => _timerManager.IsRunning;
         public bool IsPaused => _timerManager.IsPaused;
@@ -158,14 +146,16 @@ namespace CycleBell.ViewModels
         public ICommand RingCommand => new ActionCommand(Ring);
             #endregion media
 
-        public ICommand MediaTerminalCommand = new ActionCommand ((o =>
-            {
-                Debug.WriteLine (o.GetType());
-            }));
+        public ICommand MediaTerminalCommand = new ActionCommand (MediaTerminal);
 
         #endregion Commands
 
         #region Methods
+
+        private void RiseIsPlayableChanged (object sender, NotifyCollectionChangedEventArgs e)
+        {
+            OnPropertyChanged (nameof(IsPlayable));
+        }
 
         private void PresetCollectionEventHandler(object s, NotifyCollectionChangedEventArgs e)
         {
@@ -173,15 +163,19 @@ namespace CycleBell.ViewModels
 
                 Presets.Add(new PresetViewModel((Preset)e.NewItems[0], this));
                 SelectedPreset = Presets[Presets.Count - 1];
-                SelectedPreset.PropertyChanged += IsNewPresetChangedHandler;
+
+                SelectedPreset.PropertyChanged += OnSelectedPresetPropertyChangedHandler;
+                ((INotifyCollectionChanged) SelectedPreset.TimePointVmCollection).CollectionChanged += RiseIsPlayableChanged;
             }
 
             if (e?.OldItems?[0] != null && e?.NewItems?[0] == null) {
 
                 var deletingPresetVm = Presets.First(pvm => pvm.Preset.Equals((Preset)e.OldItems[0]));
 
-                if (deletingPresetVm == SelectedPreset)
-                    SelectedPreset.PropertyChanged -= IsNewPresetChangedHandler;
+                if (deletingPresetVm == SelectedPreset) {
+                    ((INotifyCollectionChanged) SelectedPreset.TimePointVmCollection).CollectionChanged += RiseIsPlayableChanged;
+                    SelectedPreset.PropertyChanged -= OnSelectedPresetPropertyChangedHandler;
+                }
 
                 Presets.Remove(deletingPresetVm);
                 SelectedPreset = Presets.Count > 0 ? Presets[0] : null;
@@ -191,7 +185,7 @@ namespace CycleBell.ViewModels
             OnPropertyChanged(nameof(IsNewPreset));
         }
 
-        private void IsNewPresetChangedHandler(object s, PropertyChangedEventArgs e)
+        private void OnSelectedPresetPropertyChangedHandler(object s, PropertyChangedEventArgs e)
         {
             if (e?.PropertyName == "IsNewPreset") {
 
