@@ -24,6 +24,7 @@
                       Margin="0,0,20,0"
                       HorizontalAlignment="Center"
                       BorderBrush="{DynamicResource brush_InfiniteBorder}"
+
                       IsChecked="{Binding IsInfiniteLoop, Mode=TwoWay}"
                       IsEnabled="{Binding IsSelectedPreset, Mode=OneWay}"
                       >
@@ -37,8 +38,9 @@
                       Width="48" Height="38"
                       HorizontalAlignment="Center"
                       local:AttachedPropertyFactory.BorderColor="#33553300"
+
                       IsEnabled="{Binding IsPlayable}"
-                      IsChecked="{Binding MediaTerminal}"
+                      Command="{Binding MediaTerminalCommand}"
                       >
             <Grid>
                 <Grid.ColumnDefinitions>

@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Globalization;
 using System.IO;
 using System.Linq;
@@ -53,6 +54,8 @@ namespace CycleBell.ViewModels
             _timerManager = cycleBellManager.TimerManager;
 
             AppDomain.CurrentDomain.ProcessExit += (s, e) => SavePresetsBeforeExit (null);
+
+
         }
 
         #endregion Constructor
@@ -64,12 +67,20 @@ namespace CycleBell.ViewModels
         {
             get => _selectedPreset;
             set {
-                SavePresetAsCommand.Execute (null);
-
+                if (_selectedPreset != null) {
+                    _selectedPreset.PropertyChanged -= OnSelectedPresetTimePointsCollectionChanged;
+                }
                 _selectedPreset = value;
+                _selectedPreset.PropertyChanged += OnSelectedPresetTimePointsCollectionChanged;
                 OnPropertyChanged ();
             }
         }
+
+        private void OnSelectedPresetTimePointsCollectionChanged (object sender, PropertyChangedEventArgs e)
+        {
+            OnPropertyChanged (nameof(IsPlayable));
+        }
+
         public string Name
         {
             get => _selectedPreset?.Name;
@@ -88,6 +99,8 @@ namespace CycleBell.ViewModels
 
         public bool IsRunning => _timerManager.IsRunning;
         public bool IsPaused => _timerManager.IsPaused;
+
+        public bool IsPlayable => _selectedPreset?.TimePointVmCollection.Count > 0;
 
         public bool IsInfiniteLoop
         {
@@ -117,7 +130,7 @@ namespace CycleBell.ViewModels
 
         #region Commands
 
-        // Menu
+            #region menu
         public ICommand CreateNewPresetCommand => new ActionCommand(CreateNewPreset);
 
         public ICommand SavePresetCommand => new ActionCommand(SavePreset, CanSavePreset);
@@ -135,13 +148,20 @@ namespace CycleBell.ViewModels
 
         // In process
         public ICommand ViewHelpCommand => new ActionCommand(About);
+            #endregion
 
-        // Media
+            #region media
         public ICommand PlayCommand => new ActionCommand (Play, CanPlay);
         public ICommand StopCommand => new ActionCommand (Stop, CanStop);
         public ICommand PauseCommand => new ActionCommand (Pause, CanPause);
         public ICommand ResumeCommand => new ActionCommand (Resume, CanResume);
         public ICommand RingCommand => new ActionCommand(Ring);
+            #endregion media
+
+        public ICommand MediaTerminalCommand = new ActionCommand ((o =>
+            {
+                Debug.WriteLine (o.GetType());
+            }));
 
         #endregion Commands
 
@@ -188,6 +208,7 @@ namespace CycleBell.ViewModels
             OnPropertyChanged(nameof(IsRunning));
             OnPropertyChanged(nameof(IsPaused));
             OnPropertyChanged(nameof(IsStopped));
+            OnPropertyChanged(nameof(IsPlayable));
         }
 
         //  Save Preset

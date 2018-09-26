@@ -212,12 +212,8 @@
         
         <Style.Triggers>
 
-            <MultiTrigger>
-                <MultiTrigger.Conditions>
-                    <Condition Property="IsChecked" Value="True" />
-                    <Condition Property="IsThreeState" Value="True" />
-                </MultiTrigger.Conditions>
-                <MultiTrigger.EnterActions>
+            <Trigger Property="IsChecked" Value="True">
+                <Trigger.EnterActions>
                     <BeginStoryboard>
                         <Storyboard>
                             <ColorAnimation Storyboard.TargetProperty="(at:AttachedPropertyFactory.FillBrush1)
@@ -239,8 +235,8 @@
                                             To="{StaticResource col_BottomPlay}" Duration="0:0:.2" />
                         </Storyboard>
                     </BeginStoryboard>
-                </MultiTrigger.EnterActions>
-                <MultiTrigger.ExitActions>
+                </Trigger.EnterActions>
+                <Trigger.ExitActions>
                     <BeginStoryboard>
                         <Storyboard>
 
@@ -265,15 +261,11 @@
                                             To="{StaticResource col_UncheckedStroke}" Duration="0:0:.2" />
                         </Storyboard>
                     </BeginStoryboard>
-                </MultiTrigger.ExitActions>
-            </MultiTrigger>
+                </Trigger.ExitActions>
+            </Trigger>
 
-            <MultiTrigger>
-                <MultiTrigger.Conditions>
-                    <Condition Property="IsChecked" Value="{x:Null}" />
-                    <Condition Property="IsThreeState" Value="True" />
-                </MultiTrigger.Conditions>
-                <MultiTrigger.EnterActions>
+            <Trigger Property="IsChecked" Value="{x:Null}">
+                <Trigger.EnterActions>
                     <BeginStoryboard>
                         <Storyboard>
                             <ColorAnimation Storyboard.TargetProperty="(at:AttachedPropertyFactory.FillBrush2)
@@ -297,8 +289,8 @@
                                             To="{StaticResource col_BottomPause}" Duration="0:0:.2" />
                         </Storyboard>
                     </BeginStoryboard>
-                </MultiTrigger.EnterActions>
-                <MultiTrigger.ExitActions>
+                </Trigger.EnterActions>
+                <Trigger.ExitActions>
                     <BeginStoryboard>
                         <Storyboard>
                             <ColorAnimation Storyboard.TargetProperty="(at:AttachedPropertyFactory.FillBrush2)
@@ -323,8 +315,57 @@
                                             To="{StaticResource col_UncheckedStroke}" Duration="0:0:.2" />
                         </Storyboard>
                     </BeginStoryboard>
-                </MultiTrigger.ExitActions>
-            </MultiTrigger>
+                </Trigger.ExitActions>
+            </Trigger>
+            
+            <Trigger Property="IsEnabled" Value="False">
+                <Trigger.EnterActions>
+                    <BeginStoryboard>
+                        <Storyboard>
+                            <ColorAnimation Storyboard.TargetProperty="(at:AttachedPropertyFactory.StrokeBrush1)
+                                                                                    .(LinearGradientBrush.GradientStops)[1]
+                                                                                    .(GradientStop.Color)"
+                                            To="Transparent" Duration="0:0:.2" />
+                            <ColorAnimation Storyboard.TargetProperty="(at:AttachedPropertyFactory.StrokeBrush1)
+                                                                                    .(LinearGradientBrush.GradientStops)[0]
+                                                                                    .(GradientStop.Color)"
+                                            To="Transparent" Duration="0:0:.2" />
+                            <ColorAnimation Storyboard.TargetProperty="(at:AttachedPropertyFactory.StrokeBrush2)
+                                                                                    .(LinearGradientBrush.GradientStops)[1]
+                                                                                    .(GradientStop.Color)"
+                                            To="Transparent" Duration="0:0:.2" />
+                            <ColorAnimation Storyboard.TargetProperty="(at:AttachedPropertyFactory.StrokeBrush2)
+                                                                                    .(LinearGradientBrush.GradientStops)[0]
+                                                                                    .(GradientStop.Color)"
+                                            To="Transparent" Duration="0:0:.2" />
+                        </Storyboard>
+                    </BeginStoryboard>
+                </Trigger.EnterActions>
+                <Trigger.ExitActions>
+                    <BeginStoryboard>
+                        <Storyboard>
+                            <ColorAnimation Storyboard.TargetProperty="(at:AttachedPropertyFactory.StrokeBrush1)
+                                                                                    .(LinearGradientBrush.GradientStops)[0]
+                                                                                    .(GradientStop.Color)"
+                                            To="{StaticResource col_UncheckedStroke}" Duration="0:0:.2" />
+
+                            <ColorAnimation Storyboard.TargetProperty="(at:AttachedPropertyFactory.StrokeBrush1)
+                                                                                    .(LinearGradientBrush.GradientStops)[1]
+                                                                                    .(GradientStop.Color)"
+                                            To="{StaticResource col_UncheckedStroke}" Duration="0:0:.2" />
+                            <ColorAnimation Storyboard.TargetProperty="(at:AttachedPropertyFactory.StrokeBrush2)
+                                                                                    .(LinearGradientBrush.GradientStops)[0]
+                                                                                    .(GradientStop.Color)"
+                                            To="{StaticResource col_UncheckedStroke}" Duration="0:0:.2" />
+
+                            <ColorAnimation Storyboard.TargetProperty="(at:AttachedPropertyFactory.StrokeBrush2)
+                                                                                    .(LinearGradientBrush.GradientStops)[1]
+                                                                                    .(GradientStop.Color)"
+                                            To="{StaticResource col_UncheckedStroke}" Duration="0:0:.2" />
+                        </Storyboard>
+                    </BeginStoryboard>
+                </Trigger.ExitActions>
+            </Trigger>
         </Style.Triggers>
     </Style>
 
