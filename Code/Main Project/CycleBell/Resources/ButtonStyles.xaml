@@ -90,6 +90,10 @@
                                             To="{DynamicResource col_TopCheckedIcon}" Duration="0:0:.2" />
                             <ColorAnimation Storyboard.TargetProperty="(Control.Foreground).(LinearGradientBrush.GradientStops)[1].(GradientStop.Color)" 
                                             To="{DynamicResource col_BottomCheckedIcon}" Duration="0:0:.2" />
+                            <ColorAnimation Storyboard.TargetProperty="(at:AttachedPropertyFactory.PathStrokeBrush).(LinearGradientBrush.GradientStops)[0].(GradientStop.Color)" 
+                                            To="{DynamicResource col_TopDsabledPathStroke}" Duration="0:0:.2" />
+                            <ColorAnimation Storyboard.TargetProperty="(at:AttachedPropertyFactory.PathStrokeBrush).(LinearGradientBrush.GradientStops)[1].(GradientStop.Color)" 
+                                            To="{DynamicResource col_BottomDsabledPathStroke}" Duration="0:0:.2" />
                         </Storyboard>
                     </VisualState>
                     <!-- Unchecked has to equal Normal state, Normal Foreground for shape fill brush is defined in a base style -->
@@ -123,8 +127,9 @@
                 </LinearGradientBrush>
             </Setter.Value>
         </Setter>
-        
+
         <Setter Property="BorderThickness" Value="0" />
+        <Setter Property="Padding" Value="5" />
 
         <Setter Property="Width" Value="30" />
         <Setter Property="Height" Value="30" />
@@ -134,7 +139,6 @@
         <Setter Property="FontWeight" Value="Bold" />
         <Setter Property="FontStyle" Value="Normal" />
         <Setter Property="FontFamily" Value="{StaticResource font_SuiGeneris}" />
-        <Setter Property="Padding" Value="5" />
         <!-- Template -->
         <Setter Property="Control.Template">
             <Setter.Value>
@@ -166,24 +170,164 @@
             </Setter.Value>
         </Setter>
     </Style>
-    
-    
 
-    <!-- style_TimerButton -->
-    <Style x:Key="style_TimerButton" TargetType="Button">
-        <Setter Property="Width" Value="75" />
-        <Setter Property="HorizontalAlignment" Value="Center" />
-        <Setter Property="VerticalAlignment" Value="Bottom" />
-        <Setter Property="Template">
+    <!-- style_ThreeStateToggleButton -->
+    <Style x:Key="style_ThreeStateToggleButton" TargetType="ToggleButton" BasedOn="{StaticResource {x:Type ToggleButton}}">
+
+        <Setter Property="at:AttachedPropertyFactory.FillBrush1">
             <Setter.Value>
-                <ControlTemplate TargetType="Button">
-                    <Border BorderThickness="0">
-                        <ContentPresenter Content="{TemplateBinding Content}"/>
-                    </Border>
-                </ControlTemplate>
+                <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+                    <GradientStop Offset="0" Color="{DynamicResource col_TopUncheckedIcon}" />
+                    <GradientStop Offset="1" Color="{DynamicResource col_BottomUncheckedIcon}" />
+                </LinearGradientBrush>
             </Setter.Value>
         </Setter>
+        
+        <Setter Property="at:AttachedPropertyFactory.StrokeBrush1">
+            <Setter.Value>
+                <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+                    <GradientStop Offset="0" Color="{DynamicResource col_UncheckedStroke}" />
+                    <GradientStop Offset="1" Color="{DynamicResource col_UncheckedStroke}" />
+                </LinearGradientBrush>
+            </Setter.Value>
+        </Setter>
+
+        <Setter Property="at:AttachedPropertyFactory.FillBrush2">
+            <Setter.Value>
+                <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+                    <GradientStop Offset="0" Color="{DynamicResource col_TopUncheckedIcon}" />
+                    <GradientStop Offset="1" Color="{DynamicResource col_BottomUncheckedIcon}" />
+                </LinearGradientBrush>
+            </Setter.Value>
+        </Setter>
+
+        <Setter Property="at:AttachedPropertyFactory.StrokeBrush2">
+            <Setter.Value>
+                <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+                    <GradientStop Offset="0" Color="{DynamicResource col_UncheckedStroke}" />
+                    <GradientStop Offset="1" Color="{DynamicResource col_UncheckedStroke}" />
+                </LinearGradientBrush>
+            </Setter.Value>
+        </Setter>
+        
+        <Style.Triggers>
+
+            <MultiTrigger>
+                <MultiTrigger.Conditions>
+                    <Condition Property="IsChecked" Value="True" />
+                    <Condition Property="IsThreeState" Value="True" />
+                </MultiTrigger.Conditions>
+                <MultiTrigger.EnterActions>
+                    <BeginStoryboard>
+                        <Storyboard>
+                            <ColorAnimation Storyboard.TargetProperty="(at:AttachedPropertyFactory.FillBrush1)
+                                                                                    .(LinearGradientBrush.GradientStops)[0]
+                                                                                    .(GradientStop.Color)"
+                                                        To="{StaticResource col_TopPlay}" Duration="0:0:.2" />
+                            <ColorAnimation Storyboard.TargetProperty="(at:AttachedPropertyFactory.FillBrush1)
+                                                                                    .(LinearGradientBrush.GradientStops)[1]
+                                                                                    .(GradientStop.Color)"
+                                                        To="{StaticResource col_BottomPlay}" Duration="0:0:.2" />
+
+                            <ColorAnimation Storyboard.TargetProperty="(at:AttachedPropertyFactory.StrokeBrush1)
+                                                                                    .(LinearGradientBrush.GradientStops)[1]
+                                                                                    .(GradientStop.Color)"
+                                            To="{StaticResource col_TopPlay}" Duration="0:0:.2" />
+                            <ColorAnimation Storyboard.TargetProperty="(at:AttachedPropertyFactory.StrokeBrush1)
+                                                                                    .(LinearGradientBrush.GradientStops)[0]
+                                                                                    .(GradientStop.Color)"
+                                            To="{StaticResource col_BottomPlay}" Duration="0:0:.2" />
+                        </Storyboard>
+                    </BeginStoryboard>
+                </MultiTrigger.EnterActions>
+                <MultiTrigger.ExitActions>
+                    <BeginStoryboard>
+                        <Storyboard>
+
+                            <ColorAnimation Storyboard.TargetProperty="(at:AttachedPropertyFactory.FillBrush1)
+                                                                                    .(LinearGradientBrush.GradientStops)[0]
+                                                                                    .(GradientStop.Color)"
+                                                        To="{StaticResource col_TopUncheckedIcon}" Duration="0:0:.2" />
+
+                            <ColorAnimation Storyboard.TargetProperty="(at:AttachedPropertyFactory.FillBrush1)
+                                                                                    .(LinearGradientBrush.GradientStops)[1]
+                                                                                    .(GradientStop.Color)"
+                                                        To="{StaticResource col_BottomUncheckedIcon}" Duration="0:0:.2" />
+
+                            <ColorAnimation Storyboard.TargetProperty="(at:AttachedPropertyFactory.StrokeBrush1)
+                                                                                    .(LinearGradientBrush.GradientStops)[0]
+                                                                                    .(GradientStop.Color)"
+                                            To="{StaticResource col_UncheckedStroke}" Duration="0:0:.2" />
+
+                            <ColorAnimation Storyboard.TargetProperty="(at:AttachedPropertyFactory.StrokeBrush1)
+                                                                                    .(LinearGradientBrush.GradientStops)[1]
+                                                                                    .(GradientStop.Color)"
+                                            To="{StaticResource col_UncheckedStroke}" Duration="0:0:.2" />
+                        </Storyboard>
+                    </BeginStoryboard>
+                </MultiTrigger.ExitActions>
+            </MultiTrigger>
+
+            <MultiTrigger>
+                <MultiTrigger.Conditions>
+                    <Condition Property="IsChecked" Value="{x:Null}" />
+                    <Condition Property="IsThreeState" Value="True" />
+                </MultiTrigger.Conditions>
+                <MultiTrigger.EnterActions>
+                    <BeginStoryboard>
+                        <Storyboard>
+                            <ColorAnimation Storyboard.TargetProperty="(at:AttachedPropertyFactory.FillBrush2)
+                                                                                    .(LinearGradientBrush.GradientStops)[0]
+                                                                                    .(GradientStop.Color)"
+                                                        To="{StaticResource col_TopPause}" Duration="0:0:.2" />
+
+                            <ColorAnimation Storyboard.TargetProperty="(at:AttachedPropertyFactory.FillBrush2)
+                                                                                    .(LinearGradientBrush.GradientStops)[1]
+                                                                                    .(GradientStop.Color)"
+                                                        To="{StaticResource col_BottomPause}" Duration="0:0:.2" />
+
+                            <ColorAnimation Storyboard.TargetProperty="(at:AttachedPropertyFactory.StrokeBrush2)
+                                                                                    .(LinearGradientBrush.GradientStops)[1]
+                                                                                    .(GradientStop.Color)"
+                                            To="{StaticResource col_BottomPause}" Duration="0:0:.2" />
+
+                            <ColorAnimation Storyboard.TargetProperty="(at:AttachedPropertyFactory.StrokeBrush2)
+                                                                                    .(LinearGradientBrush.GradientStops)[0]
+                                                                                    .(GradientStop.Color)"
+                                            To="{StaticResource col_BottomPause}" Duration="0:0:.2" />
+                        </Storyboard>
+                    </BeginStoryboard>
+                </MultiTrigger.EnterActions>
+                <MultiTrigger.ExitActions>
+                    <BeginStoryboard>
+                        <Storyboard>
+                            <ColorAnimation Storyboard.TargetProperty="(at:AttachedPropertyFactory.FillBrush2)
+                                                                                    .(LinearGradientBrush.GradientStops)[0]
+                                                                                    .(GradientStop.Color)"
+                                                        To="{StaticResource col_TopUncheckedIcon}" Duration="0:0:.2" />
+
+                            <ColorAnimation Storyboard.TargetProperty="(at:AttachedPropertyFactory.FillBrush2)
+                                                                                    .(LinearGradientBrush.GradientStops)[1]
+                                                                                    .(GradientStop.Color)"
+                                                        To="{StaticResource col_BottomUncheckedIcon}" Duration="0:0:.2" />
+
+
+                            <ColorAnimation Storyboard.TargetProperty="(at:AttachedPropertyFactory.StrokeBrush2)
+                                                                                    .(LinearGradientBrush.GradientStops)[0]
+                                                                                    .(GradientStop.Color)"
+                                            To="{StaticResource col_UncheckedStroke}" Duration="0:0:.2" />
+
+                            <ColorAnimation Storyboard.TargetProperty="(at:AttachedPropertyFactory.StrokeBrush2)
+                                                                                    .(LinearGradientBrush.GradientStops)[1]
+                                                                                    .(GradientStop.Color)"
+                                            To="{StaticResource col_UncheckedStroke}" Duration="0:0:.2" />
+                        </Storyboard>
+                    </BeginStoryboard>
+                </MultiTrigger.ExitActions>
+            </MultiTrigger>
+        </Style.Triggers>
     </Style>
+
 
     <!-- style_MuteToggleButton -->
     <Style x:Key="style_MuteToggleButton" TargetType="ToggleButton">
@@ -288,164 +432,31 @@
         </Setter>
     </Style>
 
-    <!-- style_ThreeStateToggleButton -->
-    <Style x:Key="style_ThreeStateToggleButton" TargetType="ToggleButton" BasedOn="{StaticResource style_BaseButton}">
-
-        <Setter Property="at:AttachedPropertyFactory.FillBrush1">
-            <Setter.Value>
-                <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
-                    <GradientStop Offset="0" Color="{DynamicResource col_TopUncheckedIcon}" />
-                    <GradientStop Offset="1" Color="{DynamicResource col_BottomUncheckedIcon}" />
-                </LinearGradientBrush>
-            </Setter.Value>
-        </Setter>
-        <Setter Property="at:AttachedPropertyFactory.FillBrush2">
-            <Setter.Value>
-                <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
-                    <GradientStop Offset="0" Color="{DynamicResource col_TopUncheckedIcon}" />
-                    <GradientStop Offset="1" Color="{DynamicResource col_BottomUncheckedIcon}" />
-                </LinearGradientBrush>
-            </Setter.Value>
-        </Setter>
-        <Setter Property="at:AttachedPropertyFactory.StrokeBrush1">
-            <Setter.Value>
-                <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
-                    <GradientStop Offset="0" Color="{DynamicResource col_UncheckedStroke}" />
-                    <GradientStop Offset="1" Color="{DynamicResource col_UncheckedStroke}" />
-                </LinearGradientBrush>
-            </Setter.Value>
-        </Setter>
-        <Setter Property="at:AttachedPropertyFactory.StrokeBrush2">
-            <Setter.Value>
-                <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
-                    <GradientStop Offset="0" Color="{DynamicResource col_UncheckedStroke}" />
-                    <GradientStop Offset="1" Color="{DynamicResource col_UncheckedStroke}" />
-                </LinearGradientBrush>
-            </Setter.Value>
-        </Setter>
-        <Style.Triggers>
-
-            <MultiTrigger>
-                <MultiTrigger.Conditions>
-                    <Condition Property="IsChecked" Value="True" />
-                    <Condition Property="IsThreeState" Value="True" />
-                </MultiTrigger.Conditions>
-                <MultiTrigger.EnterActions>
-                    <BeginStoryboard>
-                        <Storyboard>
-                            <ColorAnimation Storyboard.TargetProperty="(at:AttachedPropertyFactory.FillBrush1)
-                                                                                    .(LinearGradientBrush.GradientStops)[0]
-                                                                                    .(GradientStop.Color)"
-                                                        To="{StaticResource col_TopPlay}" Duration="0:0:.2" />
-                            <ColorAnimation Storyboard.TargetProperty="(at:AttachedPropertyFactory.FillBrush1)
-                                                                                    .(LinearGradientBrush.GradientStops)[1]
-                                                                                    .(GradientStop.Color)"
-                                                        To="{StaticResource col_BottomPlay}" Duration="0:0:.2" />
-
-                            <ColorAnimation Storyboard.TargetProperty="(at:AttachedPropertyFactory.StrokeBrush1)
-                                                                                    .(LinearGradientBrush.GradientStops)[1]
-                                                                                    .(GradientStop.Color)"
-                                            To="{StaticResource col_TopPlay}" Duration="0:0:.2" />
-                            <ColorAnimation Storyboard.TargetProperty="(at:AttachedPropertyFactory.StrokeBrush1)
-                                                                                    .(LinearGradientBrush.GradientStops)[0]
-                                                                                    .(GradientStop.Color)"
-                                            To="{StaticResource col_BottomPlay}" Duration="0:0:.2" />
-                        </Storyboard>
-                    </BeginStoryboard>
-                </MultiTrigger.EnterActions>
-                <MultiTrigger.ExitActions>
-                    <BeginStoryboard>
-                        <Storyboard>
-
-                            <ColorAnimation Storyboard.TargetProperty="(at:AttachedPropertyFactory.FillBrush1)
-                                                                                    .(LinearGradientBrush.GradientStops)[0]
-                                                                                    .(GradientStop.Color)"
-                                                        To="{StaticResource col_TopUncheckedIcon}" Duration="0:0:.2" />
-                            <ColorAnimation Storyboard.TargetProperty="(at:AttachedPropertyFactory.FillBrush1)
-                                                                                    .(LinearGradientBrush.GradientStops)[1]
-                                                                                    .(GradientStop.Color)"
-                                                        To="{StaticResource col_BottomUncheckedIcon}" Duration="0:0:.2" />
-
-                            <ColorAnimation Storyboard.TargetProperty="(at:AttachedPropertyFactory.StrokeBrush1)
-                                                                                    .(LinearGradientBrush.GradientStops)[0]
-                                                                                    .(GradientStop.Color)"
-                                            To="{StaticResource col_UncheckedStroke}" Duration="0:0:.2" />
-                            <ColorAnimation Storyboard.TargetProperty="(at:AttachedPropertyFactory.StrokeBrush1)
-                                                                                    .(LinearGradientBrush.GradientStops)[1]
-                                                                                    .(GradientStop.Color)"
-                                            To="{StaticResource col_UncheckedStroke}" Duration="0:0:.2" />
-                        </Storyboard>
-                    </BeginStoryboard>
-                </MultiTrigger.ExitActions>
-            </MultiTrigger>
-
-            <MultiTrigger>
-                <MultiTrigger.Conditions>
-                    <Condition Property="IsChecked" Value="{x:Null}" />
-                    <Condition Property="IsThreeState" Value="True" />
-                </MultiTrigger.Conditions>
-                <MultiTrigger.EnterActions>
-                    <BeginStoryboard>
-                        <Storyboard>
-                            <ColorAnimation Storyboard.TargetProperty="(at:AttachedPropertyFactory.FillBrush2)
-                                                                                    .(LinearGradientBrush.GradientStops)[0]
-                                                                                    .(GradientStop.Color)"
-                                                        To="{StaticResource col_TopPause}" Duration="0:0:.2" />
-                            <ColorAnimation Storyboard.TargetProperty="(at:AttachedPropertyFactory.FillBrush2)
-                                                                                    .(LinearGradientBrush.GradientStops)[1]
-                                                                                    .(GradientStop.Color)"
-                                                        To="{StaticResource col_BottomPause}" Duration="0:0:.2" />
-
-                            <ColorAnimation Storyboard.TargetProperty="(at:AttachedPropertyFactory.StrokeBrush2)
-                                                                                    .(LinearGradientBrush.GradientStops)[1]
-                                                                                    .(GradientStop.Color)"
-                                            To="{StaticResource col_BottomPause}" Duration="0:0:.2" />
-                            <ColorAnimation Storyboard.TargetProperty="(at:AttachedPropertyFactory.StrokeBrush2)
-                                                                                    .(LinearGradientBrush.GradientStops)[0]
-                                                                                    .(GradientStop.Color)"
-                                            To="{StaticResource col_BottomPause}" Duration="0:0:.2" />
-                        </Storyboard>
-                    </BeginStoryboard>
-                </MultiTrigger.EnterActions>
-                <MultiTrigger.ExitActions>
-                    <BeginStoryboard>
-                        <Storyboard>
-                            <ColorAnimation Storyboard.TargetProperty="(at:AttachedPropertyFactory.FillBrush2)
-                                                                                    .(LinearGradientBrush.GradientStops)[0]
-                                                                                    .(GradientStop.Color)"
-                                                        To="{StaticResource col_TopUncheckedIcon}" Duration="0:0:.2" />
-                            <ColorAnimation Storyboard.TargetProperty="(at:AttachedPropertyFactory.FillBrush2)
-                                                                                    .(LinearGradientBrush.GradientStops)[1]
-                                                                                    .(GradientStop.Color)"
-                                                        To="{StaticResource col_BottomUncheckedIcon}" Duration="0:0:.2" />
-
-                            <ColorAnimation Storyboard.TargetProperty="(at:AttachedPropertyFactory.StrokeBrush2)
-                                                                                    .(LinearGradientBrush.GradientStops)[0]
-                                                                                    .(GradientStop.Color)"
-                                            To="{StaticResource col_UncheckedStroke}" Duration="0:0:.2" />
-                            <ColorAnimation Storyboard.TargetProperty="(at:AttachedPropertyFactory.StrokeBrush2)
-                                                                                    .(LinearGradientBrush.GradientStops)[1]
-                                                                                    .(GradientStop.Color)"
-                                            To="{StaticResource col_UncheckedStroke}" Duration="0:0:.2" />
-                        </Storyboard>
-                    </BeginStoryboard>
-                </MultiTrigger.ExitActions>
-            </MultiTrigger>
-        </Style.Triggers>
-    </Style>
 
 
-    <!-- Path -->
 
-    <!-- style_PathBase -->
-    <Style x:Key="style_PathBase" TargetType="Path">
-        
-        <Setter Property="Fill" Value="{Binding Path=Foreground, RelativeSource={RelativeSource FindAncestor, AncestorType=ButtonBase}}" />
+    <!-- Path Style -->
+    <Style TargetType="Path">
+        <Setter Property="Fill" Value="{Binding Path=Foreground, RelativeSource={RelativeSource FindAncestor, AncestorType=ContentControl}}" />
+        <Setter Property="Stroke" Value="{Binding Path=(at:AttachedPropertyFactory.PathStrokeBrush), RelativeSource={RelativeSource FindAncestor, AncestorType=ContentControl}}" />
         <Setter Property="VerticalAlignment" Value="Center" />
         <Setter Property="HorizontalAlignment" Value="Center" />
+    </Style>
 
-        <Setter Property="Stroke" Value="{Binding Path=(at:AttachedPropertyFactory.PathStrokeBrush), RelativeSource={RelativeSource FindAncestor, AncestorType=ButtonBase}}" />
-
+    <!-- style_TimerButton -->
+    <Style x:Key="style_TimerButton" TargetType="Button">
+        <Setter Property="Width" Value="75" />
+        <Setter Property="HorizontalAlignment" Value="Center" />
+        <Setter Property="VerticalAlignment" Value="Bottom" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="Button">
+                    <Border BorderThickness="0">
+                        <ContentPresenter Content="{TemplateBinding Content}"/>
+                    </Border>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
     </Style>
 
 </ResourceDictionary>
