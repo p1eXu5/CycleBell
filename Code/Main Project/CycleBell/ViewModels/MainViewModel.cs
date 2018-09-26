@@ -87,6 +87,7 @@ namespace CycleBell.ViewModels
         }
 
         public bool IsRunning => _timerManager.IsRunning;
+        public bool IsPaused => _timerManager.IsPaused;
 
         public bool IsInfiniteLoop
         {
@@ -96,6 +97,18 @@ namespace CycleBell.ViewModels
 
                     SelectedPreset.IsInfiniteLoop = value;
                     OnPropertyChanged ();
+                }
+            }
+        }
+
+        public bool IsStopped
+        {
+            get => SelectedPreset?.IsRunning == false;
+            set {
+                if (IsRunning) {
+
+                    _timerManager.Stop();
+                    OnPropertyChanged();
                 }
             }
         }
@@ -165,10 +178,14 @@ namespace CycleBell.ViewModels
         }
 
         //  Save Preset
-        private void CreateNewPreset (object obj)
+        private void CreateNewPreset(object obj)
         {
             _manager.CreateNewPreset();
             OnPropertyChanged(nameof(IsSelectedPreset));
+            OnPropertyChanged(nameof(IsInfiniteLoop));
+            OnPropertyChanged(nameof(IsRunning));
+            OnPropertyChanged(nameof(IsPaused));
+            OnPropertyChanged(nameof(IsStopped));
         }
 
         //  Save Preset

@@ -22,12 +22,13 @@
         <ToggleButton Grid.Column="0"
                       Width="48" Height="38"
                       Margin="0,0,20,0"
-                      HorizontalAlignment="Center" 
-                      local:AttachedPropertyFactory.BorderColor="#33000055"
-                      IsChecked="{Binding IsInfiniteLoop}"
-                      IsEnabled="{Binding IsSelectedPreset}"
+                      HorizontalAlignment="Center"
+                      BorderBrush="{DynamicResource brush_InfiniteBorder}"
+                      IsChecked="{Binding IsInfiniteLoop, Mode=TwoWay}"
+                      IsEnabled="{Binding IsSelectedPreset, Mode=OneWay}"
+
                       >
-            <Path Style="{StaticResource style_PathOfToggleButton}" Data="{StaticResource gmtry_Infinite}"/>
+            <Path Style="{StaticResource style_PathBase}" Data="{StaticResource gmtry_Infinite}"/>
         </ToggleButton>
 
         <!-- play -->
@@ -46,7 +47,7 @@
                 </Grid.ColumnDefinitions>
 
                 <Path Grid.Column="0" 
-                      Style="{StaticResource style_PathOfToggleButton}" 
+                      Style="{StaticResource style_PathBase}" 
                       Data="{StaticResource gmtry_Play}"
                       Fill="{Binding Path=(local:AttachedPropertyFactory.FillBrush1), 
                                      RelativeSource={RelativeSource FindAncestor, AncestorType=ToggleButton}}"
@@ -54,7 +55,7 @@
                                        RelativeSource={RelativeSource FindAncestor, AncestorType=ToggleButton}}"
                       />
 
-                <Path Grid.Column="2" Style="{StaticResource style_PathOfToggleButton}" Data="{StaticResource gmtry_Pause}" 
+                <Path Grid.Column="2" Style="{StaticResource style_PathBase}" Data="{StaticResource gmtry_Pause}" 
                       Margin="5,0,0,0" 
                       Fill="{Binding Path=(local:AttachedPropertyFactory.FillBrush2), 
                                      RelativeSource={RelativeSource FindAncestor, AncestorType=ToggleButton}}"
@@ -69,8 +70,11 @@
         <ToggleButton Grid.Column="2"
                       Width="48" Height="38"
                       HorizontalAlignment="Center"
-                      local:AttachedPropertyFactory.BorderColor="#33330033">
-            <Path Style="{StaticResource style_PathOfToggleButton}" Data="{StaticResource gmtry_Stop}" Margin="3"/>
+                      local:AttachedPropertyFactory.BorderColor="#33330033"
+                      IsEnabled="{Binding IsSelectedPreset}"
+                      IsChecked="{Binding IsStopped}"
+                      >
+            <Path Style="{StaticResource style_PathBase}" Data="{StaticResource gmtry_Stop}" Margin="3"/>
         </ToggleButton>
 
         <!-- bell -->
@@ -79,8 +83,8 @@
                       HorizontalAlignment="Center"
                       local:AttachedPropertyFactory.BorderColor="#33005500">
             <Grid Margin="2">
-                <Path Style="{StaticResource style_PathOfToggleButton}" Data="{StaticResource gmtry_BellIn}"/>
-                <Path Style="{StaticResource style_PathOfToggleButton}" Data="{StaticResource gmtry_BellOut}" />
+                <Path Style="{StaticResource style_PathBase}" Data="{StaticResource gmtry_BellIn}"/>
+                <Path Style="{StaticResource style_PathBase}" Data="{StaticResource gmtry_BellOut}" />
             </Grid>
         </ToggleButton>
     </Grid>

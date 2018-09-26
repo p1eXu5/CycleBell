@@ -16,16 +16,6 @@
                        Stroke="{TemplateBinding BorderBrush}"
                        >
 
-                <!-- rectangle border -->
-                <!--<Rectangle.Stroke>
-                    <LinearGradientBrush>
-                        <GradientStop x:Name="col_TopStroke" Color="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=Control}, 
-                                                                             Path=BorderBrush.(LinearGradientBrush.GradientStops)[0].Color}" Offset="0" />
-                        <GradientStop x:Name="col_BottomStroke" Color="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=Control}, 
-                                                                             Path=BorderBrush.(LinearGradientBrush.GradientStops)[1].Color}" Offset="1" />
-                    </LinearGradientBrush>
-                </Rectangle.Stroke>-->
-
                 <!-- shadow -->
                 <Rectangle.Effect>
                     <DropShadowEffect x:Name="m_shadow" Direction="-90" 
@@ -85,20 +75,16 @@
                                             To="{DynamicResource col_TopUncheckedIcon}" Duration="0:0:.2" />
                             <ColorAnimation Storyboard.TargetProperty="(Control.Foreground).(LinearGradientBrush.GradientStops)[1].(GradientStop.Color)" 
                                             To="{DynamicResource col_BottomUncheckedIcon}" Duration="0:0:.2" />
+                            <ColorAnimation Storyboard.TargetProperty="(at:AttachedPropertyFactory.PathStrokeBrush).(LinearGradientBrush.GradientStops)[0].(GradientStop.Color)" 
+                                            To="{DynamicResource col_TopDsabledPathStroke}" Duration="0:0:.2" />
+                            <ColorAnimation Storyboard.TargetProperty="(at:AttachedPropertyFactory.PathStrokeBrush).(LinearGradientBrush.GradientStops)[1].(GradientStop.Color)" 
+                                            To="{DynamicResource col_BottomDsabledPathStroke}" Duration="0:0:.2" />
                         </Storyboard>
                     </VisualState>
                 </VisualStateGroup>
                 
                 <VisualStateGroup x:Name="CheckStates">
-                    <VisualState x:Name="Unchecked" >
-                        <Storyboard>
-                            <ColorAnimation Storyboard.TargetProperty="(Control.Foreground).(LinearGradientBrush.GradientStops)[0].(GradientStop.Color)" 
-                                            To="{DynamicResource col_TopUncheckedIcon}" Duration="0:0:.2" />
-                            <ColorAnimation Storyboard.TargetProperty="(Control.Foreground).(LinearGradientBrush.GradientStops)[1].(GradientStop.Color)" 
-                                            To="{DynamicResource col_BottomUncheckedIcon}" Duration="0:0:.2" />
-                        </Storyboard>
-                    </VisualState>
-                    <VisualState x:Name="Checked">
+                        <VisualState x:Name="Checked">
                         <Storyboard>
                             <ColorAnimation Storyboard.TargetProperty="(Control.Foreground).(LinearGradientBrush.GradientStops)[0].(GradientStop.Color)" 
                                             To="{DynamicResource col_TopCheckedIcon}" Duration="0:0:.2" />
@@ -106,6 +92,9 @@
                                             To="{DynamicResource col_BottomCheckedIcon}" Duration="0:0:.2" />
                         </Storyboard>
                     </VisualState>
+                    <!-- Unchecked has to equal Normal state, Normal Foreground for shape fill brush is defined in a base style -->
+                    <VisualState x:Name="Unchecked" />
+                    <VisualState Name="Indeterminate"></VisualState>
                 </VisualStateGroup>
             </VisualStateManager.VisualStateGroups>
 
@@ -116,6 +105,7 @@
     <!-- style_BaseButton -->
     <Style x:Key="style_BaseButton" TargetType="ButtonBase">
         <Setter Property="Background" Value="{DynamicResource brush_BackgroundGradient}" />
+
         <Setter Property="BorderBrush">
             <Setter.Value>
                 <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
@@ -125,28 +115,27 @@
             </Setter.Value>
         </Setter>
 
-        <Setter Property="Foreground">
+        <Setter Property="at:AttachedPropertyFactory.PathStrokeBrush">
             <Setter.Value>
                 <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
-                    <GradientStop Color="{DynamicResource col_TopForeground}" Offset="0" />
-                    <GradientStop Color="{DynamicResource col_BottomForeground}" Offset="1" />
+                    <GradientStop Color="{DynamicResource col_TopNormalPathStroke}" Offset="0" />
+                    <GradientStop Color="{DynamicResource col_BottomNormalPathStroke}" Offset="1" />
                 </LinearGradientBrush>
             </Setter.Value>
         </Setter>
-
+        
         <Setter Property="BorderThickness" Value="0" />
 
         <Setter Property="Width" Value="30" />
         <Setter Property="Height" Value="30" />
-
         <Setter Property="VerticalAlignment" Value="Center" />
         <Setter Property="HorizontalAlignment" Value="Left" />
-
+        <!-- Font -->
         <Setter Property="FontWeight" Value="Bold" />
         <Setter Property="FontStyle" Value="Normal" />
         <Setter Property="FontFamily" Value="{StaticResource font_SuiGeneris}" />
         <Setter Property="Padding" Value="5" />
-
+        <!-- Template -->
         <Setter Property="Control.Template">
             <Setter.Value>
                 <StaticResource ResourceKey="ct_BaseButton" />
@@ -155,23 +144,31 @@
     </Style>
     
     <!-- Button Style -->
-    <Style TargetType="Button" BasedOn="{StaticResource style_BaseButton}" />
+    <Style TargetType="Button" BasedOn="{StaticResource style_BaseButton}" >
+        <Setter Property="Foreground">
+            <Setter.Value>
+                <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+                    <GradientStop Color="{DynamicResource col_TopUnpressedForeground}" Offset="0" />
+                    <GradientStop Color="{DynamicResource col_BottomUnpressedForeground}" Offset="1" />
+                </LinearGradientBrush>
+            </Setter.Value>
+        </Setter>
+    </Style>
 
     <!-- ToggleButton Style -->
-    <Style TargetType="ToggleButton" BasedOn="{StaticResource style_BaseButton}">
-        <Setter Property="Control.Foreground" Value="{DynamicResource brush_UncheckedIcon}" />
-        <Setter Property="at:AttachedPropertyFactory.FillBrush1" Value="{DynamicResource brush_UncheckedIcon}"/>
-        <Setter Property="at:AttachedPropertyFactory.FillBrush2" Value="{DynamicResource brush_UncheckedIcon}"/>
-
-        <Style.Triggers>
-            <Trigger Property="IsChecked" Value="True" >
-                <Setter Property="Foreground" Value="{DynamicResource brush_CheckedIcon}" />
-                <Setter Property="at:AttachedPropertyFactory.StrokeColor" Value="{DynamicResource col_CheckedStroke}" />
-            </Trigger>
-
-        </Style.Triggers>
+    <Style TargetType="ToggleButton" BasedOn="{StaticResource style_BaseButton}" >
+        <Setter Property="Foreground">
+            <Setter.Value>
+                <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+                    <GradientStop Color="{DynamicResource col_TopUncheckedIcon}" Offset="0" />
+                    <GradientStop Color="{DynamicResource col_BottomUncheckedIcon}" Offset="1" />
+                </LinearGradientBrush>
+            </Setter.Value>
+        </Setter>
     </Style>
     
+    
+
     <!-- style_TimerButton -->
     <Style x:Key="style_TimerButton" TargetType="Button">
         <Setter Property="Width" Value="75" />
@@ -293,7 +290,7 @@
 
     <!-- style_ThreeStateToggleButton -->
     <Style x:Key="style_ThreeStateToggleButton" TargetType="ToggleButton" BasedOn="{StaticResource style_BaseButton}">
-        <Setter Property="Control.Foreground" Value="{DynamicResource brush_UncheckedIcon}" />
+
         <Setter Property="at:AttachedPropertyFactory.FillBrush1">
             <Setter.Value>
                 <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
@@ -336,9 +333,6 @@
                 <MultiTrigger.EnterActions>
                     <BeginStoryboard>
                         <Storyboard>
-                            <ColorAnimation Storyboard.TargetProperty="(at:AttachedPropertyFactory.StrokeColor)"
-                                            To="{StaticResource col_TopPlay}" Duration="0:0:.2" />
-
                             <ColorAnimation Storyboard.TargetProperty="(at:AttachedPropertyFactory.FillBrush1)
                                                                                     .(LinearGradientBrush.GradientStops)[0]
                                                                                     .(GradientStop.Color)"
@@ -362,8 +356,7 @@
                 <MultiTrigger.ExitActions>
                     <BeginStoryboard>
                         <Storyboard>
-                            <ColorAnimation Storyboard.TargetProperty="(at:AttachedPropertyFactory.StrokeColor)"
-                                            To="{StaticResource col_UncheckedStroke}" Duration="0:0:.2" />
+
                             <ColorAnimation Storyboard.TargetProperty="(at:AttachedPropertyFactory.FillBrush1)
                                                                                     .(LinearGradientBrush.GradientStops)[0]
                                                                                     .(GradientStop.Color)"
@@ -384,7 +377,6 @@
                         </Storyboard>
                     </BeginStoryboard>
                 </MultiTrigger.ExitActions>
-                <!--<Setter Property="at:AttachedPropertyFactory.StrokeColor" Value="{DynamicResource col_TopPlay}" />-->
             </MultiTrigger>
 
             <MultiTrigger>
@@ -395,9 +387,6 @@
                 <MultiTrigger.EnterActions>
                     <BeginStoryboard>
                         <Storyboard>
-                            <ColorAnimation Storyboard.TargetProperty="(at:AttachedPropertyFactory.StrokeColor)"
-                                            To="{StaticResource col_BottomPause}" Duration="0:0:.2" />
-
                             <ColorAnimation Storyboard.TargetProperty="(at:AttachedPropertyFactory.FillBrush2)
                                                                                     .(LinearGradientBrush.GradientStops)[0]
                                                                                     .(GradientStop.Color)"
@@ -421,9 +410,6 @@
                 <MultiTrigger.ExitActions>
                     <BeginStoryboard>
                         <Storyboard>
-                            <ColorAnimation Storyboard.TargetProperty="(at:AttachedPropertyFactory.StrokeColor)"
-                                            To="{StaticResource col_UncheckedStroke}" Duration="0:0:.2" />
-
                             <ColorAnimation Storyboard.TargetProperty="(at:AttachedPropertyFactory.FillBrush2)
                                                                                     .(LinearGradientBrush.GradientStops)[0]
                                                                                     .(GradientStop.Color)"
@@ -444,9 +430,7 @@
                         </Storyboard>
                     </BeginStoryboard>
                 </MultiTrigger.ExitActions>
-                <!--<Setter Property="at:AttachedPropertyFactory.StrokeColor" Value="{DynamicResource col_CheckedStroke}" />-->
             </MultiTrigger>
-
         </Style.Triggers>
     </Style>
 
@@ -455,37 +439,13 @@
 
     <!-- style_PathBase -->
     <Style x:Key="style_PathBase" TargetType="Path">
-        <Setter Property="Fill" Value="{Binding Path=Foreground, RelativeSource={RelativeSource FindAncestor, AncestorType=ContentControl}}" />
-        <Style.Triggers>
-            <Trigger Property="IsEnabled" Value="False">
-                <Setter Property="Stroke" Value="#00000000"/>
-            </Trigger>
-        </Style.Triggers>
-    </Style>
-
-    <!-- style_PathOfToggleButton -->
-    <Style x:Key="style_PathOfToggleButton" TargetType="Path" BasedOn="{StaticResource style_PathBase}">
-        <Setter Property="Stroke">
-            <Setter.Value>
-                <SolidColorBrush Color="{Binding Path=(at:AttachedPropertyFactory.StrokeColor), RelativeSource={RelativeSource FindAncestor, AncestorType=ToggleButton}}" />
-            </Setter.Value>
-        </Setter>
+        
+        <Setter Property="Fill" Value="{Binding Path=Foreground, RelativeSource={RelativeSource FindAncestor, AncestorType=ButtonBase}}" />
         <Setter Property="VerticalAlignment" Value="Center" />
         <Setter Property="HorizontalAlignment" Value="Center" />
-    </Style>
 
-    <!-- style_PathOfButton -->
-    <Style x:Key="style_PathOfButton" TargetType="Path" BasedOn="{StaticResource style_PathBase}">
-        <Setter Property="Stroke">
-            <Setter.Value>
-                <SolidColorBrush Color="{Binding Path=(at:AttachedPropertyFactory.StrokeColor), RelativeSource={RelativeSource FindAncestor, AncestorType=Button}}" />
-            </Setter.Value>
-        </Setter>
-        <Setter Property="VerticalAlignment" Value="Center" />
-        <Setter Property="HorizontalAlignment" Value="Center" />
-    </Style>
+        <Setter Property="Stroke" Value="{Binding Path=(at:AttachedPropertyFactory.PathStrokeBrush), RelativeSource={RelativeSource FindAncestor, AncestorType=ButtonBase}}" />
 
-    
-    
+    </Style>
 
 </ResourceDictionary>

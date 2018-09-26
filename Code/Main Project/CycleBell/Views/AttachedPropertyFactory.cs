@@ -38,14 +38,14 @@ namespace CycleBell.Views
         #endregion
 
 
-        #region StrokeColor
+        #region PathStrokeBrush
 
-        public static readonly DependencyProperty StrokeColorProperty = DependencyProperty.RegisterAttached("StrokeColor", typeof(Color), typeof(AttachedPropertyFactory)
-                                                                                                            , new FrameworkPropertyMetadata(Colors.DimGray, FrameworkPropertyMetadataOptions.Inherits));
+        public static readonly DependencyProperty PathStrokeBrushProperty = DependencyProperty.RegisterAttached("PathStrokeBrush", typeof(Brush), typeof(AttachedPropertyFactory)
+                                                                                                            , new FrameworkPropertyMetadata(Brushes.DimGray, FrameworkPropertyMetadataOptions.Inherits));
 
-        public static void SetStrokeColor(DependencyObject d, Color value) => d.SetValue(AttachedPropertyFactory.StrokeColorProperty, value);
+        public static void SetPathStrokeBrush(DependencyObject d, Brush value) => d.SetValue(AttachedPropertyFactory.PathStrokeBrushProperty, value);
 
-        public static Color GetStrokeColor(DependencyObject d) => (Color)d.GetValue(AttachedPropertyFactory.StrokeColorProperty);
+        public static Brush GetPathStrokeBrush(DependencyObject d) => (Brush)d.GetValue(AttachedPropertyFactory.PathStrokeBrushProperty);
 
         #endregion
 
