@@ -37,6 +37,8 @@
                       Width="48" Height="38"
                       HorizontalAlignment="Center"
                       local:AttachedPropertyFactory.BorderColor="#33553300"
+                      IsEnabled="{Binding IsPlayable}"
+                      IsChecked="{Binding MediaTerminal}"
                       >
             <Grid>
                 <Grid.ColumnDefinitions>
@@ -70,7 +72,7 @@
                       Width="48" Height="38"
                       HorizontalAlignment="Center"
                       local:AttachedPropertyFactory.BorderColor="#33330033"
-                      IsEnabled="{Binding IsSelectedPreset}"
+                      IsEnabled="{Binding IsRunning}"
                       IsChecked="{Binding IsStopped}"
                       >
             <Path Data="{StaticResource gmtry_Stop}" Margin="3"/>
@@ -80,7 +82,8 @@
         <ToggleButton Grid.Column="3"
                       Width="48" Height="38"
                       HorizontalAlignment="Center"
-                      local:AttachedPropertyFactory.BorderColor="#33005500">
+                      local:AttachedPropertyFactory.BorderColor="#33005500"
+                      IsChecked="{Binding RingTerminal}">
             <Grid Margin="2">
                 <Path Data="{StaticResource gmtry_BellIn}"/>
                 <Path Data="{StaticResource gmtry_BellOut}" />
