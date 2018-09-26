@@ -5,7 +5,8 @@
     <!-- ct_BaseButton -->
     <ControlTemplate x:Key="ct_BaseButton" TargetType="ButtonBase" >
         <Grid>
-            <!-- visual tree -->
+
+            <!-- border -->
             <Rectangle x:Name="rectangle"
                        RadiusX="4" RadiusY="4"
                        StrokeThickness="{TemplateBinding BorderThickness}"
@@ -31,16 +32,17 @@
                                       Opacity=".0" 
                                       ShadowDepth="2" BlurRadius="2" />
                 </Rectangle.Effect>
-                
             </Rectangle>
+
+            <!-- content -->
             <Viewbox Margin="{TemplateBinding Padding}" SnapsToDevicePixels="True">
-                <ContentControl Content="{TemplateBinding Content}" >
-                    <ContentControl.Foreground>
+                <ContentControl Content="{TemplateBinding Content}" Foreground="{TemplateBinding Foreground}">
+                    <!--<ContentControl.Foreground>
                         <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
                             <GradientStop x:Name="col_TopForeground" Color="{DynamicResource col_TopCheckedIcon}" Offset="0" />
                             <GradientStop x:Name="col_BottomForeground" Color="{DynamicResource col_BottomCheckedIcon}" Offset="1" />
                         </LinearGradientBrush>
-                    </ContentControl.Foreground>
+                    </ContentControl.Foreground>-->
                 </ContentControl>
             </Viewbox>
 
@@ -118,8 +120,9 @@
 
 
     <!-- style_BaseButton -->
-    <Style x:Key="style_BaseButton">
-        <Setter Property="Control.BorderBrush">
+    <Style x:Key="style_BaseButton" TargetType="ButtonBase">
+        
+        <Setter Property="BorderBrush">
             <Setter.Value>
                 <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
                     <GradientStop Color="{DynamicResource col_BottomUncheckedIcon}" Offset="0" />
@@ -127,6 +130,25 @@
                 </LinearGradientBrush>
             </Setter.Value>
         </Setter>
+        
+        <Setter Property="Foreground">
+            <Setter.Value>
+                <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+                    <GradientStop Color="{DynamicResource col_BottomUncheckedIcon}" Offset="0" />
+                    <GradientStop Color="{DynamicResource col_BottomUncheckedIcon}" Offset="1" />
+                </LinearGradientBrush>
+            </Setter.Value>
+        </Setter>
+
+        <Setter Property="at:AttachedPropertyFactory.PressedBorderBrush">
+            <Setter.Value>
+                <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+                    <GradientStop Color="{DynamicResource col_BottomUncheckedIcon}" Offset="0" />
+                    <GradientStop Color="{DynamicResource col_BottomUncheckedIcon}" Offset="1" />
+                </LinearGradientBrush>
+            </Setter.Value>
+        </Setter>
+
         <Setter Property="Control.BorderThickness" Value="0" />
         <Setter Property="Control.VerticalAlignment" Value="Center" />
         <Setter Property="Control.HorizontalAlignment" Value="Left" />
@@ -147,22 +169,14 @@
     <!-- Button Style -->
     <Style TargetType="Button" BasedOn="{StaticResource style_BaseButton}">
         <Setter Property="Padding" Value="5" />
-        <Setter Property="at:AttachedPropertyFactory.BorderBrush" >
-            <Setter.Value>
-                <LinearGradientBrush>
-                    <GradientStop Color="{DynamicResource col_BottomUncheckedIcon}" Offset="0" />
-                    <GradientStop Color="{DynamicResource col_BottomUncheckedIcon}" Offset="1" />
-                </LinearGradientBrush>
-            </Setter.Value>
-        </Setter>
+
         <Style.Triggers>
             <Trigger Property="IsPressed" Value="True">
                 <Setter Property="at:AttachedPropertyFactory.StrokeColor" Value="{DynamicResource col_PressedButton}" />
                 
                 <Trigger.EnterActions>
                     <BeginStoryboard>
-                        <ColorAnimation Storyboard.TargetProperty="BorderBrush.(LinearGradientBrush.GradientStops)[0].Color" 
-                                        To="at:AttachedPropertyFactory.BorderBrush"></ColorAnimation>
+
                     </BeginStoryboard>
                 </Trigger.EnterActions>
                 
