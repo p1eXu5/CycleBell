@@ -129,6 +129,8 @@ namespace CycleBell.ViewModels
         public ICommand ExitCommand => new ActionCommand(Exit);
         public ICommand AboutCommand => new ActionCommand(About);
 
+        public ICommand InfiniteLoopCommand => new ActionCommand((o) => { IsInfiniteLoop = !IsInfiniteLoop; });
+
         public ICommand SavePresetsBeforeExitCommand => new ActionCommand(SavePresetsBeforeExit);
 
         // In process

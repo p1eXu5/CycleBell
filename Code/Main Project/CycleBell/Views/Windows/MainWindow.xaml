@@ -75,11 +75,12 @@
                 </MenuItem.Header>
 
                 <!-- First Call menu -->
-                <MenuItem Header="First _Call" Command="{Binding FirstCallCommand}">
+                <MenuItem Header="First _Call">
                     <MenuItem.Icon>
                         <Grid VerticalAlignment="Center" HorizontalAlignment="Right" 
                               RenderTransformOrigin="0.5,0.5"
-                              Opacity="{Binding FirstCallState, Converter={StaticResource FlagToOpacityConverter}}">
+                              >
+                            <!--Opacity="{Binding FirstCallState, Converter={StaticResource FlagToOpacityConverter}}"-->
                             <Grid.RenderTransform>
                                 <TransformGroup>
                                     <TranslateTransform X="-1" Y="1"/>
@@ -88,25 +89,15 @@
                             <StaticResource ResourceKey="path_menuCheckedIcon"></StaticResource>
                         </Grid>
                     </MenuItem.Icon>
-                    <!--<MenuItem.Style>
-                        <Style TargetType="MenuItem">
-                            <Setter Property="Icon" Value="{x:Null}" />
-                            <Style.Triggers>
-                                <DataTrigger Binding="{Binding FirstCallState, Converter={StaticResource CycleBellStateConverter}}" 
-                                             Value="FirstCall">
-                                    <Setter Property="Icon" Value="{StaticResource menuIconGrid}"></Setter>
-                                </DataTrigger>
-                            </Style.Triggers>
-                        </Style>
-                    </MenuItem.Style>-->
+
                 </MenuItem>
 
                 <!-- Infinite Loop menu -->
                 <MenuItem Header="_gmtry_Infinite Loop" Command="{Binding InfiniteLoopCommand}">
                     <MenuItem.Icon>
                         <Grid VerticalAlignment="Center" HorizontalAlignment="Right" 
-                              RenderTransformOrigin="0.5,0.5"
-                              Opacity="{Binding InfiniteLoopState, Converter={StaticResource FlagToOpacityConverter}}">
+                              RenderTransformOrigin="0.5,0.5">
+                            <!--Opacity="{Binding InfiniteLoopState, Converter={StaticResource FlagToOpacityConverter}}"-->
                             <Grid.RenderTransform>
                                 <TransformGroup>
                                     <TranslateTransform X="-1" Y="1"/>
@@ -143,10 +134,7 @@
                 <RowDefinition Height="100"/>
             </Grid.RowDefinitions>
 
-            <Button Grid.Row="0" Content="mute" Width="100" BorderBrush="{DynamicResource brush_InfiniteBorder}"/>
-            <ToggleButton Grid.Row="1" Content="mute" Width="100" />
-
-             <!--Header--> 
+            <!--Header--> 
             <TextBlock Text="Cycle Bell" Grid.Row="0"
                        HorizontalAlignment="Center" VerticalAlignment="Center"
                        Margin="0,16,0,4"
@@ -192,8 +180,8 @@
             </StackPanel>
 
              <!--preset and timePoints-->
-            <!--<Grid Grid.Row="2">
-                --><!--<userControls:PresetUserControl x:Name="preset" DataContext="{Binding SelectedPreset}"
+            <Grid Grid.Row="2">
+                <userControls:PresetUserControl x:Name="preset" DataContext="{Binding SelectedPreset}"
                                          Control.Foreground="{Binding ElementName=m_presetComboBox, Path=Foreground, Mode=OneWay}"
                                          UIElement.IsEnabled="{Binding ElementName=m_presetComboBox, Path=IsEnabled, Mode=OneWay}">
 
@@ -225,9 +213,9 @@
                             </Style.Triggers>
                         </Style>
                     </userControls:PresetUserControl.Style>
-                </userControls:PresetUserControl>-->
+                </userControls:PresetUserControl>
 
-                 <!--When NoTimePoints--><!--  
+                 <!--When NoTimePoints-->  
                 <Grid Height="{Binding ElementName=preset, Path=ActualHeight}" ZIndex="-1">
 
                     <TextBlock HorizontalAlignment="Center"
@@ -265,7 +253,7 @@
                         </Style>
                     </Grid.Style>
                 </Grid>
-            </Grid>-->
+            </Grid>
 
             
              <!--timer's buttons--> 
