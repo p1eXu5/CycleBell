@@ -63,6 +63,7 @@ namespace CycleBell.ViewModels
         #region Properties
 
         public ObservableCollection<PresetViewModel> Presets { get; set; }
+
         public PresetViewModel SelectedPreset
         {
             get => _selectedPreset;
@@ -82,13 +83,12 @@ namespace CycleBell.ViewModels
                 OnPropertyChanged ();
             }
         }
+        
         public bool IsSelectedPreset => SelectedPreset != null;
         public bool IsNewPreset => SelectedPreset?.IsNewPreset ?? false;
 
         public bool IsRunning => _timerManager.IsRunning;
         public bool IsPaused => _timerManager.IsPaused;
-
-        public bool IsPlayable => _selectedPreset?.TimePointVmCollection.Count > 0;
 
         public bool IsInfiniteLoop
         {
@@ -101,6 +101,9 @@ namespace CycleBell.ViewModels
                 }
             }
         }
+        
+        public bool IsPlayable => _selectedPreset?.TimePointVmCollection.Count > 0;
+        public bool? PlayChecked { get; set; }
 
         public bool IsStopped
         {
@@ -146,7 +149,7 @@ namespace CycleBell.ViewModels
         public ICommand RingCommand => new ActionCommand(Ring);
             #endregion media
 
-        public ICommand MediaTerminalCommand = new ActionCommand (MediaTerminal);
+        public ICommand MediaTerminalCommand => new ActionCommand (MediaTerminal);
 
         #endregion Commands
 
@@ -191,6 +194,31 @@ namespace CycleBell.ViewModels
 
                 OnPropertyChanged(nameof(IsNewPreset));
             }
+        }
+
+        // MediaTermonal
+        private void MediaTerminal (object o)
+        {
+            if (PlayChecked == true) {
+
+                // if playing
+                _timerManager.Pause();
+                PlayChecked = null;
+            }
+            else if (PlayChecked == null) {
+
+                // if paused
+                _timerManager.Resume();
+                PlayChecked = true;
+            }
+            else {
+
+                // if stopped
+                _timerManager.PlayAsync (_selectedPreset.Preset);
+                PlayChecked = true;
+            }
+
+            OnPropertyChanged (nameof(PlayChecked));
         }
 
         //  Save Preset

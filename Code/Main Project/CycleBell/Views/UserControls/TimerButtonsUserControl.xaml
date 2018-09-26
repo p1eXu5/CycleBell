@@ -38,8 +38,8 @@
                       Width="48" Height="38"
                       HorizontalAlignment="Center"
                       local:AttachedPropertyFactory.BorderColor="#33553300"
-
                       IsEnabled="{Binding IsPlayable}"
+                      IsChecked="{Binding PlayChecked, Mode=OneWay}"
                       Command="{Binding MediaTerminalCommand}"
                       >
             <Grid>
