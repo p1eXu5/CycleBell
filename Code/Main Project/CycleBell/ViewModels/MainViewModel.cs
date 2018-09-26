@@ -103,11 +103,11 @@ namespace CycleBell.ViewModels
         }
         
         public bool IsPlayable => _selectedPreset?.TimePointVmCollection.Count > 0;
-        public bool? PlayChecked { get; set; }
+        public bool? PlayChecked { get; set; } = false;
 
         public bool IsStopped
         {
-            get => SelectedPreset?.IsRunning == false;
+            get => IsRunning == false && IsPlayable;
             set {
                 if (IsRunning) {
 
@@ -158,6 +158,7 @@ namespace CycleBell.ViewModels
         private void RiseIsPlayableChanged (object sender, NotifyCollectionChangedEventArgs e)
         {
             OnPropertyChanged (nameof(IsPlayable));
+            OnPropertyChanged (nameof(IsStopped));
         }
 
         private void PresetCollectionEventHandler(object s, NotifyCollectionChangedEventArgs e)
@@ -218,7 +219,7 @@ namespace CycleBell.ViewModels
                 PlayChecked = true;
             }
 
-            OnPropertyChanged (nameof(PlayChecked));
+            RiseIsPlayableChanged (null, null);
         }
 
         //  Save Preset
