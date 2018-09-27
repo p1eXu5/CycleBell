@@ -1,4 +1,5 @@
 ﻿using System;
+using CycleBell.Annotations;
 using CycleBell.Base;
 using CycleBellLibrary.Models;
 
@@ -59,6 +60,21 @@ namespace CycleBell.ViewModels.TimePointViewModels
                 _IsEnabled = value;
                 OnPropertyChanged();
             }
+        }
+
+        #endregion
+
+        #region Operators
+
+        public static bool operator == (TimePointViewModelBase baseTpvm, TimePoint timePoint)
+        {
+            // TODO: operator == (TimePointViewModelBase baseTpvm, TimePoint timePoint)
+            return false;
+        }
+
+        public static bool operator != (TimePointViewModelBase baseTpvm, TimePoint timePoint)
+        {
+            return !(baseTpvm == timePoint);
         }
 
         #endregion

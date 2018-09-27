@@ -358,7 +358,7 @@ namespace CycleBell.ViewModels
                 NextTimePointName = _mainViewModel.StartTimeName;
             }
             else {
-                TimePointVmCollection.Diactivate().Activate(tpvm => (tpvm is TimePointViewModel) && (tpvm.TimePoint == e.PrevTimePoint));
+                TimePointVmCollection.Diactivate().Activate(tpvmb => tpvmb == e.PrevTimePoint);
             }
 
             TimeLeftTo = e.LastTime;
