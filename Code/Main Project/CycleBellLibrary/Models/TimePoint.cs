@@ -40,7 +40,7 @@ namespace CycleBellLibrary.Models
         static TimePoint()
         {
             DefaultTime = InitialDefaultTime;
-            DefaultTimePointNameFunc = (tp) => $"TimePoint {tp.Id}";
+            //DefaultTimePointNameFunc = (tp) => $"TimePoint {tp.Id}";
 
             // Да хуй его, прикольно было попробовать
             Type type = MaxId.GetType();
@@ -92,7 +92,7 @@ namespace CycleBellLibrary.Models
             LoopNumber = loopNumber == Byte.MaxValue ? (byte)(Byte.MaxValue - 1) : loopNumber;
 
             if (String.IsNullOrWhiteSpace (name)) {
-                Name = DefaultTimePointNameFunc?.Invoke (this);
+                Name = GetDefaultTimePointName();
             }
             else {
                 Name = name;
@@ -150,7 +150,7 @@ namespace CycleBellLibrary.Models
 
         // Instance:_______________________________________________________________________
 
-        public string GetDefaultTimePointName() { return DefaultTimePointNameFunc?.Invoke(this); }
+        public string GetDefaultTimePointName() { return DefaultTimePointNameFunc?.Invoke(this) ?? ""; }
 
         /// <summary>
         /// Уникальный порядковый номер временной точки
@@ -319,9 +319,32 @@ namespace CycleBellLibrary.Models
             return tp;
         }
 
-        public override string ToString() => $"{Name}: {Time:h\\:mm\\:ss} ({TimePointType}) (l#: {LoopNumber})"; 
+        public override string ToString() => $"{Name}: {Time:h\\:mm\\:ss} ({TimePointType}) (l#: {LoopNumber})";
 
         #endregion
+
+        #region Operators
+
+        public static bool operator == (TimePoint tp1, TimePoint tp2)
+        {
+            var res = (String.Equals(tp1.Name, tp2.Name))
+                && (tp1.Time == tp2.Time)
+                && (tp1.BaseTime == tp2.BaseTime)
+                && (tp1.TimePointType == tp2.TimePointType)
+                && (tp1.LoopNumber == tp2.LoopNumber)
+                && (Object.Equals(tp1.Tag, tp2.Tag));
+
+            return res;
+        }
+
+        public static bool operator != (TimePoint tp1, TimePoint tp2)
+        {
+            return !(tp1 == tp2);
+        }
+
+        #endregion
+
+        #region INotifyCollectionChanged
 
         public event NotifyCollectionChangedEventHandler CollectionChanged;
 
@@ -329,5 +352,7 @@ namespace CycleBellLibrary.Models
         {
             CollectionChanged?.Invoke (this, new NotifyCollectionChangedEventArgs (action, new List<byte> { newValue }, new List<byte> { oldValue }) );
         }
+
+        #endregion
     }
 }

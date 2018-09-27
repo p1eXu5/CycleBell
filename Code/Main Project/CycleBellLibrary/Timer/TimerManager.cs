@@ -27,7 +27,8 @@ namespace CycleBellLibrary.Timer
     /// </summary>
     public class TimerManager : ITimerManager
     {
-        public const string RestartString = "Restart";
+        public const string RestartTimePointString = "Restart";
+        public const string StartTimeTimePointString = "Restart";
 
         #region Fields
 
@@ -103,6 +104,7 @@ namespace CycleBellLibrary.Timer
 
         public bool IsRunning => _isRunning;
         public bool IsPaused => _isPaused;
+        public string StartTimeTimePointName => TimerManager.StartTimeTimePointString;
 
         #endregion
 

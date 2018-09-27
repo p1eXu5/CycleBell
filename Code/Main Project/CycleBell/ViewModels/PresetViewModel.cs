@@ -53,6 +53,10 @@ namespace CycleBell.ViewModels
         private readonly HashSet<byte> _settedLoopNumbers;
 
         private StringBuilder _name;
+
+        private string _nextTimePointName;
+        private TimeSpan _timeLeftTo;
+
         #endregion
 
         #region Constructor
@@ -173,6 +177,24 @@ namespace CycleBell.ViewModels
 
         public bool IsNewPreset => _preset.PresetName == Preset.PresetName;
         public bool IsNoTimePoints => TimePointVmCollection.Count < 1;
+
+        public string NextTimePointName
+        {
+            get => _nextTimePointName;
+            set {
+                _nextTimePointName = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public TimeSpan TimeLeftTo
+        {
+            get => _timeLeftTo;
+            set {
+                _timeLeftTo = value;
+                OnPropertyChanged();
+            }
+        }
 
         #endregion
 
@@ -306,7 +328,6 @@ namespace CycleBell.ViewModels
 
             ResetAddingTimePoint();
         }
-
         private bool CanAddTimePoint (object o)
         {
             var res = _addingTimePoint.Time == TimeSpan.Zero && _addingTimePoint.TimePointType == TimePointType.Absolute 
@@ -322,20 +343,33 @@ namespace CycleBell.ViewModels
             return res;
         }
 
-
+        // IMainViewModel IsRunning property changed event handler
+        internal void OnIsRunningChangedHandler(object s, PropertyChangedEventArgs e)
+        {
+            OnPropertyChanged(nameof(IsRunning));
+        }
 
         // TimerManager handlers:
-        internal void OnSecondPassed(object s, TimerEventArgs e)
+        internal void OnTimePointChangedEventHandler(object s, TimerEventArgs e)
         {
-            throw new NotImplementedException();
+            // if prev TimePoint it is launch TimePoint
+            if (e.PrevTimePoint.Time < TimeSpan.Zero) {
+
+                NextTimePointName = _mainViewModel.StartTimeName;
+            }
+            else {
+                TimePointVmCollection.Diactivate().Activate(tpvm => (tpvm is TimePointViewModel) && (tpvm.TimePoint == e.PrevTimePoint));
+            }
+
+            TimeLeftTo = e.LastTime;
         }
 
-        internal void OnTimePointChanged(object s, TimerEventArgs e)
+        internal void OnSecondPassedEventHandler(object s, TimerEventArgs e)
         {
-            throw new NotImplementedException();
+            TimeLeftTo = e.LastTime;
         }
 
-        internal void OnStop(object s, EventArgs e)
+        internal void OnStopEventHandler(object s, EventArgs e)
         {
             throw new NotImplementedException();
         }
@@ -372,5 +406,36 @@ namespace CycleBell.ViewModels
         }
         
         #endregion
+    }
+
+    /// <summary>
+    /// Extansion class for ReadOnlyObservableCollection&lt;TimePointViewModel&gt;
+    /// </summary>
+    internal static class TimePointViewModelExtansion
+    {
+        internal static ReadOnlyObservableCollection<TimePointViewModelBase> Diactivate(this ReadOnlyObservableCollection<TimePointViewModelBase> timePointViewModels)
+        {
+            if (timePointViewModels == null)
+                return null;
+
+            var tpvmArray = timePointViewModels.Where(t => (t is TimePointViewModel model) && model.Active).ToArray();
+
+            foreach (var timePointViewModel in tpvmArray) {
+
+                ((TimePointViewModel)timePointViewModel).Active = false;
+            }
+
+            return timePointViewModels;
+        }
+
+        internal static void Activate(this ReadOnlyObservableCollection<TimePointViewModelBase> timePointViewModels, Func<TimePointViewModelBase,bool> predicate)
+        {
+            var tpvm = timePointViewModels?.Where(predicate).FirstOrDefault();
+
+            if (tpvm == null)
+                return;
+
+            ((TimePointViewModel)tpvm).Active = true;
+        }
     }
 }

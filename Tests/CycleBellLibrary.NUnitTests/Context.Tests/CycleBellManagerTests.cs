@@ -101,6 +101,8 @@ namespace CycleBellLibrary.NUnitTests.Context.Tests
             public ReadOnlyObservableCollection<Preset> Presets { get; }
             public bool IsRunning { get; }
             public bool IsPaused { get; }
+            public string StartTimeTimePointName { get; }
+
             public void AddPreset (Preset preset)
             {
                 throw new NotImplementedException();

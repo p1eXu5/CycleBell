@@ -17,4 +17,27 @@
         <Setter Property="RenderTransformOrigin" Value=".5,.5" />
     </Style>
 
+    <Style x:Key="style_TimerBlock" TargetType="TextBlock">
+        <Setter Property="Foreground" Value="{StaticResource brush_Foreground}" />
+        <Setter Property="Padding" Value="0" />
+        <Setter Property="FontSize" Value="18" />
+        <Setter Property="FontStyle" Value="Normal" />
+        <Setter Property="HorizontalAlignment" Value="Center" />
+        <Setter Property="VerticalAlignment" Value="Bottom" />
+        <Setter Property="RenderTransform">
+            <Setter.Value>
+                <TranslateTransform Y="-.7"></TranslateTransform>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style x:Key="style_UnderTimer" TargetType="TextBlock">
+        <Setter Property="Foreground" Value="{StaticResource brush_Foreground}" />
+        <Setter Property="Padding" Value="0" />
+        <Setter Property="FontSize" Value="10" />
+        <Setter Property="FontStyle" Value="Normal" />
+        <Setter Property="HorizontalAlignment" Value="Center" />
+        <Setter Property="VerticalAlignment" Value="Bottom" />
+    </Style>
+
 </ResourceDictionary>

@@ -1,4 +1,9 @@
-﻿using System;
+﻿/*
+ *
+ * LastTime - duration of a PrevTimePoint
+ */
+
+using System;
 using CycleBellLibrary.Models;
 
 namespace CycleBellLibrary.Timer

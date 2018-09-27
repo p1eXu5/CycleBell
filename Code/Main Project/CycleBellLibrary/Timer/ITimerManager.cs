@@ -13,6 +13,7 @@ namespace CycleBellLibrary.Timer
 
         bool IsRunning { get; }
         bool IsPaused { get; }
+        string StartTimeTimePointName { get; }
 
         /// <summary>
         /// Pause timer loop

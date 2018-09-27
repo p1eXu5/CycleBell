@@ -49,7 +49,7 @@ namespace CycleBell.ViewModels
             var presetManager = cycleBellManager.PresetCollectionManager;
             Presets = new ObservableCollection<PresetViewModel>(presetManager.Presets.Select(p => new PresetViewModel(p, this)));
 
-            ((INotifyCollectionChanged) (presetManager.Presets)).CollectionChanged += PresetCollectionEventHandler;
+            ((INotifyCollectionChanged) (presetManager.Presets)).CollectionChanged += OnPresetCollectionChangedEventHandler;
 
             _timerManager = cycleBellManager.TimerManager;
 
@@ -88,6 +88,7 @@ namespace CycleBell.ViewModels
         public bool IsNewPreset => SelectedPreset?.IsNewPreset ?? false;
 
         public bool IsRunning => _timerManager.IsRunning;
+        public string StartTimeName => _timerManager.StartTimeTimePointName;
         public bool IsPaused => _timerManager.IsPaused;
 
         public bool IsInfiniteLoop
@@ -161,7 +162,7 @@ namespace CycleBell.ViewModels
             OnPropertyChanged (nameof(IsStopped));
         }
 
-        private void PresetCollectionEventHandler(object s, NotifyCollectionChangedEventArgs e)
+        private void OnPresetCollectionChangedEventHandler(object s, NotifyCollectionChangedEventArgs e)
         {
             if (e?.NewItems?[0] != null && e.OldItems?[0] == null) {
 
@@ -170,13 +171,24 @@ namespace CycleBell.ViewModels
 
                 SelectedPreset.PropertyChanged += OnSelectedPresetPropertyChangedHandler;
                 ((INotifyCollectionChanged) SelectedPreset.TimePointVmCollection).CollectionChanged += RiseIsPlayableChanged;
+                ((INotifyPropertyChanged) this).PropertyChanged += SelectedPreset.OnIsRunningChangedHandler;
+
+                _timerManager.ChangeTimePointEvent += SelectedPreset.OnTimePointChangedEventHandler;
+                _timerManager.TimerStopEvent += SelectedPreset.OnStopEventHandler;
+                _timerManager.TimerSecondPassedEvent += SelectedPreset.OnSecondPassedEventHandler;
             }
 
             if (e?.OldItems?[0] != null && e?.NewItems?[0] == null) {
 
                 var deletingPresetVm = Presets.First(pvm => pvm.Preset.Equals((Preset)e.OldItems[0]));
-
+                
                 if (deletingPresetVm == SelectedPreset) {
+
+                    _timerManager.TimerSecondPassedEvent -= SelectedPreset.OnSecondPassedEventHandler;
+                    _timerManager.TimerStopEvent -= SelectedPreset.OnStopEventHandler;
+                    _timerManager.ChangeTimePointEvent -= SelectedPreset.OnTimePointChangedEventHandler;
+
+                    ((INotifyPropertyChanged)this).PropertyChanged -= SelectedPreset.OnIsRunningChangedHandler;
                     ((INotifyCollectionChanged) SelectedPreset.TimePointVmCollection).CollectionChanged += RiseIsPlayableChanged;
                     SelectedPreset.PropertyChanged -= OnSelectedPresetPropertyChangedHandler;
                 }
@@ -322,6 +334,7 @@ namespace CycleBell.ViewModels
         private void Play (object o)
         {
             _timerManager.PlayAsync (SelectedPreset.Preset);
+            OnPropertyChanged(nameof(IsRunning));
         }
         private bool CanPlay (object o)
         {
@@ -361,7 +374,6 @@ namespace CycleBell.ViewModels
 
         // RingCommand
         private void Ring (object o) => DefaultSoundPlayer.Play();
-
 
 
         #endregion Methods

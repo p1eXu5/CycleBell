@@ -39,6 +39,8 @@ namespace CycleBellLibrary.NUnitTests.Models.Tests
 
         #endregion ctor
 
+        #region GetAbsoluteTime
+
         [Test]
         public void GetAbsoluteTime_RelativeTimePointBaseTimeNotSet_Throws()
         {
@@ -75,6 +77,10 @@ namespace CycleBellLibrary.NUnitTests.Models.Tests
             Assert.AreEqual(TimeSpan.Parse(expectedAbsoluteTime), actualAbsoluteTime);
         }
 
+        #endregion
+
+        #region GetRelativeTime
+
         [Test]
         public void GetRelativeTime_AbsoluteTimePointBaseTimeNotSet_Throws()
         {
@@ -110,6 +116,8 @@ namespace CycleBellLibrary.NUnitTests.Models.Tests
 
             Assert.AreEqual(TimeSpan.Parse(expectedRelativeTime), actualRelativeTime);
         }
+
+        #endregion
 
         [Test]
         public void ChangeId_ByDefault_ChangesIds()
@@ -171,7 +179,15 @@ namespace CycleBellLibrary.NUnitTests.Models.Tests
             }
         }
 
+        [Test]
+        public void Equality_EqualTimePoints_ReturnsTrue()
+        {
+            var tp1 = TimePoint.DefaultTimePoint;
+            var tp2 = TimePoint.DefaultTimePoint;
 
+            Assert.AreNotSame(tp1, tp2);
+            Assert.IsTrue(tp1 == tp2);
+        }
 
         #region Factory
 

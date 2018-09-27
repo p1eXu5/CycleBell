@@ -30,23 +30,79 @@
             <RowDefinition Height="100"/>
         </Grid.RowDefinitions>
 
-        <!-- start time -->
-        <StackPanel Grid.Row="0"
-                    Margin="0,48,0,38"
-                    Orientation="Vertical"
-                    HorizontalAlignment="Center"
-                    VerticalAlignment="Center" 
-                    TextElement.FontFamily="{StaticResource font_SuiGeneris}" >
+        <!-- start time & upcoming time point -->
+        <Grid Grid.Row="0" TextElement.FontFamily="{StaticResource font_SuiGeneris}" Margin="0,48,0,38">
+            
+            <!-- start time -->
+            <StackPanel x:Name="sp_StartTime"
+                        Opacity="1.0"
+                        Orientation="Vertical"
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Center" 
+                        >
+                <controls:TimerBox x:Name="timer_Box" Style="{StaticResource style_TimerBox}"
+                                   Text="{Binding StartTime, StringFormat={}{0:%h}:{0:%mm}, Mode=OneWay}"
+                                   Foreground="{Binding Foreground, RelativeSource={RelativeSource FindAncestor, AncestorType=Control}}"
+                                   IsEnabled="{Binding IsEnabled, RelativeSource={RelativeSource FindAncestor, AncestorType=Control}}"
+                                   />
+                <TextBlock Text="start time" Style="{StaticResource style_UnderTimer}"
+                           Height="{Binding ElementName=timer_Box, Path=ActualHeight}"
+                           />
+            </StackPanel>
+            
+            <!-- upcoming time point -->
+            <StackPanel x:Name="sp_Upcoming"
+                        Opacity="0.0"
+                        Orientation="Vertical"
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Center" 
+                        TextElement.FontFamily="{StaticResource font_SuiGeneris}"
+                        ZIndex="-1"
+                        >
+                <TextBlock x:Name="timer_Block" Text="-0:00:22" 
+                           Style="{StaticResource style_TimerBlock}" 
+                           />
+                <TextBlock Style="{StaticResource style_UnderTimer}" 
+                           Text="{Binding TimeLeftTo}" 
+                           Height="{Binding ElementName=timer_Block, Path=ActualHeight}"
+                           >
+                    <Run>upcoming:</Run> <Run Text="{Binding NextTimePointName}"></Run>
+                </TextBlock>
+            </StackPanel>
 
-            <controls:TimerBox Style="{StaticResource style_TimerBox}"
-                               Text="{Binding StartTime, StringFormat={}{0:%h}:{0:%mm}, Mode=OneWay}"
-                               Foreground="{Binding Foreground, RelativeSource={RelativeSource FindAncestor, AncestorType=Control}}"
-                               IsEnabled="{Binding IsEnabled, RelativeSource={RelativeSource FindAncestor, AncestorType=Control}}"
-                               />
-            <Label Content="start time"
-                   Foreground="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=Control}, Path=Foreground}"
-                   HorizontalAlignment="Center"/>
-        </StackPanel>
+            <Grid.Style>
+                <Style>
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding IsRunning}" Value="True">
+                            <DataTrigger.EnterActions>
+                                <BeginStoryboard>
+                                    <Storyboard>
+                                        <DoubleAnimation Storyboard.TargetName="sp_StartTime"
+                                                         Storyboard.TargetProperty="Opacity"
+                                                         To="0.0" Duration="0:0:.2"/>
+                                        <DoubleAnimation Storyboard.TargetName="sp_Upcoming"
+                                                         Storyboard.TargetProperty="Opacity"
+                                                         To="1.0" Duration="0:0:.2"/>
+                                    </Storyboard>
+                                </BeginStoryboard>
+                            </DataTrigger.EnterActions>
+                            <DataTrigger.ExitActions>
+                                <BeginStoryboard>
+                                    <Storyboard>
+                                        <DoubleAnimation Storyboard.TargetName="sp_StartTime"
+                                                         Storyboard.TargetProperty="Opacity"
+                                                         To="1.0" Duration="0:0:.2"/>
+                                        <DoubleAnimation Storyboard.TargetName="sp_Upcoming"
+                                                         Storyboard.TargetProperty="Opacity"
+                                                         To="0.0" Duration="0:0:.2"/>
+                                    </Storyboard>
+                                </BeginStoryboard>
+                            </DataTrigger.ExitActions>
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </Grid.Style>
+        </Grid>
 
         <!-- points list -->
         <Grid Grid.Row="1">

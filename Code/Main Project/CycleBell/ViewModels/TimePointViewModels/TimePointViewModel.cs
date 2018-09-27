@@ -1,7 +1,11 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.IO;
+using System.Linq;
 using System.Media;
 using System.Windows.Input;
+using System.Windows.Navigation;
 using CycleBell.Base;
 using CycleBellLibrary.Models;
 using Microsoft.Win32;
@@ -22,6 +26,8 @@ namespace CycleBell.ViewModels.TimePointViewModels
 
         protected SoundPlayer _SoundPlayer;
         protected bool _MuteFlag = false;
+
+        private bool _active;
 
         #endregion
 
@@ -116,6 +122,15 @@ namespace CycleBell.ViewModels.TimePointViewModels
         }
 
         public string SoundLocation => (String)TimePoint.Tag;
+
+        public bool Active
+        {
+            get => _active;
+            set {
+                _active = value;
+                OnPropertyChanged();
+            }
+        }
 
         #endregion
 
