@@ -58,6 +58,12 @@ namespace CycleBell.NUnitTests.ViewModels
             _mockTimerManager.Verify(tm => tm.PlayAsync (It.IsAny<Preset>()));
         }
 
+        [Test]
+        public void PlayCommand_WhenExecuted_RaiseOnIsRunningChanged()
+        {
+
+        }
+
         #endregion
 
         // PouseCommand
