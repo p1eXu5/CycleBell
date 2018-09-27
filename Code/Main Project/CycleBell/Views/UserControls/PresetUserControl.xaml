@@ -48,6 +48,31 @@
                 <TextBlock Text="start time" Style="{StaticResource style_UnderTimer}"
                            Height="{Binding ElementName=timer_Box, Path=ActualHeight}"
                            />
+
+                <StackPanel.Style>
+                    <Style>
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding IsRunning}" Value="True">
+                                <DataTrigger.EnterActions>
+                                    <BeginStoryboard>
+                                        <Storyboard>
+                                            <DoubleAnimation Storyboard.TargetProperty="Opacity"
+                                                             To="0.0" Duration="0:0:.2"/>
+                                        </Storyboard>
+                                    </BeginStoryboard>
+                                </DataTrigger.EnterActions>
+                                <DataTrigger.ExitActions>
+                                    <BeginStoryboard>
+                                        <Storyboard>
+                                            <DoubleAnimation Storyboard.TargetProperty="Opacity"
+                                                             To="1.0" Duration="0:0:.2"/>
+                                        </Storyboard>
+                                    </BeginStoryboard>
+                                </DataTrigger.ExitActions>
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </StackPanel.Style>
             </StackPanel>
             
             <!-- upcoming time point -->
@@ -68,40 +93,32 @@
                            >
                     <Run>upcoming:</Run> <Run Text="{Binding NextTimePointName}"></Run>
                 </TextBlock>
-            </StackPanel>
 
-            <Grid.Style>
-                <Style>
-                    <Style.Triggers>
-                        <DataTrigger Binding="{Binding IsRunning}" Value="True">
-                            <DataTrigger.EnterActions>
-                                <BeginStoryboard>
-                                    <Storyboard>
-                                        <DoubleAnimation Storyboard.TargetName="sp_StartTime"
-                                                         Storyboard.TargetProperty="Opacity"
-                                                         To="0.0" Duration="0:0:.2"/>
-                                        <DoubleAnimation Storyboard.TargetName="sp_Upcoming"
-                                                         Storyboard.TargetProperty="Opacity"
-                                                         To="1.0" Duration="0:0:.2"/>
-                                    </Storyboard>
-                                </BeginStoryboard>
-                            </DataTrigger.EnterActions>
-                            <DataTrigger.ExitActions>
-                                <BeginStoryboard>
-                                    <Storyboard>
-                                        <DoubleAnimation Storyboard.TargetName="sp_StartTime"
-                                                         Storyboard.TargetProperty="Opacity"
-                                                         To="1.0" Duration="0:0:.2"/>
-                                        <DoubleAnimation Storyboard.TargetName="sp_Upcoming"
-                                                         Storyboard.TargetProperty="Opacity"
-                                                         To="0.0" Duration="0:0:.2"/>
-                                    </Storyboard>
-                                </BeginStoryboard>
-                            </DataTrigger.ExitActions>
-                        </DataTrigger>
-                    </Style.Triggers>
-                </Style>
-            </Grid.Style>
+                <StackPanel.Style>
+                    <Style>
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding IsRunning}" Value="True">
+                                <DataTrigger.EnterActions>
+                                    <BeginStoryboard>
+                                        <Storyboard>
+                                            <DoubleAnimation Storyboard.TargetProperty="Opacity"
+                                                             To="1.0" Duration="0:0:.2"/>
+                                        </Storyboard>
+                                    </BeginStoryboard>
+                                </DataTrigger.EnterActions>
+                                <DataTrigger.ExitActions>
+                                    <BeginStoryboard>
+                                        <Storyboard>
+                                            <DoubleAnimation Storyboard.TargetProperty="Opacity"
+                                                             To="0.0" Duration="0:0:.2"/>
+                                        </Storyboard>
+                                    </BeginStoryboard>
+                                </DataTrigger.ExitActions>
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </StackPanel.Style>
+            </StackPanel>
         </Grid>
 
         <!-- points list -->

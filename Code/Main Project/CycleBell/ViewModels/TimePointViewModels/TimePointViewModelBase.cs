@@ -68,7 +68,11 @@ namespace CycleBell.ViewModels.TimePointViewModels
 
         public static bool operator == (TimePointViewModelBase baseTpvm, TimePoint timePoint)
         {
-            // TODO: operator == (TimePointViewModelBase baseTpvm, TimePoint timePoint)
+            if (baseTpvm is TimePointViewModel tpvm) {
+
+                return tpvm.TimePoint == timePoint;
+            }
+
             return false;
         }
 

@@ -189,6 +189,19 @@ namespace CycleBellLibrary.NUnitTests.Models.Tests
             Assert.IsTrue(tp1 == tp2);
         }
 
+        [Test]
+        public void Equality_NotEqualTimePoints_ReturnsFalse()
+        {
+            TimePoint.DefaultTimePointType = TimePointType.Relative;
+
+            var tp1 = TimePoint.DefaultTimePoint;
+            var tp2 = TimePoint.DefaultTimePoint;
+            tp2.TimePointType = TimePointType.Absolute;
+
+            Assert.AreNotSame(tp1, tp2);
+            Assert.IsTrue(tp1 != tp2);
+        }
+
         #region Factory
 
         private TimePoint GetRelativeTimePoint()

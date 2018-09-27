@@ -409,9 +409,9 @@ namespace CycleBell.ViewModels
     }
 
     /// <summary>
-    /// Extansion class for ReadOnlyObservableCollection&lt;TimePointViewModel&gt;
+    /// Extension class for ReadOnlyObservableCollection&lt;TimePointViewModel&gt;
     /// </summary>
-    internal static class TimePointViewModelExtansion
+    internal static class TimePointViewModelExtension
     {
         internal static ReadOnlyObservableCollection<TimePointViewModelBase> Diactivate(this ReadOnlyObservableCollection<TimePointViewModelBase> timePointViewModels)
         {
