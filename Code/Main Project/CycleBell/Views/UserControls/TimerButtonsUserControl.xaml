@@ -70,15 +70,15 @@
         </ToggleButton>
 
         <!-- stop -->
-        <ToggleButton Grid.Column="2"
+        <Button Grid.Column="2"
                       Width="48" Height="38"
                       HorizontalAlignment="Center"
                       local:AttachedPropertyFactory.BorderColor="#33330033"
                       IsEnabled="{Binding IsRunning}"
-                      IsChecked="{Binding IsStopped}"
+                      Command="{Binding StopCommand}"
                       >
             <Path Data="{StaticResource gmtry_Stop}" Margin="3"/>
-        </ToggleButton>
+        </Button>
 
         <!-- bell -->
         <ToggleButton Grid.Column="3"

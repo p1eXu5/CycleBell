@@ -52,7 +52,7 @@
                 <StackPanel.Style>
                     <Style>
                         <Style.Triggers>
-                            <DataTrigger Binding="{Binding IsRunning}" Value="True">
+                            <DataTrigger Binding="{Binding DataContext.IsRunning, RelativeSource={RelativeSource FindAncestor, AncestorType=Window}}" Value="True">
                                 <DataTrigger.EnterActions>
                                     <BeginStoryboard>
                                         <Storyboard>
@@ -97,7 +97,7 @@
                 <StackPanel.Style>
                     <Style>
                         <Style.Triggers>
-                            <DataTrigger Binding="{Binding IsRunning}" Value="True">
+                            <DataTrigger Binding="{Binding DataContext.IsRunning, RelativeSource={RelativeSource FindAncestor, AncestorType=Window}}" Value="True">
                                 <DataTrigger.EnterActions>
                                     <BeginStoryboard>
                                         <Storyboard>

@@ -54,8 +54,6 @@ namespace CycleBell.ViewModels
             _timerManager = cycleBellManager.TimerManager;
 
             AppDomain.CurrentDomain.ProcessExit += (s, e) => SavePresetsBeforeExit (null);
-
-
         }
 
         #endregion Constructor
@@ -104,7 +102,24 @@ namespace CycleBell.ViewModels
         }
         
         public bool IsPlayable => _selectedPreset?.TimePointVmCollection.Count > 0;
-        public bool? PlayChecked { get; set; } = false;
+
+        public bool? PlayChecked
+        {
+            get {
+                if (IsPaused) {
+
+                    return null;
+                }
+                else if (IsRunning) {
+
+                    return true;
+                }
+                else {
+
+                    return false;
+                }
+            }
+        }
 
         public bool IsStopped
         {
@@ -236,22 +251,22 @@ namespace CycleBell.ViewModels
 
                 // if playing
                 _timerManager.Pause();
-                PlayChecked = null;
+                OnPropertyChanged(nameof(IsPaused));
             }
             else if (PlayChecked == null) {
 
                 // if paused
                 _timerManager.Resume();
-                PlayChecked = true;
+                OnPropertyChanged(nameof(IsPaused));
             }
             else {
 
-                // if stopped
+                // if not running
                 _timerManager.PlayAsync (_selectedPreset.Preset);
-                PlayChecked = true;
+                OnPropertyChanged(nameof(IsRunning));
             }
 
-            RiseIsPlayableChanged (null, null);
+            OnPropertyChanged(nameof(PlayChecked));
         }
 
         //  Save Preset
@@ -366,6 +381,7 @@ namespace CycleBell.ViewModels
         private void Stop (object o)
         {
             _timerManager.Stop();
+            OnPropertyChanged(nameof(IsRunning));
         }
         private bool CanStop (object o)
         {
@@ -462,3 +478,4 @@ namespace CycleBell.ViewModels
 
     #endregion Converters
 }
+

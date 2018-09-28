@@ -51,6 +51,7 @@ namespace CycleBellLibrary.Timer
         private bool _isPaused;
         private TimeSpan _deltaTime;
         private byte _isInfiniteLoop;
+        private bool _isRunAsync;
 
         /// <summary>
         /// Previous queue element
@@ -174,18 +175,19 @@ namespace CycleBellLibrary.Timer
             _timer?.Dispose();
 
             _queue = null;
-
-            if (_isRunning)
-                _isRunning = false;
-
-            if (_isPaused)
-                _isPaused = false;
+            if (!_isRunning) _isRunning = false;
+            if (!_isRunAsync) _isRunAsync = false;
+            if (!_isPaused) _isPaused = false;
 
             OnTimerStop();
         }
 
         public async void PlayAsync(Preset preset)
         {
+            if (IsRunning)
+                return;
+
+            _isRunAsync = _isRunning = true;
             await Task.Run(() => Play(preset));
         }
 
@@ -195,7 +197,7 @@ namespace CycleBellLibrary.Timer
         /// <param name="preset">Запускаемый пресет</param>
         public void Play(Preset preset)
         {
-            if (IsRunning)
+            if (IsRunning && !_isRunAsync)
                 return;
 
             _queue = GetTimerQueue(preset);
