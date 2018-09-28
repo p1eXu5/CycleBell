@@ -52,7 +52,7 @@ namespace CycleBellLibrary.Context
             }
             else {
                 // TODO if existing EmptyPreset does not equal Preset.EmptyPreset than throw, else - do nothing
-                if (existEmptyPreset.StartTime != Preset.DefaultStartTime || existEmptyPreset.TimePoints.Count > 0) {
+                if (existEmptyPreset.StartTime != Preset.DefaultStartTime || existEmptyPreset.TimePointCollection.Count > 0) {
                     OnCantCreateNewPreset();
                 }
             }

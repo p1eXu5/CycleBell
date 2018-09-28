@@ -37,11 +37,14 @@
             <StackPanel Grid.Column="1" Grid.Row="1" Grid.RowSpan="3"
                         Orientation="Horizontal" 
                         Height="13" Margin="5,0" TextElement.FontSize="8" TextElement.FontStyle="Normal">
-                <Label Foreground="Black" VerticalContentAlignment="Center" Content="loop 1:" Padding="0"/>
-                <TextBox Text="5" Padding="0" VerticalContentAlignment="Bottom"
+                <TextBlock Foreground="Black">
+                    <Run Text="loop #"/><Run Text="{Binding LoopNumber}"/>
+                </TextBlock>
+                <TextBox Padding="0" VerticalContentAlignment="Bottom"
                          Margin="5,0,0,0"
                          BorderThickness="0,0,0,1"
-                         Control.BorderBrush="Black"/>
+                         Control.BorderBrush="Black"
+                         Text="{Binding LoopCount}"/>
             </StackPanel>
 
             <Polyline Grid.Column="2" Grid.ColumnSpan="3" Grid.Row="0" Grid.RowSpan="4"

@@ -19,7 +19,7 @@ namespace CycleBellLibrary.Repository
 
         private TimeSpan _startTime;
         private ObservableCollection<TimePoint> _timePoints;
-        private ReadOnlyObservableCollection<TimePoint> _readOnlyTimePointCollection;
+        private ReadOnlyObservableCollection<TimePoint> _readOnlyTimePointCollectionCollection;
         private byte _isInfiniteLoop;
 
         #endregion
@@ -73,7 +73,7 @@ namespace CycleBellLibrary.Repository
             TimerLoops = new TimerLoopSortedDictionary();
             _timePoints = new ObservableCollection<TimePoint>();
 
-            _readOnlyTimePointCollection = new ReadOnlyObservableCollection<TimePoint> (_timePoints);
+            _readOnlyTimePointCollectionCollection = new ReadOnlyObservableCollection<TimePoint> (_timePoints);
 
             _startTime = startTime;
         }
@@ -128,7 +128,7 @@ namespace CycleBellLibrary.Repository
         /// </summary>
         public bool IsInfiniteLoop => _isInfiniteLoop != 0;
 
-        public ReadOnlyObservableCollection<TimePoint> TimePoints => _readOnlyTimePointCollection;
+        public ReadOnlyObservableCollection<TimePoint> TimePointCollection => _readOnlyTimePointCollectionCollection;
 
         /// <summary>
         /// # cycle - n times
@@ -144,22 +144,24 @@ namespace CycleBellLibrary.Repository
         public virtual IEnumerable<TimePoint> GetOrderedTimePoints() => _timePoints.OrderBy (tp => tp.LoopNumber).ThenBy (tp => tp.Id);
 
         /// <summary>
-        /// Add NextTimePoint
+        /// Add NextTimePoint.
+        /// If added TimePoint Id is less than max Id of contained TimePoints, new TimePoint will be created and returned.
         /// </summary>
         /// <param name="timePoint"></param>
+        /// <returns>Added TimePoint</returns>
         /// <exception cref="ArgumentNullException">when timePoint is null</exception>
-        public void AddTimePoint(TimePoint timePoint)
+        public TimePoint AddTimePoint(TimePoint timePoint)
         {
             if (timePoint == null)
                 throw new ArgumentNullException(nameof(timePoint), "timePoint can't be null");
          
-            if (TimePoints.Contains (timePoint))
+            if (TimePointCollection.Contains (timePoint))
                 throw new ArgumentException("timePoint already exists", nameof(timePoint));
 
             PreAddTimePoint(timePoint);
 
-            if (TimePoints.Count > 0)
-                PrepareTimePointId (timePoint);
+            if (TimePointCollection.Count > 0)
+                PrepareTimePointId (ref timePoint);
 
             _timePoints.Add(timePoint);
 
@@ -169,6 +171,8 @@ namespace CycleBellLibrary.Repository
 
             if (AutoUpdateTimePointBaseTimes)
                 UpdateTimePointBaseTimes();
+
+            return timePoint;
         }
 
         public virtual void PreAddTimePoint (TimePoint timePoint) { timePoint.BaseTime = null; }
@@ -185,12 +189,12 @@ namespace CycleBellLibrary.Repository
 
             _timePoints.Remove(timePoint);
 
-            if (TimePoints.FirstOrDefault (t => t.LoopNumber == timePoint.LoopNumber) == null) {
+            if (TimePointCollection.FirstOrDefault (t => t.LoopNumber == timePoint.LoopNumber) == null) {
 
                 TimerLoops.Remove(timePoint.LoopNumber);
             }
 
-            if (TimePoints.Count > 0 && AutoUpdateTimePointBaseTimes)
+            if (TimePointCollection.Count > 0 && AutoUpdateTimePointBaseTimes)
                 UpdateTimePointBaseTimes();
         }
 
@@ -204,7 +208,7 @@ namespace CycleBellLibrary.Repository
         {
             var timePoints = _timePoints;
             _timePoints = new ObservableCollection<TimePoint>(_timePoints);
-            _readOnlyTimePointCollection = new ReadOnlyObservableCollection<TimePoint>(_timePoints);
+            _readOnlyTimePointCollectionCollection = new ReadOnlyObservableCollection<TimePoint>(_timePoints);
 
             var timerLoops = TimerLoops;
             TimerLoops = new TimerLoopSortedDictionary();
@@ -222,7 +226,7 @@ namespace CycleBellLibrary.Repository
             TimerLoops = timerLoops;
 
             _timePoints = timePoints;
-            _readOnlyTimePointCollection = new ReadOnlyObservableCollection<TimePoint>(_timePoints);
+            _readOnlyTimePointCollectionCollection = new ReadOnlyObservableCollection<TimePoint>(_timePoints);
 
             return preset;
         }
@@ -234,14 +238,13 @@ namespace CycleBellLibrary.Repository
             }
         }
 
-        private void PrepareTimePointId (TimePoint timePoint)
+        private void PrepareTimePointId (ref TimePoint timePoint)
         {
-            var maxId = TimePoints.Max (tp => tp.Id);
+            var maxId = TimePointCollection.Max (tp => tp.Id);
 
             if (timePoint.Id <= maxId) {
 
-                var tmp = TimePoint.DefaultTimePoint;
-                timePoint.ChangeId (tmp);
+                timePoint = timePoint.Clone();
             }
         }
 
@@ -256,7 +259,7 @@ namespace CycleBellLibrary.Repository
                 
                 AddLoopNumber (tp);
 
-                if (TimePoints.FirstOrDefault (t => t.LoopNumber == (Byte) args.OldItems[0]) == null) {
+                if (TimePointCollection.FirstOrDefault (t => t.LoopNumber == (Byte) args.OldItems[0]) == null) {
 
                     this.TimerLoops.Remove ((Byte) args.OldItems[0]);
                 }
@@ -274,12 +277,12 @@ namespace CycleBellLibrary.Repository
         /// <returns>Returns newStartTime.</returns>
         private TimeSpan OnStartTimeChanged(TimeSpan newStartTime, TimeSpan oldStartTime)
         {
-            if (TimePoints.Count == 0)
+            if (TimePointCollection.Count == 0)
                 goto exit;
 
             var diff = newStartTime - oldStartTime;
 
-            foreach (var timePoint in TimePoints) {
+            foreach (var timePoint in TimePointCollection) {
 
                 if (timePoint.TimePointType == TimePointType.Relative) {
                     timePoint.BaseTime += diff;

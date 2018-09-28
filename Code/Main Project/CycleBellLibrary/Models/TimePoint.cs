@@ -79,7 +79,7 @@ namespace CycleBellLibrary.Models
         public TimePoint(string name, TimeSpan time, TimePointType timePointType, byte loopNumber = 0)
         {
             if (_timePointNum == MaxId)
-                throw new OverflowException ("Reached the maximum number of TimePoints");
+                throw new OverflowException ("Reached the maximum number of TimePointCollection");
 
             Id = _timePointNum++;
 
@@ -123,11 +123,11 @@ namespace CycleBellLibrary.Models
 
         #region Properties
 
-        // Static:_________________________________________________________________________
+            #region Static
 
         /// <summary>
-            /// Дефолтное смещение временной точки относительно текущего времени
-            /// </summary>
+        /// Дефолтное смещение временной точки относительно текущего времени
+        /// </summary>
         public static TimeSpan DefaultTime { get; set; }
 
         public static TimePointType DefaultTimePointType { get; set; } = TimePointType.Relative;
@@ -148,15 +148,13 @@ namespace CycleBellLibrary.Models
             set => _defaultTimePointNameFunc = new Func<TimePoint, string>(value);
         }
 
-        // Instance:_______________________________________________________________________
-
-        public string GetDefaultTimePointName() { return DefaultTimePointNameFunc?.Invoke(this) ?? ""; }
+            #endregion
 
         /// <summary>
         /// Уникальный порядковый номер временной точки
         /// </summary>
         [XmlIgnore]
-        public int Id { get; private set; }
+        public int Id { get; }
 
         /// <summary>
         /// Name of NextTimePoint
@@ -204,6 +202,8 @@ namespace CycleBellLibrary.Models
         #endregion
 
         #region Methods
+
+        public string GetDefaultTimePointName() { return DefaultTimePointNameFunc?.Invoke(this) ?? ""; }
 
         // GetAbsolute
         /// <summary>
@@ -295,17 +295,6 @@ namespace CycleBellLibrary.Models
             return res;
         }
 
-        /// <summary>
-        /// Changes Id of current instance of this class with timePoint's Id
-        /// </summary>
-        /// <param name="timePoint"></param>
-        public void ChangeId(TimePoint timePoint)
-        {
-            timePoint.Id ^= this.Id;
-            this.Id ^= timePoint.Id;
-            timePoint.Id ^= this.Id;
-        }
-
         public TimePoint Clone()
         {
             var tp = TimePoint.DefaultTimePoint;
@@ -327,6 +316,11 @@ namespace CycleBellLibrary.Models
 
         public static bool operator == (TimePoint tp1, TimePoint tp2)
         {
+            if (ReferenceEquals(tp1, null) || ReferenceEquals(tp2, null)) {
+
+                return ReferenceEquals(tp1, tp2);
+            }
+
             var res = (String.Equals(tp1.Name, tp2.Name))
                 && (tp1.Time == tp2.Time)
                 && (tp1.BaseTime == tp2.BaseTime)
@@ -340,6 +334,16 @@ namespace CycleBellLibrary.Models
         public static bool operator != (TimePoint tp1, TimePoint tp2)
         {
             return !(tp1 == tp2);
+        }
+
+        public override int GetHashCode()
+        {
+            return Id.GetHashCode();
+        }
+
+        public override bool Equals(object obj)
+        {
+            return Object.ReferenceEquals(this, obj);
         }
 
         #endregion

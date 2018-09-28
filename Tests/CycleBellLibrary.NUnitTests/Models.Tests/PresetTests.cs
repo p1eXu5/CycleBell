@@ -27,7 +27,7 @@ namespace CycleBellLibrary.NUnitTests.Models.Tests
         {
             var preset = new Preset();
 
-            Assert.NotNull (preset.TimePoints);
+            Assert.NotNull (preset.TimePointCollection);
         }
 
         [Test]
@@ -35,7 +35,7 @@ namespace CycleBellLibrary.NUnitTests.Models.Tests
         {
             var preset = new Preset();
 
-            Assert.IsTrue (preset.TimePoints.Count == 0);
+            Assert.IsTrue (preset.TimePointCollection.Count == 0);
         }
 
         [Test]
@@ -58,7 +58,7 @@ namespace CycleBellLibrary.NUnitTests.Models.Tests
 
             preset.AddTimePoint(timePoint);
 
-            Assert.IsTrue(preset.TimePoints.Count > 0);
+            Assert.IsTrue(preset.TimePointCollection.Count > 0);
         }
 
         [Test]
@@ -86,7 +86,7 @@ namespace CycleBellLibrary.NUnitTests.Models.Tests
             var timePointId = timePoint.Id;
             var preset = new Preset(new []{new TimePoint {LoopNumber = 1}, });
 
-            preset.AddTimePoint (timePoint);
+            timePoint = preset.AddTimePoint (timePoint);
 
             Assert.AreEqual (timePointId + 2, timePoint.Id);
         }
@@ -187,7 +187,7 @@ namespace CycleBellLibrary.NUnitTests.Models.Tests
 
         //    preset.AddTimePoint (timePoint);
 
-        //    Assert.AreEqual(TimeSpan.Parse (expectedBaseTime), preset.TimePoints[0].BaseTime);
+        //    Assert.AreEqual(TimeSpan.Parse (expectedBaseTime), preset.TimePointCollection[0].BaseTime);
         //}
  
 
@@ -205,7 +205,7 @@ namespace CycleBellLibrary.NUnitTests.Models.Tests
 
         //    preset.AddTimePoint (timePoint);
 
-        //    Assert.AreEqual(TimeSpan.Parse (expectedBaseTime), preset.TimePoints[0].BaseTime);
+        //    Assert.AreEqual(TimeSpan.Parse (expectedBaseTime), preset.TimePointCollection[0].BaseTime);
         //}
 
 
@@ -225,7 +225,7 @@ namespace CycleBellLibrary.NUnitTests.Models.Tests
 
         //    preset.AddTimePoint (timePoint);
 
-        //    Assert.AreEqual(TimeSpan.Parse (expectedBaseTime), preset.TimePoints[1].BaseTime);
+        //    Assert.AreEqual(TimeSpan.Parse (expectedBaseTime), preset.TimePointCollection[1].BaseTime);
         //}
 
 
@@ -245,7 +245,7 @@ namespace CycleBellLibrary.NUnitTests.Models.Tests
 
         //    preset.AddTimePoint (timePoint);
 
-        //    Assert.AreEqual(TimeSpan.Parse (expectedBaseTime), preset.TimePoints[1].BaseTime);
+        //    Assert.AreEqual(TimeSpan.Parse (expectedBaseTime), preset.TimePointCollection[1].BaseTime);
         //}
 
         #endregion
@@ -272,7 +272,7 @@ namespace CycleBellLibrary.NUnitTests.Models.Tests
 
             preset.RemoveTimePoint (timePoint);
 
-            Assert.IsTrue (preset.TimePoints.Count == 0);
+            Assert.IsTrue (preset.TimePointCollection.Count == 0);
         }
 
         [Test]
@@ -388,7 +388,7 @@ namespace CycleBellLibrary.NUnitTests.Models.Tests
 
             // Assert:
             Assert.AreNotSame (originPreset, deepPreset);
-            Assert.AreNotSame (originPreset.TimePoints, deepPreset.TimePoints);
+            Assert.AreNotSame (originPreset.TimePointCollection, deepPreset.TimePointCollection);
             Assert.AreNotSame (originPreset.TimerLoops, deepPreset.TimerLoops);
             Assert.AreNotSame (originPreset.Tag, deepPreset.Tag);
 
@@ -422,7 +422,7 @@ namespace CycleBellLibrary.NUnitTests.Models.Tests
             var deepPreset = originPreset.GetDeepCopy();
 
             // Assert:
-            Assert.AreSame (originPreset.TimePoints[0], deepPreset.TimePoints[0]);
+            Assert.AreSame (originPreset.TimePointCollection[0], deepPreset.TimePointCollection[0]);
         }
 
         [Test]
@@ -446,8 +446,8 @@ namespace CycleBellLibrary.NUnitTests.Models.Tests
             originPreset.AddTimePoint (TimePoint.DefaultTimePoint);
 
             // Assert:
-            Assert.IsTrue (originPreset.TimePoints.Count == 2);
-            Assert.IsTrue (deepPreset.TimePoints.Count == 1);
+            Assert.IsTrue (originPreset.TimePointCollection.Count == 2);
+            Assert.IsTrue (deepPreset.TimePointCollection.Count == 1);
         }
 
         #endregion

@@ -236,7 +236,7 @@ namespace CycleBellLibrary.Timer
         /// <returns>The queue of tuples consists of time of the day and TimePoint that will come in this time</returns>
         public Queue<(TimeSpan, TimePoint)> GetTimerQueue(Preset preset)
         {
-            if (preset?.TimePoints == null || preset.TimePoints.Count == 0)
+            if (preset?.TimePointCollection == null || preset.TimePointCollection.Count == 0)
                 return null;
 
             // Очередь кортежей времени будильника и соответствующей ему NextTimePoint
@@ -253,10 +253,10 @@ namespace CycleBellLibrary.Timer
 
                 TimeSpan nextTime;
 
-                if (preset.TimePoints.Count > 1) {
+                if (preset.TimePointCollection.Count > 1) {
 
                     // Список временных точек каждого временного сегмента, порядоченный по Id (по порядку создания)
-                    var timePoints = preset.TimePoints.Where(t => t.LoopNumber == timerCycle).OrderBy(t => t.Id)
+                    var timePoints = preset.TimePointCollection.Where(t => t.LoopNumber == timerCycle).OrderBy(t => t.Id)
                                            .ToList();
 
                     for (var i = 0; i < preset.TimerLoops[timerCycle]; ++i) {
@@ -270,9 +270,9 @@ namespace CycleBellLibrary.Timer
                         }
                     }
                 }
-                // Если количество TimePoints равно одной точке:
+                // Если количество TimePointCollection равно одной точке:
                 else {
-                    var timePoint = preset.TimePoints[0];
+                    var timePoint = preset.TimePointCollection[0];
 
                     for (var i = 0; i < preset.TimerLoops[timerCycle]; ++i) {
 

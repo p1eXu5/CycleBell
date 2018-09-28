@@ -178,7 +178,7 @@
                     <LineBreak /><LineBreak /><LineBreak />
                 </TextBlock>
                 <TextBlock HorizontalAlignment="Center">
-                    <Bold>To create TimePoints use form below:</Bold>
+                    <Bold>To create TimePointCollection use form below:</Bold>
                 </TextBlock>
 
                 <StackPanel.Style>

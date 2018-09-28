@@ -120,22 +120,6 @@ namespace CycleBellLibrary.NUnitTests.Models.Tests
         #endregion
 
         [Test]
-        public void ChangeId_ByDefault_ChangesIds()
-        {
-            TimePoint t1 = new TimePoint();
-            TimePoint t2 = new TimePoint();
-
-            int t1Id = t1.Id;
-            int t2Id = t2.Id;
-
-            t1.ChangeId(t2);
-
-            Assert.AreEqual(t1.Id, t2Id);
-            Assert.AreEqual(t2.Id, t1Id);
-            Assert.AreNotEqual(t1Id, t2Id);
-        }
-
-        [Test]
         public void Clone_WhenCalled_GetsClone()
         {
             var timePoint = GetRelativeTimePoint(7);

@@ -48,9 +48,9 @@ namespace CycleBellLibrary.Repository
                     preset.Tag = reader.ReadElementContentAsString();
                     // </Tag
 
-                    reader.ReadStartElement("TimePoints");
+                    reader.ReadStartElement("TimePointCollection");
 
-                    // <TimePoints>
+                    // <TimePointCollection>
                     while (reader.NodeType != XmlNodeType.EndElement) {
 
                         TimePoint tp = new TimePoint();
@@ -71,7 +71,7 @@ namespace CycleBellLibrary.Repository
                         preset.AddTimePoint(tp);
                     }
 
-                    // </TimePoints>
+                    // </TimePointCollection>
                     reader.ReadEndElement();
 
                     // <TimerLoops>
@@ -107,17 +107,17 @@ namespace CycleBellLibrary.Repository
                 writer.WriteElementString("IsInfiniteLoop", this[i].IsInfiniteLoop ? "1" : "0");
                 writer.WriteElementString("Tag", this[i].Tag == null ? "" : this[i].Tag.ToString());
 
-                writer.WriteStartElement("TimePoints");
+                writer.WriteStartElement("TimePointCollection");
 
-                for (int j = 0; j < this[i].TimePoints.Count; ++j) {
+                for (int j = 0; j < this[i].TimePointCollection.Count; ++j) {
 
                     writer.WriteStartElement("TimePoint");
-                    writer.WriteAttributeString("name", this[i].TimePoints[j].Name);
-                    writer.WriteElementString("Time", this[i].TimePoints[j].Time.ToString(@"h\:mm\:ss"));
+                    writer.WriteAttributeString("name", this[i].TimePointCollection[j].Name);
+                    writer.WriteElementString("Time", this[i].TimePointCollection[j].Time.ToString(@"h\:mm\:ss"));
                     writer.WriteElementString("TimePointType",
-                                              ((byte) (this[i].TimePoints[j].TimePointType)).ToString());
-                    writer.WriteElementString("CycleNum", this[i].TimePoints[j].LoopNumber.ToString());
-                    writer.WriteElementString("SoundLocation", (string) this[i].TimePoints[j].Tag ?? "");
+                                              ((byte) (this[i].TimePointCollection[j].TimePointType)).ToString());
+                    writer.WriteElementString("CycleNum", this[i].TimePointCollection[j].LoopNumber.ToString());
+                    writer.WriteElementString("SoundLocation", (string) this[i].TimePointCollection[j].Tag ?? "");
                     writer.WriteEndElement();
                 }
 

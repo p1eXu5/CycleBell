@@ -13,7 +13,7 @@ namespace CycleBell.ViewModels.TimePointViewModels
 
         public string CycleName => $"loop {LoopNumber}";
 
-        public int NumberOfLoops
+        public int LoopCount
         {
             get => _PresetViewModel.Preset.TimerLoops[LoopNumber];
             set {

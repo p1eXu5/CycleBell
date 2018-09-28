@@ -10,6 +10,5 @@ namespace CycleBell.ViewModels
         void RemoveTimePoint (TimePoint timePoint);
         Preset Preset { get; }
         ICommand AddTimePointCommand { get; }
-        bool IsRunning { get; }
     }
 }

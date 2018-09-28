@@ -51,23 +51,17 @@ namespace CycleBell.ViewModels.TimePointViewModels
             }
         }
 
-        public virtual bool IsRunning => _PresetViewModel.IsRunning;
-
-        public virtual bool IsEnabled
-        {
-            get => IsRunning || _IsEnabled;
-            set {
-                _IsEnabled = value;
-                OnPropertyChanged();
-            }
-        }
-
         #endregion
 
         #region Operators
 
         public static bool operator == (TimePointViewModelBase baseTpvm, TimePoint timePoint)
         {
+            if (ReferenceEquals(baseTpvm, null) || ReferenceEquals(timePoint, null)) {
+
+                return false;
+            }
+
             if (baseTpvm is TimePointViewModel tpvm) {
 
                 return tpvm.TimePoint == timePoint;
@@ -79,6 +73,16 @@ namespace CycleBell.ViewModels.TimePointViewModels
         public static bool operator != (TimePointViewModelBase baseTpvm, TimePoint timePoint)
         {
             return !(baseTpvm == timePoint);
+        }
+
+        public override int GetHashCode()
+        {
+            return Id.GetHashCode();
+        }
+
+        public override bool Equals(object obj)
+        {
+            return Object.ReferenceEquals(this, obj);
         }
 
         #endregion

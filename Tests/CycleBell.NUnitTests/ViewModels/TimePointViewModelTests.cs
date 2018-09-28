@@ -92,7 +92,7 @@ namespace CycleBell.NUnitTests.ViewModels
                 _timePoints.Remove (timePoint);
             }
 
-            public new List<TimePoint> TimePoints => _timePoints;
+            public List<TimePoint> TimePoints => _timePoints;
         }
 
         #endregion

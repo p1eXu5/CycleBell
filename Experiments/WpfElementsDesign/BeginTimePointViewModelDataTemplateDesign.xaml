@@ -35,7 +35,9 @@
         <StackPanel Grid.Column="1" Grid.Row="1" Grid.RowSpan="3"
                     Orientation="Horizontal" 
                     Height="13" Margin="5,0" TextElement.FontSize="8">
-            <Label Foreground="Black" VerticalContentAlignment="Center" Content="loop 1:" Padding="0"/>
+            <TextBlock Foreground="Black">
+                <Run Text="loop #"/><Run Text="1"/>
+            </TextBlock>
             <TextBox Text="5" Padding="0" VerticalContentAlignment="Center"
                      Margin="5,0,0,0"
                      BorderThickness="0,0,0,1"

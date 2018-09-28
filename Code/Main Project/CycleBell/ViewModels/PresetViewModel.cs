@@ -86,8 +86,8 @@ namespace CycleBell.ViewModels
             view.SortDescriptions.Add (new SortDescription ("Id", ListSortDirection.Ascending));
             view.SortDescriptions.Add (new SortDescription("LoopNumber", ListSortDirection.Ascending));
 
-            // TimePoints INotifyCollectionChanged
-            ((INotifyCollectionChanged) _preset.TimePoints).CollectionChanged += OnTimePointCollectionChanged;
+            // TimePointCollection INotifyCollectionChanged
+            ((INotifyCollectionChanged) _preset.TimePointCollection).CollectionChanged += OnTimePointCollectionChanged;
 
             // CanBellOnStartTime
             if (_preset.Tag is string str) {
@@ -220,9 +220,9 @@ namespace CycleBell.ViewModels
 
         private void LoadTimePointViewModelCollection (Preset preset)
         {
-            if (preset.TimePoints.Count > 0) {
+            if (preset.TimePointCollection.Count > 0) {
 
-                foreach (var point in preset.TimePoints) {
+                foreach (var point in preset.TimePointCollection) {
 
                     PrepareTimePoint (point);
                     _timePointVmCollection.Add (new TimePointViewModel (point, this));
@@ -339,12 +339,6 @@ namespace CycleBell.ViewModels
                       || timePoint.Time > TimeSpan.Zero;
 
             return res;
-        }
-
-        // IMainViewModel IsRunning property changed event handler
-        internal void OnIsRunningChangedHandler(object s, PropertyChangedEventArgs e)
-        {
-            OnPropertyChanged(nameof(IsRunning));
         }
 
         // TimerManager handlers:
