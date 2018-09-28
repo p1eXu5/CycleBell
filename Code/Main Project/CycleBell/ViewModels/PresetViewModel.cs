@@ -142,8 +142,6 @@ namespace CycleBell.ViewModels
             }
         }
 
-        public bool IsRunning => _mainViewModel.IsRunning;
-
         public bool IsModified
         {
             get => _isModified;
