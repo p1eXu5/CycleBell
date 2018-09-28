@@ -108,6 +108,7 @@
     <Color x:Key="col_BottomPressed">#000000</Color>
     <Color x:Key="col_PressedBorder">#55888888</Color>
 
+
     <LinearGradientBrush x:Key="brush_BackgroundGradient" StartPoint="0,0" EndPoint="0,1">
         <GradientStop Color="{DynamicResource col_Background}" Offset="0.0" />
         <GradientStop Color="{DynamicResource col_Background}" Offset="1.0" />
@@ -161,6 +162,11 @@
     <LinearGradientBrush x:Key="StatusLineBrush" StartPoint="0,0" EndPoint="0,1">
         <GradientStop Offset="0" Color="{DynamicResource col_Background}" />
         <GradientStop Offset="1" Color="{DynamicResource col_IconGreyColor}" />
+    </LinearGradientBrush>
+
+    <LinearGradientBrush x:Key="brush_TimePointName" StartPoint="0,0" EndPoint="0,1">
+        <GradientStop Offset="0" Color="#00AA00" />
+        <GradientStop Offset="1" Color="#008900" />
     </LinearGradientBrush>
 
 </ResourceDictionary>

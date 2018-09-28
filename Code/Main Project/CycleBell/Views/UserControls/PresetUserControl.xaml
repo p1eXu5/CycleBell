@@ -8,6 +8,7 @@
              xmlns:viewModels="clr-namespace:CycleBell.ViewModels"
              xmlns:dts="clr-namespace:CycleBell.DataTemplateSelectors"
              xmlns:userControls="clr-namespace:CycleBell.Views.UserControls"
+             xmlns:converters="clr-namespace:CycleBell.Converters"
              mc:Ignorable="d"
 
              d:DataContext="{d:DesignInstance viewModels:PresetViewModel}"
@@ -31,7 +32,11 @@
         </Grid.RowDefinitions>
 
         <!-- start time & upcoming time point -->
-        <Grid Grid.Row="0" TextElement.FontFamily="{StaticResource font_SuiGeneris}" Margin="0,48,0,38">
+        <Grid Grid.Row="0" 
+              TextElement.FontFamily="{StaticResource font_SuiGeneris}"
+              SnapsToDevicePixels="True"
+              Margin="0,48,0,38"
+              >
             
             <!-- start time -->
             <StackPanel x:Name="sp_StartTime"
@@ -84,14 +89,21 @@
                         TextElement.FontFamily="{StaticResource font_SuiGeneris}"
                         ZIndex="-1"
                         >
-                <TextBlock x:Name="timer_Block" Text="-0:00:22" 
+                <StackPanel.Resources>
+                    <converters:FromTimeSpanToStringConverter x:Key="FromTimeSpanToStringConverter" />
+                </StackPanel.Resources>
+
+                <TextBlock x:Name="timer_Block" Text="{Binding TimeLeftTo, Converter={StaticResource FromTimeSpanToStringConverter}}" 
                            Style="{StaticResource style_TimerBlock}" 
                            />
                 <TextBlock Style="{StaticResource style_UnderTimer}" 
-                           Text="{Binding TimeLeftTo}" 
                            Height="{Binding ElementName=timer_Block, Path=ActualHeight}"
                            >
-                    <Run>upcoming:</Run> <Run Text="{Binding NextTimePointName}"></Run>
+                    <Run>upcoming:</Run> 
+                    <Run Foreground="{DynamicResource brush_TimePointName}"
+                         FontSize="14"
+                         Text="{Binding NextTimePointName}" 
+                         />
                 </TextBlock>
 
                 <StackPanel.Style>
