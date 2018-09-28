@@ -9,6 +9,7 @@ using CycleBell.Base;
 using CycleBell.ViewModels;
 using CycleBell.Views;
 using CycleBellLibrary.Context;
+using CycleBellLibrary.Models;
 using CycleBellLibrary.Repository;
 using CycleBellLibrary.Timer;
 using Unity;
@@ -23,6 +24,8 @@ namespace CycleBell
         protected override void OnStartup(StartupEventArgs e)
         {
             base.OnStartup (e);
+
+            TimePoint.DefaultTimePointNameFunc = point => $"Time point {point.Id}";
 
             var container = new UnityContainer();
 

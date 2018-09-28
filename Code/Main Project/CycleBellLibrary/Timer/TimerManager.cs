@@ -126,7 +126,6 @@ namespace CycleBellLibrary.Timer
             if (!IsRunning) return; 
                 
             _timer.Change (Timeout.Infinite, Timeout.Infinite);
-            _isRunning = false;
             _isPaused = true;
         }
 

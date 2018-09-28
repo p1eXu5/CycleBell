@@ -162,19 +162,19 @@ namespace CycleBell.ViewModels
             OnPropertyChanged (nameof(IsStopped));
         }
 
+        /// <summary>
+        /// Refreshes SelectedPreset when a new preset was added.
+        /// </summary>
+        /// <param name="s"></param>
+        /// <param name="e"></param>
         private void OnPresetCollectionChangedEventHandler(object s, NotifyCollectionChangedEventArgs e)
         {
-            if (e?.NewItems?[0] != null && e.OldItems?[0] == null) {
+            if (e?.NewItems?[0] != null && e.OldItems?[0] == null) { 
 
                 Presets.Add(new PresetViewModel((Preset)e.NewItems[0], this));
                 SelectedPreset = Presets[Presets.Count - 1];
 
-                SelectedPreset.PropertyChanged += OnIsNewPresetChangedHandler;
-                ((INotifyCollectionChanged) SelectedPreset.TimePointVmCollection).CollectionChanged += RiseIsPlayableChanged;
-
-                _timerManager.ChangeTimePointEvent += SelectedPreset.OnTimePointChangedEventHandler;
-                _timerManager.TimerStopEvent += SelectedPreset.OnStopEventHandler;
-                _timerManager.TimerSecondPassedEvent += SelectedPreset.OnSecondPassedEventHandler;
+                ConnectHandlers(SelectedPreset);
             }
 
             if (e?.OldItems?[0] != null && e?.NewItems?[0] == null) {
@@ -183,12 +183,7 @@ namespace CycleBell.ViewModels
                 
                 if (deletingPresetVm == SelectedPreset) {
 
-                    _timerManager.TimerSecondPassedEvent -= SelectedPreset.OnSecondPassedEventHandler;
-                    _timerManager.TimerStopEvent -= SelectedPreset.OnStopEventHandler;
-                    _timerManager.ChangeTimePointEvent -= SelectedPreset.OnTimePointChangedEventHandler;
-
-                    ((INotifyCollectionChanged) SelectedPreset.TimePointVmCollection).CollectionChanged += RiseIsPlayableChanged;
-                    SelectedPreset.PropertyChanged -= OnIsNewPresetChangedHandler;
+                    DisconnectHandlers(SelectedPreset);
                 }
 
                 Presets.Remove(deletingPresetVm);
@@ -197,6 +192,33 @@ namespace CycleBell.ViewModels
 
             OnPropertyChanged(nameof(SelectedPreset));
             OnPropertyChanged(nameof(IsNewPreset));
+        }
+
+        /// <summary>
+        /// Disconnect handlers from SelectedPreset
+        /// </summary>
+        private void DisconnectHandlers(PresetViewModel presetViewModel)
+        {
+            _timerManager.TimerSecondPassedEvent -= presetViewModel.OnSecondPassedEventHandler;
+            _timerManager.TimerStopEvent -= presetViewModel.OnStopEventHandler;
+            _timerManager.ChangeTimePointEvent -= presetViewModel.OnTimePointChangedEventHandler;
+
+            ((INotifyCollectionChanged)presetViewModel.TimePointVmCollection).CollectionChanged += RiseIsPlayableChanged;
+            presetViewModel.PropertyChanged -= OnIsNewPresetChangedHandler;
+        }
+
+        /// <summary>
+        /// Connect handlers to SelectedPreset
+        /// </summary>
+        /// <param name="presetViewModel"></param>
+        private void ConnectHandlers(PresetViewModel presetViewModel)
+        {
+            presetViewModel.PropertyChanged += OnIsNewPresetChangedHandler;
+            ((INotifyCollectionChanged)presetViewModel.TimePointVmCollection).CollectionChanged += RiseIsPlayableChanged;
+
+            _timerManager.ChangeTimePointEvent += presetViewModel.OnTimePointChangedEventHandler;
+            _timerManager.TimerStopEvent += presetViewModel.OnStopEventHandler;
+            _timerManager.TimerSecondPassedEvent += presetViewModel.OnSecondPassedEventHandler;
         }
 
         private void OnIsNewPresetChangedHandler(object s, PropertyChangedEventArgs e)

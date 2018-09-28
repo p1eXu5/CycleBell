@@ -8,7 +8,9 @@
 
     <!-- BeginTimePointViewModel -->
     <DataTemplate x:Key="datatempl_BeginTimePointViewModel" DataType="vm:BeginTimePointViewModel">
-        <Grid SnapsToDevicePixels="True" ShowGridLines="False" Margin="5" TextElement.FontStyle="Normal">
+        <Grid SnapsToDevicePixels="True" ShowGridLines="False" Margin="5" 
+              TextElement.FontStyle="Normal"
+              >
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="1" />
                 <ColumnDefinition Width="Auto" />
@@ -36,7 +38,7 @@
 
             <StackPanel Grid.Column="1" Grid.Row="1" Grid.RowSpan="3"
                         Orientation="Horizontal" 
-                        Height="13" Margin="5,0" TextElement.FontSize="8" TextElement.FontStyle="Normal">
+                        Height="13" Margin="5,0" TextElement.FontSize="10" TextElement.FontStyle="Normal">
                 <TextBlock Foreground="Black">
                     <Run Text="loop #"/><Run Text="{Binding LoopNumber}"/>
                 </TextBlock>
