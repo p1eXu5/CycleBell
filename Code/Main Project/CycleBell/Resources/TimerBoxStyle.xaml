@@ -22,7 +22,7 @@
         <Setter Property="Padding" Value="0" />
         <Setter Property="FontSize" Value="18" />
         <Setter Property="FontStyle" Value="Normal" />
-        <Setter Property="HorizontalAlignment" Value="Center" />
+        <Setter Property="HorizontalAlignment" Value="Right" />
         <Setter Property="VerticalAlignment" Value="Bottom" />
         <Setter Property="RenderTransform">
             <Setter.Value>

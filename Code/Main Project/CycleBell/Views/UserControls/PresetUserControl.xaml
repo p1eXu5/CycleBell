@@ -18,6 +18,7 @@
     <UserControl.Resources>
         
         <dts:TimePointVmDataTemplateSelector x:Key="templsel_Selector" />
+        <converters:FromTimeSpanToStringConverter x:Key="FromTimeSpanToStringConverter" />
 
     </UserControl.Resources>
 
@@ -46,7 +47,8 @@
                         VerticalAlignment="Center" 
                         >
                 <controls:TimerBox x:Name="timer_Box" Style="{StaticResource style_TimerBox}"
-                                   Text="{Binding StartTime, StringFormat={}{0:%h}:{0:%mm}, Mode=OneWay}"
+                                   Text="{Binding StartTime, Mode=TwoWay, 
+                                                  Converter={StaticResource conv_TimeSpanToString}}"
                                    Foreground="{Binding Foreground, RelativeSource={RelativeSource FindAncestor, AncestorType=Control}}"
                                    IsEnabled="{Binding IsEnabled, RelativeSource={RelativeSource FindAncestor, AncestorType=Control}}"
                                    />
@@ -90,13 +92,88 @@
                         ZIndex="-1"
                         >
                 <StackPanel.Resources>
-                    <converters:FromTimeSpanToStringConverter x:Key="FromTimeSpanToStringConverter" />
                 </StackPanel.Resources>
 
-                <TextBlock x:Name="timer_Block" 
-                           Text="{Binding TimeLeftTo.Minutes, StringFormat={}{0:D1}}" 
-                           Style="{StaticResource style_TimerBlock}" 
-                           />
+                <!-- TimeLeftTo -->
+                <StackPanel Orientation="Horizontal" Width="Auto" HorizontalAlignment="Center">
+                    <!-- sign -->
+                    <ContentControl Width="6" HorizontalAlignment="Right">
+                        <TextBlock x:Name="tbk_Sign"  
+                                   Style="{StaticResource style_TimerBlock}" 
+                                   Text="-"
+                                   />
+                    </ContentControl>
+
+                    <ContentControl Width="15">
+                        <TextBlock x:Name="tbk_MajorH"
+                                   Text="{Binding TimeLeftTo.MajorH, TargetNullValue=1}"
+                                    >
+                            <TextBlock.Style>
+                                <Style TargetType="TextBlock" BasedOn="{StaticResource style_TimerBlock}">
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding TimeLeftTo.MajorH}" Value="0">
+                                            <Setter Property="Foreground" Value="{DynamicResource brush_UncheckedStroke}" />
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </TextBlock.Style>
+                        </TextBlock>
+                    </ContentControl>
+
+                    <ContentControl Width="16">
+                        <TextBlock x:Name="tbk_MinorH" 
+                                   Style="{StaticResource style_TimerBlock}" 
+                                   HorizontalAlignment="Left"
+                                   Text="{Binding TimeLeftTo.MinorH}"
+                        />
+                    </ContentControl>
+
+                    <ContentControl Width="8">
+                        <TextBlock Style="{StaticResource style_TimerBlock}"
+                                   HorizontalAlignment="Center"
+                                   Text=":"
+                                   />
+                    </ContentControl>
+
+                    <ContentControl Width="15">
+                        <TextBlock x:Name="tbk_MajorM"  
+                                   Style="{StaticResource style_TimerBlock}" 
+                                   Text="{Binding TimeLeftTo.MajorM}"
+                        />
+                    </ContentControl>
+
+                    <ContentControl Width="16">
+                        <TextBlock x:Name="tbk_MinorM"  
+                                   Style="{StaticResource style_TimerBlock}"
+                                   HorizontalAlignment="Left"
+                                   Text="{Binding TimeLeftTo.MinorM }"
+                        />
+                    </ContentControl>
+
+                    <ContentControl Width="8">
+                        <TextBlock Style="{StaticResource style_TimerBlock}"
+                                   HorizontalAlignment="Center"
+                                   Text=":"
+                                   />
+                    </ContentControl>
+
+                    <ContentControl Width="15">
+                        <TextBlock x:Name="tbk_MajorS"  
+                                   Style="{StaticResource style_TimerBlock}" 
+                                   Text="{Binding TimeLeftTo.MajorS}"
+                        />
+                    </ContentControl>
+
+                    <ContentControl Width="16">
+                        <TextBlock x:Name="tbk_MinorS"  
+                                   Style="{StaticResource style_TimerBlock}" 
+                                   Text="{Binding TimeLeftTo.MinorS}"
+                                   HorizontalAlignment="Left"
+                        />
+                    </ContentControl>
+
+                </StackPanel>
+                <!-- next TimePoint name -->
                 <TextBlock Style="{StaticResource style_UnderTimer}" 
                            Height="{Binding ElementName=timer_Block, Path=ActualHeight}"
                            >

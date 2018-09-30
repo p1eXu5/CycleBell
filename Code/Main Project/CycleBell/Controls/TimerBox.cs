@@ -165,6 +165,29 @@ namespace CycleBell.Controls
             e.Handled = true;
         }
 
+        /// <summary>
+        /// OnLostFocus handler
+        /// </summary>
+        /// <param name="e"></param>
+        protected override void OnLostFocus(RoutedEventArgs e)
+        {
+            base.OnLostFocus(e);
+
+            Debug.WriteLine("Lost focus");
+
+            if (Text.Length == 5) {
+
+                if (Text[0] == '2') {
+
+                    if (Char.GetNumericValue(Text[1]) >= 4.0) {
+                        Text = "23" + Text.Substring(2);
+                    }
+                }
+            }
+
+            CaretIndex = 0;
+        }
+
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         private void SetMinuteNum(sbyte num)
         {
@@ -246,27 +269,5 @@ namespace CycleBell.Controls
 
         }
 
-        /// <summary>
-        /// OnLostFocus handler
-        /// </summary>
-        /// <param name="e"></param>
-        protected override void OnLostFocus(RoutedEventArgs e)
-        {
-            base.OnLostFocus(e);
-
-            Debug.WriteLine("Lost focus");
-
-            if (Text.Length == 5) {
-
-                if (Text[0] == '2') {
-
-                    if (Char.GetNumericValue(Text[1]) >= 4.0) {
-                        Text = "23" + Text.Substring(2);
-                    }
-                }
-            }
-
-            CaretIndex = 0;
-        }
     }
 }
