@@ -134,7 +134,7 @@ namespace CycleBellLibrary.Timer
         /// </summary>
         public void Resume()
         {
-            if (IsRunning || !IsPaused) return;
+            if (!IsPaused) return;
 
             var currentTime = DateTime.Now.TimeOfDay;
             var foundedNextQueueElem = FindNextTimePoint(ref currentTime);
@@ -143,7 +143,6 @@ namespace CycleBellLibrary.Timer
 
             _timer.Change(GetDueTime (currentTime.Milliseconds), Timeout.Infinite);
 
-            IsRunning = true;
             IsPaused = false;
         }
 

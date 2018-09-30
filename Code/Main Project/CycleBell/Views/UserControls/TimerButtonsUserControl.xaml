@@ -4,7 +4,11 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:CycleBell.Views"
-             mc:Ignorable="d" 
+             xmlns:viewModels="clr-namespace:CycleBell.ViewModels"
+             mc:Ignorable="d"
+             
+             d:DataContext="{d:DesignInstance viewModels:MainViewModel}"
+
              d:DesignHeight="100" d:DesignWidth="400">
     <UserControl.Resources>
     </UserControl.Resources>
@@ -39,7 +43,7 @@
                       HorizontalAlignment="Center"
                       local:AttachedPropertyFactory.BorderColor="#33553300"
                       IsEnabled="{Binding IsPlayable}"
-                      IsChecked="{Binding PlayChecked, Mode=OneWay}"
+                      IsChecked="{Binding TimerState, Mode=OneWay}"
                       Command="{Binding MediaTerminalCommand}"
                       >
             <Grid>
@@ -85,7 +89,7 @@
                       Width="48" Height="38"
                       HorizontalAlignment="Center"
                       local:AttachedPropertyFactory.BorderColor="#33005500"
-                      IsChecked="{Binding RingTerminal}">
+                      >
             <Grid Margin="2">
                 <Path Data="{StaticResource gmtry_BellIn}"/>
                 <Path Data="{StaticResource gmtry_BellOut}" />

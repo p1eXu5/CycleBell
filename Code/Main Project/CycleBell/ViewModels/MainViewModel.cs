@@ -248,13 +248,15 @@ namespace CycleBell.ViewModels
         // MediaTermonal
         private void MediaTerminal (object o)
         {
-            if (TimerState == true) {
+            var state = TimerState;
+
+            if (state == true) {
 
                 // if playing
                 _timerManager.Pause();
                 OnPropertyChanged(nameof(IsPaused));
             }
-            else if (TimerState == null) {
+            else if (state == null) {
 
                 // if paused
                 _timerManager.Resume();
