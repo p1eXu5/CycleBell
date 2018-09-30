@@ -47,7 +47,7 @@
                         VerticalAlignment="Center" 
                         >
                 <controls:TimerBox x:Name="timer_Box" Style="{StaticResource style_TimerBox}"
-                                   Text="{Binding StartTime, Mode=TwoWay, 
+                                   Text="{Binding StartTime, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged,
                                                   Converter={StaticResource conv_TimeSpanToString}}"
                                    Foreground="{Binding Foreground, RelativeSource={RelativeSource FindAncestor, AncestorType=Control}}"
                                    IsEnabled="{Binding IsEnabled, RelativeSource={RelativeSource FindAncestor, AncestorType=Control}}"
@@ -104,19 +104,12 @@
                                    />
                     </ContentControl>
 
-                    <ContentControl Width="15">
+                    <ContentControl>
                         <TextBlock x:Name="tbk_MajorH"
-                                   Text="{Binding TimeLeftTo.MajorH, TargetNullValue=1}"
+                                   Style="{StaticResource style_TimerBlock}"
+                                   Text="{Binding TimeLeftTo.MajorH}"
                                     >
-                            <TextBlock.Style>
-                                <Style TargetType="TextBlock" BasedOn="{StaticResource style_TimerBlock}">
-                                    <Style.Triggers>
-                                        <DataTrigger Binding="{Binding TimeLeftTo.MajorH}" Value="0">
-                                            <Setter Property="Foreground" Value="{DynamicResource brush_UncheckedStroke}" />
-                                        </DataTrigger>
-                                    </Style.Triggers>
-                                </Style>
-                            </TextBlock.Style>
+
                         </TextBlock>
                     </ContentControl>
 

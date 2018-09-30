@@ -219,12 +219,12 @@ namespace CycleBellLibrary.Timer
 
             _deltaTime = -TimeSpan.FromHours(1);
 
-            // Инициируем таймер
+            // Timer initialize
             var durTime = GetDueTime(currentTime.Milliseconds);
             _timer = new System.Threading.Timer(TimerCallbackHandler, null, durTime, Timeout.Infinite);
 
             // Set previous queue element
-            _prevQueueElement = (currentTime, new TimePoint("Launch Time", TimeSpan.FromMinutes(-1), TimePointType.Absolute));
+            _prevQueueElement = (currentTime, new TimePoint(StartTimeTimePointString, TimeSpan.FromMinutes(-1), TimePointType.Absolute));
 
             OnChangeTimePoint(_prevQueueElement.prevTimePoint, _queue.Peek().nextTimePoint, LastTime(currentTime, _queue.Peek().nextChangeTime));
         }
