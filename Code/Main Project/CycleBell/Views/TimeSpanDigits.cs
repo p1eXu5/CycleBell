@@ -24,7 +24,7 @@ namespace CycleBell.Views
         public byte MinorM => _minorM;
         public byte MajorS => _majorS;
         public byte MinorS => _minorS;
-        public int Miliseconds => _milliseconds;
+        public int Milliseconds => _milliseconds;
 
         public static TimeSpanDigits Parse (TimeSpan timeSpan)
         {
@@ -32,6 +32,7 @@ namespace CycleBell.Views
 
             if (timeSpan < TimeSpan.Zero) {
                 res._sign = '-';
+                timeSpan = timeSpan.Negate();
             }
 
             if (timeSpan.Hours > 9) {

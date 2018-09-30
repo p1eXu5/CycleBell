@@ -354,12 +354,12 @@ namespace CycleBell.ViewModels
                 TimePointVmCollection.Diactivate().Activate(tpvmb => tpvmb == e.PrevTimePoint);
             }
 
-            TimeLeftTo = TimeSpanParse(-e.LastTime);
+            TimeLeftTo = TimeSpanDigits.Parse(-e.LastTime);
         }
 
         internal void OnSecondPassedEventHandler(object s, TimerEventArgs e)
         {
-            TimeLeftTo = e.LastTime;
+            TimeLeftTo = TimeSpanDigits.Parse(-e.LastTime);
         }
 
         internal void OnStopEventHandler(object s, EventArgs e)
