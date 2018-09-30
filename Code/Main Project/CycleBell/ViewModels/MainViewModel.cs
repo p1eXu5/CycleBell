@@ -22,7 +22,8 @@ namespace CycleBell.ViewModels
 {
     public class MainViewModel : ObservableObject, IMainViewModel
     {
-        #region Private
+        #region Fields
+
         public static SoundPlayer DefaultSoundPlayer = new SoundPlayer(); 
 
         private readonly IDialogRegistrator _dialogRegistrator;
@@ -60,6 +61,7 @@ namespace CycleBell.ViewModels
 
         #region Properties
 
+        // Preset
         public ObservableCollection<PresetViewModel> Presets { get; set; }
 
         public PresetViewModel SelectedPreset
@@ -84,11 +86,6 @@ namespace CycleBell.ViewModels
         
         public bool IsSelectedPreset => SelectedPreset != null;
         public bool IsNewPreset => SelectedPreset?.IsNewPreset ?? false;
-
-        public bool IsRunning => _timerManager.IsRunning;
-        public string StartTimeName => _timerManager.StartTimeTimePointName;
-        public bool IsPaused => _timerManager.IsPaused;
-
         public bool IsInfiniteLoop
         {
             get => SelectedPreset?.IsInfiniteLoop == true;
@@ -100,10 +97,10 @@ namespace CycleBell.ViewModels
                 }
             }
         }
-        
         public bool IsPlayable => _selectedPreset?.TimePointVmCollection.Count > 0;
 
-        public bool? PlayChecked
+        // Timer
+        public bool? TimerState
         {
             get {
                 if (IsPaused) {
@@ -121,6 +118,8 @@ namespace CycleBell.ViewModels
             }
         }
 
+        public bool IsRunning => _timerManager.IsRunning;
+        public bool IsPaused => _timerManager.IsPaused;
         public bool IsStopped
         {
             get => IsRunning == false && IsPlayable;
@@ -132,6 +131,8 @@ namespace CycleBell.ViewModels
                 }
             }
         }
+
+        public string StartTimeName => _timerManager.StartTimeTimePointName;
 
         #endregion CLR Properties
 
@@ -247,13 +248,13 @@ namespace CycleBell.ViewModels
         // MediaTermonal
         private void MediaTerminal (object o)
         {
-            if (PlayChecked == true) {
+            if (TimerState == true) {
 
                 // if playing
                 _timerManager.Pause();
                 OnPropertyChanged(nameof(IsPaused));
             }
-            else if (PlayChecked == null) {
+            else if (TimerState == null) {
 
                 // if paused
                 _timerManager.Resume();
@@ -266,7 +267,7 @@ namespace CycleBell.ViewModels
                 OnPropertyChanged(nameof(IsRunning));
             }
 
-            OnPropertyChanged(nameof(PlayChecked));
+            OnPropertyChanged(nameof(TimerState));
         }
 
         //  Save Preset

@@ -28,7 +28,7 @@ namespace CycleBellLibrary.Timer
     public class TimerManager : ITimerManager
     {
         public const string RestartTimePointString = "Restart";
-        public const string StartTimeTimePointString = "Restart";
+        public const string StartTimeTimePointString = "Launch in T-minus";
 
         #region Fields
 
@@ -40,23 +40,22 @@ namespace CycleBellLibrary.Timer
         /// <summary>
         /// The main queue. The next (TimeSpan startTimeForNextStartPoint, TimePoint nextPoint) always on the top.
         /// </summary>
-        private Queue<(TimeSpan, TimePoint)> _queue;
-
-        /// <summary>
-        /// Internel timer
-        /// </summary>
-        private System.Threading.Timer _timer;
-
-        private bool _isRunning;
-        private bool _isPaused;
-        private TimeSpan _deltaTime;
-        private byte _isInfiniteLoop;
-        private bool _isRunAsync;
+        private Queue<(TimeSpan nextChangeTime, TimePoint nextTimePoint)> _queue;
 
         /// <summary>
         /// Previous queue element
         /// </summary>
-        private (TimeSpan, TimePoint) _prevQueueElement;
+        private (TimeSpan prevChangeTime, TimePoint prevTimePoint) _prevQueueElement;
+
+        /// <summary>
+        /// Internal timer
+        /// </summary>
+        private System.Threading.Timer _timer;
+
+        private TimeSpan _deltaTime;
+        private byte _isInfiniteLoop;
+        private bool _isRunAsync;
+
 
         #endregion
 
@@ -103,8 +102,8 @@ namespace CycleBellLibrary.Timer
 
         public static int Accuracy { get; set; } =300;
 
-        public bool IsRunning => _isRunning;
-        public bool IsPaused => _isPaused;
+        public bool IsRunning { get; private set; }
+        public bool IsPaused { get; private set; }
         public string StartTimeTimePointName => TimerManager.StartTimeTimePointString;
 
         #endregion
@@ -127,7 +126,7 @@ namespace CycleBellLibrary.Timer
             if (!IsRunning) return; 
                 
             _timer.Change (Timeout.Infinite, Timeout.Infinite);
-            _isPaused = true;
+            IsPaused = true;
         }
 
         /// <summary>
@@ -135,34 +134,34 @@ namespace CycleBellLibrary.Timer
         /// </summary>
         public void Resume()
         {
-            if (_isRunning || !_isPaused) return;
+            if (IsRunning || !IsPaused) return;
 
             var currentTime = DateTime.Now.TimeOfDay;
             var foundedNextQueueElem = FindNextTimePoint(ref currentTime);
 
-            OnChangeTimePoint(_prevQueueElement.Item2, foundedNextQueueElem.Item2, LastTime(currentTime, foundedNextQueueElem.Item1));
+            OnChangeTimePoint(_prevQueueElement.prevTimePoint, foundedNextQueueElem.nextTimePoint, LastTime(currentTime, foundedNextQueueElem.nextChangeTime));
 
             _timer.Change(GetDueTime (currentTime.Milliseconds), Timeout.Infinite);
 
-            _isRunning = true;
-            _isPaused = false;
+            IsRunning = true;
+            IsPaused = false;
         }
 
         /// <summary>
         /// Find next NextTimePoint after resume
         /// </summary>
         /// <param name="currentTime"></param>
-        private (TimeSpan, TimePoint) FindNextTimePoint(ref TimeSpan currentTime)
+        private (TimeSpan nextChangeTime, TimePoint nextTimePoint) FindNextTimePoint(ref TimeSpan currentTime)
         {
             // Если текущее время меньше времени следующей точки или следующая точка - это startTime:
-            if (currentTime < _queue.Peek().Item1 || _queue.Peek().Item2.Time < TimeSpan.Zero) {
+            if (currentTime < _queue.Peek().nextChangeTime || _queue.Peek().nextTimePoint.Time < TimeSpan.Zero) {
                 return _queue.Peek();
             }
 
             do {
                 _prevQueueElement = _queue.Dequeue();
                 _queue.Enqueue(_prevQueueElement);
-            } while (currentTime >= _queue.Peek().Item1 && _queue.Peek().Item2 != null);
+            } while (currentTime >= _queue.Peek().nextChangeTime && _queue.Peek().nextTimePoint != null);
 
             return _queue.Peek();
         }
@@ -175,9 +174,9 @@ namespace CycleBellLibrary.Timer
             _timer?.Dispose();
 
             _queue = null;
-            if (!_isRunning) _isRunning = false;
+            if (!IsRunning) IsRunning = false;
             if (!_isRunAsync) _isRunAsync = false;
-            if (!_isPaused) _isPaused = false;
+            if (!IsPaused) IsPaused = false;
 
             OnTimerStop();
         }
@@ -187,7 +186,7 @@ namespace CycleBellLibrary.Timer
             if (IsRunning)
                 return;
 
-            _isRunAsync = _isRunning = true;
+            _isRunAsync = IsRunning = true;
             await Task.Run(() => Play(preset));
         }
 
@@ -208,7 +207,7 @@ namespace CycleBellLibrary.Timer
                 return;
             }
 
-            _isRunning = true;
+            IsRunning = true;
 
             var currentTime = DateTime.Now.TimeOfDay;
 
@@ -227,7 +226,7 @@ namespace CycleBellLibrary.Timer
             // Set previous queue element
             _prevQueueElement = (currentTime, new TimePoint("Launch Time", TimeSpan.FromMinutes(-1), TimePointType.Absolute));
 
-            OnChangeTimePoint(_prevQueueElement.Item2, _queue.Peek().Item2, LastTime(currentTime, _queue.Peek().Item1));
+            OnChangeTimePoint(_prevQueueElement.prevTimePoint, _queue.Peek().nextTimePoint, LastTime(currentTime, _queue.Peek().nextChangeTime));
         }
 
         /// <summary>

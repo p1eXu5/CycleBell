@@ -12,6 +12,7 @@ using System.Windows.Data;
 using System.Windows.Input;
 using CycleBell.Base;
 using CycleBell.ViewModels.TimePointViewModels;
+using CycleBell.Views;
 using CycleBellLibrary.Context;
 using CycleBellLibrary.Models;
 using CycleBellLibrary.Repository;
@@ -55,7 +56,7 @@ namespace CycleBell.ViewModels
         private StringBuilder _name;
 
         private string _nextTimePointName;
-        private TimeSpan _timeLeftTo;
+        private TimeSpanDigits _timeLeftTo;
 
         #endregion
 
@@ -185,7 +186,7 @@ namespace CycleBell.ViewModels
             }
         }
 
-        public TimeSpan TimeLeftTo
+        public TimeSpanDigits TimeLeftTo
         {
             get => _timeLeftTo;
             set {
@@ -353,7 +354,7 @@ namespace CycleBell.ViewModels
                 TimePointVmCollection.Diactivate().Activate(tpvmb => tpvmb == e.PrevTimePoint);
             }
 
-            TimeLeftTo = e.LastTime;
+            TimeLeftTo = TimeSpanParse(-e.LastTime);
         }
 
         internal void OnSecondPassedEventHandler(object s, TimerEventArgs e)
@@ -398,36 +399,6 @@ namespace CycleBell.ViewModels
         }
         
         #endregion
-    }
 
-    /// <summary>
-    /// Extension class for ReadOnlyObservableCollection&lt;TimePointViewModel&gt;
-    /// </summary>
-    internal static class TimePointViewModelExtension
-    {
-        internal static ReadOnlyObservableCollection<TimePointViewModelBase> Diactivate(this ReadOnlyObservableCollection<TimePointViewModelBase> timePointViewModels)
-        {
-            if (timePointViewModels == null)
-                return null;
-
-            var tpvmArray = timePointViewModels.Where(t => (t is TimePointViewModel model) && model.Active).ToArray();
-
-            foreach (var timePointViewModel in tpvmArray) {
-
-                ((TimePointViewModel)timePointViewModel).Active = false;
-            }
-
-            return timePointViewModels;
-        }
-
-        internal static void Activate(this ReadOnlyObservableCollection<TimePointViewModelBase> timePointViewModels, Func<TimePointViewModelBase,bool> predicate)
-        {
-            var tpvm = timePointViewModels?.Where(predicate).FirstOrDefault();
-
-            if (tpvm == null)
-                return;
-
-            ((TimePointViewModel)tpvm).Active = true;
-        }
     }
 }

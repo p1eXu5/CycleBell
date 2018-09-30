@@ -93,7 +93,8 @@
                     <converters:FromTimeSpanToStringConverter x:Key="FromTimeSpanToStringConverter" />
                 </StackPanel.Resources>
 
-                <TextBlock x:Name="timer_Block" Text="{Binding TimeLeftTo, Converter={StaticResource FromTimeSpanToStringConverter}}" 
+                <TextBlock x:Name="timer_Block" 
+                           Text="{Binding TimeLeftTo.Minutes, StringFormat={}{0:D1}}" 
                            Style="{StaticResource style_TimerBlock}" 
                            />
                 <TextBlock Style="{StaticResource style_UnderTimer}" 
