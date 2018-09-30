@@ -119,6 +119,7 @@ namespace CycleBell.ViewModels
         }
 
         public bool IsRunning => _timerManager.IsRunning;
+
         public bool IsPaused => _timerManager.IsPaused;
         public bool IsStopped
         {
