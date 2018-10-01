@@ -287,21 +287,21 @@
                     <BeginStoryboard>
                         <Storyboard>
                             <ColorAnimation Storyboard.TargetProperty="(at:AttachedPropertyFactory.FillBrush1)
-                                                                                    .(LinearGradientBrush.GradientStops)[0]
-                                                                                    .(GradientStop.Color)"
+                                                                        .(LinearGradientBrush.GradientStops)[0]
+                                                                        .(GradientStop.Color)"
                                                         To="{StaticResource col_TopPlay}" Duration="0:0:.2" />
                             <ColorAnimation Storyboard.TargetProperty="(at:AttachedPropertyFactory.FillBrush1)
-                                                                                    .(LinearGradientBrush.GradientStops)[1]
-                                                                                    .(GradientStop.Color)"
+                                                                        .(LinearGradientBrush.GradientStops)[1]
+                                                                        .(GradientStop.Color)"
                                                         To="{StaticResource col_BottomPlay}" Duration="0:0:.2" />
 
                             <ColorAnimation Storyboard.TargetProperty="(at:AttachedPropertyFactory.StrokeBrush1)
-                                                                                    .(LinearGradientBrush.GradientStops)[1]
-                                                                                    .(GradientStop.Color)"
+                                                                        .(LinearGradientBrush.GradientStops)[1]
+                                                                        .(GradientStop.Color)"
                                             To="{StaticResource col_TopPlay}" Duration="0:0:.2" />
                             <ColorAnimation Storyboard.TargetProperty="(at:AttachedPropertyFactory.StrokeBrush1)
-                                                                                    .(LinearGradientBrush.GradientStops)[0]
-                                                                                    .(GradientStop.Color)"
+                                                                        .(LinearGradientBrush.GradientStops)[0]
+                                                                        .(GradientStop.Color)"
                                             To="{StaticResource col_BottomPlay}" Duration="0:0:.2" />
                         </Storyboard>
                     </BeginStoryboard>

@@ -36,6 +36,7 @@ namespace CycleBell.ViewModels
         private string _initialDirectory = null;
 
         private bool _isNewPreset;
+        private bool _isRingOnStartTime = true;
 
         #endregion Private
 
@@ -139,7 +140,14 @@ namespace CycleBell.ViewModels
 
         public string StartTimeName => _timerManager.StartTimeTimePointName;
 
-        public bool IsRingOnStartTime { get; set; } = true;
+        public bool IsRingOnStartTime 
+        { 
+            get => _isRingOnStartTime;
+            set {
+                _isRingOnStartTime = value;
+                OnPropertyChanged ();
+            }
+        }
 
         #endregion
 
@@ -165,13 +173,13 @@ namespace CycleBell.ViewModels
         public ICommand ViewHelpCommand => new ActionCommand(About);
             #endregion
 
-            #region media
+
         public ICommand PlayCommand => new ActionCommand (Play, CanPlay);
         public ICommand StopCommand => new ActionCommand (Stop);
         public ICommand PauseCommand => new ActionCommand (Pause, CanPause);
-        public ICommand ResumeCommand => new ActionCommand (Resume, CanResume);
+        public ICommand RingOnStartTimeSwitchCommand => new ActionCommand (SwitchIsRingOnStartTime);
         public ICommand RingCommand => new ActionCommand(Ring);
-            #endregion media
+
 
         public ICommand MediaTerminalCommand => new ActionCommand (MediaTerminal);
 
@@ -409,18 +417,19 @@ namespace CycleBell.ViewModels
             return _timerManager.IsRunning;
         }
         
-        // ---- Resume
-        private void Resume (object o)
+        // ---- SwitchIsRingOnStartTime
+        private void SwitchIsRingOnStartTime (object o)
         {
-            _timerManager.Resume();
-        }
-        private bool CanResume (object o)
-        {
-            return _timerManager.IsPaused;
+            DefaultSoundPlayer.Stop();
+            IsRingOnStartTime ^= true;
         }
 
         // RingCommand
-        private void Ring (object o) => DefaultSoundPlayer.Play();
+        private void Ring (object o)
+        {
+            IsRingOnStartTime = IsRingOnStartTime;
+            //DefaultSoundPlayer.Play();
+        } 
 
 
         #endregion Methods

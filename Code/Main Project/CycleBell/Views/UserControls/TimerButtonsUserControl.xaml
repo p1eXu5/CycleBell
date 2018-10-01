@@ -5,6 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:CycleBell.Views"
              xmlns:viewModels="clr-namespace:CycleBell.ViewModels"
+             xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
              mc:Ignorable="d"
              
              d:DataContext="{d:DesignInstance viewModels:MainViewModel}"
@@ -91,15 +92,39 @@
         </Button>
 
         <!-- bell -->
-        <ToggleButton Grid.Column="3"
+        <ToggleButton x:Name="btn_Ring" Grid.Column="3"
+                      Style="{StaticResource style_RingToggleButton}"
                       Width="48" Height="38"
                       HorizontalAlignment="Center"
                       local:AttachedPropertyFactory.BorderColor="#33005500"
+                      IsChecked="{Binding IsRingOnStartTime, Mode=OneWay}"
+                      Command="{Binding RingCommand}"
                       >
             <Grid Margin="2">
-                <Path Data="{StaticResource gmtry_BellIn}"/>
-                <Path Data="{StaticResource gmtry_BellOut}" />
+                <Path Data="{StaticResource gmtry_BellOut}"
+                      Fill="{Binding Path=(local:AttachedPropertyFactory.FillBrush1), 
+                                     RelativeSource={RelativeSource FindAncestor, AncestorType=ToggleButton}}"
+                      Stroke="{Binding Path=(local:AttachedPropertyFactory.StrokeBrush1),
+                                       RelativeSource={RelativeSource FindAncestor, AncestorType=ToggleButton}}"
+                />
+                <Path Data="{StaticResource gmtry_BellIn}"
+                      Fill="{Binding Path=(local:AttachedPropertyFactory.FillBrush2), 
+                                     RelativeSource={RelativeSource FindAncestor, AncestorType=ToggleButton}}"
+                      Stroke="{Binding Path=(local:AttachedPropertyFactory.StrokeBrush2),
+                                       RelativeSource={RelativeSource FindAncestor, AncestorType=ToggleButton}}"
+                />
             </Grid>
+
+            <i:Interaction.Triggers>
+                <i:EventTrigger EventName="MouseRightButtonUp">
+                    <i:InvokeCommandAction Command="{Binding RingOnStartTimeSwitchCommand}" />
+                </i:EventTrigger>
+            </i:Interaction.Triggers>
+            
+            <ToggleButton.Triggers>
+
+
+            </ToggleButton.Triggers>
         </ToggleButton>
     </Grid>
 </UserControl>
