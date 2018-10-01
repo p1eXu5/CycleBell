@@ -343,30 +343,20 @@ namespace CycleBell.ViewModels
         }
 
         // TimerManager handlers:
-        internal void OnTimerStartEventHandler(object sender, EventArgs args)
-        {
-            if (TimePointVmCollection.Count > 0) {
-                TimePointVmCollection.DeactivateAll();
-            }
-        }
-
         internal void OnTimePointChangedEventHandler(object s, TimerEventArgs e)
         {
-            // if prev TimePoint it is launch TimePoint TimePointVmCollection was deactivated
-            // in OnTimerStartEventHandler
-            if (e.PrevTimePoint.Time < TimeSpan.Zero) {
+            if (e.NextTimePoint.Name == _mainViewModel.StartTimeName) {
 
-                NextTimePointName = _mainViewModel.StartTimeName;
-            }
-            else if (e.NextTimePoint.Name == _mainViewModel.StartTimeName) {
-
-                TimePointVmCollection.DeactivateAll();
+                if (TimePointVmCollection.Count > 0) {
+                    TimePointVmCollection.DeactivateAll();
+                }
             }
             else {
 
                 TimePointVmCollection.Activate(tpvmb => tpvmb == e.NextTimePoint);
             }
 
+            NextTimePointName = e.NextTimePoint.Name;
             TimeLeftTo = TimeSpanDigits.Parse(-e.LastTime);
         }
 

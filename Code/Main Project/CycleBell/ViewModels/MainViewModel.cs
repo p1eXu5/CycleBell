@@ -54,20 +54,13 @@ namespace CycleBell.ViewModels
             ((INotifyCollectionChanged) (presetManager.Presets)).CollectionChanged += OnPresetCollectionChangedEventHandler;
 
             _timerManager = cycleBellManager.TimerManager;
-            _timerManager.TimerStartEvent += (sender, args) =>
-                                             {
-                                                 OnPropertyChanged(nameof(IsRunning));
-                                                 OnPropertyChanged(nameof(TimerState));
-                                             };
+            _timerManager.TimerStartEvent += UpdateIsRunningAndTimerStateProperties;
+            _timerManager.TimerStopEvent += UpdateIsRunningAndTimerStateProperties;
 
-            _timerManager.TimerStopEvent += (sender, args) =>
-                                             {
-                                                 OnPropertyChanged(nameof(IsRunning));
-                                                 OnPropertyChanged(nameof(TimerState));
-                                             };
 
             AppDomain.CurrentDomain.ProcessExit += (s, e) => SavePresetsBeforeExit (null);
         }
+
 
         #endregion Constructor
 
@@ -222,6 +215,13 @@ namespace CycleBell.ViewModels
             OnPropertyChanged(nameof(SelectedPreset));
             OnPropertyChanged(nameof(IsNewPreset));
         }
+        
+        // timer handler
+        private void UpdateIsRunningAndTimerStateProperties(object s, EventArgs e)
+        {
+            OnPropertyChanged(nameof(IsRunning));
+            OnPropertyChanged(nameof(TimerState));
+        }
 
         // add/remove SelectedPreset handlers
         /// <summary>
@@ -233,7 +233,6 @@ namespace CycleBell.ViewModels
             selectedPresetViewModel.PropertyChanged += OnIsNewPresetChangedHandler;
             ((INotifyCollectionChanged)selectedPresetViewModel.TimePointVmCollection).CollectionChanged += RiseIsPlayableChanged;
 
-            _timerManager.TimerStartEvent += selectedPresetViewModel.OnTimerStartEventHandler;
             _timerManager.ChangeTimePointEvent += selectedPresetViewModel.OnTimePointChangedEventHandler;
             _timerManager.TimerSecondPassedEvent += selectedPresetViewModel.OnSecondPassedEventHandler;
             _timerManager.TimerStopEvent += selectedPresetViewModel.OnTimerStopEventHandler;
@@ -247,7 +246,6 @@ namespace CycleBell.ViewModels
             _timerManager.TimerStopEvent -= selectedPresetViewModel.OnTimerStopEventHandler;
             _timerManager.TimerSecondPassedEvent -= selectedPresetViewModel.OnSecondPassedEventHandler;
             _timerManager.ChangeTimePointEvent -= selectedPresetViewModel.OnTimePointChangedEventHandler;
-            _timerManager.TimerStartEvent -= selectedPresetViewModel.OnTimerStartEventHandler;
 
             ((INotifyCollectionChanged)selectedPresetViewModel.TimePointVmCollection).CollectionChanged += RiseIsPlayableChanged;
             selectedPresetViewModel.PropertyChanged -= OnIsNewPresetChangedHandler;
