@@ -250,7 +250,7 @@ namespace CycleBellLibrary.Timer
             // Очередь кортежей времени будильника и соответствующей ему NextTimePoint
             Queue<(TimeSpan, TimePoint)> queue = new Queue<(TimeSpan, TimePoint)>();
 
-            queue.Enqueue((startTime, new TimePoint(Preset.StartTimePointName, startTime, TimePointType.Absolute)));
+            queue.Enqueue((startTime, new TimePoint(StartTimeTimePointName, startTime, TimePointType.Absolute)));
 
             // Заполняем очередь
 
@@ -355,11 +355,10 @@ namespace CycleBellLibrary.Timer
             OnTimerSecondPassed(_queue.Peek().Item2, TimeSpan.Zero);
 
             _prevQueueElement = _queue.Dequeue();
-
             _queue.Enqueue(_prevQueueElement);
 
             // If StartTimePoint are next:
-            if (_queue.Peek().Item2.Time < TimeSpan.Zero) {
+            if (_queue.Peek().nextTimePoint.Name == TimerManager.StartTimeTimePointString) {
 
                 // Если цикл не бесконечный:
                 if (_isInfiniteLoop == 0) {
@@ -368,11 +367,12 @@ namespace CycleBellLibrary.Timer
                     return;
                 }
 
-                OnChangeTimePoint(_prevQueueElement.Item2, _queue.Peek().Item2, LastTime(currentTime, _queue.Peek().Item1));
+                OnChangeTimePoint(_prevQueueElement.prevTimePoint, _queue.Peek().nextTimePoint, LastTime(currentTime, _queue.Peek().Item1));
                 return;
             }
 
-            OnChangeTimePoint(_prevQueueElement.Item2, _queue.Peek().Item2, LastTime(currentTime, _queue.Peek().Item1));
+
+            OnChangeTimePoint(_prevQueueElement.prevTimePoint, _queue.Peek().nextTimePoint, LastTime(currentTime, _queue.Peek().nextChangeTime));
 
             // Если время следующей точки равно предыдущей:
             if (_queue.Peek().Item1 == _prevQueueElement.Item1) {

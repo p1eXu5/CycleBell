@@ -352,13 +352,19 @@ namespace CycleBell.ViewModels
 
         internal void OnTimePointChangedEventHandler(object s, TimerEventArgs e)
         {
-            // if prev TimePoint it is launch TimePoint
+            // if prev TimePoint it is launch TimePoint TimePointVmCollection was deactivated
+            // in OnTimerStartEventHandler
             if (e.PrevTimePoint.Time < TimeSpan.Zero) {
 
                 NextTimePointName = _mainViewModel.StartTimeName;
             }
+            else if (e.NextTimePoint.Name == _mainViewModel.StartTimeName) {
+
+                TimePointVmCollection.DeactivateAll();
+            }
             else {
-                TimePointVmCollection.Activate(tpvmb => tpvmb == e.PrevTimePoint);
+
+                TimePointVmCollection.Activate(tpvmb => tpvmb == e.NextTimePoint);
             }
 
             TimeLeftTo = TimeSpanDigits.Parse(-e.LastTime);
