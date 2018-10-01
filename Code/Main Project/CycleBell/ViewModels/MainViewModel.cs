@@ -56,22 +56,12 @@ namespace CycleBell.ViewModels
             _timerManager = cycleBellManager.TimerManager;
             _timerManager.TimerStartEvent += (sender, args) =>
                                              {
-                                                 if (_selectedPreset != null && _selectedPreset.TimePointVmCollection.Count > 0) {
-
-                                                     _selectedPreset.TimePointVmCollection.DeactivateAll();
-                                                 }
-
                                                  OnPropertyChanged(nameof(IsRunning));
                                                  OnPropertyChanged(nameof(TimerState));
                                              };
 
             _timerManager.TimerStopEvent += (sender, args) =>
                                              {
-                                                 if (_selectedPreset != null && _selectedPreset.TimePointVmCollection.Count > 0) {
-
-                                                     _selectedPreset.TimePointVmCollection.ActivateAll();
-                                                 }
-
                                                  OnPropertyChanged(nameof(IsRunning));
                                                  OnPropertyChanged(nameof(TimerState));
                                              };
@@ -233,31 +223,34 @@ namespace CycleBell.ViewModels
             OnPropertyChanged(nameof(IsNewPreset));
         }
 
-        /// <summary>
-        /// Disconnect handlers from SelectedPreset
-        /// </summary>
-        private void DisconnectHandlers(PresetViewModel presetViewModel)
-        {
-            _timerManager.TimerSecondPassedEvent -= presetViewModel.OnSecondPassedEventHandler;
-            _timerManager.TimerStopEvent -= presetViewModel.OnStopEventHandler;
-            _timerManager.ChangeTimePointEvent -= presetViewModel.OnTimePointChangedEventHandler;
-
-            ((INotifyCollectionChanged)presetViewModel.TimePointVmCollection).CollectionChanged += RiseIsPlayableChanged;
-            presetViewModel.PropertyChanged -= OnIsNewPresetChangedHandler;
-        }
-
+        // add/remove SelectedPreset handlers
         /// <summary>
         /// Connect handlers to SelectedPreset
         /// </summary>
-        /// <param name="presetViewModel"></param>
-        private void ConnectHandlers(PresetViewModel presetViewModel)
+        /// <param name="selectedPresetViewModel"></param>
+        private void ConnectHandlers(PresetViewModel selectedPresetViewModel)
         {
-            presetViewModel.PropertyChanged += OnIsNewPresetChangedHandler;
-            ((INotifyCollectionChanged)presetViewModel.TimePointVmCollection).CollectionChanged += RiseIsPlayableChanged;
+            selectedPresetViewModel.PropertyChanged += OnIsNewPresetChangedHandler;
+            ((INotifyCollectionChanged)selectedPresetViewModel.TimePointVmCollection).CollectionChanged += RiseIsPlayableChanged;
 
-            _timerManager.ChangeTimePointEvent += presetViewModel.OnTimePointChangedEventHandler;
-            _timerManager.TimerStopEvent += presetViewModel.OnStopEventHandler;
-            _timerManager.TimerSecondPassedEvent += presetViewModel.OnSecondPassedEventHandler;
+            _timerManager.TimerStartEvent += selectedPresetViewModel.OnTimerStartEventHandler;
+            _timerManager.ChangeTimePointEvent += selectedPresetViewModel.OnTimePointChangedEventHandler;
+            _timerManager.TimerSecondPassedEvent += selectedPresetViewModel.OnSecondPassedEventHandler;
+            _timerManager.TimerStopEvent += selectedPresetViewModel.OnTimerStopEventHandler;
+        }
+
+        /// <summary>
+        /// Disconnect handlers from SelectedPreset
+        /// </summary>
+        private void DisconnectHandlers(PresetViewModel selectedPresetViewModel)
+        {
+            _timerManager.TimerStopEvent -= selectedPresetViewModel.OnTimerStopEventHandler;
+            _timerManager.TimerSecondPassedEvent -= selectedPresetViewModel.OnSecondPassedEventHandler;
+            _timerManager.ChangeTimePointEvent -= selectedPresetViewModel.OnTimePointChangedEventHandler;
+            _timerManager.TimerStartEvent -= selectedPresetViewModel.OnTimerStartEventHandler;
+
+            ((INotifyCollectionChanged)selectedPresetViewModel.TimePointVmCollection).CollectionChanged += RiseIsPlayableChanged;
+            selectedPresetViewModel.PropertyChanged -= OnIsNewPresetChangedHandler;
         }
 
         private void OnIsNewPresetChangedHandler(object s, PropertyChangedEventArgs e)

@@ -343,6 +343,13 @@ namespace CycleBell.ViewModels
         }
 
         // TimerManager handlers:
+        internal void OnTimerStartEventHandler(object sender, EventArgs args)
+        {
+            if (TimePointVmCollection.Count > 0) {
+                TimePointVmCollection.DeactivateAll();
+            }
+        }
+
         internal void OnTimePointChangedEventHandler(object s, TimerEventArgs e)
         {
             // if prev TimePoint it is launch TimePoint
@@ -351,7 +358,7 @@ namespace CycleBell.ViewModels
                 NextTimePointName = _mainViewModel.StartTimeName;
             }
             else {
-                TimePointVmCollection.DeactivateAll().Activate(tpvmb => tpvmb == e.PrevTimePoint);
+                TimePointVmCollection.Activate(tpvmb => tpvmb == e.PrevTimePoint);
             }
 
             TimeLeftTo = TimeSpanDigits.Parse(-e.LastTime);
@@ -362,7 +369,12 @@ namespace CycleBell.ViewModels
             TimeLeftTo = TimeSpanDigits.Parse(-e.LastTime);
         }
 
-
+        internal void OnTimerStopEventHandler(object sender, EventArgs args)
+        {
+            if (TimePointVmCollection.Count > 0) {
+                TimePointVmCollection.ActivateAll();
+            }
+        }
 
         // Checkers:
 
