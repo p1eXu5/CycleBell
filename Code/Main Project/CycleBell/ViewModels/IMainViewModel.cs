@@ -6,8 +6,9 @@ namespace CycleBell.ViewModels
 {
     public interface IMainViewModel : INotifyPropertyChanged
     {
-        void Ring (int id);
+        void Ring ();
         bool IsRunning { get; }
+        bool IsRingOnStartTime { get; }
         string StartTimeName { get; }
     }
 }

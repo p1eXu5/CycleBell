@@ -25,7 +25,7 @@ namespace CycleBell.ViewModels
     {
         #region Fields
 
-        public static SoundPlayer DefaultSoundPlayer = new SoundPlayer(); 
+        public static SoundPlayer DefaultSoundPlayer = new SoundPlayer("..\\Code\\Main Project\\CycleBell\\Sounds\\default.wav"); 
 
         private readonly IDialogRegistrator _dialogRegistrator;
 
@@ -139,7 +139,9 @@ namespace CycleBell.ViewModels
 
         public string StartTimeName => _timerManager.StartTimeTimePointName;
 
-        #endregion CLR Properties
+        public bool IsRingOnStartTime { get; set; }
+
+        #endregion
 
         #region Commands
 
@@ -425,7 +427,7 @@ namespace CycleBell.ViewModels
 
         #region IMainViewModel impl
 
-
+        public void Ring() => Ring(null);
         public void Ring (int id) { throw new NotImplementedException(); }
 
         #endregion
