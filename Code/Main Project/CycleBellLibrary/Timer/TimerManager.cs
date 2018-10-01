@@ -96,6 +96,14 @@ namespace CycleBellLibrary.Timer
             TimerStopEvent?.Invoke(this, EventArgs.Empty);
         }
 
+        public event EventHandler TimerStartEvent;
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        private void OnTimerStart()
+        {
+            TimerStopEvent?.Invoke(this, EventArgs.Empty);
+        }
+
         #endregion
 
         #region Properties
@@ -185,7 +193,6 @@ namespace CycleBellLibrary.Timer
             if (IsRunning)
                 return;
 
-            _isRunAsync = IsRunning = true;
             await Task.Run(() => Play(preset));
         }
 
@@ -206,12 +213,11 @@ namespace CycleBellLibrary.Timer
                 return;
             }
 
-            if (!IsRunning)
-                IsRunning = true;
+            IsRunning = true;
+            OnTimerStart();
 
             var currentTime = DateTime.Now.TimeOfDay;
 
-            // Определяем бесконечный ли цикл
             if (preset.IsInfiniteLoop)
                 _isInfiniteLoop = 1;
             else
@@ -270,8 +276,9 @@ namespace CycleBellLibrary.Timer
                         }
                     }
                 }
-                // Если количество TimePointCollection равно одной точке:
                 else {
+
+                    // If TimePointCollection.Count == 1
                     var timePoint = preset.TimePointCollection[0];
 
                     for (var i = 0; i < preset.TimerLoops[timerCycle]; ++i) {

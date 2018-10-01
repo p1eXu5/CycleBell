@@ -9,6 +9,7 @@ namespace CycleBellLibrary.Timer
     {
         event EventHandler<TimerEventArgs> ChangeTimePointEvent;
         event EventHandler<TimerEventArgs> TimerSecondPassedEvent;
+        event EventHandler TimerStartEvent;
         event EventHandler TimerStopEvent;
 
         bool IsRunning { get; }

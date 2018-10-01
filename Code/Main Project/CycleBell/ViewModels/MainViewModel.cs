@@ -53,6 +53,11 @@ namespace CycleBell.ViewModels
             ((INotifyCollectionChanged) (presetManager.Presets)).CollectionChanged += OnPresetCollectionChangedEventHandler;
 
             _timerManager = cycleBellManager.TimerManager;
+            _timerManager.TimerStartEvent += (sender, args) =>
+                                             {
+                                                 OnPropertyChanged(nameof(IsRunning));
+                                                 OnPropertyChanged(nameof(TimerState));
+                                             };
 
             AppDomain.CurrentDomain.ProcessExit += (s, e) => SavePresetsBeforeExit (null);
         }
@@ -246,31 +251,30 @@ namespace CycleBell.ViewModels
             }
         }
 
-        // MediaTermonal
+        // MediaTerminal
         private void MediaTerminal (object o)
         {
             var state = TimerState;
 
-            if (state == true) {
+            if (state == true || state == null) {
 
-                // if playing
-                _timerManager.Pause();
-                OnPropertyChanged(nameof(IsPaused));
-            }
-            else if (state == null) {
+                if (state == true) {
+                    // if playing
+                    _timerManager.Pause();
+                }
+                else {
+                    // if paused
+                    _timerManager.Resume();
+                }
 
-                // if paused
-                _timerManager.Resume();
                 OnPropertyChanged(nameof(IsPaused));
+                OnPropertyChanged(nameof(TimerState));
             }
             else {
-
                 // if not running
                 _timerManager.PlayAsync (_selectedPreset.Preset);
-                OnPropertyChanged(nameof(IsRunning));
             }
 
-            OnPropertyChanged(nameof(TimerState));
         }
 
         //  Save Preset
