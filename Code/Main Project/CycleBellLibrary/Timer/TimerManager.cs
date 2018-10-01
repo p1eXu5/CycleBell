@@ -101,7 +101,7 @@ namespace CycleBellLibrary.Timer
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         private void OnTimerStart()
         {
-            TimerStopEvent?.Invoke(this, EventArgs.Empty);
+            TimerStartEvent?.Invoke(this, EventArgs.Empty);
         }
 
         #endregion
@@ -160,8 +160,7 @@ namespace CycleBellLibrary.Timer
         /// <param name="currentTime"></param>
         private (TimeSpan nextChangeTime, TimePoint nextTimePoint) FindNextTimePoint(ref TimeSpan currentTime)
         {
-            // Если текущее время меньше времени следующей точки или следующая точка - это startTime:
-            if (currentTime < _queue.Peek().nextChangeTime || _queue.Peek().nextTimePoint.Time < TimeSpan.Zero) {
+            if (currentTime < _queue.Peek().nextChangeTime || _prevQueueElement.prevTimePoint.Time < TimeSpan.Zero) {
                 return _queue.Peek();
             }
 
@@ -245,12 +244,13 @@ namespace CycleBellLibrary.Timer
             if (preset?.TimePointCollection == null || preset.TimePointCollection.Count == 0)
                 return null;
 
+            // Смещение по времени следующей временной точки
+            TimeSpan startTime = preset.StartTime;
+
             // Очередь кортежей времени будильника и соответствующей ему NextTimePoint
             Queue<(TimeSpan, TimePoint)> queue = new Queue<(TimeSpan, TimePoint)>();
 
-            // Смещение по времени следующей временной точки
-            TimeSpan localStartTime = preset.StartTime;
-            queue.Enqueue((localStartTime, new TimePoint(Preset.StartTimePointName, localStartTime, TimePointType.Absolute)));
+            queue.Enqueue((startTime, new TimePoint(Preset.StartTimePointName, startTime, TimePointType.Absolute)));
 
             // Заполняем очередь
 
@@ -269,10 +269,10 @@ namespace CycleBellLibrary.Timer
 
                         foreach (var point in timePoints) {
 
-                            nextTime = point.GetAbsoluteTime(localStartTime);
+                            nextTime = point.GetAbsoluteTime(startTime);
 
                             queue.Enqueue((nextTime, point));
-                            localStartTime = point.GetAbsoluteTime(localStartTime);
+                            startTime = point.GetAbsoluteTime(startTime);
                         }
                     }
                 }
@@ -283,10 +283,10 @@ namespace CycleBellLibrary.Timer
 
                     for (var i = 0; i < preset.TimerLoops[timerCycle]; ++i) {
 
-                        nextTime = timePoint.GetAbsoluteTime(localStartTime);
+                        nextTime = timePoint.GetAbsoluteTime(startTime);
 
                         queue.Enqueue((nextTime, timePoint));
-                        localStartTime = timePoint.GetAbsoluteTime(localStartTime);
+                        startTime = timePoint.GetAbsoluteTime(startTime);
                     }
                 }
             }

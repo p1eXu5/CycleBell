@@ -281,12 +281,9 @@ namespace CycleBell.ViewModels
         private void CreateNewPreset(object obj)
         {
             _manager.CreateNewPreset();
+
             OnPropertyChanged(nameof(IsSelectedPreset));
             OnPropertyChanged(nameof(IsInfiniteLoop));
-            OnPropertyChanged(nameof(IsRunning));
-            OnPropertyChanged(nameof(IsPaused));
-            OnPropertyChanged(nameof(IsStopped));
-            OnPropertyChanged(nameof(IsPlayable));
         }
 
         //  Save Preset
@@ -377,6 +374,7 @@ namespace CycleBell.ViewModels
         private void Play (object o)
         {
             _timerManager.PlayAsync (SelectedPreset.Preset);
+
             OnPropertyChanged(nameof(IsRunning));
         }
         private bool CanPlay (object o)

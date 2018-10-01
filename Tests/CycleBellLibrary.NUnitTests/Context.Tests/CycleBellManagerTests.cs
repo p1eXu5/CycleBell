@@ -97,6 +97,7 @@ namespace CycleBellLibrary.NUnitTests.Context.Tests
             public event NotifyCollectionChangedEventHandler PresetCollectionChanged;
             public event EventHandler<TimerEventArgs> ChangeTimePointEvent;
             public event EventHandler<TimerEventArgs> TimerSecondPassedEvent;
+            public event EventHandler TimerStartEvent;
             public event EventHandler TimerStopEvent;
             public ReadOnlyObservableCollection<Preset> Presets { get; }
             public bool IsRunning { get; }
