@@ -351,7 +351,7 @@ namespace CycleBell.ViewModels
                 NextTimePointName = _mainViewModel.StartTimeName;
             }
             else {
-                TimePointVmCollection.Diactivate().Activate(tpvmb => tpvmb == e.PrevTimePoint);
+                TimePointVmCollection.DeactivateAll().Activate(tpvmb => tpvmb == e.PrevTimePoint);
             }
 
             TimeLeftTo = TimeSpanDigits.Parse(-e.LastTime);
@@ -362,10 +362,6 @@ namespace CycleBell.ViewModels
             TimeLeftTo = TimeSpanDigits.Parse(-e.LastTime);
         }
 
-        internal void OnStopEventHandler(object s, EventArgs e)
-        {
-            //throw new NotImplementedException();
-        }
 
 
         // Checkers:

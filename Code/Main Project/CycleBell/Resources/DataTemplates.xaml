@@ -10,6 +10,7 @@
     <DataTemplate x:Key="datatempl_BeginTimePointViewModel" DataType="vm:BeginTimePointViewModel">
         <Grid SnapsToDevicePixels="True" ShowGridLines="False" Margin="5" 
               TextElement.FontStyle="Normal"
+              IsEnabled="{Binding IsEnabled}"
               >
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="1" />
@@ -60,7 +61,7 @@
 
     <!-- TimePointViewModel --> 
     <DataTemplate x:Key="datatempl_TimePointViewModel" >
-        <Grid>
+        <Grid IsEnabled="{Binding IsEnabled}">
             <!--<ToggleButton Width="200" Height="200" Content="mute" Style="{x:Null}" />-->
             <Grid.ColumnDefinitions>
                 <!-- marker -->

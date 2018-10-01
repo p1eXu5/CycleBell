@@ -13,6 +13,7 @@ using System.Windows.Data;
 using System.Windows.Input;
 
 using CycleBell.Base;
+using CycleBell.ViewModels.TimePointViewModels;
 using CycleBellLibrary.Context;
 using CycleBellLibrary.Repository;
 using CycleBellLibrary.Timer;
@@ -55,6 +56,22 @@ namespace CycleBell.ViewModels
             _timerManager = cycleBellManager.TimerManager;
             _timerManager.TimerStartEvent += (sender, args) =>
                                              {
+                                                 if (_selectedPreset != null && _selectedPreset.TimePointVmCollection.Count > 0) {
+
+                                                     _selectedPreset.TimePointVmCollection.DeactivateAll();
+                                                 }
+
+                                                 OnPropertyChanged(nameof(IsRunning));
+                                                 OnPropertyChanged(nameof(TimerState));
+                                             };
+
+            _timerManager.TimerStopEvent += (sender, args) =>
+                                             {
+                                                 if (_selectedPreset != null && _selectedPreset.TimePointVmCollection.Count > 0) {
+
+                                                     _selectedPreset.TimePointVmCollection.ActivateAll();
+                                                 }
+
                                                  OnPropertyChanged(nameof(IsRunning));
                                                  OnPropertyChanged(nameof(TimerState));
                                              };
@@ -387,9 +404,6 @@ namespace CycleBell.ViewModels
         private void Stop (object o)
         {
             _timerManager.Stop();
-
-            OnPropertyChanged(nameof(IsRunning));
-            OnPropertyChanged(nameof(TimerState));
         }
         
         // ---- Pause

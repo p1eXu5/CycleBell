@@ -27,8 +27,6 @@ namespace CycleBell.ViewModels.TimePointViewModels
         protected SoundPlayer _SoundPlayer;
         protected bool _MuteFlag = false;
 
-        private bool _active;
-
         #endregion
 
         #region Constructor
@@ -122,15 +120,6 @@ namespace CycleBell.ViewModels.TimePointViewModels
         }
 
         public string SoundLocation => (String)TimePoint.Tag;
-
-        public bool Active
-        {
-            get => _active;
-            set {
-                _active = value;
-                OnPropertyChanged();
-            }
-        }
 
         #endregion
 

@@ -13,10 +13,11 @@ namespace CycleBell.ViewModels.TimePointViewModels
         private byte _loopNumber;
 
         protected IPresetViewModel _PresetViewModel;
-        protected bool _IsEnabled;
+
+        protected bool _IsEnabled = true;
 
         #endregion
-        
+
         #region Constructors
 
         protected TimePointViewModelBase (int id, byte loopNumber, IPresetViewModel presetViewModel)
@@ -41,12 +42,19 @@ namespace CycleBell.ViewModels.TimePointViewModels
                 OnPropertyChanged();
             }
         }
-
         public virtual byte LoopNumber
         {
             get => _loopNumber;
             set {
                 _loopNumber = value;
+                OnPropertyChanged();
+            }
+        }
+        public virtual bool IsEnabled
+        {
+            get => _IsEnabled;
+            set {
+                _IsEnabled = value;
                 OnPropertyChanged();
             }
         }
