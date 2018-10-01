@@ -61,7 +61,6 @@ namespace CycleBell.ViewModels
             AppDomain.CurrentDomain.ProcessExit += (s, e) => SavePresetsBeforeExit (null);
         }
 
-
         #endregion Constructor
 
         #region Properties
@@ -178,12 +177,7 @@ namespace CycleBell.ViewModels
 
         #region Methods
 
-        private void RiseIsPlayableChanged (object sender, NotifyCollectionChangedEventArgs e)
-        {
-            OnPropertyChanged (nameof(IsPlayable));
-            OnPropertyChanged (nameof(IsStopped));
-        }
-
+        // Presets changed handler
         /// <summary>
         /// Refreshes SelectedPreset when a new preset was added.
         /// </summary>
@@ -221,6 +215,12 @@ namespace CycleBell.ViewModels
         {
             OnPropertyChanged(nameof(IsRunning));
             OnPropertyChanged(nameof(TimerState));
+        }
+
+        private void RiseIsPlayableChanged (object sender, NotifyCollectionChangedEventArgs e)
+        {
+            OnPropertyChanged (nameof(IsPlayable));
+            OnPropertyChanged (nameof(IsStopped));
         }
 
         // add/remove SelectedPreset handlers
@@ -425,7 +425,7 @@ namespace CycleBell.ViewModels
 
         #region IMainViewModel impl
 
-        public IDictionary<int, SoundPlayer> SoundMap { get; } = new Dictionary<int, SoundPlayer>();
+
         public void Ring (int id) { throw new NotImplementedException(); }
 
         #endregion

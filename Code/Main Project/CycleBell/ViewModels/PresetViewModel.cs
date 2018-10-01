@@ -58,6 +58,8 @@ namespace CycleBell.ViewModels
         private string _nextTimePointName;
         private TimeSpanDigits _timeLeftTo;
 
+        public IDictionary<int, SoundPlayer> SoundMap { get; } = new Dictionary<int, SoundPlayer>();
+
         #endregion
 
         #region Constructor
@@ -205,20 +207,48 @@ namespace CycleBell.ViewModels
 
         #region Methods
 
+        // RemoveTimePoint
         public void RemoveTimePoint (TimePoint timePoint)
         {
             _preset.RemoveTimePoint (timePoint);
         }
 
+        // AddTimePointCommand:
+        private void AddTimePoint(object o)
+        {
+            var timePoint = _addingTimePoint.TimePoint.Clone();
+
+            if (String.IsNullOrWhiteSpace (timePoint.Name))
+                timePoint.Name = timePoint.GetDefaultTimePointName();
+
+            _preset.AddTimePoint(timePoint);
+
+            ResetAddingTimePoint();
+        }
+        private bool CanAddTimePoint (object o)
+        {
+            var res = _addingTimePoint.Time == TimeSpan.Zero && _addingTimePoint.TimePointType == TimePointType.Absolute 
+                        || _addingTimePoint.Time > TimeSpan.Zero;
+
+            return res;
+        }
+        private bool CanAddTimePoint (TimePoint timePoint)
+        {
+            var res = timePoint.Time == TimeSpan.Zero && timePoint.TimePointType == TimePointType.Absolute 
+                      || timePoint.Time > TimeSpan.Zero;
+
+            return res;
+        }
+
+        // Sound
         public void UpdateSoundBank (TimePoint timePoint)
         {
-            _mainViewModel.SoundMap[timePoint.Id] = new SoundPlayer((string)timePoint.Tag);
+            SoundMap[timePoint.Id] = new SoundPlayer((string)timePoint.Tag);
         }
 
         public void Save() { throw new NotImplementedException(); }
 
         // Service:
-
         private void LoadTimePointViewModelCollection (Preset preset)
         {
             if (preset.TimePointCollection.Count > 0) {
@@ -315,32 +345,6 @@ namespace CycleBell.ViewModels
             }
         }
 
-        // AddTimePointCommand:
-        private void AddTimePoint(object o)
-        {
-            var timePoint = _addingTimePoint.TimePoint.Clone();
-
-            if (String.IsNullOrWhiteSpace (timePoint.Name))
-                timePoint.Name = timePoint.GetDefaultTimePointName();
-
-            _preset.AddTimePoint(timePoint);
-
-            ResetAddingTimePoint();
-        }
-        private bool CanAddTimePoint (object o)
-        {
-            var res = _addingTimePoint.Time == TimeSpan.Zero && _addingTimePoint.TimePointType == TimePointType.Absolute 
-                        || _addingTimePoint.Time > TimeSpan.Zero;
-
-            return res;
-        }
-        private bool CanAddTimePoint (TimePoint timePoint)
-        {
-            var res = timePoint.Time == TimeSpan.Zero && timePoint.TimePointType == TimePointType.Absolute 
-                      || timePoint.Time > TimeSpan.Zero;
-
-            return res;
-        }
 
         // TimerManager handlers:
         internal void OnTimePointChangedEventHandler(object s, TimerEventArgs e)
@@ -373,7 +377,6 @@ namespace CycleBell.ViewModels
         }
 
         // Checkers:
-
         /// <summary>
         /// Used in OnTimePointCollectionChanged
         /// </summary>
