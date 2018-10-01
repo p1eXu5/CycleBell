@@ -75,12 +75,18 @@
 
         <!-- stop -->
         <Button Grid.Column="2"
-                      Width="48" Height="38"
-                      HorizontalAlignment="Center"
-                      local:AttachedPropertyFactory.BorderColor="#33330033"
-                      IsEnabled="{Binding IsRunning}"
-                      Command="{Binding StopCommand}"
-                      >
+                Width="48" Height="38"
+                HorizontalAlignment="Center"
+                local:AttachedPropertyFactory.BorderColor="#33330033"
+                IsEnabled="{Binding IsRunning}"
+                Command="{Binding StopCommand}"
+                >
+            <Button.Foreground>
+                <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+                    <GradientStop Color="{DynamicResource col_TopUncheckedIcon}" Offset="0" />
+                    <GradientStop Color="{DynamicResource col_BottomUncheckedIcon}" Offset="1" />
+                </LinearGradientBrush>
+            </Button.Foreground>
             <Path Data="{StaticResource gmtry_Stop}" Margin="3"/>
         </Button>
 

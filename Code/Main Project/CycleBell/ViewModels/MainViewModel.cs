@@ -166,7 +166,7 @@ namespace CycleBell.ViewModels
 
             #region media
         public ICommand PlayCommand => new ActionCommand (Play, CanPlay);
-        public ICommand StopCommand => new ActionCommand (Stop, CanStop);
+        public ICommand StopCommand => new ActionCommand (Stop);
         public ICommand PauseCommand => new ActionCommand (Pause, CanPause);
         public ICommand ResumeCommand => new ActionCommand (Resume, CanResume);
         public ICommand RingCommand => new ActionCommand(Ring);
@@ -388,10 +388,6 @@ namespace CycleBell.ViewModels
         {
             _timerManager.Stop();
             OnPropertyChanged(nameof(IsRunning));
-        }
-        private bool CanStop (object o)
-        {
-            return _timerManager.IsRunning;
         }
         
         // ---- Pause

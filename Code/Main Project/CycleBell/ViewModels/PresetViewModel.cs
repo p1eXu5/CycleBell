@@ -364,7 +364,7 @@ namespace CycleBell.ViewModels
 
         internal void OnStopEventHandler(object s, EventArgs e)
         {
-            throw new NotImplementedException();
+            //throw new NotImplementedException();
         }
 
 
