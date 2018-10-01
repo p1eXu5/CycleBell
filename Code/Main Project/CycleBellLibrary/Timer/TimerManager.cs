@@ -180,9 +180,9 @@ namespace CycleBellLibrary.Timer
             _timer?.Dispose();
 
             _queue = null;
-            if (!IsRunning) IsRunning = false;
-            if (!_isRunAsync) _isRunAsync = false;
-            if (!IsPaused) IsPaused = false;
+            if (IsRunning) IsRunning = false;
+            if (_isRunAsync) _isRunAsync = false;
+            if (IsPaused) IsPaused = false;
 
             OnTimerStop();
         }

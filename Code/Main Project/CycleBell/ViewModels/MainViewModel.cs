@@ -387,7 +387,9 @@ namespace CycleBell.ViewModels
         private void Stop (object o)
         {
             _timerManager.Stop();
+
             OnPropertyChanged(nameof(IsRunning));
+            OnPropertyChanged(nameof(TimerState));
         }
         
         // ---- Pause

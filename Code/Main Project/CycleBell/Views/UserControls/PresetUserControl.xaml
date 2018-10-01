@@ -297,7 +297,19 @@
         <userControls:AddingTimePointUserControl Grid.Row="2"
                                                  VerticalAlignment="Center"
                                                  Height="Auto" Width="Auto" Margin="20,40,20,20"
-                                                 DataContext="{Binding AddingTimePoint}"/>
+                                                 DataContext="{Binding AddingTimePoint}">
+            <userControls:AddingTimePointUserControl.Style>
+                <Style TargetType="UserControl">
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding Path=DataContext.IsRunning,
+                                                       RelativeSource={RelativeSource FindAncestor, AncestorType=Window}}" 
+                                     Value="True">
+                            <Setter Property="IsEnabled" Value="False" />
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </userControls:AddingTimePointUserControl.Style>
+        </userControls:AddingTimePointUserControl>
         
 
     </Grid>
