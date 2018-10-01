@@ -139,7 +139,7 @@ namespace CycleBell.ViewModels
 
         public string StartTimeName => _timerManager.StartTimeTimePointName;
 
-        public bool IsRingOnStartTime { get; set; }
+        public bool IsRingOnStartTime { get; set; } = true;
 
         #endregion
 

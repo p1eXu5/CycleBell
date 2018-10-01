@@ -148,9 +148,32 @@
                     <BeginStoryboard>
                         <Storyboard>
                             <ColorAnimation Storyboard.TargetProperty="(at:AttachedPropertyFactory.PathStrokeBrush).(LinearGradientBrush.GradientStops)[0].(GradientStop.Color)" 
-                                            To="{StaticResource col_TopDsabledPathStroke}" Duration="0:0:.2" />
+                                            To="{StaticResource col_TopDisabledPathStroke}" Duration="0:0:.2" />
                             <ColorAnimation Storyboard.TargetProperty="(at:AttachedPropertyFactory.PathStrokeBrush).(LinearGradientBrush.GradientStops)[1].(GradientStop.Color)" 
-                                            To="{StaticResource col_BottomDsabledPathStroke}" Duration="0:0:.2" />
+                                            To="{StaticResource col_BottomDisabledPathStroke}" Duration="0:0:.2" />
+                        </Storyboard>
+                    </BeginStoryboard>
+                </Trigger.EnterActions>
+                <Trigger.ExitActions>
+                    <BeginStoryboard>
+                        <Storyboard>
+                            <ColorAnimation Storyboard.TargetProperty="(at:AttachedPropertyFactory.PathStrokeBrush).(LinearGradientBrush.GradientStops)[0].(GradientStop.Color)" 
+                                            To="{StaticResource col_TopNormalPathStroke}" Duration="0:0:.2" />
+                            <ColorAnimation Storyboard.TargetProperty="(at:AttachedPropertyFactory.PathStrokeBrush).(LinearGradientBrush.GradientStops)[1].(GradientStop.Color)" 
+                                            To="{StaticResource col_BottomNormalPathStroke}" Duration="0:0:.2" />
+                        </Storyboard>
+                    </BeginStoryboard>
+                </Trigger.ExitActions>
+            </Trigger>
+
+            <Trigger Property="IsPressed" Value="True">
+                <Trigger.EnterActions>
+                    <BeginStoryboard>
+                        <Storyboard>
+                            <ColorAnimation Storyboard.TargetProperty="(at:AttachedPropertyFactory.PathStrokeBrush).(LinearGradientBrush.GradientStops)[0].(GradientStop.Color)" 
+                                            To="{StaticResource col_TopDisabledPathStroke}" Duration="0:0:.2" />
+                            <ColorAnimation Storyboard.TargetProperty="(at:AttachedPropertyFactory.PathStrokeBrush).(LinearGradientBrush.GradientStops)[1].(GradientStop.Color)" 
+                                            To="{StaticResource col_BottomDisabledPathStroke}" Duration="0:0:.2" />
                         </Storyboard>
                     </BeginStoryboard>
                 </Trigger.EnterActions>
@@ -191,16 +214,16 @@
                 </LinearGradientBrush>
             </Setter.Value>
         </Setter>
-        
+
         <Style.Triggers>
             <Trigger Property="IsChecked" Value="True">
                 <Trigger.EnterActions>
                     <BeginStoryboard>
                         <Storyboard>
                             <ColorAnimation Storyboard.TargetProperty="(at:AttachedPropertyFactory.PathStrokeBrush).(LinearGradientBrush.GradientStops)[0].(GradientStop.Color)" 
-                                            To="{StaticResource col_TopDsabledPathStroke}" Duration="0:0:.2" />
+                                            To="{StaticResource col_TopDisabledPathStroke}" Duration="0:0:.2" />
                             <ColorAnimation Storyboard.TargetProperty="(at:AttachedPropertyFactory.PathStrokeBrush).(LinearGradientBrush.GradientStops)[1].(GradientStop.Color)" 
-                                            To="{StaticResource col_BottomDsabledPathStroke}" Duration="0:0:.2" />
+                                            To="{StaticResource col_BottomDisabledPathStroke}" Duration="0:0:.2" />
                         </Storyboard>
                     </BeginStoryboard>
                 </Trigger.EnterActions>
@@ -216,7 +239,6 @@
                 </Trigger.ExitActions>
             </Trigger>
         </Style.Triggers>
-
     </Style>
 
     <!-- style_ThreeStateToggleButton -->
@@ -230,7 +252,7 @@
                 </LinearGradientBrush>
             </Setter.Value>
         </Setter>
-        
+
         <Setter Property="at:AttachedPropertyFactory.StrokeBrush1">
             <Setter.Value>
                 <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
@@ -257,7 +279,7 @@
                 </LinearGradientBrush>
             </Setter.Value>
         </Setter>
-        
+
         <Style.Triggers>
 
             <Trigger Property="IsChecked" Value="True">
@@ -365,7 +387,7 @@
                     </BeginStoryboard>
                 </Trigger.ExitActions>
             </Trigger>
-            
+
             <Trigger Property="IsEnabled" Value="False">
                 <Trigger.EnterActions>
                     <BeginStoryboard>
@@ -416,7 +438,6 @@
             </Trigger>
         </Style.Triggers>
     </Style>
-
 
     <!-- style_MuteToggleButton -->
     <Style x:Key="style_MuteToggleButton" TargetType="ToggleButton">

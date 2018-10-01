@@ -82,8 +82,8 @@
     <Color x:Key="col_TopPause">#FFFF00</Color>
     <Color x:Key="col_BottomPause">#AAAA00</Color>
 
-    <Color x:Key="col_TopDsabledPathStroke">#00AAAA00</Color>
-    <Color x:Key="col_BottomDsabledPathStroke">#00AAAA00</Color>
+    <Color x:Key="col_TopDisabledPathStroke">#00AAAA00</Color>
+    <Color x:Key="col_BottomDisabledPathStroke">#00AAAA00</Color>
 
     <Color x:Key="col_TopNormalPathStroke">#C8C8C8</Color>
     <Color x:Key="col_BottomNormalPathStroke">#C8C8C8</Color>
