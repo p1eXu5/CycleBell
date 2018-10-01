@@ -206,7 +206,8 @@ namespace CycleBellLibrary.Timer
                 return;
             }
 
-            IsRunning = true;
+            if (!IsRunning)
+                IsRunning = true;
 
             var currentTime = DateTime.Now.TimeOfDay;
 
