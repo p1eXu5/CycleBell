@@ -33,7 +33,8 @@
 
             <Line Grid.Column="1" Grid.Row="0" 
                   Stroke="DimGray" Fill="{x:Null}" Stretch="Fill"
-                  StrokeEndLineCap="Square" StrokeStartLineCap="Square"
+                  StrokeEndLineCap="Square" 
+                  StrokeStartLineCap="Square"
                   VerticalAlignment="Center"
                   X1="0" Y1="0" X2="1" />
 
@@ -50,10 +51,16 @@
                          Text="{Binding LoopCount}"/>
             </StackPanel>
 
-            <Polyline Grid.Column="2" Grid.ColumnSpan="3" Grid.Row="0" Grid.RowSpan="4"
+            <Polyline Grid.Column="2" Grid.ColumnSpan="3" Grid.Row="0" Grid.RowSpan="3"
                       Stroke="DimGray" Fill="{x:Null}" Stretch="Fill"
                       StrokeEndLineCap="Square" StrokeStartLineCap="Square"
-                      Points="0,0 0,1 1,1 1,2" />
+                      Points="0,0 0,1 1,1" />
+
+            <Line Grid.Column="4" Grid.Row="3" 
+                  Stroke="DimGray" Fill="{x:Null}" Stretch="Fill"
+                  StrokeEndLineCap="Square" StrokeStartLineCap="Square"
+                  VerticalAlignment="Stretch"
+                  X1="0" Y1="0" Y2="1" />
         </Grid>
     </DataTemplate>
 
