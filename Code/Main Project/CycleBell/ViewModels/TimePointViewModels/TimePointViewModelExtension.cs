@@ -36,14 +36,15 @@ namespace CycleBell.ViewModels.TimePointViewModels
             return timePointViewModels;
         }
 
-        internal static void Activate(this ReadOnlyObservableCollection<TimePointViewModelBase> timePointViewModels, Func<TimePointViewModelBase,bool> predicate)
+        internal static TimePointViewModelBase Activate(this ReadOnlyObservableCollection<TimePointViewModelBase> timePointViewModels, Func<TimePointViewModelBase,bool> predicate)
         {
             var tpvm = timePointViewModels?.Where(predicate).FirstOrDefault();
 
             if (tpvm == null)
-                return;
+                return null;
 
             tpvm.IsEnabled = true;
+            return tpvm;
         }
     }
 }

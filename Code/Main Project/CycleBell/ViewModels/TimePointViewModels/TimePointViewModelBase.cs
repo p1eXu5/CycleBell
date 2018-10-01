@@ -50,7 +50,17 @@ namespace CycleBell.ViewModels.TimePointViewModels
                 OnPropertyChanged();
             }
         }
+
         public virtual bool IsEnabled
+        {
+            get => _IsEnabled;
+            set {
+                _IsEnabled = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public bool IsActive
         {
             get => _IsEnabled;
             set {

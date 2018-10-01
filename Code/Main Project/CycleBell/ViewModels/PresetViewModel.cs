@@ -60,6 +60,8 @@ namespace CycleBell.ViewModels
 
         public IDictionary<int, SoundPlayer> SoundMap { get; } = new Dictionary<int, SoundPlayer>();
 
+        private TimePointViewModelBase _activeTimePointViewModelBase = null;
+
         #endregion
 
         #region Constructor
@@ -362,7 +364,12 @@ namespace CycleBell.ViewModels
             }
             else {
 
-                TimePointVmCollection.Activate(tpvmb => tpvmb == e.NextTimePoint);
+                if (_activeTimePointViewModelBase != null)
+                    _activeTimePointViewModelBase.IsActive = false;
+
+                _activeTimePointViewModelBase = TimePointVmCollection.Activate(tpvmb => tpvmb == e.NextTimePoint);
+                
+                _activeTimePointViewModelBase.IsActive = true;
             }
 
             NextTimePointName = e.NextTimePoint.Name;
