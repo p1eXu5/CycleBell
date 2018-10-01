@@ -51,7 +51,6 @@ namespace CycleBellLibrary.Context
                 _presetCollectionManager.Add (Preset.EmptyPreset);
             }
             else {
-                // TODO if existing EmptyPreset does not equal Preset.EmptyPreset than throw, else - do nothing
                 if (existEmptyPreset.StartTime != Preset.DefaultStartTime || existEmptyPreset.TimePointCollection.Count > 0) {
                     OnCantCreateNewPreset();
                 }
