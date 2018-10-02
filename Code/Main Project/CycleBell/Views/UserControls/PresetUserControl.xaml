@@ -216,6 +216,7 @@
                      ItemContainerStyle="{StaticResource style_ListBoxItem}"
                      FontFamily="{StaticResource font_SuiGeneris}"
                      ScrollViewer.HorizontalScrollBarVisibility="Hidden"
+                     ScrollViewer.CanContentScroll="False"
                      >
                 <!--<ToggleButton Width="200" Height="200" Style="{x:Null}" />-->
                 <ListBox.Style>
