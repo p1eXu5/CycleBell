@@ -173,10 +173,7 @@ namespace CycleBell.ViewModels
         public ICommand ViewHelpCommand => new ActionCommand(About);
             #endregion
 
-
-        public ICommand PlayCommand => new ActionCommand (Play, CanPlay);
         public ICommand StopCommand => new ActionCommand (Stop);
-        public ICommand PauseCommand => new ActionCommand (Pause, CanPause);
         public ICommand RingOnStartTimeSwitchCommand => new ActionCommand (SwitchIsRingOnStartTime);
         public ICommand RingCommand => new ActionCommand(Ring);
 
@@ -269,32 +266,6 @@ namespace CycleBell.ViewModels
             }
         }
 
-        // MediaTerminal
-        private void MediaTerminal (object o)
-        {
-            var state = TimerState;
-
-            if (state == true || state == null) {
-
-                if (state == true) {
-                    // if playing
-                    _timerManager.Pause();
-                }
-                else {
-                    // if paused
-                    _timerManager.Resume();
-                }
-
-                OnPropertyChanged(nameof(IsPaused));
-                OnPropertyChanged(nameof(TimerState));
-            }
-            else {
-                // if not running
-                _timerManager.PlayAsync (_selectedPreset.Preset);
-            }
-
-        }
-
         //  Save Preset
         private void CreateNewPreset(object obj)
         {
@@ -374,31 +345,31 @@ namespace CycleBell.ViewModels
              _manager.SavePresets();
         }
 
-        //  Exit
-        private void Exit(object obj)
-        {
-            //_manager.SavePresets();
-            System.Windows.Application.Current.Shutdown();
-        }
 
-        //  About
-        private void About(object obj)
+        // MediaTerminal - timer launcher
+        private void MediaTerminal (object o)
         {
-            var viewModel = new AboutDialogViewModel();
-            _dialogRegistrator.ShowDialog(viewModel);
-        }
+            var state = TimerState;
 
-        // ---- Play
-        private void Play (object o)
-        {
-            _timerManager.PlayAsync (SelectedPreset.Preset);
+            if (state == true || state == null) {
 
-            OnPropertyChanged(nameof(IsRunning));
-        }
-        private bool CanPlay (object o)
-        {
-            return (SelectedPreset?.TimePointVmCollection.Count > 0)
-                && !_timerManager.IsRunning;
+                if (state == true) {
+                    // if playing
+                    _timerManager.Pause();
+                }
+                else {
+                    // if paused
+                    _timerManager.Resume();
+                }
+
+                OnPropertyChanged(nameof(IsPaused));
+                OnPropertyChanged(nameof(TimerState));
+            }
+            else {
+                // if not running
+                _timerManager.PlayAsync (_selectedPreset.Preset);
+            }
+
         }
 
         // ---- Stop
@@ -407,16 +378,7 @@ namespace CycleBell.ViewModels
             _timerManager.Stop();
         }
         
-        // ---- Pause
-        private void Pause (object o)
-        {
-            _timerManager.Pause();
-        }
-        private bool CanPause (object o)
-        {
-            return _timerManager.IsRunning;
-        }
-        
+
         // ---- SwitchIsRingOnStartTime
         private void SwitchIsRingOnStartTime (object o)
         {
@@ -431,6 +393,20 @@ namespace CycleBell.ViewModels
             //DefaultSoundPlayer.Play();
         } 
 
+
+        //  Exit
+        private void Exit(object obj)
+        {
+            //_manager.SavePresets();
+            System.Windows.Application.Current.Shutdown();
+        }
+
+        //  About
+        private void About(object obj)
+        {
+            var viewModel = new AboutDialogViewModel();
+            _dialogRegistrator.ShowDialog(viewModel);
+        }
 
         #endregion Methods
 

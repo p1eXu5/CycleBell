@@ -28,75 +28,82 @@ namespace CycleBell.NUnitTests.ViewModels
         #region PlayCommand
 
         [Test]
-        public void PlayCommand_SelectedPresetIsNull_CannotExecute()
-        {
-            var pvm = GetMainViewModel();
-
-            Assert.IsFalse (pvm.PlayCommand.CanExecute (null));
-        }
-
-        [Test]
-        public void PlayCommand_SelectedPresetIsExistsTimerIsNotRunning_CanExecute()
+        public void MediaTerminal_TimerStateIsTrue_CallsTimerManager()
         {
             var mvm = GetMainViewModel();
-
-            mvm.SelectedPreset = GetPresetViewModel(mvm);
-            _mockTimerManager.Setup (tm => tm.IsRunning).Returns (false);
-
-            Assert.IsTrue (mvm.PlayCommand.CanExecute(null));
+           
         }
 
-        [Test]
-        public void PlayCommand_WhenExecuted_CallsITimerManagerPlayAsync()
-        {
-            var mvm = GetMainViewModel();
-            mvm.SelectedPreset = GetPresetViewModel(mvm);
-            _mockTimerManager.Setup (tm => tm.IsRunning).Returns (false);
+        //[Test]
+        //public void PlayCommand_SelectedPresetIsNull_CannotExecute()
+        //{
+        //    var pvm = GetMainViewModel();
 
-            mvm.PlayCommand.Execute (null);
+        //    Assert.IsFalse (pvm.PlayCommand.CanExecute (null));
+        //}
 
-            _mockTimerManager.Verify(tm => tm.PlayAsync (It.IsAny<Preset>()));
-        }
+        //[Test]
+        //public void PlayCommand_SelectedPresetIsExistsTimerIsNotRunning_CanExecute()
+        //{
+        //    var mvm = GetMainViewModel();
 
-        [Test]
-        public void PlayCommand_WhenExecuted_RaiseOnIsRunningChanged()
-        {
+        //    mvm.SelectedPreset = GetPresetViewModel(mvm);
+        //    _mockTimerManager.Setup (tm => tm.IsRunning).Returns (false);
 
-        }
+        //    Assert.IsTrue (mvm.PlayCommand.CanExecute(null));
+        //}
+
+        //[Test]
+        //public void PlayCommand_WhenExecuted_CallsITimerManagerPlayAsync()
+        //{
+        //    var mvm = GetMainViewModel();
+        //    mvm.SelectedPreset = GetPresetViewModel(mvm);
+        //    _mockTimerManager.Setup (tm => tm.IsRunning).Returns (false);
+
+        //    mvm.PlayCommand.Execute (null);
+
+        //    _mockTimerManager.Verify(tm => tm.PlayAsync (It.IsAny<Preset>()));
+        //}
+
+        //[Test]
+        //public void PlayCommand_WhenExecuted_RaiseOnIsRunningChanged()
+        //{
+
+        //}
 
         #endregion
 
         // PouseCommand
 
-        [Test]
-        public void PouseCommand_TimerIsNotRunning_CanNotExecuted()
-        {
-            var pvm = GetMainViewModel();
+        //[Test]
+        //public void PouseCommand_TimerIsNotRunning_CanNotExecuted()
+        //{
+        //    var pvm = GetMainViewModel();
 
-            _mockTimerManager.Setup (tm => tm.IsRunning).Returns (false);
+        //    _mockTimerManager.Setup (tm => tm.IsRunning).Returns (false);
 
-            Assert.IsFalse (pvm.PauseCommand.CanExecute (null));
-        }
+        //    Assert.IsFalse (pvm.PauseCommand.CanExecute (null));
+        //}
 
-        [Test]
-        public void PouseCommand_TimerIsRunning_CanExecuted()
-        {
-            var pvm = GetMainViewModel();
+        //[Test]
+        //public void PouseCommand_TimerIsRunning_CanExecuted()
+        //{
+        //    var pvm = GetMainViewModel();
 
-            _mockTimerManager.Setup (tm => tm.IsRunning).Returns (true);
+        //    _mockTimerManager.Setup (tm => tm.IsRunning).Returns (true);
 
-            Assert.IsTrue (pvm.PauseCommand.CanExecute(null));
-        }
+        //    Assert.IsTrue (pvm.PauseCommand.CanExecute(null));
+        //}
 
-        [Test]
-        public void PouseCommand_WhenExecuted_CallsITimerManager()
-        {
-            var pvm = GetMainViewModel();
+        //[Test]
+        //public void PouseCommand_WhenExecuted_CallsITimerManager()
+        //{
+        //    var pvm = GetMainViewModel();
 
-            pvm.PauseCommand.Execute (null);
+        //    pvm.PauseCommand.Execute (null);
 
-            _mockTimerManager.Verify (tm => tm.Pause());
-        }
+        //    _mockTimerManager.Verify (tm => tm.Pause());
+        //}
 
         #region Factory
 
