@@ -14,7 +14,8 @@ namespace CycleBell.ViewModels.TimePointViewModels
 
         protected IPresetViewModel _PresetViewModel;
 
-        protected bool _IsEnabled = true;
+        private bool _isEnabled = true;
+        private bool _isActive = true;
 
         #endregion
 
@@ -53,18 +54,18 @@ namespace CycleBell.ViewModels.TimePointViewModels
 
         public virtual bool IsEnabled
         {
-            get => _IsEnabled;
+            get => _isEnabled;
             set {
-                _IsEnabled = value;
+                _isEnabled = value;
                 OnPropertyChanged();
             }
         }
 
         public bool IsActive
         {
-            get => _IsEnabled;
+            get => _isActive;
             set {
-                _IsEnabled = value;
+                _isActive = value;
                 OnPropertyChanged();
             }
         }
@@ -82,6 +83,7 @@ namespace CycleBell.ViewModels.TimePointViewModels
 
             if (baseTpvm is TimePointViewModel tpvm) {
 
+                // TODO: bag is the equality null == null is true
                 return tpvm.TimePoint == timePoint;
             }
 

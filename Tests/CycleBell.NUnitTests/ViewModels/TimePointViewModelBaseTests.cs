@@ -10,7 +10,7 @@ namespace CycleBell.NUnitTests.ViewModels
     public class TimePointViewModelBaseTests
     {
         [Test]
-        public void Equality_EqualTimePoints_ReturnsTrue()
+        public void EqualToOperator_EqualTimePoints_ReturnsTrue()
         {
             TimePointViewModelBase tpvmb = GetTimePointViewModel(TimePoint.DefaultTimePoint);
             var tp = TimePoint.DefaultTimePoint;
@@ -19,7 +19,28 @@ namespace CycleBell.NUnitTests.ViewModels
         }
 
         [Test]
-        public void Equality_NotEqualTimePoints_ReturnsFalse()
+        public void EqualToOperator_NotEqualTimePoints_ReturnsFalse()
+        {
+            TimePoint.DefaultTimePointType = TimePointType.Relative;
+
+            TimePointViewModelBase tpvmb = GetTimePointViewModel(TimePoint.DefaultTimePoint);
+            var tp = TimePoint.DefaultTimePoint;
+
+            tp.TimePointType = TimePointType.Absolute;
+
+            Assert.IsFalse(tpvmb == tp);
+        }
+
+        [Test]
+        public void EqualToOperator_CompareToNull_ReturnsFalse()
+        {
+            TimePointViewModelBase tpvmb = GetTimePointViewModel(TimePoint.DefaultTimePoint);
+
+            Assert.IsFalse(tpvmb == null);
+        }
+
+        [Test]
+        public void NotEqualToOperator_NotEqualTimePoints_ReturnsFalse()
         {
             TimePoint.DefaultTimePointType = TimePointType.Relative;
 
@@ -29,6 +50,23 @@ namespace CycleBell.NUnitTests.ViewModels
             tp.TimePointType = TimePointType.Absolute;
 
             Assert.IsTrue(tpvmb != tp);
+        }
+
+        [Test]
+        public void NotEqualToOperator_EqualTimePoints_ReturnsFalse()
+        {
+            TimePointViewModelBase tpvmb = GetTimePointViewModel(TimePoint.DefaultTimePoint);
+            var tp = TimePoint.DefaultTimePoint;
+
+            Assert.IsFalse(tpvmb != tp);
+        }
+
+        [Test]
+        public void NorEqualToOperator_CompareToNull_ReturnsTrue()
+        {
+            TimePointViewModelBase tpvmb = GetTimePointViewModel(TimePoint.DefaultTimePoint);
+
+            Assert.IsTrue(tpvmb != null);
         }
 
         #region Factory
