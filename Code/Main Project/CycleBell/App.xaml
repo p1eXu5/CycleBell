@@ -20,6 +20,7 @@
                 <ResourceDictionary Source="Resources/ListBoxStyles.xaml" />
                 <ResourceDictionary Source="Resources/DataTemplates.xaml" />
                 <ResourceDictionary Source="Resources/ToggleButtonsStyles.xaml" />
+                <ResourceDictionary Source="Resources/ScrollBarStyle.xaml" />
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
 
