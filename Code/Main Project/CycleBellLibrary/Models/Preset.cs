@@ -304,15 +304,11 @@ namespace CycleBellLibrary.Repository
         {
             var array = GetOrderedTimePoints().ToArray();
 
-            if (array[0].TimePointType == TimePointType.Relative) {
-                array[0].BaseTime = StartTime;
-            }
+            array[0].BaseTime = StartTime;
 
             for (int i = 1; i < array.Length; ++i) {
 
-                if (array[i].TimePointType == TimePointType.Relative) {
                     array[i].BaseTime = array[i - 1].GetAbsoluteTime();
-                }
             }
         }
 

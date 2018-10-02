@@ -308,7 +308,7 @@ namespace CycleBellLibrary.Models
             return tp;
         }
 
-        public override string ToString() => $"{Name}: {Time:h\\:mm\\:ss} ({TimePointType}) (l#: {LoopNumber})";
+        public override string ToString() => $"{Name}: {Time:h\\:mm\\:ss}\n({TimePointType})\n(l#: {LoopNumber})\n(BaseTime: {(BaseTime == null ? "null" : BaseTime.ToString())})\n";
 
         #endregion
 

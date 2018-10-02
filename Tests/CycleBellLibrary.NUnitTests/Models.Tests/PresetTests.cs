@@ -101,17 +101,73 @@ namespace CycleBellLibrary.NUnitTests.Models.Tests
                     new TimePoint { Time = TimeSpan.Parse ("1:00:00"), LoopNumber = 3 }
                 };
 
-            var preset = new Preset(timePoints);
-
             var addingTimePoint = new TimePoint { Time = TimeSpan.Parse ("1:00:00"), LoopNumber = 2 };
 
             // Action
+            var preset = new Preset(timePoints);
             preset.AddTimePoint (addingTimePoint);
 
             // Assert
             Assert.AreEqual (TimeSpan.Parse ("0:00:00"), timePoints[0].BaseTime);
             Assert.AreEqual (TimeSpan.Parse ("1:00:00"), addingTimePoint.BaseTime);
             Assert.AreEqual (TimeSpan.Parse ("2:00:00"), timePoints[1].BaseTime);
+        }
+
+        [Test]
+        public void AddTimePoint_AbsoluteTimePoint_SetsBaseTime()
+        {
+            var preset = new Preset() {StartTime = TimeSpan.Parse ("12:00:00")};
+            var timePoint = new TimePoint ("Test point 2", "12:00:20", TimePointType.Absolute, 20);
+
+            preset.AddTimePoint(timePoint);
+
+            Assert.That (timePoint.BaseTime, Is.Not.Null);
+        }
+
+        [Test]
+        public void AddTimePoint_PresetIsEmptyAddingTimePointIsAbsoluteTimePoint_SetsBaseTimeEqualedToStartTime()
+        {
+            var preset = new Preset() {StartTime = TimeSpan.Parse ("12:00:00")};
+            var timePoint = new TimePoint ("Test point 2", "12:00:20", TimePointType.Absolute, 20);
+
+            preset.AddTimePoint(timePoint);
+
+            Assert.That (timePoint.BaseTime, Is.EqualTo (preset.StartTime));
+        }
+
+        [Test]
+        public void AddTimePoint_PresetIsEmptyAddingTimePointIsRelativeTimePoint_SetsBaseTimeEqualedToStartTime()
+        {
+            var preset = new Preset() {StartTime = TimeSpan.Parse ("12:00:00")};
+            var timePoint = new TimePoint ("Test point 2", "12:00:20", TimePointType.Relative, 20);
+
+            preset.AddTimePoint(timePoint);
+
+            Assert.That (timePoint.BaseTime, Is.EqualTo (preset.StartTime));
+        }
+
+        [Test]
+        public void AddTimePoint_PresetIsNotEmptyNextTimePointIsAbsoluteTimePoint_SetsBaseTimeEqualedToStartTime()
+        {
+            var time = "0:00:10";
+            var preset = new Preset(new []{new TimePoint(time)}) {StartTime = TimeSpan.Parse ("12:00:00")};
+            var timePoint = new TimePoint ("Test point 2", "12:00:20", TimePointType.Absolute, 20);
+
+            preset.AddTimePoint(timePoint);
+
+            Assert.That (timePoint.BaseTime, Is.EqualTo (preset.StartTime + TimeSpan.Parse (time)));
+        }
+
+        [Test]
+        public void AddTimePoint_PresetIsNotEmptyNextTimePointIsRelativeTimePoint_SetsBaseTimeEqualedToStartTime()
+        {
+            var time = "0:00:10";
+            var preset = new Preset(new []{new TimePoint(time)}) {StartTime = TimeSpan.Parse ("12:00:00")};
+            var timePoint = new TimePoint ("Test point 2", "12:00:20", TimePointType.Relative, 20);
+
+            preset.AddTimePoint(timePoint);
+
+            Assert.That (timePoint.BaseTime, Is.EqualTo (preset.StartTime + TimeSpan.Parse (time)));
         }
 
         [Test]
