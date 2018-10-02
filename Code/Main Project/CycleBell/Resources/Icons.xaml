@@ -99,7 +99,7 @@
     <SolidColorBrush x:Key="brush_PressedButton" Color="{DynamicResource col_PressedButton}" />
 
     <Color x:Key="col_TopForeground">#666666</Color>
-    <Color x:Key="col_BottomForeground">#444444</Color>
+    <Color x:Key="col_BottomForeground">#333333</Color>
 
     <Color x:Key="col_TopUnpressedForeground">#666666</Color>
     <Color x:Key="col_BottomUnpressedForeground">#222222</Color>
@@ -167,6 +167,16 @@
     <LinearGradientBrush x:Key="brush_TimePointName" StartPoint="0,0" EndPoint="0,1">
         <GradientStop Offset="0" Color="#00AA00" />
         <GradientStop Offset="1" Color="#008900" />
+    </LinearGradientBrush>
+
+    <!-- TimePointViewModel DataTemplate -->
+
+    <Color x:Key="col_Text.Top.Enabled">#666666</Color>
+    <Color x:Key="col_Text.Bottom.Enabled">#222222</Color>
+
+    <LinearGradientBrush x:Key="brush_Text.Enabled.Gradient" StartPoint="0,0" EndPoint="0,1">
+        <GradientStop Offset="0" Color="{DynamicResource col_Text.Top.Enabled}" />
+        <GradientStop Offset="1" Color="{DynamicResource col_Text.Bottom.Enabled}" />
     </LinearGradientBrush>
 
 </ResourceDictionary>

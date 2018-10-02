@@ -139,58 +139,11 @@
 
             <!-- Name -->
             <TextBox x:Name="m_pointName" Grid.Column="1" Grid.Row="0"
-                     IsEnabled="{Binding IsEnabled}"
                      HorizontalAlignment="Right"
                      Margin="0,0,5,0"
-                     Text="{Binding Name}">
-                <TextBox.Style>
-                    <Style TargetType="TextBox">
-                        <Setter Property="BorderThickness" Value="0" />
-                        <Setter Property="MinHeight" Value="17" />
-                        <Setter Property="VerticalAlignment" Value="Bottom" />
-                        <Setter Property="VerticalContentAlignment" Value="Top"></Setter>
-                        <Setter Property="FontFamily" Value="Segoe UI" />
-                        <Setter Property="FontWeight" Value="Bold" />
-                        <Setter Property="FontStyle" Value="Normal" />
-                        <Setter Property="FontSize" Value="14" />
-
-                        <Setter Property="Foreground">
-                            <Setter.Value>
-                                <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
-                                    <GradientStop Color="{DynamicResource col_TopUnpressedForeground}" Offset="0" />
-                                    <GradientStop Color="{DynamicResource col_BottomUnpressedForeground}" Offset="1" />
-                                </LinearGradientBrush>
-                            </Setter.Value>
-                        </Setter>
-
-                        <Style.Triggers>
-                            <Trigger Property="IsEnabled" Value="False">
-
-                                <Trigger.EnterActions>
-                                    <BeginStoryboard>
-                                        <Storyboard>
-                                            <ColorAnimation Storyboard.TargetProperty="Foreground.(LinearGradientBrush.GradientStops)[0].(GradientStop.Color)" 
-                                                            To="{StaticResource col_TopUncheckedIcon}" Duration="0:0:.2" />
-                                            <ColorAnimation Storyboard.TargetProperty="Foreground.(LinearGradientBrush.GradientStops)[1].(GradientStop.Color)" 
-                                                            To="{StaticResource col_BottomUncheckedIcon}" Duration="0:0:.2" />
-                                        </Storyboard>
-                                    </BeginStoryboard>
-                                </Trigger.EnterActions>
-                                <Trigger.ExitActions>
-                                    <BeginStoryboard>
-                                        <Storyboard>
-                                            <ColorAnimation Storyboard.TargetProperty="Foreground.(LinearGradientBrush.GradientStops)[0].(GradientStop.Color)" 
-                                                            To="{StaticResource col_TopUnpressedForeground}" Duration="0:0:.2" />
-                                            <ColorAnimation Storyboard.TargetProperty="Foreground.(LinearGradientBrush.GradientStops)[1].(GradientStop.Color)" 
-                                                            To="{StaticResource col_BottomUnpressedForeground}" Duration="0:0:.2" />
-                                        </Storyboard>
-                                    </BeginStoryboard>
-                                </Trigger.ExitActions>
-                            </Trigger>
-                        </Style.Triggers>
-                    </Style>
-                </TextBox.Style>
-
+                     Text="{Binding Name}"
+                     Style="{StaticResource style_TemplatedTextBox}"
+                     >
                 <TextBox.RenderTransform>
                     <TranslateTransform Y="-2"></TranslateTransform>
                 </TextBox.RenderTransform>
