@@ -33,7 +33,7 @@ namespace CycleBellLibrary.Timer
             // Очередь кортежей времени будильника и соответствующей ему NextTimePoint
             Queue<(TimeSpan, TimePoint)> queue = new Queue<(TimeSpan, TimePoint)>();
 
-            queue.Enqueue((startTime, new TimePoint(_startTimeTimePointName.StartTimeTimePointName, startTime, TimePointType.Absolute)));
+            queue.Enqueue((startTime, new TimePoint(_startTimeTimePointName.StartTimeTimePointName, startTime, TimePointType.Absolute){BaseTime = startTime}));
 
             // Заполняем очередь
 

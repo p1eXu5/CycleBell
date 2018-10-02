@@ -181,6 +181,26 @@ namespace CycleBellLibrary.NUnitTests.Models.Tests
             Assert.IsTrue (preset.TimerLoops.Count == 1);
         }
 
+        [TestCase("0:00:00")]
+        [TestCase("-0:00:00")]
+        [TestCase("12:00:00")]
+        [TestCase("-12:00:00")]
+        [TestCase("23:59:59")]
+        [TestCase("-23:59:59")]
+        public void AddTimePoint_AbsoluteTimePoints_DoesNotChangeTimePointsTime(string time)
+        {
+            var preset = GetPreset();
+            preset.StartTime = TimeSpan.Parse ("12:00:00");
+            var tpoint = GetRelativeTimePoint(TimeSpan.Parse (time));
+            var tpoint2 = GetAbsoluteTimePoint (TimeSpan.Parse (time));
+
+            preset.AddTimePoint (tpoint);
+            preset.AddTimePoint (tpoint2);
+
+            Assert.AreEqual (TimeSpan.Parse (time),preset.TimePointCollection[0].Time);
+            Assert.AreEqual (TimeSpan.Parse (time),preset.TimePointCollection[1].Time);
+        }
+
         //[TestCase("0:00:00", "0:00:00", "0:00:00")]
         //[TestCase("23:59:59", "23:59:59", "00:00:00")]
         //[TestCase("0:00:10", "0:00:20", "0:00:10")]

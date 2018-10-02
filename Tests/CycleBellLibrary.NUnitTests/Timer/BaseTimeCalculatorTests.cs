@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using CycleBellLibrary.Models;
 using CycleBellLibrary.Repository;
 using CycleBellLibrary.Timer;
@@ -27,7 +28,7 @@ namespace CycleBellLibrary.NUnitTests.Timer
         }
 
         [Test]
-        public void GetTimerQueue_PresetContainsTimePoint_ReturnsExpectedQueue()
+        public void GetTimerQueue_PresetContainsTimePoint_ReturnsEqualTimePoints()
         {
             var btc = GetBaseTimeCalculator();
             var preset = new Preset (new[]
@@ -39,11 +40,19 @@ namespace CycleBellLibrary.NUnitTests.Timer
             Queue<(TimeSpan, TimePoint)> expectedQueue = new Queue<(TimeSpan, TimePoint)>(new []
                 {
                     (TimeSpan.Parse ("12:00:00"), new TimePoint(StartTimeTimePointName, "12:00:00", TimePointType.Absolute) {BaseTime = TimeSpan.Parse ("12:00:00")}),
-                    (TimeSpan.Parse ("12:00:10"), new TimePoint("Test point 1", "0:00:10", TimePointType.Relative, 10) {BaseTime = TimeSpan.Parse ("12:00:00")}),
-                    (TimeSpan.Parse ("12:00:20"), new TimePoint("Test point 2", "12:00:20", TimePointType.Absolute, 20) {BaseTime = TimeSpan.Parse ("12:00:00")}),
+                    (TimeSpan.Parse ("12:00:10"), preset.TimePointCollection[0]),
+                    (TimeSpan.Parse ("12:00:20"), preset.TimePointCollection[1]),
                 });
 
-            Assert.That (btc.GetTimerQueue(preset), Is.EquivalentTo (expectedQueue));
+            var actualQueue = btc.GetTimerQueue (preset);
+
+            do {
+                Assert.IsTrue(expectedQueue.Dequeue().Item2 == actualQueue.Dequeue().Item2);
+
+            } while (expectedQueue.Any());
+
+            // Working with Object.Equals, not equality operator
+            // Assert.That (actualQueue, Is.EquivalentTo (expectedQueue));
         }
     
         #region Factory
