@@ -39,11 +39,6 @@ namespace CycleBellLibrary.Timer
         /// <param name="preset">Запускаемый пресет</param>
         void Play(Preset preset);
 
-        /// <summary>
-        /// Creates alarm queue
-        /// </summary>
-        /// <param name="preset">Preset</param>
-        /// <returns>The queue of tuples consists of time of the day and TimePoint that will come in this time</returns>
-        Queue<(TimeSpan, TimePoint)> GetTimerQueue(Preset preset);
+
     }
 }

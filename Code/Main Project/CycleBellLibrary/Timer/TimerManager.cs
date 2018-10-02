@@ -25,7 +25,7 @@ namespace CycleBellLibrary.Timer
     /// First TimePointChange signal emits with last TimePoint with
     /// negative Time, next TimePoint - created TimePoint with name preset.StartTimePointName
     /// </summary>
-    public class TimerManager : ITimerManager
+    public class TimerManager : ITimerManager, IStartTimeTimePointName
     {
         public const string RestartTimePointString = "Restart";
         public const string StartTimeTimePointString = "Launch in T-minus";
@@ -56,12 +56,21 @@ namespace CycleBellLibrary.Timer
         private byte _isInfiniteLoop;
         private bool _isRunAsync;
 
+        private readonly IBaseTimeCalculator _baseTimeCalculator;
 
         #endregion
 
         #region Constructor
 
-        private TimerManager() { }
+        private TimerManager()
+        {
+            _baseTimeCalculator = new BaseTimeCalculator (this);
+        }
+
+        private TimerManager(IBaseTimeCalculator baseTimeCalculator)
+        {
+            _baseTimeCalculator = baseTimeCalculator;
+        }
 
         /// <summary>
         /// Gets instance of manager and if IPresetCollectionManager.FileName is Exist loads presets or loads only one empty preset
@@ -70,6 +79,9 @@ namespace CycleBellLibrary.Timer
         public static TimerManager Instance 
             => _timerManager ?? (_timerManager = new TimerManager());
         
+        public static TimerManager GetInstance (IBaseTimeCalculator baseTimeCalculator)
+            => _timerManager ?? (_timerManager = new TimerManager(baseTimeCalculator));
+
         #endregion
 
         #region Events
@@ -204,7 +216,7 @@ namespace CycleBellLibrary.Timer
             if (IsRunning && !_isRunAsync)
                 return;
 
-            _queue = GetTimerQueue(preset);
+            _queue = _baseTimeCalculator.GetTimerQueue(preset);
 
             if (_queue == null) {
 
@@ -239,60 +251,60 @@ namespace CycleBellLibrary.Timer
         /// </summary>
         /// <param name="preset">Preset</param>
         /// <returns>The queue of tuples consists of time of the day and TimePoint that will come in this time</returns>
-        public Queue<(TimeSpan, TimePoint)> GetTimerQueue(Preset preset)
-        {
-            if (preset?.TimePointCollection == null || preset.TimePointCollection.Count == 0)
-                return null;
+        //public Queue<(TimeSpan, TimePoint)> GetTimerQueue(Preset preset)
+        //{
+        //    if (preset?.TimePointCollection == null || preset.TimePointCollection.Count == 0)
+        //        return null;
 
-            // Смещение по времени следующей временной точки
-            TimeSpan startTime = preset.StartTime;
+        //    // Смещение по времени следующей временной точки
+        //    TimeSpan startTime = preset.StartTime;
 
-            // Очередь кортежей времени будильника и соответствующей ему NextTimePoint
-            Queue<(TimeSpan, TimePoint)> queue = new Queue<(TimeSpan, TimePoint)>();
+        //    // Очередь кортежей времени будильника и соответствующей ему NextTimePoint
+        //    Queue<(TimeSpan, TimePoint)> queue = new Queue<(TimeSpan, TimePoint)>();
 
-            queue.Enqueue((startTime, new TimePoint(StartTimeTimePointName, startTime, TimePointType.Absolute)));
+        //    queue.Enqueue((startTime, new TimePoint(StartTimeTimePointName, startTime, TimePointType.Absolute)));
 
-            // Заполняем очередь
+        //    // Заполняем очередь
 
-            // Для всех временных сегментов
-            foreach (var timerCycle in preset.TimerLoops.Keys) {
+        //    // Для всех временных сегментов
+        //    foreach (var timerCycle in preset.TimerLoops.Keys) {
 
-                TimeSpan nextTime;
+        //        TimeSpan nextTime;
 
-                if (preset.TimePointCollection.Count > 1) {
+        //        if (preset.TimePointCollection.Count > 1) {
 
-                    // Список временных точек каждого временного сегмента, порядоченный по Id (по порядку создания)
-                    var timePoints = preset.TimePointCollection.Where(t => t.LoopNumber == timerCycle).OrderBy(t => t.Id)
-                                           .ToList();
+        //            // Список временных точек каждого временного сегмента, порядоченный по Id (по порядку создания)
+        //            var timePoints = preset.TimePointCollection.Where(t => t.LoopNumber == timerCycle).OrderBy(t => t.Id)
+        //                                   .ToList();
 
-                    for (var i = 0; i < preset.TimerLoops[timerCycle]; ++i) {
+        //            for (var i = 0; i < preset.TimerLoops[timerCycle]; ++i) {
 
-                        foreach (var point in timePoints) {
+        //                foreach (var point in timePoints) {
 
-                            nextTime = point.GetAbsoluteTime(startTime);
+        //                    nextTime = point.GetAbsoluteTime(startTime);
 
-                            queue.Enqueue((nextTime, point));
-                            startTime = point.GetAbsoluteTime(startTime);
-                        }
-                    }
-                }
-                else {
+        //                    queue.Enqueue((nextTime, point));
+        //                    startTime = point.GetAbsoluteTime(startTime);
+        //                }
+        //            }
+        //        }
+        //        else {
 
-                    // If TimePointCollection.Count == 1
-                    var timePoint = preset.TimePointCollection[0];
+        //            // If TimePointCollection.Count == 1
+        //            var timePoint = preset.TimePointCollection[0];
 
-                    for (var i = 0; i < preset.TimerLoops[timerCycle]; ++i) {
+        //            for (var i = 0; i < preset.TimerLoops[timerCycle]; ++i) {
 
-                        nextTime = timePoint.GetAbsoluteTime(startTime);
+        //                nextTime = timePoint.GetAbsoluteTime(startTime);
 
-                        queue.Enqueue((nextTime, timePoint));
-                        startTime = timePoint.GetAbsoluteTime(startTime);
-                    }
-                }
-            }
+        //                queue.Enqueue((nextTime, timePoint));
+        //                startTime = timePoint.GetAbsoluteTime(startTime);
+        //            }
+        //        }
+        //    }
 
-            return queue;
-        }
+        //    return queue;
+        //}
 
         /// <summary>
         /// Timer handler

@@ -49,6 +49,9 @@
     <Compile Include="Properties\Annotations.cs" />
     <Compile Include="Repository\IInnerPresetCollectionManager.cs" />
     <Compile Include="Models\ITimePointBaseTimeSetter.cs" />
+    <Compile Include="Timer\BaseTimeCalculator.cs" />
+    <Compile Include="Timer\IBaseTimeCalculator.cs" />
+    <Compile Include="Timer\IStartTimeTimePointName.cs" />
     <Compile Include="Timer\ITimerManager.cs" />
     <Compile Include="Repository\PresetSerializableObservableCollection.cs" />
     <Compile Include="Timer\TimerEventArgs.cs" />
