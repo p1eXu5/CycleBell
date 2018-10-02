@@ -13,19 +13,19 @@ namespace CycleBellLibrary.NUnitTests.Timer
     public class BaseTimeCalculatorTests : IStartTimeTimePointName
     {
         [Test]
-        public void GetTimerQueue_PresetIsNull_Thows()
+        public void GetTimerQueue_PresetIsNull_NotThows()
         {
             var btc = GetBaseTimeCalculator();
 
-            Assert.That (() => btc.GetTimerQueue(null), Throws.ArgumentNullException);
+            Assert.That (() => btc.GetTimerQueue(null), Throws.Nothing);
         }
 
         [Test]
-        public void GetTimerQueue_PresetIsNotNullBaseTimeNotSet_ChangesTimePointBaseTime()
+        public void GetTimerQueue_PresetIsNull_ReturnsNull()
         {
             var btc = GetBaseTimeCalculator();
 
-            
+            Assert.That (() => btc.GetTimerQueue(null), Is.Null);
         }
 
 

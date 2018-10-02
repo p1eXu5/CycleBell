@@ -216,7 +216,12 @@ namespace CycleBellLibrary.Timer
             if (IsRunning && !_isRunAsync)
                 return;
 
-            _queue = _baseTimeCalculator.GetTimerQueue(preset);
+            try {
+                _queue = _baseTimeCalculator.GetTimerQueue (preset);
+            }
+            catch (ArgumentNullException) {
+
+            }
 
             if (_queue == null) {
 

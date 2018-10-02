@@ -24,13 +24,11 @@ namespace CycleBellLibrary.Timer
         /// <returns>The queue of tuples consists of time of the day and TimePoint that will come in this time</returns>
         public Queue<(TimeSpan, TimePoint)> GetTimerQueue(Preset preset)
          {
-            var _preset = preset ?? throw new ArgumentNullException();
-
-            if (_preset?.TimePointCollection == null || _preset.TimePointCollection.Count == 0)
+            if (preset?.TimePointCollection == null || preset.TimePointCollection.Count == 0)
                 return null;
 
             // Смещение по времени следующей временной точки
-            TimeSpan startTime = _preset.StartTime;
+            TimeSpan startTime = preset.StartTime;
 
             // Очередь кортежей времени будильника и соответствующей ему NextTimePoint
             Queue<(TimeSpan, TimePoint)> queue = new Queue<(TimeSpan, TimePoint)>();
@@ -40,17 +38,17 @@ namespace CycleBellLibrary.Timer
             // Заполняем очередь
 
             // Для всех временных сегментов
-            foreach (var timerCycle in _preset.TimerLoops.Keys) {
+            foreach (var timerCycle in preset.TimerLoops.Keys) {
 
                 TimeSpan nextTime;
 
-                if (_preset.TimePointCollection.Count > 1) {
+                if (preset.TimePointCollection.Count > 1) {
 
                     // Список временных точек каждого временного сегмента, порядоченный по Id (по порядку создания)
-                    var timePoints = _preset.TimePointCollection.Where(t => t.LoopNumber == timerCycle).OrderBy(t => t.Id)
+                    var timePoints = preset.TimePointCollection.Where(t => t.LoopNumber == timerCycle).OrderBy(t => t.Id)
                                            .ToList();
 
-                    for (var i = 0; i < _preset.TimerLoops[timerCycle]; ++i) {
+                    for (var i = 0; i < preset.TimerLoops[timerCycle]; ++i) {
 
                         foreach (var point in timePoints) {
 
@@ -64,9 +62,9 @@ namespace CycleBellLibrary.Timer
                 else {
 
                     // If TimePointCollection.Count == 1
-                    var timePoint = _preset.TimePointCollection[0];
+                    var timePoint = preset.TimePointCollection[0];
 
-                    for (var i = 0; i < _preset.TimerLoops[timerCycle]; ++i) {
+                    for (var i = 0; i < preset.TimerLoops[timerCycle]; ++i) {
 
                         nextTime = timePoint.GetAbsoluteTime(startTime);
 
