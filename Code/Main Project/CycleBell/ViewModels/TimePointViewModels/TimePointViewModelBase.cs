@@ -5,7 +5,7 @@ using CycleBellLibrary.Models;
 
 namespace CycleBell.ViewModels.TimePointViewModels
 {
-    public abstract class TimePointViewModelBase : ObservableObject
+    public abstract class TimePointViewModelBase : ObservableObject, IEquatable<TimePointViewModelBase>
     {
         #region Fields
 
@@ -74,25 +74,29 @@ namespace CycleBell.ViewModels.TimePointViewModels
 
         #region Operators
 
-        public static bool operator == (TimePointViewModelBase baseTpvm, TimePoint timePoint)
+        public override bool Equals(object obj)
         {
-            if (ReferenceEquals(baseTpvm, null) || ReferenceEquals(timePoint, null)) {
+            if (ReferenceEquals (null, obj)) return false;
+            if (ReferenceEquals (this, obj)) return true;
+            if (this.GetType() != obj.GetType()) return false;
 
-                return false;
-            }
-
-            if (baseTpvm is TimePointViewModel tpvm) {
-
-                // TODO: bag is the equality null == null is true
-                return tpvm.TimePoint == timePoint;
-            }
-
-            return false;
+            return Equals ((TimePointViewModelBase) obj);
         }
 
-        public static bool operator != (TimePointViewModelBase baseTpvm, TimePoint timePoint)
+        public bool Equals (TimePointViewModelBase other)
         {
-            return !(baseTpvm == timePoint);
+            if (ReferenceEquals (null, other)) return false;
+            if (ReferenceEquals (this, other)) return true;
+
+            return Id == other.Id && LoopNumber == other.LoopNumber;
+        }
+
+        public bool Equals (TimePoint timePoint)
+        {
+            if (ReferenceEquals (null, timePoint)) return false;
+            if (ReferenceEquals (this.TimePoint, timePoint)) return true;
+
+            return TimePoint == timePoint;
         }
 
         public override int GetHashCode()
@@ -100,10 +104,6 @@ namespace CycleBell.ViewModels.TimePointViewModels
             return Id.GetHashCode();
         }
 
-        public override bool Equals(object obj)
-        {
-            return Object.ReferenceEquals(this, obj);
-        }
 
         #endregion
     }

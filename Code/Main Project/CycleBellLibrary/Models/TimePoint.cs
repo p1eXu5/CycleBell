@@ -18,7 +18,7 @@ namespace CycleBellLibrary.Models
     }
 
     [Serializable]
-    public class TimePoint : INotifyCollectionChanged
+    public class TimePoint : INotifyCollectionChanged, IEquatable<TimePoint>
     {
         #region Fields
 
@@ -336,14 +336,25 @@ namespace CycleBellLibrary.Models
             return !(tp1 == tp2);
         }
 
-        public override int GetHashCode()
-        {
-            return Id.GetHashCode();
-        }
 
         public override bool Equals(object obj)
         {
-            return Object.ReferenceEquals(this, obj);
+            if (ReferenceEquals (null, obj)) return false;
+            if (ReferenceEquals (this, obj)) return true;
+            if (obj.GetType() != this.GetType()) return false;
+            return Equals ((TimePoint) obj);
+        }
+
+        public bool Equals (TimePoint other)
+        {
+            if (ReferenceEquals (null, other)) return false;
+            if (ReferenceEquals (this, other)) return true;
+            return Id == other.Id;
+        }
+
+        public override int GetHashCode()
+        {
+            return Id.GetHashCode();
         }
 
         #endregion
@@ -358,5 +369,6 @@ namespace CycleBellLibrary.Models
         }
 
         #endregion
+
     }
 }

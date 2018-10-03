@@ -367,7 +367,7 @@ namespace CycleBell.ViewModels
                 if (_activeTimePointViewModelBase != null)
                     _activeTimePointViewModelBase.IsActive = false;
 
-                _activeTimePointViewModelBase = TimePointVmCollection.Activate(tpvmb => tpvmb == e.NextTimePoint);
+                _activeTimePointViewModelBase = TimePointVmCollection.Activate(tpvmb => tpvmb.Equals (e.NextTimePoint));
                 
                 _activeTimePointViewModelBase.IsActive = true;
             }
