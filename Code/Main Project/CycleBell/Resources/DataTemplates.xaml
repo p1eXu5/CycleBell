@@ -56,13 +56,16 @@
                            >
                     <Run Text="loop #"/><Run Text="{Binding LoopNumber}"/>
                 </TextBlock>
-                <TextBox Padding="0" VerticalContentAlignment="Bottom"
+
+                <TextBox x:Name="tbx_LoopCount"
+                         Padding="0" VerticalContentAlignment="Bottom"
                          HorizontalAlignment="Center"
                          MinWidth="12"
                          Margin="5,0,0,0"
                          BorderThickness="0,0,0,1"
                          Control.BorderBrush="Black"
-                         Text="{Binding LoopCount}"/>
+                         Text="{Binding LoopCount, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+
             </StackPanel>
 
             <Polyline Grid.Column="2" Grid.ColumnSpan="3" Grid.Row="0" Grid.RowSpan="3"
@@ -155,6 +158,7 @@
             <TextBox x:Name="m_pointName" Grid.Column="1" Grid.Row="0"
                      HorizontalAlignment="Right"
                      Margin="0,0,5,0"
+                     IsEnabled="{Binding IsEnabled}"
                      Text="{Binding Name}"
                      Style="{StaticResource style_TemplatedTextBox}"
                      >

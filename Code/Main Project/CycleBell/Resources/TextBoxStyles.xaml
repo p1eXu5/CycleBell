@@ -2,16 +2,16 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     >
     <Storyboard x:Key="anim_ToDisable">
-        <ColorAnimation Storyboard.TargetProperty="(Control.Foreground).(LinearGradientBrush.GradientStops)[0].(GradientStop.Color)" 
+        <ColorAnimation Storyboard.TargetProperty="Foreground.(LinearGradientBrush.GradientStops)[0].(GradientStop.Color)" 
                                 To="{StaticResource col_TopUncheckedIcon}" Duration="0:0:.2" />
-        <ColorAnimation Storyboard.TargetProperty="(Control.Foreground).(LinearGradientBrush.GradientStops)[1].(GradientStop.Color)" 
+        <ColorAnimation Storyboard.TargetProperty="Foreground.(LinearGradientBrush.GradientStops)[1].(GradientStop.Color)" 
                                 To="{StaticResource col_BottomUncheckedIcon}" Duration="0:0:.2" />
     </Storyboard>
 
     <Storyboard x:Key="anim_ToEnable">
-        <ColorAnimation Storyboard.TargetProperty="(Control.Foreground).(LinearGradientBrush.GradientStops)[0].(GradientStop.Color)" 
+        <ColorAnimation Storyboard.TargetProperty="Foreground.(LinearGradientBrush.GradientStops)[0].(GradientStop.Color)" 
                                 To="{StaticResource col_Text.Top.Enabled}" Duration="0:0:.2" />
-        <ColorAnimation Storyboard.TargetProperty="(Control.Foreground).(LinearGradientBrush.GradientStops)[1].(GradientStop.Color)" 
+        <ColorAnimation Storyboard.TargetProperty="Foreground.(LinearGradientBrush.GradientStops)[1].(GradientStop.Color)" 
                                 To="{StaticResource col_Text.Bottom.Enabled}" Duration="0:0:.2" />
     </Storyboard>
 
@@ -21,11 +21,24 @@
         <Setter Property="BorderThickness" Value="0" />
         <Setter Property="MinHeight" Value="17" />
         <Setter Property="VerticalAlignment" Value="Bottom" />
-        <Setter Property="VerticalContentAlignment" Value="Top"></Setter>
+        <Setter Property="VerticalContentAlignment" Value="Top" />
         <Setter Property="FontFamily" Value="Segoe UI" />
         <Setter Property="FontWeight" Value="Bold" />
         <Setter Property="FontStyle" Value="Normal" />
         <Setter Property="FontSize" Value="14" />
+        
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate>
+                    <Border BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="{TemplateBinding BorderThickness}">
+                            
+                        <ScrollViewer Margin="0"
+                                      x:Name="PART_ContentHost" />
+                    </Border>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
 
         <Style.Triggers>
             <DataTrigger Binding="{Binding IsActive}" Value="True">
@@ -36,7 +49,7 @@
                     <BeginStoryboard Storyboard="{StaticResource anim_ToDisable}" />
                 </DataTrigger.ExitActions>
             </DataTrigger>
-            
+
             <MultiDataTrigger>
                 <MultiDataTrigger.Conditions>
                     <Condition Binding="{Binding IsActive}" Value="False" />
