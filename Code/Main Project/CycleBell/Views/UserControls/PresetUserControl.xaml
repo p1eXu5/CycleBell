@@ -91,9 +91,6 @@
                         TextElement.FontFamily="{StaticResource font_SuiGeneris}"
                         ZIndex="-1"
                         >
-                <StackPanel.Resources>
-                </StackPanel.Resources>
-
                 <!-- TimeLeftTo -->
                 <StackPanel Orientation="Horizontal" Width="Auto" HorizontalAlignment="Center">
                     <!-- sign -->
@@ -170,7 +167,7 @@
                 <TextBlock Style="{StaticResource style_UnderTimer}" 
                            Height="{Binding ElementName=timer_Block, Path=ActualHeight}"
                            >
-                    <Run>upcoming:</Run> 
+                    <Run>now:</Run> 
                     <Run Foreground="{DynamicResource brush_TimePointName}"
                          FontSize="14"
                          Text="{Binding NextTimePointName}" 
