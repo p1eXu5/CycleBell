@@ -5,6 +5,14 @@
                     xmlns:converters="clr-namespace:CycleBell.Converters">
 
     <converters:FromTimeSpanToStringConverter x:Key="conv_TimeSpanToString" />
+    
+    <Storyboard x:Key="amin_UpOpacity">
+        <DoubleAnimation Storyboard.TargetProperty="Opacity" To="1.0" Duration="0:0:.2" />
+    </Storyboard>
+
+    <Storyboard x:Key="amin_DownpOpacity">
+        <DoubleAnimation Storyboard.TargetProperty="Opacity" To="0.0" Duration="0:0:.2" />
+    </Storyboard>
 
     <!-- BeginTimePointViewModel -->
     <DataTemplate x:Key="datatempl_BeginTimePointViewModel" DataType="vm:BeginTimePointViewModel">

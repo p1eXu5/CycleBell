@@ -26,15 +26,43 @@
         <Setter Property="FontWeight" Value="Bold" />
         <Setter Property="FontStyle" Value="Normal" />
         <Setter Property="FontSize" Value="14" />
+
         <Style.Triggers>
-            <DataTrigger Binding="{Binding IsEnabled}" Value="False">
+            <DataTrigger Binding="{Binding IsActive}" Value="True">
                 <DataTrigger.EnterActions>
-                    <BeginStoryboard Storyboard="{StaticResource anim_ToDisable}" />
+                    <BeginStoryboard Storyboard="{StaticResource anim_ToEnable}" />
                 </DataTrigger.EnterActions>
                 <DataTrigger.ExitActions>
-                    <BeginStoryboard Storyboard="{StaticResource anim_ToEnable}" />
+                    <BeginStoryboard Storyboard="{StaticResource anim_ToDisable}" />
                 </DataTrigger.ExitActions>
             </DataTrigger>
+            
+            <MultiDataTrigger>
+                <MultiDataTrigger.Conditions>
+                    <Condition Binding="{Binding IsActive}" Value="False" />
+                    <Condition Binding="{Binding IsEnabled}" Value="True" />
+                </MultiDataTrigger.Conditions>
+                <MultiDataTrigger.EnterActions>
+                    <BeginStoryboard Storyboard="{StaticResource anim_ToEnable}" />
+                </MultiDataTrigger.EnterActions>
+                <MultiDataTrigger.ExitActions>
+                    <BeginStoryboard Storyboard="{StaticResource anim_ToDisable}" />
+                </MultiDataTrigger.ExitActions>
+            </MultiDataTrigger>
+
+            <MultiDataTrigger>
+                <MultiDataTrigger.Conditions>
+                    <Condition Binding="{Binding IsActive}" Value="False" />
+                    <Condition Binding="{Binding IsEnabled}" Value="False" />
+                </MultiDataTrigger.Conditions>
+                <MultiDataTrigger.EnterActions>
+                    <BeginStoryboard Storyboard="{StaticResource anim_ToDisable}" />
+                </MultiDataTrigger.EnterActions>
+                <MultiDataTrigger.ExitActions>
+                    <BeginStoryboard Storyboard="{StaticResource anim_ToEnable}" />
+                </MultiDataTrigger.ExitActions>
+            </MultiDataTrigger>
+
         </Style.Triggers>
     </Style>
 </ResourceDictionary>

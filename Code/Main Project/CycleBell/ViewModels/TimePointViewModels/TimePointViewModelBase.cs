@@ -15,7 +15,7 @@ namespace CycleBell.ViewModels.TimePointViewModels
         protected IPresetViewModel _PresetViewModel;
 
         private bool _isEnabled = true;
-        private bool _isActive = true;
+        private bool _isActive = false;
 
         #endregion
 

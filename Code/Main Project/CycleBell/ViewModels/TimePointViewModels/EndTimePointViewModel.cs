@@ -13,6 +13,6 @@ namespace CycleBell.ViewModels.TimePointViewModels
         {
         }
 
-        public override TimePoint TimePoint => throw new NotImplementedException();
+        public override TimePoint TimePoint => null;
     }
 }

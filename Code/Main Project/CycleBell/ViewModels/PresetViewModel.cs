@@ -351,12 +351,16 @@ namespace CycleBell.ViewModels
         // TimerManager handlers:
         internal void OnTimePointChangedEventHandler(object s, TimerEventArgs e)
         {
-            if (e.PrevTimePoint.Name == _mainViewModel.StartTimeName && _mainViewModel.IsRingOnStartTime) {
+            if (e == null) return;
+            
+            if (e.PrevTimePoint?.Name == _mainViewModel.StartTimeName && _mainViewModel.IsRingOnStartTime) {
 
                 _mainViewModel.Ring();
             }
 
-            if (e.NextTimePoint.Name == _mainViewModel.StartTimeName) {
+            if (e.NextTimePoint == null) return;
+
+            if (e.NextTimePoint?.Name == _mainViewModel.StartTimeName) {
 
                 if (TimePointVmCollection.Count > 0) {
                     TimePointVmCollection.DisableAll();
@@ -367,9 +371,7 @@ namespace CycleBell.ViewModels
                 if (_activeTimePointViewModelBase != null)
                     _activeTimePointViewModelBase.IsActive = false;
 
-                _activeTimePointViewModelBase = TimePointVmCollection.Activate(tpvmb => tpvmb.Equals (e.NextTimePoint));
-                
-                _activeTimePointViewModelBase.IsActive = true;
+                _activeTimePointViewModelBase = TimePointVmCollection.Activate(tpvmb => tpvmb.Equals (e.NextTimePoint));   
             }
 
             NextTimePointName = e.NextTimePoint.Name;

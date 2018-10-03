@@ -9,7 +9,7 @@ namespace CycleBell.ViewModels.TimePointViewModels
         public BeginTimePointViewModel(byte loopNumber, IPresetViewModel presetViewModel) : base((int)TimePoint.MinId, loopNumber, presetViewModel)
         { }
 
-        public override TimePoint TimePoint => throw new NotImplementedException();
+        public override TimePoint TimePoint => null;
 
         public string CycleName => $"loop {LoopNumber}";
 

@@ -43,7 +43,7 @@ namespace CycleBell.ViewModels.TimePointViewModels
             if (tpvm == null)
                 return null;
 
-            tpvm.IsEnabled = true;
+            tpvm.IsActive = true;
             return tpvm;
         }
     }

@@ -282,17 +282,62 @@ namespace CycleBell.NUnitTests.ViewModels
 
         #endregion
 
+        #region OnTimePointChangedEventHandler
 
+        [Test]
+        public void OnTimePointChangedEventHandler_NextTimePointNotNull_ChangesActiveTpvmb()
+        {
+            MainViewModel mvm = GetMainViewModel();
+            
+            var preset = new Preset( new[] {new TimePoint("1", "0:00:01"), new TimePoint("2", "0:00:02")});
+            
+            _presetCollectionManager.Add (preset);
+
+            var timePoints = mvm.SelectedPreset.TimePointVmCollection.Where (t => t is TimePointViewModel).ToArray();
+
+            Assert.IsFalse (timePoints[0].IsActive);
+            Assert.IsFalse (timePoints[1].IsActive);
+
+            _mockTimerManager.Raise (t => t.ChangeTimePointEvent += null, new TimerEventArgs (null, timePoints[0].TimePoint, TimeSpan.Zero));
+
+            Assert.IsTrue (timePoints[0].IsActive);
+            Assert.IsFalse (timePoints[1].IsActive);
+
+            _mockTimerManager.Raise (t => t.ChangeTimePointEvent += null, new TimerEventArgs (null, timePoints[1].TimePoint, TimeSpan.Zero));
+
+            Assert.IsFalse (timePoints[0].IsActive);
+            Assert.IsTrue (timePoints[1].IsActive);
+        }
+
+        #endregion
 
         #region Factory
 
         private readonly Mock<IMainViewModel> _mockMainViewModel = new Mock<IMainViewModel>();
+        private Mock<ITimerManager> _mockTimerManager;
+        private Mock<IPresetViewModel> _mockPresetViewModel;
+        private PresetCollectionManager _presetCollectionManager = new PresetCollectionManager();
 
         private PresetViewModel GetPresetViewModel()
         {
             var preset = GetEmptyTestPreset();
 
-            return new PresetViewModel(preset, _mockMainViewModel.Object);
+            return new PresetViewModel(preset, GetMainViewModel());
+        }
+
+        private MainViewModel GetMainViewModel()
+        {
+            var mockDialogRegistrator = new Mock<IDialogRegistrator>();
+            var mockCycleBellManager = new Mock<ICycleBellManager>();
+            _mockPresetViewModel = mockCycleBellManager.As<IPresetViewModel>();
+            _mockTimerManager = mockCycleBellManager.As<ITimerManager>();
+
+            mockCycleBellManager.Setup (m => m.PresetCollectionManager).Returns (_presetCollectionManager);
+            mockCycleBellManager.Setup (m => m.TimerManager).Returns (_mockTimerManager.Object);
+
+
+            var mvm = new MainViewModel (mockDialogRegistrator.Object, mockCycleBellManager.Object);
+            return mvm;
         }
 
         private Preset GetEmptyTestPreset() => new Preset("Test preset");
