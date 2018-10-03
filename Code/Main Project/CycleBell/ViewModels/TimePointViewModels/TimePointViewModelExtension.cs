@@ -10,7 +10,7 @@ namespace CycleBell.ViewModels.TimePointViewModels
     /// </summary>
     internal static class TimePointViewModelExtension
     {
-        internal static ReadOnlyObservableCollection<TimePointViewModelBase> DeactivateAll(this ReadOnlyObservableCollection<TimePointViewModelBase> timePointViewModels)
+        internal static ReadOnlyObservableCollection<TimePointViewModelBase> DisableAll(this ReadOnlyObservableCollection<TimePointViewModelBase> timePointViewModels)
         {
             if (timePointViewModels == null)
                 return null;
@@ -23,7 +23,7 @@ namespace CycleBell.ViewModels.TimePointViewModels
             return timePointViewModels;
         }
 
-        internal static ReadOnlyObservableCollection<TimePointViewModelBase> ActivateAll(this ReadOnlyObservableCollection<TimePointViewModelBase> timePointViewModels)
+        internal static ReadOnlyObservableCollection<TimePointViewModelBase> EnableAll(this ReadOnlyObservableCollection<TimePointViewModelBase> timePointViewModels)
         {
             if (timePointViewModels == null)
                 return null;

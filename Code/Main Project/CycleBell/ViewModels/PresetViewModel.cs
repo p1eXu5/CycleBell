@@ -359,7 +359,7 @@ namespace CycleBell.ViewModels
             if (e.NextTimePoint.Name == _mainViewModel.StartTimeName) {
 
                 if (TimePointVmCollection.Count > 0) {
-                    TimePointVmCollection.DeactivateAll();
+                    TimePointVmCollection.DisableAll();
                 }
             }
             else {
@@ -383,9 +383,10 @@ namespace CycleBell.ViewModels
 
         internal void OnTimerStopEventHandler(object sender, EventArgs args)
         {
-            if (TimePointVmCollection.Count > 0) {
-                TimePointVmCollection.ActivateAll();
-            }
+            if (_activeTimePointViewModelBase != null)
+                _activeTimePointViewModelBase.IsActive = false;
+
+            TimePointVmCollection.EnableAll();
         }
 
         // Checkers:
