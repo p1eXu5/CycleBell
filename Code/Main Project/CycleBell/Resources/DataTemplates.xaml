@@ -48,11 +48,17 @@
 
             <StackPanel Grid.Column="1" Grid.Row="1" Grid.RowSpan="3"
                         Orientation="Horizontal" 
-                        Height="13" Margin="5,0" TextElement.FontSize="10" TextElement.FontStyle="Normal">
-                <TextBlock Foreground="Black">
+                        Height="13" Margin="5,0" 
+                        TextElement.FontSize="10" 
+                        TextElement.FontStyle="Normal">
+                <TextBlock Foreground="Black" 
+                           VerticalAlignment="Bottom"
+                           >
                     <Run Text="loop #"/><Run Text="{Binding LoopNumber}"/>
                 </TextBlock>
                 <TextBox Padding="0" VerticalContentAlignment="Bottom"
+                         HorizontalAlignment="Center"
+                         MinWidth="12"
                          Margin="5,0,0,0"
                          BorderThickness="0,0,0,1"
                          Control.BorderBrush="Black"

@@ -5,7 +5,8 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:WpfApp1"
         mc:Ignorable="d"
-        Title="BeginTimePointViewModelDataTemplateDesign" Height="65.205" Width="182.933">
+        Title="BeginTimePointViewModelDataTemplateDesign" Height="65.205" Width="182.933"
+        FontFamily="{StaticResource font_SuiGeneris}">
     <Grid SnapsToDevicePixels="True" ShowGridLines="False" Margin="5">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="1" />
@@ -34,16 +35,22 @@
 
         <StackPanel Grid.Column="1" Grid.Row="1" Grid.RowSpan="3"
                     Orientation="Horizontal" 
-                    Height="13" Margin="5,0" TextElement.FontSize="8">
-            <TextBlock Foreground="Black">
-                <Run Text="loop #"/><Run Text="1"/>
+                    Height="13" Margin="5,0" 
+                    TextElement.FontSize="10" 
+                    TextElement.FontStyle="Normal">
+            <TextBlock Foreground="Black" VerticalAlignment="Bottom"
+                       >
+                <Run Text="loop #"/><Run Text="0"/>
             </TextBlock>
-            <TextBox Text="5" Padding="0" VerticalContentAlignment="Center"
+            <TextBox Padding="0" 
+                     VerticalContentAlignment="Bottom" 
+                     HorizontalAlignment="Center"
+                     MinWidth="12"
                      Margin="5,0,0,0"
                      BorderThickness="0,0,0,1"
-                     Control.BorderBrush="Black"/>
+                     Control.BorderBrush="Black"
+                     Text="9"/>
         </StackPanel>
-
 
         <Polyline Grid.Column="2" Grid.ColumnSpan="3" Grid.Row="0" Grid.RowSpan="3"
                   Stroke="DimGray" Fill="{x:Null}" Stretch="Fill"
