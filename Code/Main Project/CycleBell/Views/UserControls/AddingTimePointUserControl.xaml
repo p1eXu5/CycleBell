@@ -104,10 +104,14 @@
 
             <controls:TimerBox.Style>
                 <Style TargetType="controls:TimerBox" BasedOn="{StaticResource style_TimerBox}">
+
                     <Style.Triggers>
                         <DataTrigger Binding="{Binding NoSetTime}" Value="False">
-                            <Setter Property="Foreground" Value="{StaticResource brush_Foreground}"></Setter>
+                            <Setter Property="Foreground" Value="{StaticResource brush_Foreground}" />
                         </DataTrigger>
+                        <Trigger Property="IsEnabled" Value="False">
+                            <Setter Property="Foreground" Value="#CCCCCC" />
+                        </Trigger>
                     </Style.Triggers>
                 </Style>
             </controls:TimerBox.Style>

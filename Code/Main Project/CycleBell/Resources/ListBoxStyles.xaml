@@ -14,6 +14,13 @@
         <Setter Property="IsHitTestVisible" Value="True" />
         <Setter Property="Shape.Stroke" Value="{DynamicResource brush_Foreground}" />
         <Setter Property="Margin" Value="5" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="ListBoxItem">
+                    <ContentPresenter />
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
     </Style>
 
 </ResourceDictionary>
