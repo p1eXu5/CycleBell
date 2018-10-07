@@ -116,7 +116,14 @@ namespace CycleBell.ViewModels
 
         // Preset
         public Preset Preset => _preset;
-        public string Name => _name.ToString();
+        public string Name
+        {
+            get => _preset.PresetName;
+            set {
+                _preset.PresetName = value;
+                OnPropertyChanged ();
+            }
+        }
 
         public TimeSpan StartTime
         {

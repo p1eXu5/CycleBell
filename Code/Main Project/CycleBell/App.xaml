@@ -22,6 +22,7 @@
                 <ResourceDictionary Source="Resources/ScrollBarStyle.xaml" />
                 <ResourceDictionary Source="Resources/TextBoxStyles.xaml" />
                 <ResourceDictionary Source="Resources/DataTemplates.xaml" />
+                <ResourceDictionary Source="Resources/ComboBoxStyles.xaml" />
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
 

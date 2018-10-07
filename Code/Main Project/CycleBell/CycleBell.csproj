@@ -108,6 +108,7 @@
     <Compile Include="ViewModels\TimePointViewModels\TimePointViewModel.cs" />
     <Compile Include="ViewModels\TimePointViewModels\TimePointViewModelBase.cs" />
     <Compile Include="Views\AttachedPropertyFactory.cs" />
+    <Compile Include="Views\TabOnEnterBehavior.cs" />
     <Compile Include="Views\TimeSpanDigits.cs" />
     <Compile Include="Views\UserControls\TimerButtonsUserControl.xaml.cs">
       <DependentUpon>TimerButtonsUserControl.xaml</DependentUpon>
@@ -121,6 +122,10 @@
     <Compile Include="Views\UserControls\PresetUserControl.xaml.cs">
       <DependentUpon>PresetUserControl.xaml</DependentUpon>
     </Compile>
+    <Page Include="Resources\ComboBoxStyles.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Resources\DataTemplates.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -128,6 +133,10 @@
     <Page Include="Resources\Fonts.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Resources\Icons.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="Resources\ListBoxStyles.xaml">
       <SubType>Designer</SubType>
@@ -170,10 +179,6 @@
       <SubType>Code</SubType>
     </Compile>
     <Page Include="MyComboBox.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Resources\Icons.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

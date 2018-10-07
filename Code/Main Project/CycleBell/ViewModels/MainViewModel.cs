@@ -37,6 +37,7 @@ namespace CycleBell.ViewModels
 
         private bool _isNewPreset;
         private bool _isRingOnStartTime = true;
+        private bool _isFocused = false;
 
         #endregion Private
 
@@ -149,6 +150,15 @@ namespace CycleBell.ViewModels
             }
         }
 
+        public bool IsFocused
+        {
+            get => _isFocused;
+            set {
+                _isFocused = value;
+                OnPropertyChanged ();
+            }
+        }
+
         #endregion
 
         #region Commands
@@ -176,7 +186,7 @@ namespace CycleBell.ViewModels
         public ICommand StopCommand => new ActionCommand (Stop);
         public ICommand RingOnStartTimeSwitchCommand => new ActionCommand (SwitchIsRingOnStartTime);
         public ICommand RingCommand => new ActionCommand(Ring);
-
+        public ICommand KeyDownCommand => new ActionCommand (KeyDown);
 
         public ICommand MediaTerminalCommand => new ActionCommand (MediaTerminal);
 
@@ -408,6 +418,12 @@ namespace CycleBell.ViewModels
             _dialogRegistrator.ShowDialog(viewModel);
         }
 
+
+        private void KeyDown (object newName)
+        {
+            SelectedPreset.Name = newName.ToString();
+            IsFocused ^= true;
+        }
         #endregion Methods
 
         #region IMainViewModel impl

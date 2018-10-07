@@ -2,6 +2,8 @@
  *  StrokeColor is setted in BaseButton style and used in Path style
  */
 using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Input;
 using System.Windows.Media;
 
 namespace CycleBell.Views
@@ -92,5 +94,28 @@ namespace CycleBell.Views
         public static Brush GetStrokeBrush2(DependencyObject d) => (Brush)d.GetValue(AttachedPropertyFactory.StrokeBrush2Property);
 
         #endregion
+
+        #region IsFocused
+
+        public static readonly DependencyProperty IsFocusedProperty = DependencyProperty.RegisterAttached("IsFocused", typeof(bool), typeof(AttachedPropertyFactory)
+            , new FrameworkPropertyMetadata(false, ChangeFocus) {BindsTwoWayByDefault = true});
+
+        public static void SetIsFocused(DependencyObject d, bool value) => d.SetValue(IsFocusedProperty, value);
+
+        public static bool GetIsFocused(DependencyObject d) => (bool)d.GetValue(IsFocusedProperty);
+
+        public static void ChangeFocus (DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            if (d is Control elem) {
+
+                TraversalRequest request = new TraversalRequest(FocusNavigationDirection.Next);
+                request.Wrapped = true;
+                elem.MoveFocus (request);
+            }
+        }
+
+        #endregion
+
+
     }
 }
