@@ -41,7 +41,8 @@
         <Grid x:Name="grid_TimePointName" Grid.Column="0" Grid.Row="0" Margin="10,0,5,0"
               VerticalAlignment="Bottom" Height="{Binding ElementName=tibx_PointTime, Path=ActualHeight}">
 
-            <TextBox x:Name="m_pointName" 
+            <TextBox x:Name="m_pointName"
+                     TabIndex="2"
                      Height="{Binding ActualHeight, ElementName=grid_TimePointName}"
                      Text="{Binding Name, Mode=TwoWay, UpdateSourceTrigger=LostFocus}">
                 <TextBox.Style>

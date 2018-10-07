@@ -106,7 +106,7 @@ namespace CycleBell.Views
 
         public static void ChangeFocus (DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
-            if (d is Control elem) {
+            if (d is UIElement elem) {
 
                 elem.MoveFocus (new TraversalRequest (FocusNavigationDirection.Down));
                 //elem.Focus();
