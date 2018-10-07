@@ -108,9 +108,8 @@ namespace CycleBell.Views
         {
             if (d is Control elem) {
 
-                TraversalRequest request = new TraversalRequest(FocusNavigationDirection.Next);
-                request.Wrapped = true;
-                elem.MoveFocus (request);
+                elem.MoveFocus (new TraversalRequest (FocusNavigationDirection.Down));
+                //elem.Focus();
             }
         }
 

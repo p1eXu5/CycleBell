@@ -172,6 +172,7 @@
                           IsEditable="True"
                           MaxDropDownHeight="90"
                           IsTextSearchEnabled="False"
+                          local:AttachedPropertyFactory.IsFocused="{Binding IsFocused}"
                           >
 
                     <ComboBox.InputBindings>

@@ -422,6 +422,8 @@ namespace CycleBell.ViewModels
         private void KeyDown (object newName)
         {
             SelectedPreset.Name = newName.ToString();
+
+            // Change value for call PropertyChangedCallback in attached property
             IsFocused ^= true;
         }
         #endregion Methods
