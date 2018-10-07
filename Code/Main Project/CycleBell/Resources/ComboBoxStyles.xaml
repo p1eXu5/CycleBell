@@ -4,7 +4,7 @@
 
     <Style TargetType="ComboBox">
         <Setter Property="MaxDropDownHeight" Value="100" />
-
+        <Setter Property="Foreground" Value="{DynamicResource brush_ForegroundGradient}"/>
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="ComboBox">
@@ -15,11 +15,10 @@
                         </Grid.ColumnDefinitions>
 
                         <!--TextBox--> 
-                        <TextBox x:Name="PART_EditableTextBox" Grid.Column="0">
+                        <TextBox x:Name="PART_EditableTextBox" Grid.Column="0" Foreground="{TemplateBinding Foreground}">
                             <TextBox.Style>
                                 <Style TargetType="TextBox">
                                     <Setter Property="VerticalContentAlignment" Value="Center" />
-                                    <Setter Property="Foreground" Value="{DynamicResource brush_ForegroundGradient}"/>
                                     <Setter Property="Template">
                                         <Setter.Value>
                                             <ControlTemplate TargetType="TextBox">

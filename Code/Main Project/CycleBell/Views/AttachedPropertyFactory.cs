@@ -108,7 +108,7 @@ namespace CycleBell.Views
         {
             if (d is UIElement elem) {
 
-                elem.MoveFocus (new TraversalRequest (FocusNavigationDirection.Down));
+                elem.MoveFocus (new TraversalRequest (FocusNavigationDirection.Right));
                 //elem.Focus();
             }
         }

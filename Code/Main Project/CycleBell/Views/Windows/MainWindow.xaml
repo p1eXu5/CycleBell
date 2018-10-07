@@ -20,9 +20,9 @@
 
     <Window.Resources>
         <ResourceDictionary>
-            
-            
-            <BooleanToVisibilityConverter x:Key="conv_BoolToVisibility" />
+
+
+            <BooleanToVisibilityConverter x:Key="conv_BooleanToVisibility" />
 
             <sys:Double x:Key="SeparatorSpaseKey">15</sys:Double>
 
@@ -160,28 +160,56 @@
                     </TextBlock.RenderTransform>
                 </TextBlock>
 
-                <ComboBox x:Name="m_presetComboBox"
-                          TabIndex="1"
-                          Height="auto"
-                          IsEnabled="{Binding IsSelectedPreset, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"
-                          ItemsSource="{Binding Presets, Mode=OneWay}"
-                          VerticalContentAlignment="Center"
-                          SelectedItem="{Binding SelectedPreset, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                          DisplayMemberPath="Name"
-                          Width="146"
-                          Margin="0,0" 
-                          IsEditable="True"
-                          MaxDropDownHeight="90"
-                          IsTextSearchEnabled="False"
-                          local:AttachedPropertyFactory.IsFocused="{Binding IsFocused}"
-                          >
+                <Grid>
+                    <ComboBox x:Name="m_presetComboBox"
+                              TabIndex="1"
+                              Height="auto"
+                              IsEnabled="{Binding IsSelectedPreset, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"
+                              ItemsSource="{Binding Presets, Mode=OneWay}"
+                              VerticalContentAlignment="Center"
+                              SelectedItem="{Binding SelectedPreset, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                              DisplayMemberPath="Name"
+                              Width="146"
+                              Margin="0,0" 
+                              IsEditable="True"
+                              MaxDropDownHeight="90"
+                              IsTextSearchEnabled="False"
+                              local:AttachedPropertyFactory.IsFocused="{Binding IsFocused}"
+                              >
 
-                    <ComboBox.InputBindings>
-                        <KeyBinding Command="{Binding KeyDownCommand}"
-                                    CommandParameter="{Binding ElementName=m_presetComboBox, Path=Text}"
-                                    Key="Return"/>
-                    </ComboBox.InputBindings>
-                </ComboBox>
+                        <ComboBox.InputBindings>
+                            <KeyBinding Command="{Binding KeyDownCommand}"
+                                        CommandParameter="{Binding ElementName=m_presetComboBox, Path=Text}"
+                                        Key="Return"/>
+                        </ComboBox.InputBindings>
+                    </ComboBox>
+
+                    <TextBlock x:Name="tbk_Tip" FontSize="10" FontStyle="Italic" Foreground="#CCCCCC"
+                               VerticalAlignment="Center" Text="new_preset" IsHitTestVisible="False"
+                               Visibility="{Binding HasNoName, Converter={StaticResource conv_BooleanToVisibility}}">
+                    </TextBlock>
+
+                    <Grid.Triggers>
+                        <EventTrigger RoutedEvent="Grid.GotFocus">
+                            <BeginStoryboard>
+                                <Storyboard TargetProperty="Opacity">
+                                    <DoubleAnimation Storyboard.TargetName="tbk_Tip"
+                                                     To="0.0" Duration="0:0:.2"/>
+                                </Storyboard>
+                            </BeginStoryboard>
+                        </EventTrigger>
+                        <EventTrigger RoutedEvent="Grid.LostFocus">
+                            <BeginStoryboard>
+                                <Storyboard TargetProperty="Opacity">
+                                    <DoubleAnimation Storyboard.TargetName="tbk_Tip"
+                                                     To="1.0" Duration="0:0:.2"/>
+                                </Storyboard>
+                            </BeginStoryboard>
+                        </EventTrigger>
+                    </Grid.Triggers>
+                </Grid>
+                <!-- for focus after preset renaming -->
+                <FrameworkElement Name="Dummy" Width="0" Focusable="True" />
             </StackPanel>
 
              <!--preset and timePoints-->

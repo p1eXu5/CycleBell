@@ -206,6 +206,7 @@ namespace CycleBell.ViewModels
             }
         }
 
+
         #endregion
 
         #region Commands

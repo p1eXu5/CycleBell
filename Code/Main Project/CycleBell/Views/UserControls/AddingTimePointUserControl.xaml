@@ -120,6 +120,7 @@
 
         <!-- mute -->
         <ToggleButton x:Name="tgl_Mute" Grid.Column="2" Grid.Row="0"
+                      KeyboardNavigation.IsTabStop="False"
                       Style="{StaticResource style_MuteToggleButton}"
                       HorizontalAlignment="Center"
                       Content="mute" Margin="0,0,12,0"
@@ -145,12 +146,14 @@
 
         <!-- add sound -->
         <Button x:Name="btn_AddSoundButton"
+                KeyboardNavigation.IsTabStop="False"
                 Grid.Column="3" Grid.Row="0" Grid.RowSpan="2"
                 Margin="16,5,0,0"
                 Width="30" Height="30"
                 VerticalAlignment="Center"
                 Command="{Binding AddSoundCommand}">
             <Path Data="{StaticResource gmtry_Notes}"
+                  KeyboardNavigation.IsTabStop="False"
                   Stroke="{x:Null}"
                   />
         </Button>

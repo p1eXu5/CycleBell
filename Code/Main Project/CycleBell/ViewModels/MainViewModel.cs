@@ -159,6 +159,8 @@ namespace CycleBell.ViewModels
             }
         }
 
+        public bool HasNoName => SelectedPreset != null && String.IsNullOrWhiteSpace(SelectedPreset.Name);
+
         #endregion
 
         #region Commands
@@ -283,6 +285,7 @@ namespace CycleBell.ViewModels
 
             OnPropertyChanged(nameof(IsSelectedPreset));
             OnPropertyChanged(nameof(IsInfiniteLoop));
+            OnPropertyChanged(nameof(HasNoName));
         }
 
         //  Save Preset
@@ -422,6 +425,7 @@ namespace CycleBell.ViewModels
         private void KeyDown (object newName)
         {
             SelectedPreset.Name = newName.ToString();
+            OnPropertyChanged(nameof(HasNoName));
 
             // Change value for call PropertyChangedCallback in attached property
             IsFocused ^= true;
