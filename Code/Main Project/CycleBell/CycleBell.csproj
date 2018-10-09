@@ -122,6 +122,10 @@
     <Compile Include="Views\UserControls\PresetUserControl.xaml.cs">
       <DependentUpon>PresetUserControl.xaml</DependentUpon>
     </Compile>
+    <Page Include="Resources\ArrowPathes.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Resources\ComboBoxStyles.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

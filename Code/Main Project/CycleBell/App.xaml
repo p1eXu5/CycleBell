@@ -1,9 +1,6 @@
 ﻿<Application
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:local="clr-namespace:CycleBell"
-             xmlns:Themes="clr-namespace:Microsoft.Windows.Themes;assembly=PresentationFramework.Aero"
-             xmlns:converters="clr-namespace:CycleBell.Converters"
              x:Class="CycleBell.App">
     <Application.Resources>
         <ResourceDictionary>
@@ -23,6 +20,7 @@
                 <ResourceDictionary Source="Resources/TextBoxStyles.xaml" />
                 <ResourceDictionary Source="Resources/DataTemplates.xaml" />
                 <ResourceDictionary Source="Resources/ComboBoxStyles.xaml" />
+                <ResourceDictionary Source="Resources/ArrowPathes.xaml" />
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
 
