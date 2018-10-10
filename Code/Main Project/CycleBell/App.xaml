@@ -21,6 +21,7 @@
                 <ResourceDictionary Source="Resources/DataTemplates.xaml" />
                 <ResourceDictionary Source="Resources/ComboBoxStyles.xaml" />
                 <ResourceDictionary Source="Resources/ArrowPathes.xaml" />
+                <ResourceDictionary Source="Resources/PathStyles.xaml" />
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
 
