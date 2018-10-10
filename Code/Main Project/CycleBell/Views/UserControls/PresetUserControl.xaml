@@ -223,7 +223,7 @@
                         <Setter Property="HorizontalAlignment" Value="Stretch" />
                         <Setter Property="Background" Value="White" />
                         <Setter Property="Margin" Value="20,0" />
-                        <Setter Property="MinHeight" Value="100"></Setter>
+                        <Setter Property="MinHeight" Value="110"></Setter>
                         <Setter Property="SelectionMode" Value="Single" />
                         <Style.Triggers>
                             <DataTrigger Binding="{Binding IsNoTimePoints}" Value="False">

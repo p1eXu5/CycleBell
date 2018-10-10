@@ -1,4 +1,6 @@
-﻿using System.Windows;
+﻿using System.Globalization;
+using System.Threading;
+using System.Windows;
 using CycleBell.Base;
 using CycleBell.ViewModels;
 using CycleBell.Views;
@@ -25,6 +27,8 @@ namespace CycleBell
             //      8.  License
             //      9.  Deploy
             //      10. DrugAndDrop?
+
+            Thread.CurrentThread.CurrentUICulture = new CultureInfo("en-us");
 
             base.OnStartup (e);
 

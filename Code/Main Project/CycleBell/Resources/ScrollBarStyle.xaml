@@ -2,29 +2,39 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     >
 
+    <Color x:Key="col_Path.Fill.TopNormal">#939393</Color>
+    <Color x:Key="col_Path.Fill.BottomNormal">#939393</Color>
+    <Color x:Key="col_Path.Fill.TopPressed">#0000FF</Color>
+    <Color x:Key="col_Path.Fill.TopCovered">#000000</Color>
+    <Color x:Key="col_Path.Fill.TopDisabled">#C3C3C3</Color>
+
     <LinearGradientBrush x:Key="brush_Path.Fill.NormalUpDownGradient" StartPoint="0,0" EndPoint="0,1">
-        <GradientStop Color="#939393" Offset="0.0" />
-        <GradientStop Color="#000000" Offset="1.0" />
+        <GradientStop Color="{DynamicResource col_Path.Fill.TopNormal}" Offset="0.0" />
+        <GradientStop Color="{DynamicResource col_Path.Fill.BottomNormal}" Offset="1.0" />
     </LinearGradientBrush>
 
     <LinearGradientBrush x:Key="brush_Path.Fill.NormalDownUpGradient" StartPoint="0,1" EndPoint="0,0">
-        <GradientStop Color="#939393" Offset="0.0" />
-        <GradientStop Color="#000000" Offset="1.0" />
+        <GradientStop Color="{DynamicResource col_Path.Fill.TopNormal}" Offset="0.0" />
+        <GradientStop Color="{DynamicResource col_Path.Fill.BottomNormal}" Offset="1.0" />
     </LinearGradientBrush>
 
     <LinearGradientBrush x:Key="brush_Path.Fill.NormalLeftRightGradient" StartPoint="0,0" EndPoint="1,0">
-        <GradientStop Color="#939393" Offset="0.0" />
-        <GradientStop Color="#000000" Offset="1.0" />
+        <GradientStop Color="{DynamicResource col_Path.Fill.TopNormal}" Offset="0.0" />
+        <GradientStop Color="{DynamicResource col_Path.Fill.BottomNormal}" Offset="1.0" />
     </LinearGradientBrush>
 
     <LinearGradientBrush x:Key="brush_Path.Fill.NormalRightLeftGradient" StartPoint="1,0" EndPoint="0,0">
-        <GradientStop Color="#939393" Offset="0.0" />
-        <GradientStop Color="#000000" Offset="1.0" />
+        <GradientStop Color="{DynamicResource col_Path.Fill.TopNormal}" Offset="0.0" />
+        <GradientStop Color="{DynamicResource col_Path.Fill.BottomNormal}" Offset="1.0" />
     </LinearGradientBrush>
 
-    <Color x:Key="col_Path.Fill.TopPressed">#0000FF</Color>
-    <Color x:Key="col_Path.Fill.TopCovered">#000000</Color>
-    <Color x:Key="col_Path.Fill.TopDisabled">#C8C8C8</Color>
+    <Storyboard x:Key="anim_RepeatButtonMouseOver">
+        <ColorAnimation Storyboard.TargetProperty="(Control.Foreground).(LinearGradientBrush.GradientStops)[0].(GradientStop.Color)"
+                        To="{StaticResource col_Path.Fill.TopCovered}" Duration="0:0:.2" />
+        <ColorAnimation Storyboard.TargetName="polygon" Storyboard.TargetProperty="Stroke.Color"
+                        To="{StaticResource col_Path.Fill.TopDisabled}" Duration="0:0:.2" />
+    </Storyboard>
+
 
     <Style x:Key="style_ScrollBarPageButton" TargetType="{x:Type RepeatButton}">
         <Setter Property="SnapsToDevicePixels" Value="True" />
@@ -44,29 +54,39 @@
         <Setter Property="SnapsToDevicePixels" Value="True" />
         <Setter Property="OverridesDefaultStyle" Value="true" />
         <Setter Property="Focusable" Value="false" />
-        <Setter Property="Foreground" Value="{DynamicResource brush_Path.Fill.NormalUpDownGradient}" />
-        <Setter Property="Template">
+        <Setter Property="Control.Foreground" Value="{DynamicResource brush_Path.Fill.NormalUpDownGradient}" />
+            <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate>
-                    <Border Background="Transparent">
+                    <Grid>
+                        <Polygon x:Name="polygon"
+                            Points="1,4 3,4 4,3 2,0 0,3" 
+                                 Stroke="Transparent"
+                                 Fill="Transparent"
+                                 Stretch="Fill">
+                        </Polygon>
                         <Path Data="{StaticResource gmtry_ArrowUp1}" 
                               Fill="{TemplateBinding Foreground}"
                               Stroke="{x:Null}"
-                              Stretch="Uniform"/>
+                              Stretch="None"
+                              VerticalAlignment="Bottom"
+                              HorizontalAlignment="Center"
+                              />
 
                         <VisualStateManager.VisualStateGroups>
                             <VisualStateGroup x:Name="CommonStates">
                                 <VisualState Name="Normal" />
                                 <VisualState Name="MouseOver">
-                                    <Storyboard>
-                                        <ColorAnimation Storyboard.TargetProperty="(Control.Foreground).(LinearGradientBrush.GradientStops)[0].(GradientStop.Color)"
-                                                        To="{StaticResource col_Path.Fill.TopCovered}" Duration="0:0:.2" />          
+                                    <Storyboard >
+                                        <ColorAnimation Storyboard.TargetName="polygon" Storyboard.TargetProperty="Stroke.Color"
+                                                        To="{StaticResource col_Path.Fill.TopDisabled}" Duration="0" />
                                     </Storyboard>
                                 </VisualState>
                                 <VisualState Name="Pressed">
                                     <Storyboard>
-                                        <ColorAnimation Storyboard.TargetProperty="(Control.Foreground).(LinearGradientBrush.GradientStops)[0].(GradientStop.Color)"
-                                                        To="{StaticResource col_Path.Fill.TopPressed}" Duration="0:0:.2" />
+
+                                        <ColorAnimation Storyboard.TargetName="polygon" Storyboard.TargetProperty="Fill.Color"
+                                                        To="{StaticResource col_Path.Fill.TopDisabled}" Duration="0" />
                                     </Storyboard>
                                 </VisualState>
                                 <VisualState Name="Disabled">
@@ -77,7 +97,7 @@
                                 </VisualState>
                             </VisualStateGroup>
                         </VisualStateManager.VisualStateGroups>
-                    </Border>
+                    </Grid>
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
@@ -91,25 +111,34 @@
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate>
-                    <Border Background="Transparent">
+                    <Grid>
+                        <Polygon x:Name="polygon"
+                                 Points="1,0 3,0 4,1 2,4 0,1" 
+                                 Stroke="Transparent"
+                                 Fill="Transparent"
+                                 Stretch="Fill">
+                        </Polygon>
                         <Path Data="{StaticResource gmtry_ArrowDown1}" 
                               Fill="{TemplateBinding Foreground}"
                               Stroke="{x:Null}"
-                              Stretch="Uniform"/>
+                              Stretch="None"
+                              VerticalAlignment="Top"
+                              HorizontalAlignment="Center"
+                              />
 
                         <VisualStateManager.VisualStateGroups>
                             <VisualStateGroup x:Name="CommonStates">
                                 <VisualState Name="Normal" />
                                 <VisualState Name="MouseOver">
-                                    <Storyboard>
-                                        <ColorAnimation Storyboard.TargetProperty="(Control.Foreground).(LinearGradientBrush.GradientStops)[0].(GradientStop.Color)"
-                                                        To="{StaticResource col_Path.Fill.TopCovered}" Duration="0:0:.2" />
+                                    <Storyboard >
+                                        <ColorAnimation Storyboard.TargetName="polygon" Storyboard.TargetProperty="Stroke.Color"
+                                                        To="{StaticResource col_Path.Fill.TopDisabled}" Duration="0:0:.2" />
                                     </Storyboard>
                                 </VisualState>
                                 <VisualState Name="Pressed">
                                     <Storyboard>
-                                        <ColorAnimation Storyboard.TargetProperty="(Control.Foreground).(LinearGradientBrush.GradientStops)[0].(GradientStop.Color)"
-                                                        To="{StaticResource col_Path.Fill.TopPressed}" Duration="0:0:.2" />
+                                        <ColorAnimation Storyboard.TargetName="polygon" Storyboard.TargetProperty="Fill.Color"
+                                                        To="{StaticResource col_Path.Fill.TopDisabled}" Duration="0" />
                                     </Storyboard>
                                 </VisualState>
                                 <VisualState Name="Disabled">
@@ -120,7 +149,7 @@
                                 </VisualState>
                             </VisualStateGroup>
                         </VisualStateManager.VisualStateGroups>
-                    </Border>
+                    </Grid>
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
@@ -135,25 +164,34 @@
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate>
-                    <Border Background="Transparent">
+                    <Grid >
+                        <Polygon x:Name="polygon"
+                                 Points="4,3 4,1 3,0 0,2 3,4" 
+                                 Stroke="Transparent"
+                                 Fill="Transparent"
+                                 Stretch="Fill"
+                                 />
                         <Path Data="{StaticResource gmtry_ArrowLeft1}" 
                               Fill="{TemplateBinding Foreground}"
                               Stroke="{x:Null}"
-                              Stretch="Uniform"/>
+                              Stretch="None"
+                              HorizontalAlignment="Right"
+                              VerticalAlignment="Center"
+                              />
 
                         <VisualStateManager.VisualStateGroups>
                             <VisualStateGroup x:Name="CommonStates">
                                 <VisualState Name="Normal" />
                                 <VisualState Name="MouseOver">
-                                    <Storyboard>
-                                        <ColorAnimation Storyboard.TargetProperty="(Control.Foreground).(LinearGradientBrush.GradientStops)[0].(GradientStop.Color)"
-                                                        To="{StaticResource col_Path.Fill.TopCovered}" Duration="0:0:.2" />
+                                    <Storyboard >
+                                        <ColorAnimation Storyboard.TargetName="polygon" Storyboard.TargetProperty="Stroke.Color"
+                                                        To="{StaticResource col_Path.Fill.TopDisabled}" Duration="0:0:.2" />
                                     </Storyboard>
                                 </VisualState>
                                 <VisualState Name="Pressed">
                                     <Storyboard>
-                                        <ColorAnimation Storyboard.TargetProperty="(Control.Foreground).(LinearGradientBrush.GradientStops)[0].(GradientStop.Color)"
-                                                        To="{StaticResource col_Path.Fill.TopPressed}" Duration="0:0:.2" />
+                                        <ColorAnimation Storyboard.TargetName="polygon" Storyboard.TargetProperty="Fill.Color"
+                                                        To="{StaticResource col_Path.Fill.TopDisabled}" Duration="0" />
                                     </Storyboard>
                                 </VisualState>
                                 <VisualState Name="Disabled">
@@ -164,7 +202,7 @@
                                 </VisualState>
                             </VisualStateGroup>
                         </VisualStateManager.VisualStateGroups>
-                    </Border>
+                    </Grid>
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
@@ -178,25 +216,34 @@
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate>
-                    <Border Background="Transparent">
+                    <Grid>
+                        <Polygon x:Name="polygon"
+                                 Points="0,1 0,3 1,4 4,2 1,0" 
+                                 Stroke="Transparent"
+                                 Fill="Transparent"
+                                 Stretch="Fill"
+                        />
                         <Path Data="{StaticResource gmtry_ArrowRight1}" 
                               Fill="{TemplateBinding Foreground}"
                               Stroke="{x:Null}"
-                              Stretch="Uniform"/>
+                              Stretch="None"
+                              HorizontalAlignment="Left"
+                              VerticalAlignment="Center"
+                              />
 
                         <VisualStateManager.VisualStateGroups>
                             <VisualStateGroup x:Name="CommonStates">
                                 <VisualState Name="Normal" />
                                 <VisualState Name="MouseOver">
-                                    <Storyboard>
-                                        <ColorAnimation Storyboard.TargetProperty="(Control.Foreground).(LinearGradientBrush.GradientStops)[0].(GradientStop.Color)"
-                                                        To="{StaticResource col_Path.Fill.TopCovered}" Duration="0:0:.2" />
+                                    <Storyboard >
+                                        <ColorAnimation Storyboard.TargetName="polygon" Storyboard.TargetProperty="Stroke.Color"
+                                                        To="{StaticResource col_Path.Fill.TopDisabled}" Duration="0:0:.2" />
                                     </Storyboard>
                                 </VisualState>
                                 <VisualState Name="Pressed">
                                     <Storyboard>
-                                        <ColorAnimation Storyboard.TargetProperty="(Control.Foreground).(LinearGradientBrush.GradientStops)[0].(GradientStop.Color)"
-                                                        To="{StaticResource col_Path.Fill.TopPressed}" Duration="0:0:.2" />
+                                        <ColorAnimation Storyboard.TargetName="polygon" Storyboard.TargetProperty="Fill.Color"
+                                                        To="{StaticResource col_Path.Fill.TopDisabled}" Duration="0" />
                                     </Storyboard>
                                 </VisualState>
                                 <VisualState Name="Disabled">
@@ -207,7 +254,7 @@
                                 </VisualState>
                             </VisualStateGroup>
                         </VisualStateManager.VisualStateGroups>
-                    </Border>
+                    </Grid>
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
@@ -222,7 +269,7 @@
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate>
-                    <Rectangle RadiusY="3.5" RadiusX="3.5"
+                    <Rectangle RadiusY="5" RadiusX="5"
                                Stroke="{DynamicResource brush_UncheckedStroke}"
                                Fill="{DynamicResource brush_NoSetTime}"
                     />
@@ -245,11 +292,16 @@
                   Stroke="{DynamicResource brush_UncheckedStroke}" 
                   StrokeThickness="1"
                   Stretch="Fill"
-                  VerticalAlignment="Stretch" HorizontalAlignment="Center"/>
+                  StrokeStartLineCap="Square"
+                  StrokeEndLineCap="Square"
+                  VerticalAlignment="Stretch" 
+                  HorizontalAlignment="Center"
+                  />
 
-            <RepeatButton Grid.Row="0" 
+            <RepeatButton Grid.Row="0" Padding="0"
                           Style="{StaticResource style_ScrollBarLineUpButton}"
                           Command="ScrollBar.LineUpCommand"
+                          
                           />
 
             <Track x:Name="PART_Track"
@@ -276,7 +328,7 @@
             </Track>
 
             <RepeatButton Grid.Row="2" 
-                          Style="{StaticResource style_ScrollBarLineUpButton}"
+                          Style="{StaticResource style_ScrollBarLineDownButton}"
                           Command="ScrollBar.LineDownCommand"
                           />
         </Grid>
@@ -348,9 +400,11 @@
         <Style.Triggers>
             <Trigger Property="Orientation" Value="Horizontal">
                 <Setter Property="Template" Value="{StaticResource ctempl_HorizontalScrollBar}" />
+                <Setter Property="Height" Value="11"></Setter>
             </Trigger>
             <Trigger Property="Orientation" Value="Vertical">
                 <Setter Property="Template" Value="{StaticResource ctempl_VerticalScrollBar}" />
+                <Setter Property="Width" Value="11" />
             </Trigger>
         </Style.Triggers>
     </Style>
