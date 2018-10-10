@@ -9,7 +9,6 @@ namespace CycleBell.ViewModels.TimePointViewModels
     public class AddingTimePointViewModel : TimePointViewModel
     {
         private const byte _loopNumberLimit = 10;
-        private byte _loopNumber;
 
         public AddingTimePointViewModel (IPresetViewModel presetViewModel) : base (new TimePoint { Name = "" }, presetViewModel)
         {
