@@ -175,14 +175,13 @@ namespace CycleBell.ViewModels
         public ICommand ExportPresetsCommand => new ActionCommand(ExportPresets, CanExportPresets);
 
         public ICommand ExitCommand => new ActionCommand(Exit);
-        public ICommand AboutCommand => new ActionCommand(About);
 
         public ICommand InfiniteLoopCommand => new ActionCommand((o) => { IsInfiniteLoop = !IsInfiniteLoop; });
 
         public ICommand SavePresetsBeforeExitCommand => new ActionCommand(SavePresetsBeforeExit);
 
-        // In process
-        public ICommand ViewHelpCommand => new ActionCommand(About);
+        public ICommand ViewHelpCommand => new ActionCommand(About, o => false);
+        public ICommand AboutCommand => new ActionCommand(About);
             #endregion
 
         public ICommand StopCommand => new ActionCommand (Stop);

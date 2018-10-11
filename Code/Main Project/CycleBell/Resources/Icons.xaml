@@ -16,16 +16,11 @@
             </GeometryGroup>
         </Path.Data>
     </Path>
-    
-    <Path x:Key="path_CloseIcon" Stroke="{Binding Foreground, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type Control}}}" 
-          StrokeThickness="2" SnapsToDevicePixels="True" StrokeEndLineCap="Flat">
-        <Path.Data>
-            <GeometryGroup>
-                <LineGeometry StartPoint="0,0" EndPoint="20,20" />
-                <LineGeometry StartPoint="0,20" EndPoint="20,0" />
-            </GeometryGroup>
-        </Path.Data>
-    </Path>
+
+    <GeometryGroup x:Key="gmtry_CloseIcon" >
+        <LineGeometry StartPoint="0,0" EndPoint="20,20" />
+        <LineGeometry StartPoint="0,20" EndPoint="20,0" />
+    </GeometryGroup>
 
 
     <PathGeometry x:Key="gmtry_Notes"

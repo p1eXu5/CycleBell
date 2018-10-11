@@ -127,7 +127,7 @@
 
                 <MenuItem Header="View Help" Command="{Binding ViewHelpCommand}" />
                 <Separator />
-            <MenuItem Header="About Cycle Bell"  Command="{Binding AboutCommand}" />
+                <MenuItem Header="About Cycle Bell"  Command="{Binding AboutCommand}" />
             </MenuItem>
         </Menu>
 
