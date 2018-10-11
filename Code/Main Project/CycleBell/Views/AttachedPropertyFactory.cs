@@ -139,6 +139,18 @@ namespace CycleBell.Views
 
         #endregion
 
+        #region IsFocused
+
+        public static readonly DependencyProperty IsTimePopintsProperty = DependencyProperty.RegisterAttached("IsTimePopints", typeof(bool), typeof(AttachedPropertyFactory)
+                                                                                                          , new FrameworkPropertyMetadata(false));
+
+        public static void SetIsTimePopints(DependencyObject d, bool value) => d.SetValue(IsTimePopintsProperty, value);
+
+        public static bool GetIsTimePopints(DependencyObject d) => (bool)d.GetValue(IsTimePopintsProperty);
+
+        
+        #endregion
+
 
     }
 }

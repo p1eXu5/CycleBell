@@ -43,18 +43,24 @@ namespace CycleBellLibrary.Context
         /// Creates empty preset when it doesn't exist.
         /// </summary>
         /// <exception cref="InvalidOperationException">Throws when empty preset already exists and it is particulary filled</exception>
-        public void CreateNewPreset()
+        public bool CreateNewPreset()
         {
             var existEmptyPreset = PresetCollectionManager.Presets.FirstOrDefault (p => p.PresetName == Preset.DefaultName);
+            bool res;
 
             if (existEmptyPreset == null) {
                 _presetCollectionManager.Add (Preset.EmptyPreset);
+                res = true;
             }
             else {
                 if (existEmptyPreset.StartTime != Preset.DefaultStartTime || existEmptyPreset.TimePointCollection.Count > 0) {
                     OnCantCreateNewPreset();
                 }
+
+                res = false;
             }
+
+            return res;
         }
 
         public event Action CantCreateNewPresetEvent;

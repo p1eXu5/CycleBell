@@ -74,6 +74,7 @@ namespace CycleBell.ViewModels
             // _presetCollectionManager
             _mainViewModel = mainViewModel ?? throw new ArgumentNullException(nameof(mainViewModel));
 
+
             // _settedLoopNumbers
             _settedLoopNumbers = new HashSet<byte>();
 
@@ -118,7 +119,7 @@ namespace CycleBell.ViewModels
         public Preset Preset => _preset;
         public string Name
         {
-            get => _preset.PresetName;
+            get => _preset?.PresetName ?? null;
             set {
                 _preset.PresetName = value;
                 OnPropertyChanged ();
@@ -186,7 +187,9 @@ namespace CycleBell.ViewModels
         }
 
         public bool IsNewPreset => _preset.PresetName == Preset.PresetName;
+
         public bool IsNoTimePoints => TimePointVmCollection.Count < 1;
+        public bool IsTimePoints => TimePointVmCollection.Count > 0;
 
         public string NextTimePointName
         {
@@ -212,6 +215,7 @@ namespace CycleBell.ViewModels
         #region Commands
 
         public ICommand AddTimePointCommand => new ActionCommand (AddTimePoint, CanAddTimePoint);
+        public ICommand TestCommand => new ActionCommand((o) => OnPropertyChanged(nameof(IsNoTimePoints)));
 
         #endregion
 
@@ -331,6 +335,7 @@ namespace CycleBell.ViewModels
 
                 CheckBounds (newTimePoint);
 
+                OnPropertyChanged(nameof(IsTimePoints));
                 return;
             }
 
@@ -347,12 +352,15 @@ namespace CycleBell.ViewModels
                     _timePointVmCollection.Remove(timePoints[2]);
 
                     _settedLoopNumbers.Remove(loopNumber);
+
+                    OnPropertyChanged(nameof(IsTimePoints));
                     return;
                 }
 
                 var removingTimePointVm = timePoints.First (tpvm => tpvm.Id == oldTimePoint.Id);
                 _timePointVmCollection.Remove (removingTimePointVm);
             }
+
         }
 
 
@@ -427,7 +435,9 @@ namespace CycleBell.ViewModels
             if (point.Time == TimeSpan.Zero && point.TimePointType == TimePointType.Relative)
                 point.TimePointType = TimePointType.Absolute;
         }
-        
+
+        internal void RaiseOnIsNoTimePointChanged() => OnPropertyChanged(nameof(IsNoTimePoints));
+
         #endregion
 
     }

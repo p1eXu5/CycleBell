@@ -15,7 +15,7 @@ namespace CycleBellLibrary.Context
         /// Creates a new preset
         /// </summary>
         /// <exception cref="InvalidOperationException"></exception>
-        void CreateNewPreset();
+        bool CreateNewPreset();
 
         void OpenPresets (string fileName);
 

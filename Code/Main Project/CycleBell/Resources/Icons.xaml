@@ -22,6 +22,8 @@
         <LineGeometry StartPoint="0,20" EndPoint="20,0" />
     </GeometryGroup>
 
+    <EllipseGeometry x:Key="gmtry_OuterCircle" Center="5,5" RadiusX="4.5" RadiusY="4.5" />
+    <EllipseGeometry x:Key="gmtry_InnerCircle" Center="2.5,2.5" RadiusX="2" RadiusY="2" />
 
     <PathGeometry x:Key="gmtry_Notes"
           Figures="M16,0L4.6,1.8v0v11.7c-0.3-0.3-0.8-0.3-1.4-0.3c-0.7,0-1.5,0.3-2.1,0.8

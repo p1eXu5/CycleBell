@@ -51,7 +51,7 @@ namespace CycleBell.ViewModels
             _manager.CantCreateNewPresetEvent += () => SavePresetAs(null);
 
             var presetManager = cycleBellManager.PresetCollectionManager;
-            Presets = new ObservableCollection<PresetViewModel>(presetManager.Presets.Select(p => new PresetViewModel(p, this)));
+            PresetViewModelCollection = new ObservableCollection<PresetViewModel>(presetManager.Presets.Select(p => new PresetViewModel(p, this)));
 
             ((INotifyCollectionChanged) (presetManager.Presets)).CollectionChanged += OnPresetCollectionChangedEventHandler;
 
@@ -68,14 +68,19 @@ namespace CycleBell.ViewModels
         #region Properties
 
         // Preset
-        public ObservableCollection<PresetViewModel> Presets { get; set; }
+        public ObservableCollection<PresetViewModel> PresetViewModelCollection { get; set; }
 
         public PresetViewModel SelectedPreset
         {
             get => _selectedPreset;
             set {
                 _selectedPreset = value;
-                OnPropertyChanged ();
+
+                OnPropertyChanged();
+
+                OnPropertyChanged(nameof(IsInfiniteLoop));
+                OnPropertyChanged(nameof(HasNoName));
+                OnPropertyChanged(nameof(IsSelectedPreset));
             }
         }
 
@@ -94,7 +99,7 @@ namespace CycleBell.ViewModels
         public bool IsNewPreset => SelectedPreset?.IsNewPreset ?? false;
         public bool IsInfiniteLoop
         {
-            get => SelectedPreset?.IsInfiniteLoop == true;
+            get => SelectedPreset?.IsInfiniteLoop ?? false;
             set {
                 if (SelectedPreset != null) {
 
@@ -159,7 +164,17 @@ namespace CycleBell.ViewModels
             }
         }
 
-        public bool HasNoName => SelectedPreset != null && String.IsNullOrWhiteSpace(SelectedPreset.Name);
+        public bool HasNoName
+        {
+            get {
+
+                if (SelectedPreset != null) {
+                    return String.IsNullOrWhiteSpace(SelectedPreset?.Name);
+                }
+
+                return false;
+            }
+        } 
 
         #endregion
 
@@ -176,7 +191,7 @@ namespace CycleBell.ViewModels
 
         public ICommand ExitCommand => new ActionCommand(Exit);
 
-        public ICommand InfiniteLoopCommand => new ActionCommand((o) => { IsInfiniteLoop = !IsInfiniteLoop; });
+        public ICommand InfiniteLoopCommand => new ActionCommand((o) => { IsInfiniteLoop ^= true; });
 
         public ICommand SavePresetsBeforeExitCommand => new ActionCommand(SavePresetsBeforeExit);
 
@@ -187,7 +202,7 @@ namespace CycleBell.ViewModels
         public ICommand StopCommand => new ActionCommand (Stop);
         public ICommand RingOnStartTimeSwitchCommand => new ActionCommand (SwitchIsRingOnStartTime);
         public ICommand RingCommand => new ActionCommand(Ring);
-        public ICommand KeyDownCommand => new ActionCommand (KeyDown);
+        public ICommand PresetComboBoxReturnCommand => new ActionCommand (PresetComboBoxReturn);
 
         public ICommand MediaTerminalCommand => new ActionCommand (MediaTerminal);
 
@@ -195,7 +210,7 @@ namespace CycleBell.ViewModels
 
         #region Methods
 
-        // Presets changed handler
+        // PresetViewModelCollection changed handler
         /// <summary>
         /// Refreshes SelectedPreset when a new preset was added.
         /// </summary>
@@ -205,23 +220,23 @@ namespace CycleBell.ViewModels
         {
             if (e?.NewItems?[0] != null && e.OldItems?[0] == null) { 
 
-                Presets.Add(new PresetViewModel((Preset)e.NewItems[0], this));
-                SelectedPreset = Presets[Presets.Count - 1];
+                PresetViewModelCollection.Add(new PresetViewModel((Preset)e.NewItems[0], this));
+                SelectedPreset = PresetViewModelCollection[PresetViewModelCollection.Count - 1];
 
                 ConnectHandlers(SelectedPreset);
             }
 
             if (e?.OldItems?[0] != null && e?.NewItems?[0] == null) {
 
-                var deletingPresetVm = Presets.First(pvm => pvm.Preset.Equals((Preset)e.OldItems[0]));
+                var deletingPresetVm = PresetViewModelCollection.First(pvm => pvm.Preset.Equals((Preset)e.OldItems[0]));
                 
                 if (deletingPresetVm == SelectedPreset) {
 
                     DisconnectHandlers(SelectedPreset);
                 }
 
-                Presets.Remove(deletingPresetVm);
-                SelectedPreset = Presets.Count > 0 ? Presets[0] : null;
+                PresetViewModelCollection.Remove(deletingPresetVm);
+                SelectedPreset = PresetViewModelCollection.Count > 0 ? PresetViewModelCollection[0] : null;
             }
 
             OnPropertyChanged(nameof(SelectedPreset));
@@ -265,7 +280,7 @@ namespace CycleBell.ViewModels
             _timerManager.TimerSecondPassedEvent -= selectedPresetViewModel.OnSecondPassedEventHandler;
             _timerManager.ChangeTimePointEvent -= selectedPresetViewModel.OnTimePointChangedEventHandler;
 
-            ((INotifyCollectionChanged)selectedPresetViewModel.TimePointVmCollection).CollectionChanged += RiseIsPlayableChanged;
+            ((INotifyCollectionChanged)selectedPresetViewModel.TimePointVmCollection).CollectionChanged -= RiseIsPlayableChanged;
             selectedPresetViewModel.PropertyChanged -= OnIsNewPresetChangedHandler;
         }
 
@@ -281,10 +296,6 @@ namespace CycleBell.ViewModels
         private void CreateNewPreset(object obj)
         {
             _manager.CreateNewPreset();
-
-            OnPropertyChanged(nameof(IsSelectedPreset));
-            OnPropertyChanged(nameof(IsInfiniteLoop));
-            OnPropertyChanged(nameof(HasNoName));
         }
 
         //  Save Preset
@@ -307,12 +318,14 @@ namespace CycleBell.ViewModels
                 if (res == null || res == false) {
 
                     _manager.DeletePreset (_selectedPreset.Preset);
+
+                    CreateNewPreset(null);
                 }
             }
         }
         private bool CanSavePresetAs(object obj) => _selectedPreset?.IsModified ?? false;
 
-        //  Import/Export Presets
+        //  Import/Export PresetViewModelCollection
         private void ImportPresets(object obj)
         {
             var ofd = new OpenFileDialog
@@ -348,7 +361,7 @@ namespace CycleBell.ViewModels
         }
         private bool CanExportPresets(object obj)
         {
-            return Presets.Count > 0;
+            return PresetViewModelCollection.Count > 0;
         }
 
         //  Save presets before exit
@@ -421,7 +434,7 @@ namespace CycleBell.ViewModels
         }
 
 
-        private void KeyDown (object newName)
+        private void PresetComboBoxReturn (object newName)
         {
             SelectedPreset.Name = newName.ToString();
             OnPropertyChanged(nameof(HasNoName));

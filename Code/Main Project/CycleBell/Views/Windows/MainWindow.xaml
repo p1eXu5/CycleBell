@@ -68,8 +68,8 @@
                 <MenuItem Header="_Save Preset" Command="{Binding SavePresetCommand}"></MenuItem>
                 <MenuItem Header="Save Preset _As..." Command="{Binding SavePresetAsCommand}"></MenuItem>
                 <Separator></Separator>
-                <MenuItem Header="_Import Presets..." Command="{Binding ImportPresetsCommand}"></MenuItem>
-                <MenuItem Header="_Export Presets..." Command="{Binding ImportPresetsCommand}"></MenuItem>
+                <MenuItem Header="_Import PresetViewModelCollection..." Command="{Binding ImportPresetsCommand}"></MenuItem>
+                <MenuItem Header="_Export PresetViewModelCollection..." Command="{Binding ImportPresetsCommand}"></MenuItem>
                 <Separator></Separator>
                 <MenuItem Header="_Exit" Command="{Binding ExitCommand}"></MenuItem>
             </MenuItem>
@@ -77,41 +77,61 @@
             <!-- Settings menu -->
             <MenuItem Name="m_settingsMenu"
                       KeyboardNavigation.IsTabStop="False"
+                      
                       >
                 <MenuItem.Header>
                     <TextBlock VerticalAlignment="Center">Settings</TextBlock>
                 </MenuItem.Header>
 
                 <!-- First Call menu -->
-                <MenuItem Header="First _Call">
+                <MenuItem Header="_Ring On Start Time"
+                          Command="{Binding RingOnStartTimeSwitchCommand}">
                     <MenuItem.Icon>
                         <Grid VerticalAlignment="Center" HorizontalAlignment="Right" 
-                              RenderTransformOrigin="0.5,0.5"
-                              >
-                            <!--Opacity="{Binding FirstCallState, Converter={StaticResource FlagToOpacityConverter}}"-->
+                              RenderTransformOrigin="0.5,0.5">
                             <Grid.RenderTransform>
                                 <TransformGroup>
                                     <TranslateTransform X="-1" Y="1"/>
                                 </TransformGroup>
                             </Grid.RenderTransform>
-                            <StaticResource ResourceKey="path_menuCheckedIcon"></StaticResource>
+                            <Path Data="{StaticResource gmtry_InnerCircle}"
+                                  Stretch="None"
+                                  Fill="Black"
+                                  Stroke="Black"
+                                  Visibility="{Binding IsRingOnStartTime, Converter={StaticResource conv_BooleanToVisibility}}"
+                            />
+                            <Path Data="{StaticResource gmtry_OuterCircle}"
+                                  Stretch="None"
+                                  Fill="{x:Null}"
+                                  Stroke="Black"/>
                         </Grid>
                     </MenuItem.Icon>
 
                 </MenuItem>
 
                 <!-- Infinite Loop menu -->
-                <MenuItem Header="_gmtry_Infinite Loop" Command="{Binding InfiniteLoopCommand}">
+                <MenuItem Header="_Infinite Loop" 
+                          Command="{Binding InfiniteLoopCommand}"
+                          IsEnabled="{Binding IsSelectedPreset}"
+                          >
                     <MenuItem.Icon>
-                        <Grid VerticalAlignment="Center" HorizontalAlignment="Right" 
+                        <Grid VerticalAlignment="Center" HorizontalAlignment="Right"
                               RenderTransformOrigin="0.5,0.5">
-                            <!--Opacity="{Binding InfiniteLoopState, Converter={StaticResource FlagToOpacityConverter}}"-->
                             <Grid.RenderTransform>
                                 <TransformGroup>
                                     <TranslateTransform X="-1" Y="1"/>
                                 </TransformGroup>
                             </Grid.RenderTransform>
-                            <StaticResource ResourceKey="path_menuCheckedIcon"></StaticResource>
+                            <Path Data="{StaticResource gmtry_InnerCircle}"
+                                  Stretch="None"
+                                  Fill="Black"
+                                  Stroke="Black"
+                                  Visibility="{Binding IsInfiniteLoop, Converter={StaticResource conv_BooleanToVisibility}}"
+                                  />
+                            <Path Data="{StaticResource gmtry_OuterCircle}"
+                                  Stretch="None"
+                                  Fill="{x:Null}"
+                                  Stroke="Black"/>
                         </Grid>
                     </MenuItem.Icon>
                 </MenuItem>
@@ -176,12 +196,11 @@
                               TabIndex="1"
                               Height="auto"
                               IsEnabled="{Binding IsSelectedPreset, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"
-                              ItemsSource="{Binding Presets, Mode=OneWay}"
+                              ItemsSource="{Binding PresetViewModelCollection, Mode=OneWay}"
                               VerticalContentAlignment="Center"
                               SelectedItem="{Binding SelectedPreset, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                               DisplayMemberPath="Name"
                               Width="146"
-                              Margin="0,0" 
                               IsEditable="True"
                               MaxDropDownHeight="90"
                               IsTextSearchEnabled="False"
@@ -189,14 +208,24 @@
                               >
 
                         <ComboBox.InputBindings>
-                            <KeyBinding Command="{Binding KeyDownCommand}"
+                            <KeyBinding Command="{Binding PresetComboBoxReturnCommand}"
                                         CommandParameter="{Binding ElementName=m_presetComboBox, Path=Text}"
                                         Key="Return"/>
                         </ComboBox.InputBindings>
+
+                        <i:Interaction.Triggers>
+                            <i:EventTrigger EventName="LostFocus">
+                                <i:InvokeCommandAction Command="{Binding PresetComboBoxReturnCommand}" 
+                                                       CommandParameter="{Binding ElementName=m_presetComboBox, Path=Text}"
+                                                       />
+                            </i:EventTrigger>
+                        </i:Interaction.Triggers>
                     </ComboBox>
 
-                    <TextBlock x:Name="tbk_Tip" FontSize="10" FontStyle="Italic" Foreground="#CCCCCC"
-                               VerticalAlignment="Center" Text="new_preset" IsHitTestVisible="False"
+                    <TextBlock x:Name="tbk_Tip" FontSize="10" FontStyle="Italic" 
+                               Foreground="#CCCCCC"
+                               VerticalAlignment="Center" 
+                               Text="new_preset" IsHitTestVisible="False"
                                Visibility="{Binding HasNoName, Converter={StaticResource conv_BooleanToVisibility}}">
                     </TextBlock>
 
@@ -225,9 +254,9 @@
 
              <!--preset and timePoints-->
             <Grid Grid.Row="2">
-                <userControls:PresetUserControl x:Name="preset" DataContext="{Binding SelectedPreset}"
-                                         Control.Foreground="{Binding ElementName=m_presetComboBox, Path=Foreground, Mode=OneWay}"
-                                         UIElement.IsEnabled="{Binding ElementName=m_presetComboBox, Path=IsEnabled, Mode=OneWay}">
+                <userControls:PresetUserControl x:Name="preset" 
+                                                DataContext="{Binding SelectedPreset}"
+                                                >
 
                     <userControls:PresetUserControl.Style>
                         <Style TargetType="UserControl">

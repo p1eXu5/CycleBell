@@ -14,11 +14,11 @@
                 <ResourceDictionary Source="Resources/Fonts.xaml" />
                 <ResourceDictionary Source="MyComboBox.xaml" />
                 <ResourceDictionary Source="Resources/ButtonStyles.xaml" />
-                <ResourceDictionary Source="Resources/ListBoxStyles.xaml" />
                 <ResourceDictionary Source="Resources/ToggleButtonsStyles.xaml" />
                 <ResourceDictionary Source="Resources/TextBoxStyles.xaml" />
                 <ResourceDictionary Source="Resources/DataTemplates.xaml" />
                 <ResourceDictionary Source="Resources/ComboBoxStyles.xaml" />
+                <ResourceDictionary Source="Resources/ListBoxStyles.xaml" />
                 <ResourceDictionary Source="Resources/ArrowPathes.xaml" />
                 <ResourceDictionary Source="Resources/PathStyles.xaml" />
                 <ResourceDictionary Source="Resources/ScrollBarStyle.xaml" />

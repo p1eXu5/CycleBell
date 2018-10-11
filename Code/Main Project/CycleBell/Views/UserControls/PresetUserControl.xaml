@@ -8,6 +8,7 @@
              xmlns:viewModels="clr-namespace:CycleBell.ViewModels"
              xmlns:dts="clr-namespace:CycleBell.DataTemplateSelectors"
              xmlns:userControls="clr-namespace:CycleBell.Views.UserControls"
+             xmlns:at="clr-namespace:CycleBell.Views"
              xmlns:converters="clr-namespace:CycleBell.Converters"
              mc:Ignorable="d"
 
@@ -18,11 +19,19 @@
     <UserControl.Resources>
         
         <dts:TimePointVmDataTemplateSelector x:Key="templsel_Selector" />
-        <converters:FromTimeSpanToStringConverter x:Key="FromTimeSpanToStringConverter" />
+        <BooleanToVisibilityConverter x:Key="conv_BooleanToVisibility" />
+
+        <Storyboard x:Key="anim_OpacityOn">
+            <DoubleAnimation Storyboard.TargetProperty="Opacity" To="1.0" Duration="0:0:.4"/>
+        </Storyboard>
+
+        <Storyboard x:Key="anim_OpacityOff">
+            <DoubleAnimation Storyboard.TargetProperty="Opacity" To="0.0" Duration="0:0:.4"/>
+        </Storyboard>
 
     </UserControl.Resources>
 
-    <Grid x:Name="PresetGrid" Width="auto">
+    <Grid x:Name="PresetGrid" HorizontalAlignment="Stretch">
         <Grid.RowDefinitions>
             <!-- start time -->
             <RowDefinition Height="auto"/>
@@ -36,7 +45,7 @@
         <Grid Grid.Row="0" 
               TextElement.FontFamily="{StaticResource font_SuiGeneris}"
               SnapsToDevicePixels="True"
-              Margin="0,48,0,38"
+              Margin="10,48,10,38"
               >
             
             <!-- start time -->
@@ -209,88 +218,65 @@
         <!-- points list -->
         <Grid Grid.Row="1">
             <!-- TimePointVmCollection -->
-            <ListBox x:Name="m_pointsList" Opacity="0.0"
+            <ListBox x:Name="m_pointsList" 
                      ItemTemplateSelector="{StaticResource templsel_Selector}"
                      ItemsSource="{Binding TimePointVmCollection}"
                      ItemContainerStyle="{StaticResource style_ListBoxItem}"
                      FontFamily="{StaticResource font_SuiGeneris}"
                      ScrollViewer.HorizontalScrollBarVisibility="Hidden"
                      ScrollViewer.CanContentScroll="False"
+                     Background="Aqua"
+                     at:AttachedPropertyFactory.IsTimePopints="{Binding IsTimePoints}"
                      >
                 <!--<ToggleButton Width="200" Height="200" Style="{x:Null}" />-->
                 <ListBox.Style>
                     <Style TargetType="ListBox">
+                        <Setter Property="Opacity" Value="0.0" />
                         <Setter Property="ScrollViewer.HorizontalScrollBarVisibility" Value="Auto" />
                         <Setter Property="BorderThickness" Value="0" />
                         <Setter Property="HorizontalAlignment" Value="Stretch" />
-                        <Setter Property="Background" Value="White" />
                         <Setter Property="Margin" Value="20,0" />
                         <Setter Property="MinHeight" Value="110"></Setter>
                         <Setter Property="SelectionMode" Value="Single" />
                         <Style.Triggers>
-                            <DataTrigger Binding="{Binding IsNoTimePoints}" Value="False">
-                                <DataTrigger.EnterActions>
-                                    <BeginStoryboard>
-                                        <Storyboard>
-                                            <DoubleAnimation Storyboard.TargetProperty="Opacity" To="1.0" Duration="0:0:.4"/>
-                                        </Storyboard>
-                                    </BeginStoryboard>
-                                </DataTrigger.EnterActions>
-                                <DataTrigger.ExitActions>
-                                    <BeginStoryboard>
-                                        <Storyboard>
-                                            <DoubleAnimation Storyboard.TargetProperty="Opacity" To="0.0" Duration="0:0:.4"/>
-                                        </Storyboard>
-                                    </BeginStoryboard>
-                                </DataTrigger.ExitActions>
-                            </DataTrigger>
+                            <Trigger Property="at:AttachedPropertyFactory.IsTimePopints" Value="True">
+                                <Trigger.EnterActions>
+                                    <BeginStoryboard Storyboard="{StaticResource anim_OpacityOn}" />
+                                </Trigger.EnterActions>
+                                <Trigger.ExitActions>
+                                    <BeginStoryboard Storyboard="{StaticResource anim_OpacityOff}" />
+                                </Trigger.ExitActions>
+                            </Trigger>
                         </Style.Triggers>
                     </Style>
                 </ListBox.Style>
             </ListBox>
 
             <!-- info table -->
-            <StackPanel Orientation="Vertical" ZIndex="-1">
+            <StackPanel Orientation="Vertical" ZIndex="-1" x:Name="panel" Background="BlueViolet"
+                        IsHitTestVisible="False">
 
-                <TextBlock HorizontalAlignment="Center">
-                    <Bold>To create a new preset:</Bold>
-                    <LineBreak /><LineBreak />
-                    <Run Text="    "></Run><Run>1. Menu "File"</Run>
+                <TextBlock HorizontalAlignment="Center" Style="{x:Null}">
                     <LineBreak />
-                    <Run Text="    "></Run><Run>2. Command "New Preset"</Run>
+                    <Run Text="               "></Run><Bold>Preset is empty. To fill it you need:</Bold>
+                    <LineBreak /><LineBreak />
+                    <Run Text="    "></Run><Run>1. Set the Time in section bellow</Run>
+                    <LineBreak />
+                    <Run Text="    "></Run><Run>2. Push the "add" button on the right in same section</Run>
                     <LineBreak /><LineBreak /><LineBreak />
                 </TextBlock>
-                <TextBlock HorizontalAlignment="Center">
-                    <Bold>To create TimePointCollection use form below:</Bold>
+                <TextBlock HorizontalAlignment="Center" Style="{x:Null}">
+                    <LineBreak /><LineBreak /><LineBreak />
+                    <Bold>TimePoint creating section:</Bold>
                 </TextBlock>
-
-                <StackPanel.Style>
-                    <Style TargetType="StackPanel">
-                        <Setter Property="UIElement.Opacity" Value="1.0" />
-                        <Style.Triggers>
-
-                            <DataTrigger Binding="{Binding IsNoTimePoints}" Value="False">
-                                <DataTrigger.EnterActions>
-                                    <BeginStoryboard>
-                                        <Storyboard>
-                                            <DoubleAnimation Storyboard.TargetProperty="Opacity" To="0.0" Duration="0:0:.4"/>
-                                        </Storyboard>
-                                    </BeginStoryboard>
-                                </DataTrigger.EnterActions>
-                                <DataTrigger.ExitActions>
-                                    <BeginStoryboard>
-                                        <Storyboard>
-                                            <DoubleAnimation Storyboard.TargetProperty="Opacity" To="1.0" Duration="0:0:.4"/>
-                                        </Storyboard>
-                                    </BeginStoryboard>
-                                </DataTrigger.ExitActions>
-                            </DataTrigger>
-
-                        </Style.Triggers>
-                    </Style>
-                </StackPanel.Style>
             </StackPanel>
 
+            <StackPanel Orientation="Vertical">
+                <TextBlock Text="{Binding Name}" />
+                <TextBlock Text="{Binding ElementName=panel, Path=Opacity}" />
+                <TextBlock Text="{Binding IsNoTimePoints}" />
+                <Button Command="{Binding TestCommand}" Height="30" Width="50">update</Button>
+            </StackPanel>
         </Grid>
 
         <!-- adding point -->

@@ -16,7 +16,7 @@ namespace CycleBellLibrary.Repository
     {
         #region Fields
 
-        private readonly PresetSerializableObservableCollection _presetsSerializable;
+        private readonly PresetSerializableObservableCollection _presetSerializableCollection;
 
         #endregion
 
@@ -24,8 +24,8 @@ namespace CycleBellLibrary.Repository
 
         public PresetCollectionManager()
         {
-            _presetsSerializable = new PresetSerializableObservableCollection();
-            Presets = new ReadOnlyObservableCollection<Preset>(_presetsSerializable);
+            _presetSerializableCollection = new PresetSerializableObservableCollection();
+            Presets = new ReadOnlyObservableCollection<Preset>(_presetSerializableCollection);
         }
 
         #endregion
@@ -43,8 +43,8 @@ namespace CycleBellLibrary.Repository
         /// </summary>
         public void Clear()
         {
-            if (_presetsSerializable.Count > 0) {
-                _presetsSerializable.Clear();
+            if (_presetSerializableCollection.Count > 0) {
+                _presetSerializableCollection.Clear();
             }
         }
 
@@ -69,10 +69,10 @@ namespace CycleBellLibrary.Repository
             if (preset.PresetName == null)
                 throw new ArgumentNullException (nameof(preset.PresetName), "PresetName can't be null");
 
-            if (_presetsSerializable.Any (p => p.PresetName == preset.PresetName)) 
+            if (_presetSerializableCollection.Any (p => p.PresetName == preset.PresetName)) 
                 preset.PresetName += "_copy";
 
-            _presetsSerializable.Add (preset);
+            _presetSerializableCollection.Add (preset);
         }
 
         public void Remove (Preset preset)
@@ -80,7 +80,7 @@ namespace CycleBellLibrary.Repository
             if (preset == null)
                 throw new ArgumentNullException (nameof(preset), "preset can't be null");
 
-            var res = _presetsSerializable.Remove (preset);
+            var res = _presetSerializableCollection.Remove (preset);
 
             if (!res)
                 throw new ArgumentException("preset doesn't exists", nameof(preset));
@@ -122,7 +122,7 @@ namespace CycleBellLibrary.Repository
             using (FileStream fs = File.Open(fileName, FileMode.Create)) {
 
                 XmlSerializer xmlSerializer = new XmlSerializer(typeof(PresetSerializableObservableCollection));
-                xmlSerializer.Serialize(fs, _presetsSerializable);
+                xmlSerializer.Serialize(fs, _presetSerializableCollection);
             }
         }
 
@@ -137,9 +137,9 @@ namespace CycleBellLibrary.Repository
                 var presets = (PresetSerializableObservableCollection)xmlSerializer.Deserialize(fStream);
 
                 if (presets.Count > 0) {
-                    _presetsSerializable.Clear();
+                    _presetSerializableCollection.Clear();
                     foreach (var preset in presets) {
-                        _presetsSerializable.Add (preset);
+                        _presetSerializableCollection.Add (preset);
                     }
                 }
             }
@@ -149,7 +149,7 @@ namespace CycleBellLibrary.Repository
 
         #region IEnumerable Implementation
 
-        public IEnumerator<Preset> GetEnumerator() => _presetsSerializable.GetEnumerator();
+        public IEnumerator<Preset> GetEnumerator() => _presetSerializableCollection.GetEnumerator();
         
         IEnumerator IEnumerable.GetEnumerator() { return GetEnumerator(); }
 
