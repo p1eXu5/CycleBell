@@ -15,10 +15,12 @@
     </Storyboard>
 
     <!-- BeginTimePointViewModel -->
-    <DataTemplate x:Key="datatempl_BeginTimePointViewModel" DataType="vm:BeginTimePointViewModel">
+    <DataTemplate x:Key="datatempl_BeginTimePointViewModel" DataType="vm:BeginTimePointViewModel"
+                  >
         <Grid SnapsToDevicePixels="True" ShowGridLines="False" Margin="5" 
               TextElement.FontStyle="Normal"
               IsEnabled="{Binding IsEnabled}"
+              Focusable="False"
               >
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="1" />
@@ -64,6 +66,7 @@
                          Margin="5,0,0,0"
                          BorderThickness="0,0,0,1"
                          Control.BorderBrush="Black"
+                         Focusable="False"
                          Text="{Binding LoopCount, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
 
             </StackPanel>
@@ -161,6 +164,7 @@
                      IsEnabled="{Binding IsEnabled}"
                      Text="{Binding Name}"
                      Style="{StaticResource style_TemplatedTextBox}"
+                     Focusable="False"
                      >
                 <TextBox.RenderTransform>
                     <TranslateTransform Y="-2"></TranslateTransform>
@@ -174,14 +178,17 @@
                           FontSize="18"
                           Style="{StaticResource style_MuteToggleButton}"
                           Content="{Binding Time, Converter={StaticResource conv_TimeSpanToString}, Mode=OneWay}"
-            />
+                          Focusable="False"
+                          />
 
             <!-- mute -->
             <ToggleButton Grid.Column="3" Grid.Row="0"
                           IsEnabled="True"
                           Style="{StaticResource style_MuteToggleButton}"
                           Content="mute"
-                          HorizontalAlignment="Center" >
+                          HorizontalAlignment="Center" 
+                          Focusable="False"
+                          >
 
                 <ToggleButton.RenderTransform>
                     <TranslateTransform Y="-1" X="2" />
@@ -202,6 +209,7 @@
                        FontStyle="Normal"
                        TextTrimming="CharacterEllipsis"
                        MaxHeight="28"
+                       Focusable="False"
                    />
 
             <!-- add sound -->
@@ -211,7 +219,8 @@
                     Margin="16,5,0,0"
                     Width="30" Height="30"
                     VerticalAlignment="Center"
-                    Command="{Binding AddSoundCommand}">
+                    Command="{Binding AddSoundCommand}"
+                    Focusable="False">
                 <Path Data="{StaticResource gmtry_Notes}"
                       Stroke="{x:Null}"
                 />
@@ -223,7 +232,9 @@
                     Width="40" Height="30" Margin="10,5,10,0" 
                     Command="{Binding RemoveTimePointCommand}"
                     VerticalAlignment="Center"
-                    Content="del" Padding="6">
+                    Content="del" Padding="6"
+                    Focusable="False"
+                    >
             </Button>
         </Grid>
 

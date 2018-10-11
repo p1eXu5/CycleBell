@@ -25,6 +25,7 @@
 
         <!-- infinite -->
         <ToggleButton Grid.Column="0"
+                      TabIndex="6"
                       Width="48" Height="38"
                       Margin="0,0,20,0"
                       HorizontalAlignment="Center"
@@ -38,6 +39,7 @@
 
         <!-- play -->
         <ToggleButton Grid.Column="1"
+                      TabIndex="7"
                       IsThreeState="True"
                       Style="{StaticResource style_ThreeStateToggleButton}"
                       Width="48" Height="38"
@@ -76,6 +78,7 @@
 
         <!-- stop -->
         <Button Grid.Column="2"
+                TabIndex="8"
                 Width="48" Height="38"
                 HorizontalAlignment="Center"
                 local:AttachedPropertyFactory.BorderColor="#33330033"
@@ -93,6 +96,7 @@
 
         <!-- bell -->
         <ToggleButton x:Name="btn_Ring" Grid.Column="3"
+                      TabIndex="9"
                       Style="{StaticResource style_RingToggleButton}"
                       Width="48" Height="38"
                       HorizontalAlignment="Center"

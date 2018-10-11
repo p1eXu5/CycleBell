@@ -115,6 +115,26 @@ namespace CycleBell.Views
 
         #endregion
 
+        #region IsFocused
+
+        public static readonly DependencyProperty IsTimeFocusedProperty = DependencyProperty.RegisterAttached("IsTimeFocused", typeof(bool), typeof(AttachedPropertyFactory)
+                                                                                                          , new FrameworkPropertyMetadata(false, ChangeTimeFocus));
+
+        public static void SetIsTimeFocused(DependencyObject d, bool value) => d.SetValue(IsTimeFocusedProperty, value);
+
+        public static bool GetIsTimeFocused(DependencyObject d) => (bool)d.GetValue(IsTimeFocusedProperty);
+
+        public static void ChangeTimeFocus(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            if (d is UIElement elem) {
+
+                if (!elem.IsFocused)
+                    elem.Focus();
+            }
+        }
+
+        #endregion
+
 
     }
 }

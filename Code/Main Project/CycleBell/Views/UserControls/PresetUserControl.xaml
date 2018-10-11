@@ -29,7 +29,7 @@
             <!-- points list -->
             <RowDefinition Height="*"/>
             <!-- adding point -->
-            <RowDefinition Height="100"/>
+            <RowDefinition Height="110"/>
         </Grid.RowDefinitions>
 
         <!-- start time & upcoming time point -->
@@ -46,11 +46,13 @@
                         HorizontalAlignment="Center"
                         VerticalAlignment="Center" 
                         >
-                <controls:TimerBox x:Name="timer_Box" Style="{StaticResource style_TimerBox}"
+                <controls:TimerBox x:Name="timer_Box" 
+                                   TabIndex="2"
                                    Text="{Binding StartTime, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged,
                                                   Converter={StaticResource conv_TimeSpanToString}}"
                                    Foreground="{Binding Foreground, RelativeSource={RelativeSource FindAncestor, AncestorType=Control}}"
                                    IsEnabled="{Binding IsEnabled, RelativeSource={RelativeSource FindAncestor, AncestorType=Control}}"
+                                   Style="{StaticResource style_TimerBox}"
                                    />
                 <TextBlock Text="start time" Style="{StaticResource style_UnderTimer}"
                            Height="{Binding ElementName=timer_Box, Path=ActualHeight}"
@@ -94,14 +96,17 @@
                 <!-- TimeLeftTo -->
                 <StackPanel Orientation="Horizontal" Width="Auto" HorizontalAlignment="Center">
                     <!-- sign -->
-                    <ContentControl Width="6" HorizontalAlignment="Right">
+                    <ContentControl Width="6" 
+                                    HorizontalAlignment="Right"
+                                    Focusable="False"
+                                    >
                         <TextBlock x:Name="tbk_Sign"  
                                    Style="{StaticResource style_TimerBlock}" 
                                    Text="-"
                                    />
                     </ContentControl>
 
-                    <ContentControl>
+                    <ContentControl Focusable="False">
                         <TextBlock x:Name="tbk_MajorH"
                                    Style="{StaticResource style_TimerBlock}"
                                    Text="{Binding TimeLeftTo.MajorH}"
@@ -110,7 +115,7 @@
                         </TextBlock>
                     </ContentControl>
 
-                    <ContentControl Width="16">
+                    <ContentControl Width="16" Focusable="False">
                         <TextBlock x:Name="tbk_MinorH" 
                                    Style="{StaticResource style_TimerBlock}" 
                                    HorizontalAlignment="Left"
@@ -118,21 +123,21 @@
                         />
                     </ContentControl>
 
-                    <ContentControl Width="8">
+                    <ContentControl Width="8" Focusable="False">
                         <TextBlock Style="{StaticResource style_TimerBlock}"
                                    HorizontalAlignment="Center"
                                    Text=":"
                                    />
                     </ContentControl>
 
-                    <ContentControl Width="15">
+                    <ContentControl Width="15" Focusable="False">
                         <TextBlock x:Name="tbk_MajorM"  
                                    Style="{StaticResource style_TimerBlock}" 
                                    Text="{Binding TimeLeftTo.MajorM}"
                         />
                     </ContentControl>
 
-                    <ContentControl Width="16">
+                    <ContentControl Width="16" Focusable="False">
                         <TextBlock x:Name="tbk_MinorM"  
                                    Style="{StaticResource style_TimerBlock}"
                                    HorizontalAlignment="Left"
@@ -140,21 +145,21 @@
                         />
                     </ContentControl>
 
-                    <ContentControl Width="8">
+                    <ContentControl Width="8" Focusable="False">
                         <TextBlock Style="{StaticResource style_TimerBlock}"
                                    HorizontalAlignment="Center"
                                    Text=":"
                                    />
                     </ContentControl>
 
-                    <ContentControl Width="15">
+                    <ContentControl Width="15" Focusable="False">
                         <TextBlock x:Name="tbk_MajorS"  
                                    Style="{StaticResource style_TimerBlock}" 
                                    Text="{Binding TimeLeftTo.MajorS}"
                         />
                     </ContentControl>
 
-                    <ContentControl Width="16">
+                    <ContentControl Width="16" Focusable="False">
                         <TextBlock x:Name="tbk_MinorS"  
                                    Style="{StaticResource style_TimerBlock}" 
                                    Text="{Binding TimeLeftTo.MinorS}"
@@ -203,9 +208,6 @@
 
         <!-- points list -->
         <Grid Grid.Row="1">
-            
-
-
             <!-- TimePointVmCollection -->
             <ListBox x:Name="m_pointsList" Opacity="0.0"
                      ItemTemplateSelector="{StaticResource templsel_Selector}"

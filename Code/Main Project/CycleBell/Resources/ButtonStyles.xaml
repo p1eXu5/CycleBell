@@ -2,6 +2,8 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:at="clr-namespace:CycleBell.Views">
 
+    
+
     <!-- ct_BaseButton -->
     <ControlTemplate x:Key="ct_BaseButton" TargetType="ButtonBase" >
         <Grid>
@@ -17,15 +19,19 @@
 
                 <!-- shadow -->
                 <Rectangle.Effect>
-                    <DropShadowEffect x:Name="m_shadow" Direction="-90" 
+                    <DropShadowEffect x:Name="m_shadow" Direction="-90"
                                       Opacity="0.0" 
-                                      ShadowDepth="2" BlurRadius="2" />
+                                      ShadowDepth="2" BlurRadius="2" >
+                    </DropShadowEffect>
                 </Rectangle.Effect>
             </Rectangle>
 
             <!-- content -->
             <Viewbox Margin="{TemplateBinding Padding}" SnapsToDevicePixels="True">
-                <ContentControl Content="{TemplateBinding Content}" Foreground="{TemplateBinding Foreground}" />
+                <ContentControl Content="{TemplateBinding Content}" 
+                                Foreground="{TemplateBinding Foreground}"
+                                Focusable="False"
+                                />
             </Viewbox>
 
             <!-- visual states -->
@@ -78,9 +84,28 @@
                         </Storyboard>
                     </VisualState>
                 </VisualStateGroup>
-                
+
+                <VisualStateGroup x:Name="FocusStates">
+                    <VisualState x:Name="Unfocused" />
+                    <VisualState x:Name="Focused">
+                        <Storyboard>
+                            <DoubleAnimationUsingKeyFrames Storyboard.TargetName="rectangle"
+                                                           Storyboard.TargetProperty="(UIElement.Effect).(DropShadowEffect.Opacity)"
+                                                           >
+                                <EasingDoubleKeyFrame Value=".2" KeyTime="0:0:.1" />
+                            </DoubleAnimationUsingKeyFrames>
+                            <DoubleAnimationUsingKeyFrames Storyboard.TargetName="rectangle"
+                                                          Storyboard.TargetProperty="(UIElement.Effect).(DropShadowEffect.ShadowDepth)"
+                                                          RepeatBehavior="Forever">
+                                <LinearDoubleKeyFrame Value="1.0" KeyTime="0:0:.4" />
+                                <LinearDoubleKeyFrame Value="2.0" KeyTime="0:0:.4" />
+                            </DoubleAnimationUsingKeyFrames>
+                        </Storyboard>
+                    </VisualState>
+                </VisualStateGroup>
+
                 <VisualStateGroup x:Name="CheckStates">
-                        <VisualState x:Name="Checked">
+                    <VisualState x:Name="Checked">
                         <Storyboard>
                             <ColorAnimation Storyboard.TargetProperty="(Control.Foreground).(LinearGradientBrush.GradientStops)[0].(GradientStop.Color)" 
                                             To="{DynamicResource col_TopCheckedIcon}" Duration="0:0:.2" />
@@ -96,6 +121,7 @@
                     <VisualState x:Name="Unchecked" />
                     <VisualState Name="Indeterminate"></VisualState>
                 </VisualStateGroup>
+
             </VisualStateManager.VisualStateGroups>
 
         </Grid>
@@ -105,6 +131,7 @@
     <!-- style_BaseButton -->
     <Style x:Key="style_BaseButton" TargetType="ButtonBase">
         <Setter Property="Background" Value="{DynamicResource brush_BackgroundGradient}" />
+        <Setter Property="FocusVisualStyle" Value="{x:Null}" />
 
         <Setter Property="BorderBrush">
             <Setter.Value>
@@ -141,7 +168,7 @@
                 <StaticResource ResourceKey="ct_BaseButton" />
             </Setter.Value>
         </Setter>
-        
+
         <Style.Triggers>
             <Trigger Property="IsEnabled" Value="False">
                 <Trigger.EnterActions>
@@ -189,7 +216,6 @@
                 </Trigger.ExitActions>
             </Trigger>
         </Style.Triggers>
-
     </Style>
     
     <!-- Button Style -->

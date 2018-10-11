@@ -49,10 +49,16 @@
     <DockPanel VerticalAlignment="Stretch">
 
         <!-- Menu -->
-        <Menu DockPanel.Dock="Top" Height="auto" Background="{StaticResource col_menuBackground}">
+        <Menu DockPanel.Dock="Top" 
+              Height="auto" 
+              Background="{StaticResource col_menuBackground}"
+              
+              >
 
             <!-- File menu -->
-            <MenuItem Name="m_fileMenu">
+            <MenuItem Name="m_fileMenu"
+                      KeyboardNavigation.IsTabStop="False"
+                      >
                 <MenuItem.Header>
                     <TextBlock VerticalAlignment="Center">File</TextBlock>
                 </MenuItem.Header>
@@ -69,7 +75,9 @@
             </MenuItem>
             
             <!-- Settings menu -->
-            <MenuItem Name="m_settingsMenu">
+            <MenuItem Name="m_settingsMenu"
+                      KeyboardNavigation.IsTabStop="False"
+                      >
                 <MenuItem.Header>
                     <TextBlock VerticalAlignment="Center">Settings</TextBlock>
                 </MenuItem.Header>
@@ -110,7 +118,9 @@
             </MenuItem>
             
             <!-- About menu -->
-            <MenuItem Name="m_aboutMenu">
+            <MenuItem Name="m_aboutMenu"
+                      KeyboardNavigation.IsTabStop="False"
+                      >
                 <MenuItem.Header>
                     <TextBlock VerticalAlignment="Center">About</TextBlock>
                 </MenuItem.Header>
@@ -154,7 +164,8 @@
                            FontFamily="{StaticResource font_SuiGeneris}"
                            FontWeight="Normal"
                            FontSize="14"
-                           RenderTransformOrigin="0.5, 0.5">
+                           RenderTransformOrigin="0.5, 0.5"
+                           >
                     <TextBlock.RenderTransform>
                         <TranslateTransform Y="1"/>
                     </TextBlock.RenderTransform>
