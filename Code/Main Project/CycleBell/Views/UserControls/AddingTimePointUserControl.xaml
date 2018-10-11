@@ -46,8 +46,16 @@
 
             <TextBox x:Name="m_pointName"
                      TabIndex="2"
+                     at:AttachedPropertyFactory.IsFocused="{Binding FocusName}"
                      Height="{Binding ActualHeight, ElementName=grid_TimePointName}"
-                     Text="{Binding Name, Mode=TwoWay, UpdateSourceTrigger=LostFocus}">
+                     Text="{Binding Name, Mode=TwoWay, UpdateSourceTrigger=LostFocus}"
+                     FontWeight="Normal"
+                     >
+                <TextBox.InputBindings>
+                    <KeyBinding Command="{Binding TimePointNameReturnCommand}"
+                                Key="Return"
+                                />
+                </TextBox.InputBindings>
                 <TextBox.Style>
                     <Style TargetType="TextBox">
                         <Setter Property="VerticalContentAlignment" Value="Bottom" />
@@ -94,7 +102,7 @@
 
         <!-- Time -->
         <controls:TimerBox x:Name="tibx_PointTime"
-                           at:AttachedPropertyFactory.IsTimeFocused="{Binding FocusTime}"
+                           at:AttachedPropertyFactory.IsFocused="{Binding FocusTime}"
                            TabIndex="3"
                            Grid.Column="1" Grid.Row="0"
                            Margin="0"

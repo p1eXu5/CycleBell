@@ -176,9 +176,9 @@
                           Margin="0"
                           Height="22" HorizontalAlignment="Center"
                           FontSize="18"
-                          Style="{StaticResource style_MuteToggleButton}"
                           Content="{Binding Time, Converter={StaticResource conv_TimeSpanToString}, Mode=OneWay}"
                           Focusable="False"
+                          Style="{StaticResource style_MuteToggleButton}"
                           />
 
             <!-- mute -->

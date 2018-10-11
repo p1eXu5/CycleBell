@@ -481,6 +481,28 @@
                             HorizontalAlignment="{TemplateBinding HorizontalAlignment}"
                             Height="{TemplateBinding Height}" Width="{TemplateBinding Width}"
                             BorderThickness="{TemplateBinding BorderThickness}">
+                        <Border.BorderBrush>
+                            <SolidColorBrush x:Name="col_Border" Color="{StaticResource col_UncheckedStroke}" />
+                        </Border.BorderBrush>
+
+                        <TextBlock x:Name="tbk_Mute"
+                                   VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+                                   HorizontalAlignment="Center"
+                                   RenderTransformOrigin=".5,.5"
+                                   FontSize="{TemplateBinding FontSize}"
+                                   FontStyle="{TemplateBinding FontStyle}"
+                                   FontFamily="{TemplateBinding FontFamily}"
+                                   Text="{TemplateBinding Content}"
+                                   >
+
+                            <TextBlock.Foreground>
+                                <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+                                    <GradientStop x:Name="col_Top" Color="{DynamicResource col_TopForeground}" Offset="0" />
+                                    <GradientStop x:Name="col_Bottom" Color="{DynamicResource col_BottomForeground}" Offset="1" />
+                                </LinearGradientBrush>
+                            </TextBlock.Foreground>
+                        </TextBlock>
+
 
                         <VisualStateManager.VisualStateGroups>
                             <VisualStateGroup x:Name="CommonState">
@@ -534,34 +556,12 @@
                                                         To="{DynamicResource col_TopCheckedMute}" Duration="0:0:.2" />
                                         <ColorAnimation Storyboard.TargetName="col_Bottom" Storyboard.TargetProperty="Color" 
                                                         To="{DynamicResource col_BottomCheckedMute}" Duration="0:0:.2" />
-                                        <ColorAnimation Storyboard.TargetName="col_Border" Storyboard.TargetProperty="Color" 
-                                                        To="{DynamicResource col_BottomCheckedMute}" Duration="0:0:.2" />
+
                                     </Storyboard>
                                 </VisualState>
                             </VisualStateGroup>
                         </VisualStateManager.VisualStateGroups>
 
-                        <TextBlock x:Name="tbk_Mute"
-                                   VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
-                                   HorizontalAlignment="Center"
-                                   RenderTransformOrigin=".5,.5"
-                                   FontSize="{TemplateBinding FontSize}"
-                                   FontStyle="{TemplateBinding FontStyle}"
-                                   FontFamily="{TemplateBinding FontFamily}"
-                                   Text="{TemplateBinding Content}"
-                                   >
-
-                            <TextBlock.Foreground>
-                                <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
-                                    <GradientStop x:Name="col_Top" Color="{DynamicResource col_TopForeground}" Offset="0" />
-                                    <GradientStop x:Name="col_Bottom" Color="{DynamicResource col_BottomForeground}" Offset="1" />
-                                </LinearGradientBrush>
-                            </TextBlock.Foreground>
-                        </TextBlock>
-
-                        <Border.BorderBrush>
-                            <SolidColorBrush x:Name="col_Border" Color="{StaticResource col_UncheckedStroke}" />
-                        </Border.BorderBrush>
                     </Border>
                 </ControlTemplate>
             </Setter.Value>

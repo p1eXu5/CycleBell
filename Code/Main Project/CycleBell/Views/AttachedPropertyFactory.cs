@@ -98,12 +98,12 @@ namespace CycleBell.Views
 
         #region IsFocused
 
-        public static readonly DependencyProperty IsFocusedProperty = DependencyProperty.RegisterAttached("IsFocused", typeof(bool), typeof(AttachedPropertyFactory)
+        public static readonly DependencyProperty IsPresetNameFocusedProperty = DependencyProperty.RegisterAttached("IsPresetNameFocused", typeof(bool), typeof(AttachedPropertyFactory)
             , new FrameworkPropertyMetadata(false, ChangeFocus) {BindsTwoWayByDefault = true});
 
-        public static void SetIsFocused(DependencyObject d, bool value) => d.SetValue(IsFocusedProperty, value);
+        public static void SetIsPresetNameFocused(DependencyObject d, bool value) => d.SetValue(IsPresetNameFocusedProperty, value);
 
-        public static bool GetIsFocused(DependencyObject d) => (bool)d.GetValue(IsFocusedProperty);
+        public static bool GetIsPresetNameFocused(DependencyObject d) => (bool)d.GetValue(IsPresetNameFocusedProperty);
 
         public static void ChangeFocus (DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
@@ -118,12 +118,12 @@ namespace CycleBell.Views
 
         #region IsFocused
 
-        public static readonly DependencyProperty IsTimeFocusedProperty = DependencyProperty.RegisterAttached("IsTimeFocused", typeof(bool), typeof(AttachedPropertyFactory)
+        public static readonly DependencyProperty IsFocusedProperty = DependencyProperty.RegisterAttached("IsFocused", typeof(bool), typeof(AttachedPropertyFactory)
                                                                                                           , new FrameworkPropertyMetadata(false, ChangeTimeFocus));
 
-        public static void SetIsTimeFocused(DependencyObject d, bool value) => d.SetValue(IsTimeFocusedProperty, value);
+        public static void SetIsFocused(DependencyObject d, bool value) => d.SetValue(IsFocusedProperty, value);
 
-        public static bool GetIsTimeFocused(DependencyObject d) => (bool)d.GetValue(IsTimeFocusedProperty);
+        public static bool GetIsFocused(DependencyObject d) => (bool)d.GetValue(IsFocusedProperty);
 
         public static void ChangeTimeFocus(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {

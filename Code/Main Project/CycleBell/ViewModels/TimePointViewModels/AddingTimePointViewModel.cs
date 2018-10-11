@@ -11,6 +11,7 @@ namespace CycleBell.ViewModels.TimePointViewModels
     {
         private const byte _loopNumberLimit = 10;
         private bool _focusTime;
+        private bool _focusName;
 
         public AddingTimePointViewModel (IPresetViewModel presetViewModel) : base (new TimePoint { Name = "" }, presetViewModel)
         {
@@ -20,6 +21,8 @@ namespace CycleBell.ViewModels.TimePointViewModels
                                     ? Enumerable.Range (0, _PresetViewModel.Preset.TimerLoops.Values.Max() + 1).Select (n => (byte) n).ToArray() 
                                     : Enumerable.Range(0, _loopNumberLimit).Select(n => (byte)n).ToArray();
         }
+
+        #region Properties
 
         public override TimeSpan Time
         {
@@ -53,14 +56,35 @@ namespace CycleBell.ViewModels.TimePointViewModels
             }
         }
 
+        public bool FocusName
+        {
+            get => _focusName;
+            set {
+                _focusName = value;
+                OnPropertyChanged();
+            }
+        }
+
         public byte[] NumberCollection { get; private set; }
 
+        #endregion
+
+        #region Commands
+
         public ICommand AddTimePointCommand { get; }
+        public ICommand TimePointNameReturnCommand => new ActionCommand(TimePointNameReturn);
+
+        #endregion
+
+        private void TimePointNameReturn(object o)
+        {
+            FocusTime ^= true;
+        }
 
         private void AddTimePoint(object o)
         {
             _PresetViewModel.AddTimePointCommand.Execute(null);
-            FocusTime ^= true;
+            FocusName ^= true;
         }
 
         public void Reset()
