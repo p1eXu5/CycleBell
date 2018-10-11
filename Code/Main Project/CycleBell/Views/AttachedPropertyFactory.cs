@@ -5,6 +5,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
+using CycleBell.Controls;
 
 namespace CycleBell.Views
 {
@@ -130,6 +131,9 @@ namespace CycleBell.Views
 
                 if (!elem.IsFocused)
                     elem.Focus();
+
+                if (elem is TimerBox tb)
+                    tb.CaretIndex = 2;
             }
         }
 

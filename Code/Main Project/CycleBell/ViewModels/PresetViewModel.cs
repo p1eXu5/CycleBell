@@ -88,8 +88,8 @@ namespace CycleBell.ViewModels
             ICollectionView view = CollectionViewSource.GetDefaultView (TimePointVmCollection);
 
             view.SortDescriptions.Clear();
-            view.SortDescriptions.Add (new SortDescription ("Id", ListSortDirection.Ascending));
             view.SortDescriptions.Add (new SortDescription("LoopNumber", ListSortDirection.Ascending));
+            view.SortDescriptions.Add (new SortDescription ("Id", ListSortDirection.Ascending));
 
             // TimePointCollection INotifyCollectionChanged
             ((INotifyCollectionChanged) _preset.TimePointCollection).CollectionChanged += OnTimePointCollectionChanged;
