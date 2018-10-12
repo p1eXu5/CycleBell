@@ -105,14 +105,7 @@ namespace CycleBell.ViewModels.TimePointViewModels
         /// <summary>
         /// Gets TimePointTime
         /// </summary>
-        public TimePointType TimePointType
-        {
-            get => _TimePoint.TimePointType;
-            set {
-                _TimePoint.TimePointType = value;
-                OnPropertyChanged();
-            }
-        }
+        public TimePointType TimePointType => _TimePoint.TimePointType;
 
         public bool MuteFlag
         {
@@ -130,8 +123,8 @@ namespace CycleBell.ViewModels.TimePointViewModels
             get => _isAbsolute;
             set {
                 _isAbsolute = value;
-                TimePointType = _isAbsolute ? TimePointType.Absolute : TimePointType.Relative;
                 OnPropertyChanged();
+                OnPropertyChanged(nameof(Time));
             }
         }
 

@@ -31,6 +31,7 @@ namespace CycleBellLibrary.Models
         private byte _loopNumber;
 
         private static Func<TimePoint, String> _defaultTimePointNameFunc;
+        private TimePointType _timePointType;
 
         #endregion
 
@@ -84,7 +85,7 @@ namespace CycleBellLibrary.Models
             Id = _timePointNum++;
 
             Time = time;
-            TimePointType = timePointType;
+            _timePointType = timePointType;
 
             if (timePointType == TimePointType.Absolute)
                 BaseTime = TimeSpan.Zero;
@@ -179,7 +180,7 @@ namespace CycleBellLibrary.Models
         /// <summary>
         /// Type of Time, absolute or relative
         /// </summary>
-        public TimePointType TimePointType { get; set; }
+        public TimePointType TimePointType => _timePointType;
 
         /// <summary>
         /// Number of queue where this NextTimePoint will measure off
@@ -202,6 +203,43 @@ namespace CycleBellLibrary.Models
         #endregion
 
         #region Methods
+
+        public void ChangeTimePointType(TimePointType newTimePointType)
+        {
+            switch (newTimePointType) {
+
+                case TimePointType.Absolute:
+
+                    if (TimePointType == TimePointType.Relative) {
+
+                        if (BaseTime == null) {
+                            Time = GetAbsoluteTime(TimeSpan.Zero);
+                        }
+                        else {
+                            Time = GetAbsoluteTime();
+                        }
+
+                        _timePointType = TimePointType.Absolute;
+                    }
+
+                    break;
+
+                case TimePointType.Relative:
+
+                    if (TimePointType == TimePointType.Absolute) {
+
+                        if (BaseTime == null) {
+                            Time = GetRelativeTime(TimeSpan.Zero);
+                        }
+                        else {
+                            Time = GetRelativeTime();
+                        }
+                        _timePointType = TimePointType.Relative;
+                    }
+
+                    break;
+            }
+        }
 
         public string GetDefaultTimePointName() { return DefaultTimePointNameFunc?.Invoke(this) ?? ""; }
 
@@ -298,16 +336,17 @@ namespace CycleBellLibrary.Models
         public TimePoint Clone()
         {
             var tp = TimePoint.DefaultTimePoint;
-            tp.Name = this.Name;
+
+            tp.BaseTime = this.BaseTime;
             tp.Time = this.Time;
-            tp.TimePointType = this.TimePointType;
+            tp.ChangeTimePointType(this._timePointType);
+
+            tp.Name = this.Name;
             tp.LoopNumber = this.LoopNumber;
 
             if (Tag != null) {
                 tp.Tag = Tag.CopyObject<object>();
             }
-
-            tp.BaseTime = this.BaseTime;
 
             return tp;
         }

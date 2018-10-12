@@ -570,6 +570,109 @@
         </Setter>
     </Style>
 
+    <Style x:Key="style_TimeToggleButton" TargetType="ToggleButton">
+        <Setter Property="VerticalAlignment" Value="Bottom" />
+        <Setter Property="FontWeight" Value="Normal" />
+        <Setter Property="FontFamily" Value="{StaticResource font_SuiGeneris}" />
+        <Setter Property="FontSize" Value="14" />
+        <Setter Property="FontStyle" Value="Normal" />
+        <Setter Property="BorderThickness" Value="0" />
+
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="ToggleButton">
+                    <Border x:Name="border"
+                            HorizontalAlignment="{TemplateBinding HorizontalAlignment}"
+                            Height="{TemplateBinding Height}" Width="{TemplateBinding Width}"
+                            BorderThickness="{TemplateBinding BorderThickness}"
+                            Background="Transparent"
+                            >
+                        <Border.BorderBrush>
+                            <SolidColorBrush x:Name="col_Border" Color="{StaticResource col_UncheckedStroke}" />
+                        </Border.BorderBrush>
+
+                        <TextBlock x:Name="tbk_Mute"
+                                   VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+                                   HorizontalAlignment="Center"
+                                   RenderTransformOrigin=".5,.5"
+                                   FontSize="{TemplateBinding FontSize}"
+                                   FontStyle="{TemplateBinding FontStyle}"
+                                   FontFamily="{TemplateBinding FontFamily}"
+                                   Text="{TemplateBinding Content}"
+                                   >
+
+                            <TextBlock.Foreground>
+                                <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+                                    <GradientStop x:Name="col_Top" Color="{DynamicResource col_TopForeground}" Offset="0" />
+                                    <GradientStop x:Name="col_Bottom" Color="{DynamicResource col_BottomForeground}" Offset="1" />
+                                </LinearGradientBrush>
+                            </TextBlock.Foreground>
+                        </TextBlock>
+
+
+                        <VisualStateManager.VisualStateGroups>
+                            <VisualStateGroup x:Name="CommonState">
+
+                                <!--<VisualStateGroup.Transitions>
+                                    <VisualTransition GeneratedDuration="0:0:.2"></VisualTransition>
+                                </VisualStateGroup.Transitions>-->
+
+                                <VisualState x:Name="Normal" >
+                                </VisualState>
+
+                                <VisualState x:Name="Pressed">
+                                    <Storyboard TargetName="tbk_Mute">
+                                        <DoubleAnimation Storyboard.TargetProperty="FontSize" To="12" Duration="0"/>
+                                        <ColorAnimation Storyboard.TargetName="col_Top" Storyboard.TargetProperty="Color" 
+                                                                To="{DynamicResource col_TopPressed}" Duration="0" />
+                                        <ColorAnimation Storyboard.TargetName="col_Bottom" Storyboard.TargetProperty="Color" 
+                                                                To="{DynamicResource col_BottomPressed}" Duration="0" />
+                                        <ThicknessAnimationUsingKeyFrames Storyboard.TargetName="border" Storyboard.TargetProperty="BorderThickness">
+                                            <LinearThicknessKeyFrame Value="0,0,0,1" KeyTime="0" />
+                                        </ThicknessAnimationUsingKeyFrames>
+                                    </Storyboard>
+                                </VisualState>
+
+                                <VisualState x:Name="MouseOver">
+                                    <Storyboard TargetName="tbk_Mute">
+                                        <!--<DoubleAnimation Storyboard.TargetProperty="FontSize" To="14" Duration="0"/>-->
+                                        <ThicknessAnimationUsingKeyFrames Storyboard.TargetName="border" Storyboard.TargetProperty="BorderThickness">
+                                            <LinearThicknessKeyFrame Value="0,0,0,1" KeyTime="0" />
+                                        </ThicknessAnimationUsingKeyFrames>
+                                    </Storyboard>
+                                </VisualState>
+
+                                <VisualState x:Name="Disabled">
+                                    <Storyboard TargetName="tbk_Mute">
+                                        <ColorAnimation Storyboard.TargetName="col_Top" Storyboard.TargetProperty="Color" 
+                                                        To="{DynamicResource col_TopUncheckedIcon}" Duration="0:0:.2" />
+                                        <ColorAnimation Storyboard.TargetName="col_Bottom" Storyboard.TargetProperty="Color" 
+                                                        To="{DynamicResource col_BottomUncheckedIcon}" Duration="0:0:.2" />
+                                    </Storyboard>
+                                </VisualState>
+
+                            </VisualStateGroup>
+
+                            <VisualStateGroup x:Name="CheckStates">
+                                <VisualState x:Name="Unchecked" />
+
+                                <VisualState x:Name="Checked">
+                                    <Storyboard>
+                                        <ColorAnimation Storyboard.TargetName="col_Top" Storyboard.TargetProperty="Color" 
+                                                        To="{DynamicResource col_TopCheckedTime}" Duration="0:0:.2" />
+                                        <ColorAnimation Storyboard.TargetName="col_Bottom" Storyboard.TargetProperty="Color" 
+                                                        To="{DynamicResource col_BottomCheckedTime}" Duration="0:0:.2" />
+
+                                    </Storyboard>
+                                </VisualState>
+                            </VisualStateGroup>
+                        </VisualStateManager.VisualStateGroups>
+
+                    </Border>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
 
 
 

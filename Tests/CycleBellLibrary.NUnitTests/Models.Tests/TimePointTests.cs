@@ -182,7 +182,7 @@ namespace CycleBellLibrary.NUnitTests.Models.Tests
 
             var tp1 = TimePoint.DefaultTimePoint;
             var tp2 = TimePoint.DefaultTimePoint;
-            tp2.TimePointType = TimePointType.Absolute;
+            tp2.ChangeTimePointType(TimePointType.Absolute);
 
             Assert.AreNotSame(tp1, tp2);
             Assert.IsTrue(tp1 != tp2);
@@ -192,7 +192,8 @@ namespace CycleBellLibrary.NUnitTests.Models.Tests
 
         private TimePoint GetRelativeTimePoint()
         {
-            return new TimePoint("0:00:30") {TimePointType = TimePointType.Relative};
+            TimePoint.DefaultTimePointType = TimePointType.Relative;
+            return new TimePoint("0:00:30");
         }
 
         private TimePoint GetRelativeTimePoint(byte loopNumber) => new TimePoint("Test Relative TimePoint", "0:00:07", TimePointType.Relative, loopNumber);

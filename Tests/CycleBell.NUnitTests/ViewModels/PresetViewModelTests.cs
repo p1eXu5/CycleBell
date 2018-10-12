@@ -61,7 +61,7 @@ namespace CycleBell.NUnitTests.ViewModels
             var pvm = GetPresetViewModel();
 
             pvm.AddingTimePoint.Time = TimeSpan.Parse (time);
-            pvm.AddingTimePoint.TimePointType = timePointType;
+            pvm.AddingTimePoint.TimePoint.ChangeTimePointType(timePointType);
 
             Assert.IsFalse(pvm.AddTimePointCommand.CanExecute(null));
         }
@@ -73,7 +73,7 @@ namespace CycleBell.NUnitTests.ViewModels
             var pvm = GetPresetViewModel();
 
             pvm.AddingTimePoint.Time = TimeSpan.Parse (time);
-            pvm.AddingTimePoint.TimePointType = timePointType;
+            pvm.AddingTimePoint.TimePoint.ChangeTimePointType(timePointType);
 
             Assert.IsTrue(pvm.AddTimePointCommand.CanExecute(null));
         }

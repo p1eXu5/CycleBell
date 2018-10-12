@@ -86,6 +86,8 @@
     <Color x:Key="col_Pause">#FFFF00</Color>
     <Color x:Key="col_TopPause">#FFFF00</Color>
     <Color x:Key="col_BottomPause">#AAAA00</Color>
+    <Color x:Key="col_AbsoluteTime">#990000</Color>
+    <Color x:Key="col_RelativeTime">#AAAAAA</Color>
 
     <Color x:Key="col_TopDisabledPathStroke">#00AAAA00</Color>
     <Color x:Key="col_BottomDisabledPathStroke">#00AAAA00</Color>
@@ -96,6 +98,8 @@
     <SolidColorBrush x:Key="BackgroundBrush" Color="{DynamicResource col_Background}" />
     <SolidColorBrush x:Key="brush_Foreground" Color="{DynamicResource col_Foreground}" />
     <SolidColorBrush x:Key="brush_Tip" Color="{DynamicResource col_Tip}" />
+    <SolidColorBrush x:Key="brush_AbsoluteTime" Color="{DynamicResource col_AbsoluteTime}" />
+    <SolidColorBrush x:Key="brush_RelativeTime" Color="{DynamicResource col_RelativeTime}" />
     <SolidColorBrush x:Key="brush_NoSetTime" Color="{DynamicResource col_NoSetTime}" />
     <SolidColorBrush x:Key="brush_UncheckedStroke" Color="{DynamicResource col_UncheckedStroke}" />
     <SolidColorBrush x:Key="brush_BorderBottomLine" Color="{DynamicResource col_UncheckedStroke}" />
@@ -142,6 +146,9 @@
 
     <Color x:Key="col_TopCheckedMute">#0000FF</Color>
     <Color x:Key="col_BottomCheckedMute">#000088</Color>
+
+    <Color x:Key="col_TopCheckedTime">#990000</Color>
+    <Color x:Key="col_BottomCheckedTime">#440000</Color>
 
     <Color x:Key="col_TopCheckedIcon">#7F7F7F</Color>
     <Color x:Key="col_BottomCheckedIcon">#000000</Color>

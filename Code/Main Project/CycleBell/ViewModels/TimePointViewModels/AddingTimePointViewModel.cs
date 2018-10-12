@@ -95,7 +95,10 @@ namespace CycleBell.ViewModels.TimePointViewModels
         {
             Name = "";
             Time = TimeSpan.Zero;
-            TimePointType = TimePointType.Relative;
+
+            _TimePoint.ChangeTimePointType(TimePointType.Relative);
+            OnPropertyChanged(nameof(TimePointType));
+
             LoopNumber = 0;
         }
 
@@ -103,7 +106,7 @@ namespace CycleBell.ViewModels.TimePointViewModels
         {
             _TimePoint.Name = timePoint.Name;
             _TimePoint.Time = timePoint.Time;
-            _TimePoint.TimePointType = timePoint.TimePointType;
+            _TimePoint.ChangeTimePointType(timePoint.TimePointType);
             _TimePoint.LoopNumber = timePoint.LoopNumber;
 
             OnPropertyChanged(nameof(Name));

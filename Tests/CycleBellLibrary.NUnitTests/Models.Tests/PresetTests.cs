@@ -604,13 +604,15 @@ namespace CycleBellLibrary.NUnitTests.Models.Tests
 
         private TimePoint GetAbsoluteTimePoint()
         {
-            var timePoint = new TimePoint() {TimePointType = TimePointType.Absolute};
+            TimePoint.DefaultTimePointType = TimePointType.Absolute;
+            var timePoint = new TimePoint();
 
             return timePoint;
         }
 
         private TimePoint GetRelativeTimePoint(TimeSpan time)
         {
+            TimePoint.DefaultTimePointType = TimePointType.Relative;
             var timePoint = new TimePoint(time, TimePointType.Relative);
 
             return timePoint;

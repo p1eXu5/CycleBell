@@ -57,7 +57,7 @@ namespace CycleBellLibrary.Repository
                         tp.Name = reader.GetAttribute("name");
                         reader.Read();
                         tp.Time = TimeSpan.Parse(reader.ReadElementContentAsString());
-                        tp.TimePointType = (TimePointType)(reader.ReadElementContentAsInt());
+                        tp.ChangeTimePointType((TimePointType)(reader.ReadElementContentAsInt()));
                         tp.LoopNumber = (byte)(reader.ReadElementContentAsInt());
 
                         if (reader.IsEmptyElement)

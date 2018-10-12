@@ -26,7 +26,7 @@ namespace CycleBell.NUnitTests.ViewModels
             TimePointViewModelBase tpvmb = GetTimePointViewModel(TimePoint.DefaultTimePoint);
             var tp = TimePoint.DefaultTimePoint;
 
-            tp.TimePointType = TimePointType.Absolute;
+            tp.ChangeTimePointType(TimePointType.Absolute);
 
             Assert.IsFalse(tpvmb.Equals(tp));
         }
