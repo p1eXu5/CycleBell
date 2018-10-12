@@ -487,23 +487,26 @@
                             <SolidColorBrush x:Name="col_Border" Color="{StaticResource col_UncheckedStroke}" />
                         </Border.BorderBrush>
 
-                        <TextBlock x:Name="tbk_Mute"
-                                   VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
-                                   HorizontalAlignment="Center"
-                                   RenderTransformOrigin=".5,.5"
-                                   FontSize="{TemplateBinding FontSize}"
-                                   FontStyle="{TemplateBinding FontStyle}"
-                                   FontFamily="{TemplateBinding FontFamily}"
-                                   Text="{TemplateBinding Content}"
-                                   >
+                        
+                            <TextBlock x:Name="tbk_Mute"
+                                       VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+                                       HorizontalAlignment="Center"
+                                       RenderTransformOrigin=".5,.5"
+                                       FontSize="{TemplateBinding FontSize}"
+                                       FontStyle="{TemplateBinding FontStyle}"
+                                       FontFamily="{TemplateBinding FontFamily}"
+                                       Text="{TemplateBinding Content}"
+                                       >
 
-                            <TextBlock.Foreground>
-                                <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
-                                    <GradientStop x:Name="col_Top" Color="{DynamicResource col_TopForeground}" Offset="0" />
-                                    <GradientStop x:Name="col_Bottom" Color="{DynamicResource col_BottomForeground}" Offset="1" />
-                                </LinearGradientBrush>
-                            </TextBlock.Foreground>
-                        </TextBlock>
+                                <TextBlock.Foreground>
+                                    <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+                                        <GradientStop x:Name="col_Top" Color="{DynamicResource col_TopForeground}" Offset="0" />
+                                        <GradientStop x:Name="col_Bottom" Color="{DynamicResource col_BottomForeground}" Offset="1" />
+                                    </LinearGradientBrush>
+                                </TextBlock.Foreground>
+                            </TextBlock>
+
+                            
 
 
                         <VisualStateManager.VisualStateGroups>
@@ -525,10 +528,10 @@
                                                                 To="{DynamicResource col_BottomPressed}" Duration="0" />
                                         <ThicknessAnimationUsingKeyFrames Storyboard.TargetName="border" Storyboard.TargetProperty="BorderThickness">
                                             <LinearThicknessKeyFrame Value="0,0,0,1" KeyTime="0" />
-                                        </ThicknessAnimationUsingKeyFrames> 
+                                        </ThicknessAnimationUsingKeyFrames>
                                     </Storyboard>
                                 </VisualState>
-                                
+
                                 <VisualState x:Name="MouseOver">
                                     <Storyboard TargetName="tbk_Mute">
                                         <!--<DoubleAnimation Storyboard.TargetProperty="FontSize" To="14" Duration="0"/>-->
@@ -537,7 +540,7 @@
                                         </ThicknessAnimationUsingKeyFrames>
                                     </Storyboard>
                                 </VisualState>
-                            
+
                                 <VisualState x:Name="Disabled">
                                     <Storyboard TargetName="tbk_Mute">
                                         <ColorAnimation Storyboard.TargetName="col_Top" Storyboard.TargetProperty="Color" 
@@ -591,23 +594,26 @@
                             <SolidColorBrush x:Name="col_Border" Color="{StaticResource col_UncheckedStroke}" />
                         </Border.BorderBrush>
 
-                        <TextBlock x:Name="tbk_Mute"
-                                   VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
-                                   HorizontalAlignment="Center"
-                                   RenderTransformOrigin=".5,.5"
-                                   FontSize="{TemplateBinding FontSize}"
-                                   FontStyle="{TemplateBinding FontStyle}"
-                                   FontFamily="{TemplateBinding FontFamily}"
-                                   Text="{TemplateBinding Content}"
-                                   >
 
-                            <TextBlock.Foreground>
-                                <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
-                                    <GradientStop x:Name="col_Top" Color="{DynamicResource col_TopForeground}" Offset="0" />
-                                    <GradientStop x:Name="col_Bottom" Color="{DynamicResource col_BottomForeground}" Offset="1" />
-                                </LinearGradientBrush>
-                            </TextBlock.Foreground>
-                        </TextBlock>
+                            <TextBlock x:Name="tbk_Mute"
+                                       Width="{TemplateBinding Width}"
+                                       VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+                                       HorizontalAlignment="Center"
+                                       RenderTransformOrigin=".5,.5"
+                                       FontSize="{TemplateBinding FontSize}"
+                                       FontStyle="{TemplateBinding FontStyle}"
+                                       FontFamily="{TemplateBinding FontFamily}"
+                                       Text="{TemplateBinding Content}"
+                                       >
+
+                                <TextBlock.Foreground>
+                                    <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+                                        <GradientStop x:Name="col_Top" Color="{DynamicResource col_TopForeground}" Offset="0" />
+                                        <GradientStop x:Name="col_Bottom" Color="{DynamicResource col_BottomForeground}" Offset="1" />
+                                    </LinearGradientBrush>
+                                </TextBlock.Foreground>
+                            </TextBlock>
+
 
 
                         <VisualStateManager.VisualStateGroups>
@@ -667,8 +673,8 @@
                                 </VisualState>
                             </VisualStateGroup>
                         </VisualStateManager.VisualStateGroups>
-
                     </Border>
+
                 </ControlTemplate>
             </Setter.Value>
         </Setter>

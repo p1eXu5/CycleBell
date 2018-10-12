@@ -5,6 +5,7 @@
                     xmlns:converters="clr-namespace:CycleBell.Converters">
 
     <converters:FromTimeSpanToStringConverter x:Key="conv_TimeSpanToString" />
+    <BooleanToVisibilityConverter x:Key="conv_BooleanToVisibility" />
     
     <Storyboard x:Key="amin_UpOpacity">
         <DoubleAnimation Storyboard.TargetProperty="Opacity" To="1.0" Duration="0:0:.2" />
@@ -91,17 +92,17 @@
         <Grid >
             <!--<ToggleButton Width="200" Height="200" Content="mute" Style="{x:Null}" />-->
             <Grid.ColumnDefinitions>
-                <!-- marker -->
+                <!-- 0: marker -->
                 <ColumnDefinition  Width="*"/>
-                <!-- name -->
+                <!-- 1: name -->
                 <ColumnDefinition Width="Auto"/>
-                <!-- time -->
+                <!-- 2: time -->
                 <ColumnDefinition Width="96"/>
-                <!-- mute -->
+                <!-- 3: mute -->
                 <ColumnDefinition Width="42"/>
-                <!-- sound -->
+                <!-- 4: sound -->
                 <ColumnDefinition Width="Auto"/>
-                <!-- add -->
+                <!-- 5: add -->
                 <ColumnDefinition Width="Auto"/>
             </Grid.ColumnDefinitions>
             <Grid.RowDefinitions>
@@ -159,6 +160,7 @@
 
             <!-- Name -->
             <TextBox x:Name="m_pointName" Grid.Column="1" Grid.Row="0"
+                     VerticalAlignment="Bottom"
                      HorizontalAlignment="Right"
                      Margin="0,0,5,0"
                      IsEnabled="{Binding IsEnabled}"
@@ -172,18 +174,34 @@
             </TextBox>
 
             <!-- Time -->
-            <ToggleButton Grid.Column="2" Grid.Row="0"
-                          IsChecked="{Binding IsAbsolute}"
-                          Margin="0"
-                          Height="22" HorizontalAlignment="Center"
-                          FontSize="18"
-                          Content="{Binding Time, Converter={StaticResource conv_TimeSpanToString}, Mode=OneWay}"
-                          Focusable="False"
-                          Style="{StaticResource style_MuteToggleButton}"
-                          />
+            <StackPanel Orientation="Horizontal" Grid.Column="2" Grid.Row="0" HorizontalAlignment="Center"
+                        Width="Auto">
+                <ToggleButton VerticalAlignment="Bottom"
+                              VerticalContentAlignment="Bottom"
+                              IsChecked="{Binding IsAbsolute}"
+                              Margin="0"
+                              Height="22" HorizontalAlignment="Center"
+                              FontSize="18"
+                              Content="{Binding Time, Converter={StaticResource conv_TimeSpanToString}, Mode=OneWay}"
+                              Focusable="False"
+                              Style="{StaticResource style_TimeToggleButton}"
+                              />
+
+                <TextBlock x:Name="absolute" 
+                           VerticalAlignment="Top" 
+                           FontSize="8" 
+                           Foreground="{DynamicResource brush_AbsoluteTime}"
+                           Visibility="{Binding IsAbsolute,
+                                                Converter={StaticResource conv_BooleanToVisibility}}">
+                    <Run>A</Run>
+                </TextBlock>
+
+            </StackPanel>
 
             <!-- mute -->
             <ToggleButton Grid.Column="3" Grid.Row="0"
+                          VerticalAlignment="Bottom"
+                          VerticalContentAlignment="Bottom"
                           IsEnabled="True"
                           IsChecked="{Binding MuteFlag}"
                           Style="{StaticResource style_MuteToggleButton}"

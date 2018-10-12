@@ -102,10 +102,9 @@
         </Grid>
 
         <!-- Time -->
-        <controls:TimerBox x:Name="tibx_PointTime"
+        <controls:TimerBox x:Name="tibx_PointTime" Grid.Column="1" Grid.Row="0"
                            at:AttachedPropertyFactory.IsFocused="{Binding FocusTime}"
                            TabIndex="3"
-                           Grid.Column="1" Grid.Row="0"
                            Margin="0"
                            VerticalAlignment="Bottom"
                            VerticalContentAlignment="Bottom"
@@ -121,7 +120,6 @@
 
             <controls:TimerBox.Style>
                 <Style TargetType="controls:TimerBox" BasedOn="{StaticResource style_TimerBox}">
-
                     <Style.Triggers>
                         <DataTrigger Binding="{Binding NoSetTime}" Value="False">
                             <Setter Property="Foreground" Value="{StaticResource brush_Foreground}" />
