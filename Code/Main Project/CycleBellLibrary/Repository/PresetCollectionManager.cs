@@ -111,7 +111,7 @@ namespace CycleBellLibrary.Repository
                 throw new ArgumentNullException(nameof(fileName), "File name is null or empty");
 
             if (!File.Exists (fileName))
-                throw new ArgumentException("File doesn't exist", nameof(fileName));
+                throw new FileNotFoundException("File doesn't exist", nameof(fileName));
         }
 
         /// <summary>

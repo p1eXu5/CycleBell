@@ -216,6 +216,7 @@ namespace CycleBell.ViewModels
         public ICommand RemoveSelectedPresetCommand { get; }
 
         public ICommand MediaTerminalCommand => new ActionCommand (MediaTerminal);
+        public ICommand OnClosingWindowCommand => new ActionCommand(OnClosingWindow);
 
         #endregion Commands
 
@@ -478,6 +479,10 @@ namespace CycleBell.ViewModels
             _dialogRegistrator.ShowDialog(viewModel);
         }
 
+        private void OnClosingWindow(object o)
+        {
+            _manager.CheckCreateNewPreset(_selectedPreset.Preset);
+        }
 
         private void PresetComboBoxReturnKeyHandler (object newName)
         {

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using System.Linq;
 using CycleBellLibrary.Repository;
 using CycleBellLibrary.Timer;
@@ -20,6 +21,11 @@ namespace CycleBellLibrary.Context
             FileName = fileName;
            _presetCollectionManager = presetCollectionManager ?? throw new ArgumentNullException(nameof(presetCollectionManager), "presetCollectionManager can't be null");
             TimerManager = timerManager ?? throw new ArgumentNullException(nameof(timerManager), "timerManager can't be null");
+
+            try {
+                OpenPresets();
+            }
+            catch(FileNotFoundException ex) { }
         }
 
         public CycleBellManager (IInnerPresetCollectionManager presetCollectionManager, ITimerManager timerManager)
@@ -78,6 +84,7 @@ namespace CycleBellLibrary.Context
             CantCreateNewPresetEvent?.Invoke(this, new CantCreateNewPreetEventArgs(reason, preset));
         }
 
+        public void OpenPresets() => OpenPresets(FileName);
         public void OpenPresets (string fileName)
         {
             PresetCollectionManager.OpenPresets(fileName);

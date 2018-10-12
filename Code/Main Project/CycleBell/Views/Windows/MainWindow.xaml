@@ -18,6 +18,12 @@
         Height="816" Width="444.125" 
         ResizeMode="CanResize" WindowStartupLocation="CenterScreen">
 
+    <i:Interaction.Triggers>
+        <i:EventTrigger EventName="Closing">
+            <i:InvokeCommandAction Command="{Binding OnClosingWindowCommand}" />
+        </i:EventTrigger>
+    </i:Interaction.Triggers>
+
     <Window.Resources>
         <ResourceDictionary>
 
