@@ -173,6 +173,7 @@
 
             <!-- Time -->
             <ToggleButton Grid.Column="2" Grid.Row="0"
+                          IsChecked="{Binding IsAbsolute}"
                           Margin="0"
                           Height="22" HorizontalAlignment="Center"
                           FontSize="18"

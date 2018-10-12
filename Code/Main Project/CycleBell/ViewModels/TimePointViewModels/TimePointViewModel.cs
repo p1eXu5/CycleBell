@@ -26,6 +26,7 @@ namespace CycleBell.ViewModels.TimePointViewModels
 
         protected SoundPlayer _SoundPlayer = new SoundPlayer();
         protected bool _MuteFlag = false;
+        protected bool _isAbsolute; 
 
         #endregion
 
@@ -86,9 +87,17 @@ namespace CycleBell.ViewModels.TimePointViewModels
         /// </summary>
         public virtual TimeSpan Time
         {
-            get => _TimePoint.Time;
+            get {
+                if (IsAbsolute) {
+                    return  _TimePoint.GetAbsoluteTime();
+                }
+                else {
+                    return _TimePoint.GetRelativeTime();
+                }
+            } 
             set {
                 _TimePoint.Time = value;
+
                 OnPropertyChanged();
             }
         }
@@ -105,11 +114,6 @@ namespace CycleBell.ViewModels.TimePointViewModels
             }
         }
 
-        public bool IsAbsoluteTime
-        {
-            get => _TimePoint.TimePointType == TimePointType.Absolute;
-        }
-
         public bool MuteFlag
         {
             get => _MuteFlag;
@@ -120,6 +124,16 @@ namespace CycleBell.ViewModels.TimePointViewModels
         }
 
         public string SoundLocation => Path.GetFileName((String)TimePoint.Tag);
+
+        public bool IsAbsolute
+        {
+            get => _isAbsolute;
+            set {
+                _isAbsolute = value;
+                TimePointType = _isAbsolute ? TimePointType.Absolute : TimePointType.Relative;
+                OnPropertyChanged();
+            }
+        }
 
         #endregion
 
