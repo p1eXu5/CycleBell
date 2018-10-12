@@ -225,7 +225,7 @@
                      FontFamily="{StaticResource font_SuiGeneris}"
                      ScrollViewer.HorizontalScrollBarVisibility="Hidden"
                      ScrollViewer.CanContentScroll="False"
-                     Background="Aqua"
+
                      at:AttachedPropertyFactory.IsTimePopints="{Binding IsTimePoints}"
                      >
                 <!--<ToggleButton Width="200" Height="200" Style="{x:Null}" />-->
@@ -253,7 +253,7 @@
             </ListBox>
 
             <!-- info table -->
-            <StackPanel Orientation="Vertical" ZIndex="-1" x:Name="panel" Background="BlueViolet"
+            <StackPanel Orientation="Vertical" ZIndex="-1" x:Name="panel"
                         IsHitTestVisible="False">
 
                 <TextBlock HorizontalAlignment="Center" Style="{x:Null}">
@@ -271,12 +271,6 @@
                 </TextBlock>
             </StackPanel>
 
-            <StackPanel Orientation="Vertical">
-                <TextBlock Text="{Binding Name}" />
-                <TextBlock Text="{Binding ElementName=panel, Path=Opacity}" />
-                <TextBlock Text="{Binding IsNoTimePoints}" />
-                <Button Command="{Binding TestCommand}" Height="30" Width="50">update</Button>
-            </StackPanel>
         </Grid>
 
         <!-- adding point -->

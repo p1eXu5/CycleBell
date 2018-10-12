@@ -84,7 +84,7 @@ namespace CycleBell.ViewModels
             }
         }
 
-        public string Name
+        public string SelectedPresetName
         {
             get => _selectedPreset?.Name;
             set {
@@ -436,7 +436,7 @@ namespace CycleBell.ViewModels
 
         private void PresetComboBoxReturn (object newName)
         {
-            SelectedPreset.Name = newName.ToString();
+            //SelectedPreset.Name = newName.ToString();
             OnPropertyChanged(nameof(HasNoName));
 
             // Change value for call PropertyChangedCallback in attached property

@@ -70,7 +70,7 @@ namespace CycleBell.ViewModels.TimePointViewModels
         public override TimePoint TimePoint => _TimePoint;
 
         /// <summary>
-        /// Name of TimePoint
+        /// SelectedPresetName of TimePoint
         /// </summary>
         public virtual string Name
         {
