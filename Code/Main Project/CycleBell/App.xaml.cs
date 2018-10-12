@@ -4,6 +4,7 @@ using System.Windows;
 using CycleBell.Base;
 using CycleBell.ViewModels;
 using CycleBell.Views;
+using CycleBell.Views.Windows;
 using CycleBellLibrary.Context;
 using CycleBellLibrary.Models;
 using CycleBellLibrary.Repository;
@@ -41,6 +42,8 @@ namespace CycleBell
             // IDialogRegistrator:
             DialogRegistrator dialogRegistrator = new DialogRegistrator(wnd);
             dialogRegistrator.Register<AboutDialogViewModel,AboutWindow>();
+            dialogRegistrator.Register<SavePresetDialogViewModel, SavePresetDialogWindow>();
+            dialogRegistrator.Register<RenamePresetDialogViewModel, RenamePresetDialogWindow>();
 
             container.RegisterInstance<IDialogRegistrator>(dialogRegistrator);
 
@@ -54,6 +57,8 @@ namespace CycleBell
             wnd.DataContext = container.Resolve<MainViewModel>();
 
             wnd.ShowDialog();
+
+            manager.SavePresets();
         }
     }
 }

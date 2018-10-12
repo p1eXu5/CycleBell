@@ -193,11 +193,10 @@
 
                 <Grid>
                     <ComboBox x:Name="m_presetComboBox"
+                              VerticalAlignment="Center"
                               TabIndex="1"
-                              Height="auto"
                               IsEnabled="{Binding IsSelectedPreset, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"
                               ItemsSource="{Binding PresetViewModelCollection, Mode=OneWay}"
-                              VerticalContentAlignment="Center"
                               SelectedItem="{Binding SelectedPreset, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                               DisplayMemberPath="Name"
                               Width="146"
@@ -251,6 +250,7 @@
                 </Grid>
                 <!-- for focus after preset renaming -->
                 <FrameworkElement Name="Dummy" Width="0" Focusable="True" />
+
                 <Button Content="del" Command="{Binding RemoveSelectedPresetCommand}"
                         Margin="5,0,0,0"
                         />

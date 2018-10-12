@@ -33,6 +33,8 @@ namespace CycleBell.ViewModels
         private readonly ITimerManager _timerManager;
 
         private PresetViewModel _selectedPreset;
+        private PresetViewModel _prevSelectedPreset;
+
         private string _initialDirectory = null;
 
         private bool _isNewPreset;
@@ -59,8 +61,9 @@ namespace CycleBell.ViewModels
             _timerManager.TimerStartEvent += UpdateIsRunningAndTimerStateProperties;
             _timerManager.TimerStopEvent += UpdateIsRunningAndTimerStateProperties;
 
-
             AppDomain.CurrentDomain.ProcessExit += (s, e) => SavePresetsBeforeExit (null);
+
+            RemoveSelectedPresetCommand = new ActionCommand(RemoveSelectedPreset, CanRemoveSelectedPreset);
         }
 
         #endregion Constructor
@@ -74,16 +77,20 @@ namespace CycleBell.ViewModels
         {
             get => _selectedPreset;
             set {
-                if (_selectedPreset.Name == Preset.DefaultName)
-                    OnCantCreateNewPresetEventHandler(null, null);
+                var newSelectedPreset = value;
+                _prevSelectedPreset = _selectedPreset;
 
                 _selectedPreset = value;
+
+                if (newSelectedPreset != null && _prevSelectedPreset != null && _prevSelectedPreset.Name == Preset.DefaultName)
+                    _manager.CheckCreateNewPreset(_prevSelectedPreset.Preset);
 
                 OnPropertyChanged();
 
                 OnPropertyChanged(nameof(IsInfiniteLoop));
                 OnPropertyChanged(nameof(HasNoName));
                 OnPropertyChanged(nameof(IsSelectedPreset));
+                ((ActionCommand)RemoveSelectedPresetCommand).RaiseCanExecuteChanged();
             }
         }
 
@@ -167,6 +174,7 @@ namespace CycleBell.ViewModels
             }
         }
 
+
         public bool HasNoName
         {
             get {
@@ -206,7 +214,7 @@ namespace CycleBell.ViewModels
         public ICommand RingOnStartTimeSwitchCommand => new ActionCommand (SwitchIsRingOnStartTime);
         public ICommand RingCommand => new ActionCommand(Ring);
         public ICommand PresetComboBoxReturnCommand => new ActionCommand (PresetComboBoxReturnKeyHandler);
-        public ICommand RemoveSelectedPresetCommand => new ActionCommand (RemoveSelectedPreset, CanRemoveSelectedPreset);
+        public ICommand RemoveSelectedPresetCommand { get; }
 
         public ICommand MediaTerminalCommand => new ActionCommand (MediaTerminal);
 
@@ -214,19 +222,6 @@ namespace CycleBell.ViewModels
 
         #region Methods
 
-        private void OnCantCreateNewPresetEventHandler(object sendeer, CantCreateNewPreetEventArgs reason)
-        {
-            var saveViewModel = new SavePresetDialogViewModel();
-            if (_dialogRegistrator.ShowDialog(saveViewModel) == true) {
-
-                var renameViewModel = new RenamePresetDialogViewModel();
-
-                _dialogRegistrator.ShowDialog(renameViewModel);
-            }
-            else {
-                RemoveSelectedPreset(null);
-            }
-        }
 
         // PresetViewModelCollection changed handler
         /// <summary>
@@ -247,20 +242,43 @@ namespace CycleBell.ViewModels
             if (e?.OldItems?[0] != null && e?.NewItems?[0] == null) {
 
                 var deletingPresetVm = PresetViewModelCollection.First(pvm => pvm.Preset.Equals((Preset)e.OldItems[0]));
-                
-                if (deletingPresetVm == SelectedPreset) {
 
-                    DisconnectHandlers(SelectedPreset);
-                }
+                DisconnectHandlers(SelectedPreset);
 
                 PresetViewModelCollection.Remove(deletingPresetVm);
-                SelectedPreset = PresetViewModelCollection.Count > 0 ? PresetViewModelCollection[0] : null;
+                //if (!PresetViewModelCollection.IsNotify) {
+                //    PresetViewModelCollection.IsNotify = true;
+                //}
+
+                //SelectedPreset = PresetViewModelCollection.Count > 0 ? PresetViewModelCollection[0] : null;
             }
 
             OnPropertyChanged(nameof(SelectedPreset));
             OnPropertyChanged(nameof(IsNewPreset));
         }
         
+        private void OnCantCreateNewPresetEventHandler(object sender, CantCreateNewPreetEventArgs args)
+        {
+            if (args.CantCreateNewPresetReason == CantCreateNewPresetReasons.EmptyPresetNotModified) {
+
+                //PresetViewModelCollection.IsNotify = false;
+                _manager.DeletePreset(args.Preset);
+                return;
+            }
+
+            var saveViewModel = new SavePresetDialogViewModel();
+
+            if (_dialogRegistrator.ShowDialog(saveViewModel) == true) {
+
+                var renameViewModel = new RenamePresetDialogViewModel(_prevSelectedPreset);
+
+                _dialogRegistrator.ShowDialog(renameViewModel);
+                _prevSelectedPreset.Name = _prevSelectedPreset.Name;
+            }
+            else {
+                _manager.DeletePreset(args.Preset);
+            }
+        }
         // timer handler
         private void UpdateIsRunningAndTimerStateProperties(object s, EventArgs e)
         {
@@ -321,7 +339,6 @@ namespace CycleBell.ViewModels
         {
             _manager.DeletePreset(SelectedPreset?.Preset);
         }
-
         private bool CanRemoveSelectedPreset(object o)
         {
             return IsSelectedPreset;

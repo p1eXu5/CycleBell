@@ -78,4 +78,22 @@
 
         </Style.Triggers>
     </Style>
+
+    <Style TargetType="TextBox">
+        <Setter Property="VerticalContentAlignment" Value="Bottom" />
+        <Setter Property="BorderThickness" Value="0,0,0,1" />
+        <Setter Property="BorderBrush" Value="{DynamicResource brush_Tip}" />
+        <Setter Property="MinWidth" Value="106" />
+        <Setter Property="MinHeight" Value="17" />
+        <Setter Property="HorizontalAlignment" Value="Stretch" />
+        <Setter Property="VerticalAlignment" Value="Bottom" />
+        <Setter Property="HorizontalContentAlignment" Value="Left" />
+        <Setter Property="Foreground" Value="{DynamicResource brush_Foreground}" />
+        <Setter Property="Background" Value="Transparent" />
+        <Setter Property="FontFamily" Value="{StaticResource font_SuiGeneris}" />
+        <Setter Property="FontWeight" Value="Normal"></Setter>
+        <Setter Property="FontStyle" Value="Normal" />
+        <Setter Property="FontSize" Value="14" />
+    </Style>
+
 </ResourceDictionary>

@@ -126,6 +126,9 @@
     <Compile Include="Views\UserControls\PresetUserControl.xaml.cs">
       <DependentUpon>PresetUserControl.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\Windows\RenamePresetDialogWindow.xaml.cs">
+      <DependentUpon>RenamePresetDialogWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\Windows\SavePresetDialogWindow.xaml.cs">
       <DependentUpon>SavePresetDialogWindow.xaml</DependentUpon>
     </Compile>
@@ -210,6 +213,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\UserControls\PresetUserControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Windows\RenamePresetDialogWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

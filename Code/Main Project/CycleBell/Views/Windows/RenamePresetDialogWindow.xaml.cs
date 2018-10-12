@@ -16,11 +16,11 @@ using CycleBell.Base;
 namespace CycleBell.Views.Windows
 {
     /// <summary>
-    /// Interaction logic for SavePresetDialogWindow.xaml
+    /// Interaction logic for RenamePresetDialogWindow.xaml
     /// </summary>
-    public partial class SavePresetDialogWindow : Window, IDialog
+    public partial class RenamePresetDialogWindow : Window, IDialog
     {
-        public SavePresetDialogWindow()
+        public RenamePresetDialogWindow()
         {
             InitializeComponent();
         }

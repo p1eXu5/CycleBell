@@ -36,7 +36,7 @@
                     />
 
             <Button IsCancel="True" Grid.Row="1" Grid.Column="1"
-                    Content="No"
+                    Content="Yes"
                     VerticalAlignment="Center" HorizontalAlignment="Center"
                     Command="{Binding OkCommand}"
             />
