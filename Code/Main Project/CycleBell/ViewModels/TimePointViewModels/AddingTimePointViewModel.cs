@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Linq;
+using System.Media;
 using System.Security.Cryptography;
 using System.Windows.Input;
 using CycleBell.Base;
 using CycleBellLibrary.Models;
+using Microsoft.Win32;
 
 namespace CycleBell.ViewModels.TimePointViewModels
 {
@@ -17,7 +19,9 @@ namespace CycleBell.ViewModels.TimePointViewModels
         {
             AddTimePointCommand = new ActionCommand (AddTimePoint, _PresetViewModel.AddTimePointCommand.CanExecute);
 
-            NumberCollection = _PresetViewModel.Preset.TimerLoops.Values.Any() && _PresetViewModel.Preset.TimerLoops.Values.Max() > _loopNumberLimit 
+            NumberCollection = _PresetViewModel.Preset != null 
+                               && _PresetViewModel.Preset.TimerLoops.Values.Any() 
+                               && _PresetViewModel.Preset.TimerLoops.Values.Max() > _loopNumberLimit 
                                     ? Enumerable.Range (0, _PresetViewModel.Preset.TimerLoops.Values.Max() + 1).Select (n => (byte) n).ToArray() 
                                     : Enumerable.Range(0, _loopNumberLimit).Select(n => (byte)n).ToArray();
         }
@@ -107,5 +111,18 @@ namespace CycleBell.ViewModels.TimePointViewModels
             OnPropertyChanged(nameof(TimePointType));
             OnPropertyChanged(nameof(LoopNumber));
         }
+
+        protected override void OpenWavFile(SoundPlayer sound)
+        {
+            OpenFileDialog ofd = new OpenFileDialog { Filter = "Waveform Audio File Format|*.wav" };
+
+            if (ofd.ShowDialog() == true) {
+
+                sound.SoundLocation = ofd.FileName;
+                _TimePoint.Tag = ofd.FileName;
+                OnPropertyChanged(nameof(SoundLocation));
+            }
+        }
+
     }
 }

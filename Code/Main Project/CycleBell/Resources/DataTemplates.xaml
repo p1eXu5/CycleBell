@@ -184,6 +184,7 @@
             <!-- mute -->
             <ToggleButton Grid.Column="3" Grid.Row="0"
                           IsEnabled="True"
+                          IsChecked="{Binding MuteFlag}"
                           Style="{StaticResource style_MuteToggleButton}"
                           Content="mute"
                           HorizontalAlignment="Center" 

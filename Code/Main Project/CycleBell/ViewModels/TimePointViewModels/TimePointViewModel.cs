@@ -24,7 +24,7 @@ namespace CycleBell.ViewModels.TimePointViewModels
 
         protected readonly TimePoint _TimePoint;
 
-        protected SoundPlayer _SoundPlayer;
+        protected SoundPlayer _SoundPlayer = new SoundPlayer();
         protected bool _MuteFlag = false;
 
         #endregion
@@ -119,7 +119,7 @@ namespace CycleBell.ViewModels.TimePointViewModels
             }
         }
 
-        public string SoundLocation => (String)TimePoint.Tag;
+        public string SoundLocation => Path.GetFileName((String)TimePoint.Tag);
 
         #endregion
 
@@ -162,10 +162,9 @@ namespace CycleBell.ViewModels.TimePointViewModels
         private void AddSound (object o)
         {
             OpenWavFile (_SoundPlayer);
-            _PresetViewModel.UpdateSoundBank (this);
         }
 
-        private void OpenWavFile(SoundPlayer sound)
+        protected virtual void OpenWavFile(SoundPlayer sound)
         {
             OpenFileDialog ofd = new OpenFileDialog { Filter = "Waveform Audio File Format|*.wav" };
 
@@ -173,6 +172,9 @@ namespace CycleBell.ViewModels.TimePointViewModels
 
                 sound.SoundLocation = ofd.FileName;
                 _TimePoint.Tag = ofd.FileName;
+                OnPropertyChanged(nameof(SoundLocation));
+
+                _PresetViewModel.UpdateSoundBank (this);
             }
         }
 

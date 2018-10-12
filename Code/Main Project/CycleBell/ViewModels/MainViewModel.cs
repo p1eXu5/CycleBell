@@ -174,7 +174,6 @@ namespace CycleBell.ViewModels
             }
         }
 
-
         public bool HasNoName
         {
             get {
@@ -461,7 +460,7 @@ namespace CycleBell.ViewModels
         private void Ring (object o)
         {
             IsRingOnStartTime = IsRingOnStartTime;
-            //DefaultSoundPlayer.Play();
+            DefaultSoundPlayer.Play();
         } 
 
 

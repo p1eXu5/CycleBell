@@ -368,15 +368,21 @@ namespace CycleBell.ViewModels
         internal void OnTimePointChangedEventHandler(object s, TimerEventArgs e)
         {
             if (e == null) return;
-            
-            if (e.PrevTimePoint?.Name == _mainViewModel.StartTimeName && _mainViewModel.IsRingOnStartTime) {
 
-                _mainViewModel.Ring();
+            if (e.PrevTimePoint != null) {
+                if (e.PrevTimePoint.Name == _mainViewModel.StartTimeName && _mainViewModel.IsRingOnStartTime) {
+
+                    _mainViewModel.Ring();
+                }
+                else {
+
+                    SoundMap[e.PrevTimePoint.Id].Play();
+                }
             }
 
             if (e.NextTimePoint == null) return;
 
-            if (e.NextTimePoint?.Name == _mainViewModel.StartTimeName) {
+            if (e.NextTimePoint.Name == _mainViewModel.StartTimeName) {
 
                 if (TimePointVmCollection.Count > 0) {
                     TimePointVmCollection.DisableAll();

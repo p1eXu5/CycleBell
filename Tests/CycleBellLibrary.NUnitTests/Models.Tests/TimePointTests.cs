@@ -123,10 +123,12 @@ namespace CycleBellLibrary.NUnitTests.Models.Tests
         public void Clone_WhenCalled_GetsClone()
         {
             var timePoint = GetRelativeTimePoint(7);
+            timePoint.Tag = "";
 
             var timePointClone = timePoint.Clone();
 
             Assert.AreNotSame(timePoint, timePointClone);
+            Assert.AreEqual(timePoint.Tag, timePointClone.Tag);
             Assert.AreNotEqual(timePoint.Id, timePointClone.Id);
             Assert.AreEqual(timePoint.Name, timePointClone.Name);
             Assert.AreEqual(timePoint.TimePointType, timePointClone.TimePointType);

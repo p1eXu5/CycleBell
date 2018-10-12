@@ -302,7 +302,11 @@ namespace CycleBellLibrary.Models
             tp.Time = this.Time;
             tp.TimePointType = this.TimePointType;
             tp.LoopNumber = this.LoopNumber;
-            tp.Tag = this.Tag;
+
+            if (Tag != null) {
+                tp.Tag = Tag.CopyObject<object>();
+            }
+
             tp.BaseTime = this.BaseTime;
 
             return tp;
