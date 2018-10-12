@@ -48,7 +48,7 @@ namespace CycleBell.ViewModels
             _dialogRegistrator = dialogRegistrator ?? throw new ArgumentNullException(nameof(dialogRegistrator));
 
             _manager = cycleBellManager ?? throw new ArgumentNullException(nameof(cycleBellManager));
-            _manager.CantCreateNewPresetEvent += () => SavePresetAs(null);
+            _manager.CantCreateNewPresetEvent += OnCantCreateNewPresetEventHandler;
 
             var presetManager = cycleBellManager.PresetCollectionManager;
             PresetViewModelCollection = new ObservableCollection<PresetViewModel>(presetManager.Presets.Select(p => new PresetViewModel(p, this)));
@@ -74,6 +74,9 @@ namespace CycleBell.ViewModels
         {
             get => _selectedPreset;
             set {
+                if (_selectedPreset.Name == Preset.DefaultName)
+                    OnCantCreateNewPresetEventHandler(null, null);
+
                 _selectedPreset = value;
 
                 OnPropertyChanged();
@@ -202,13 +205,28 @@ namespace CycleBell.ViewModels
         public ICommand StopCommand => new ActionCommand (Stop);
         public ICommand RingOnStartTimeSwitchCommand => new ActionCommand (SwitchIsRingOnStartTime);
         public ICommand RingCommand => new ActionCommand(Ring);
-        public ICommand PresetComboBoxReturnCommand => new ActionCommand (PresetComboBoxReturn);
+        public ICommand PresetComboBoxReturnCommand => new ActionCommand (PresetComboBoxReturnKeyHandler);
+        public ICommand RemoveSelectedPresetCommand => new ActionCommand (RemoveSelectedPreset, CanRemoveSelectedPreset);
 
         public ICommand MediaTerminalCommand => new ActionCommand (MediaTerminal);
 
         #endregion Commands
 
         #region Methods
+
+        private void OnCantCreateNewPresetEventHandler(object sendeer, CantCreateNewPreetEventArgs reason)
+        {
+            var saveViewModel = new SavePresetDialogViewModel();
+            if (_dialogRegistrator.ShowDialog(saveViewModel) == true) {
+
+                var renameViewModel = new RenamePresetDialogViewModel();
+
+                _dialogRegistrator.ShowDialog(renameViewModel);
+            }
+            else {
+                RemoveSelectedPreset(null);
+            }
+        }
 
         // PresetViewModelCollection changed handler
         /// <summary>
@@ -296,6 +314,17 @@ namespace CycleBell.ViewModels
         private void CreateNewPreset(object obj)
         {
             _manager.CreateNewPreset();
+        }
+
+        // Remove SelectedPreset
+        private void RemoveSelectedPreset(object o)
+        {
+            _manager.DeletePreset(SelectedPreset?.Preset);
+        }
+
+        private bool CanRemoveSelectedPreset(object o)
+        {
+            return IsSelectedPreset;
         }
 
         //  Save Preset
@@ -434,7 +463,7 @@ namespace CycleBell.ViewModels
         }
 
 
-        private void PresetComboBoxReturn (object newName)
+        private void PresetComboBoxReturnKeyHandler (object newName)
         {
             //SelectedPreset.Name = newName.ToString();
             OnPropertyChanged(nameof(HasNoName));
@@ -442,6 +471,7 @@ namespace CycleBell.ViewModels
             // Change value for call PropertyChangedCallback in attached property
             IsFocused ^= true;
         }
+
         #endregion Methods
 
         #region IMainViewModel impl

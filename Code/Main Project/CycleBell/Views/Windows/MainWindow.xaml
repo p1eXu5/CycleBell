@@ -251,6 +251,9 @@
                 </Grid>
                 <!-- for focus after preset renaming -->
                 <FrameworkElement Name="Dummy" Width="0" Focusable="True" />
+                <Button Content="del" Command="{Binding RemoveSelectedPresetCommand}"
+                        Margin="5,0,0,0"
+                        />
             </StackPanel>
 
              <!--preset and timePoints-->
