@@ -94,7 +94,7 @@ namespace CycleBellLibrary.Repository
             try {
                 CheckFileName (fileName);
             }
-            catch (ArgumentException) {
+            catch (FileNotFoundException) {
             }
 
             SerializePresets(fileName);

@@ -481,7 +481,8 @@ namespace CycleBell.ViewModels
 
         private void OnClosingWindow(object o)
         {
-            _manager.CheckCreateNewPreset(_selectedPreset.Preset);
+            if (_selectedPreset != null)
+                _manager.CheckCreateNewPreset(_selectedPreset.Preset);
         }
 
         private void PresetComboBoxReturnKeyHandler (object newName)

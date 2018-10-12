@@ -90,7 +90,7 @@ namespace CycleBellLibrary.Repository
             catch {
 
                 this.Clear();
-                throw;
+                //throw;
             }
         }
 
