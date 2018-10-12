@@ -124,6 +124,9 @@
     <Compile Include="Views\UserControls\PresetUserControl.xaml.cs">
       <DependentUpon>PresetUserControl.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\Windows\SavePresetDialogWindow.xaml.cs">
+      <DependentUpon>SavePresetDialogWindow.xaml</DependentUpon>
+    </Compile>
     <Page Include="Resources\ArrowPathes.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -153,6 +156,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Resources\ScrollBarStyle.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Resources\TextBlockStyles.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -201,6 +208,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\UserControls\PresetUserControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Windows\SavePresetDialogWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

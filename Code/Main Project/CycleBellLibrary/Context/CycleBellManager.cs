@@ -54,8 +54,10 @@ namespace CycleBellLibrary.Context
             }
             else {
                 if (existEmptyPreset.StartTime != Preset.DefaultStartTime || existEmptyPreset.TimePointCollection.Count > 0) {
-                    OnCantCreateNewPreset();
+                    OnCantCreateNewPreset(CantCreateNewPresetReasons.EmptyPresetAlreadyExists | CantCreateNewPresetReasons.EmptyPresetModified);
                 }
+
+                OnCantCreateNewPreset(CantCreateNewPresetReasons.EmptyPresetAlreadyExists);
 
                 res = false;
             }
@@ -63,11 +65,11 @@ namespace CycleBellLibrary.Context
             return res;
         }
 
-        public event Action CantCreateNewPresetEvent;
+        public event EventHandler<CantCreateNewPreetEventArgs> CantCreateNewPresetEvent;
 
-        private void OnCantCreateNewPreset()
+        private void OnCantCreateNewPreset(CantCreateNewPresetReasons reason)
         {
-            CantCreateNewPresetEvent?.Invoke();
+            CantCreateNewPresetEvent?.Invoke(this, new CantCreateNewPreetEventArgs(reason));
         }
 
         public void OpenPresets (string fileName)

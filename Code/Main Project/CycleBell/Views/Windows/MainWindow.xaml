@@ -64,12 +64,12 @@
                 </MenuItem.Header>
                 
                 <MenuItem Header="_New Preset" Command="{Binding CreateNewPresetCommand}" />
-                <Separator></Separator>
+                <!--<Separator></Separator>
                 <MenuItem Header="_Save Preset" Command="{Binding SavePresetCommand}"></MenuItem>
-                <MenuItem Header="Save Preset _As..." Command="{Binding SavePresetAsCommand}"></MenuItem>
+                <MenuItem Header="Save Preset _As..." Command="{Binding SavePresetAsCommand}"></MenuItem>-->
                 <Separator></Separator>
-                <MenuItem Header="_Import PresetViewModelCollection..." Command="{Binding ImportPresetsCommand}"></MenuItem>
-                <MenuItem Header="_Export PresetViewModelCollection..." Command="{Binding ImportPresetsCommand}"></MenuItem>
+                <MenuItem Header="_Import Presets..." Command="{Binding ImportPresetsCommand}"></MenuItem>
+                <MenuItem Header="_Export Presets..." Command="{Binding ExportPresetsCommand}"></MenuItem>
                 <Separator></Separator>
                 <MenuItem Header="_Exit" Command="{Binding ExitCommand}"></MenuItem>
             </MenuItem>

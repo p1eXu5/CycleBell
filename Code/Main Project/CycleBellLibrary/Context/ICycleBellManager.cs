@@ -4,6 +4,24 @@ using CycleBellLibrary.Timer;
 
 namespace CycleBellLibrary.Context
 {
+    [Flags]
+    public enum CantCreateNewPresetReasons
+    {
+        EmptyPresetAlreadyExists = 0x1,
+        EmptyPresetModified = 0x2,
+        UnknownReason = 0x128
+    }
+
+    public class CantCreateNewPreetEventArgs : EventArgs
+    {
+        public CantCreateNewPreetEventArgs(CantCreateNewPresetReasons cantCreateNewPresetReason)
+        {
+            CantCreateNewPresetReason = cantCreateNewPresetReason;
+        }
+
+        public CantCreateNewPresetReasons CantCreateNewPresetReason { get; }
+    }
+
     public interface ICycleBellManager
     {
         IPresetCollectionManager PresetCollectionManager { get; }
@@ -30,6 +48,6 @@ namespace CycleBellLibrary.Context
 
         void SavePresets (string fileName);
 
-        event Action CantCreateNewPresetEvent;
+        event EventHandler<CantCreateNewPreetEventArgs> CantCreateNewPresetEvent;
     }
 }

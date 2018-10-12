@@ -292,7 +292,7 @@ namespace CycleBell.ViewModels
             }
         }
 
-        //  Save Preset
+        //  Create the new preset
         private void CreateNewPreset(object obj)
         {
             _manager.CreateNewPreset();

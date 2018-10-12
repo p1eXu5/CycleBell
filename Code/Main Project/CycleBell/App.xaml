@@ -10,6 +10,7 @@
 
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="Resources/Icons.xaml" />
+                <ResourceDictionary Source="Resources/TextBlockStyles.xaml" />
                 <ResourceDictionary Source="Resources/TimerBoxStyle.xaml" />
                 <ResourceDictionary Source="Resources/Fonts.xaml" />
                 <ResourceDictionary Source="MyComboBox.xaml" />
