@@ -480,7 +480,9 @@
                     <Border x:Name="border"
                             HorizontalAlignment="{TemplateBinding HorizontalAlignment}"
                             Height="{TemplateBinding Height}" Width="{TemplateBinding Width}"
-                            BorderThickness="{TemplateBinding BorderThickness}">
+                            BorderThickness="{TemplateBinding BorderThickness}"
+                            Background="Transparent"
+                            >
                         <Border.BorderBrush>
                             <SolidColorBrush x:Name="col_Border" Color="{StaticResource col_UncheckedStroke}" />
                         </Border.BorderBrush>
