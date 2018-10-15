@@ -48,6 +48,7 @@ namespace CycleBell.ViewModels
 
             RemoveSelectedPresetCommand = new ActionCommand(RemoveSelectedPreset, CanRemoveSelectedPreset);
             ExportPresetsCommand = new ActionCommand(ExportPresets, CanExportPresets);
+            ClearPresetsCommand = new ActionCommand(ClearPresets, CanExportPresets);
 
             LoadPresetViewModelCollection(_manager);
 
@@ -199,6 +200,8 @@ namespace CycleBell.ViewModels
         public ICommand ImportPresetsCommand => new ActionCommand(ImportPresets, CanImportPresets);
         public ICommand ExportPresetsCommand { get; }
 
+        public ICommand ClearPresetsCommand { get; }
+
         public ICommand ExitCommand => new ActionCommand(Exit);
 
         // Menu Settings and some timer buttons
@@ -334,23 +337,12 @@ namespace CycleBell.ViewModels
             }
         }
 
-        //  Create the new preset
+        //  File
         private void CreateNewPreset(object obj)
         {
             _manager.CreateNewPreset();
         }
 
-        // Remove SelectedPreset
-        private void RemoveSelectedPreset(object o)
-        {
-            _manager.DeletePreset(SelectedPreset?.Preset);
-        }
-        private bool CanRemoveSelectedPreset(object o)
-        {
-            return IsSelectedPreset;
-        }
-
-        //  Import/Export PresetViewModelCollection
         private void ImportPresets(object obj)
         {
             var ofd = new OpenFileDialog
@@ -391,6 +383,28 @@ namespace CycleBell.ViewModels
         private bool CanExportPresets(object obj)
         {
             return PresetViewModelCollection.Count > 0;
+        }
+
+        private void ClearPresets(object obj)
+        {
+            PresetViewModelCollection.Clear();
+            _prevSelectedPreset = null;
+        }
+
+        private void Exit(object obj)
+        {
+            //_manager.SavePresets();
+            System.Windows.Application.Current.Shutdown();
+        }
+
+        // Remove SelectedPreset
+        private void RemoveSelectedPreset(object o)
+        {
+            _manager.DeletePreset(SelectedPreset?.Preset);
+        }
+        private bool CanRemoveSelectedPreset(object o)
+        {
+            return IsSelectedPreset;
         }
 
         // Preset ComboBox
@@ -450,13 +464,6 @@ namespace CycleBell.ViewModels
             IsRingOnStartTime = IsRingOnStartTime;
             DefaultSoundPlayer.Play();
         } 
-
-        //  Exit
-        private void Exit(object obj)
-        {
-            //_manager.SavePresets();
-            System.Windows.Application.Current.Shutdown();
-        }
 
         //  About
         private void About(object obj)

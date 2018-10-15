@@ -76,7 +76,9 @@
                 <Separator></Separator>
                 <MenuItem Header="_Import Presets..." Command="{Binding ImportPresetsCommand}"></MenuItem>
                 <MenuItem Header="_Export Presets..." Command="{Binding ExportPresetsCommand}"></MenuItem>
-                <Separator></Separator>
+                <Separator />
+                <MenuItem Header="_Clear Presets" Command="{Binding ClearPresetsCommand}" />
+                <Separator />
                 <MenuItem Header="_Exit" Command="{Binding ExitCommand}"></MenuItem>
             </MenuItem>
             
