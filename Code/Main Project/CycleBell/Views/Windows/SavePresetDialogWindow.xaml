@@ -8,39 +8,45 @@
         Title="SavePresetDialogWindow" Height="170" Width="300"
         ResizeMode="NoResize" WindowStyle="None" WindowStartupLocation="CenterOwner"
         FontFamily="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=Window}, Path=FontFamily}"
+        BorderThickness="0" BorderBrush="{x:Null}"
         >
-    <Grid>
-        <Border BorderThickness="1" BorderBrush="Black" 
-                Background="{DynamicResource BackgroundBrush}" />
+    <Grid Background="Transparent">
+        <Grid Margin="5" >
+            <Grid.Effect>
+                <DropShadowEffect BlurRadius="8" ShadowDepth="0" Opacity=".8" />
+            </Grid.Effect>
+            <Border BorderThickness="1" BorderBrush="Black" 
+                    Background="{DynamicResource BackgroundBrush}" />
 
-        <Grid Margin="20">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*" />
-                <ColumnDefinition Width="*" />
-            </Grid.ColumnDefinitions>
-            <Grid.RowDefinitions>
-                <RowDefinition />
-                <RowDefinition />
-            </Grid.RowDefinitions>
+            <Grid Margin="20">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition />
+                    <RowDefinition />
+                </Grid.RowDefinitions>
 
-            <TextBlock Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" 
-                       Text="Save preset?"
-                       VerticalAlignment="Center" HorizontalAlignment="Center"
-                       Style="{StaticResource style_DialogTextBlock}"
-                       />
+                <TextBlock Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" 
+                           Text="Save preset?"
+                           VerticalAlignment="Center" HorizontalAlignment="Center"
+                           Style="{StaticResource style_DialogTextBlock}"
+                           />
 
-            <Button IsCancel="True" Grid.Row="1" Grid.Column="0"
-                    Content="No"
-                    VerticalAlignment="Center" HorizontalAlignment="Center"
-                    Command="{Binding CancelCommand}"
-                    />
+                <Button IsCancel="True" Grid.Row="1" Grid.Column="0"
+                        Content="No"
+                        VerticalAlignment="Center" HorizontalAlignment="Center"
+                        Command="{Binding CancelCommand}"
+                        />
 
-            <Button IsCancel="True" Grid.Row="1" Grid.Column="1"
-                    Content="Yes"
-                    VerticalAlignment="Center" HorizontalAlignment="Center"
-                    Command="{Binding OkCommand}"
-            />
+                <Button IsCancel="True" Grid.Row="1" Grid.Column="1"
+                        Content="Yes"
+                        VerticalAlignment="Center" HorizontalAlignment="Center"
+                        Command="{Binding OkCommand}"
+                />
 
+            </Grid>
         </Grid>
     </Grid>
 </Window>

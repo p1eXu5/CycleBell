@@ -57,18 +57,24 @@
                 <TextBlock Foreground="Black" 
                            VerticalAlignment="Bottom"
                            >
-                    <Run Text="loop #"/><Run Text="{Binding LoopNumber}"/>
+                    <Run Text="loop #"/><Run Text="{Binding LoopNumber}"/><Run Text=":" />
                 </TextBlock>
 
                 <TextBox x:Name="tbx_LoopCount"
+                         FontSize="10"
                          Padding="0" VerticalContentAlignment="Bottom"
                          HorizontalAlignment="Center"
                          MinWidth="12"
                          Margin="5,0,0,0"
                          BorderThickness="0,0,0,1"
                          Control.BorderBrush="Black"
-                         Focusable="False"
-                         Text="{Binding LoopCount, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                         Focusable="True"
+                         KeyboardNavigation.IsTabStop="False"
+                         Text="{Binding LoopCount, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+                    <TextBox.RenderTransform>
+                        <TranslateTransform Y="1" />
+                    </TextBox.RenderTransform>
+                </TextBox>
 
             </StackPanel>
 

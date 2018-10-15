@@ -7,7 +7,13 @@
         mc:Ignorable="d"
         Title="BeginTimePointViewModelDataTemplateDesign" Height="65.205" Width="182.933"
         FontFamily="{StaticResource font_SuiGeneris}">
-    <Grid SnapsToDevicePixels="True" ShowGridLines="False" Margin="5">
+
+
+    <Grid SnapsToDevicePixels="True" ShowGridLines="False" Margin="5" 
+              TextElement.FontStyle="Normal"
+              IsEnabled="{Binding IsEnabled}"
+              Focusable="False"
+              >
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="1" />
             <ColumnDefinition Width="Auto" />
@@ -23,44 +29,52 @@
         </Grid.RowDefinitions>
 
         <Line Grid.Column="0" Grid.Row="0" Grid.RowSpan="4" 
-              Stroke="DimGray" Fill="{x:Null}" Stretch="Fill"
-              StrokeEndLineCap="Square" StrokeStartLineCap="Square"
-              X1="0" Y1="0" Y2="1" />
+                  Stroke="DimGray" Fill="{x:Null}" Stretch="Fill"
+                  StrokeEndLineCap="Square" StrokeStartLineCap="Square"
+                  X1="0" Y1="0" Y2="1" />
 
         <Line Grid.Column="1" Grid.Row="0" 
-              Stroke="DimGray" Fill="{x:Null}" Stretch="Fill"
-              StrokeEndLineCap="Square" StrokeStartLineCap="Square"
-              VerticalAlignment="Center"
-              X1="0" Y1="0" X2="1" />
+                  Stroke="DimGray" Fill="{x:Null}" Stretch="Fill"
+                  StrokeEndLineCap="Square" 
+                  StrokeStartLineCap="Square"
+                  VerticalAlignment="Center"
+                  X1="0" Y1="0" X2="1" />
 
         <StackPanel Grid.Column="1" Grid.Row="1" Grid.RowSpan="3"
-                    Orientation="Horizontal" 
-                    Height="13" Margin="5,0" 
-                    TextElement.FontSize="10" 
-                    TextElement.FontStyle="Normal">
-            <TextBlock Foreground="Black" VerticalAlignment="Bottom"
-                       >
-                <Run Text="loop #"/><Run Text="0"/>
+                        Orientation="Horizontal" 
+                        Height="13" Margin="5,0" 
+                        TextElement.FontSize="10" 
+                        TextElement.FontStyle="Normal">
+            <TextBlock Foreground="Black" 
+                           VerticalAlignment="Bottom"
+                           >
+                    <Run Text="loop #"/><Run Text="{Binding LoopNumber}"/>
             </TextBlock>
-            <TextBox Padding="0" 
-                     VerticalContentAlignment="Bottom" 
+
+            <TextBox x:Name="tbx_LoopCount"
+                     Padding="0"
+                     VerticalAlignment="Bottom"
+                     VerticalContentAlignment="Bottom"
                      HorizontalAlignment="Center"
                      MinWidth="12"
                      Margin="5,0,0,0"
                      BorderThickness="0,0,0,1"
                      Control.BorderBrush="Black"
-                     Text="9"/>
+                     Focusable="True"
+                     KeyboardNavigation.TabNavigation="None"
+                     Text="1"/>
+
         </StackPanel>
 
         <Polyline Grid.Column="2" Grid.ColumnSpan="3" Grid.Row="0" Grid.RowSpan="3"
-                  Stroke="DimGray" Fill="{x:Null}" Stretch="Fill"
-                  StrokeEndLineCap="Square" StrokeStartLineCap="Square"
-                  Points="0,0 0,1 1,1" />
+                      Stroke="DimGray" Fill="{x:Null}" Stretch="Fill"
+                      StrokeEndLineCap="Square" StrokeStartLineCap="Square"
+                      Points="0,0 0,1 1,1" />
 
         <Line Grid.Column="4" Grid.Row="3" 
-              Stroke="DimGray" Fill="{x:Null}" Stretch="Fill"
-              StrokeEndLineCap="Square" StrokeStartLineCap="Square"
-              VerticalAlignment="Stretch"
-              X1="0" Y1="0" Y2="1" />
+                  Stroke="DimGray" Fill="{x:Null}" Stretch="Fill"
+                  StrokeEndLineCap="Square" StrokeStartLineCap="Square"
+                  VerticalAlignment="Stretch"
+                  X1="0" Y1="0" Y2="1" />
     </Grid>
 </Window>

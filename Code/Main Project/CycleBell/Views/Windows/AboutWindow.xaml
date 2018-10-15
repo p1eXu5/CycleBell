@@ -7,7 +7,10 @@
         mc:Ignorable="d"
         xmlns:vm="clr-namespace:CycleBell.ViewModels"
         d:DataContext="{d:DesignInstance vm:AboutDialogViewModel, IsDesignTimeCreatable=True}"
-        Title="Window1" Height="250" Width="393.948" ResizeMode="NoResize" WindowStartupLocation="CenterOwner" WindowStyle="None">
+        Title="Window1" Height="250" Width="393.948" ResizeMode="NoResize" WindowStartupLocation="CenterOwner" WindowStyle="None"
+        BorderThickness="0" BorderBrush="{x:Null}"
+        >
+
     <Window.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
@@ -15,14 +18,21 @@
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </Window.Resources>
-    <Border BorderBrush="Black" BorderThickness="1">
-        <Grid>
-            <Grid.RowDefinitions>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="*"/>
-            </Grid.RowDefinitions>
+    <Grid Background="Transparent">
+        <Grid Margin="5" >
+            <Grid.Effect>
+                <DropShadowEffect BlurRadius="8" ShadowDepth="0" Opacity=".8" />
+            </Grid.Effect>
+            <Border BorderBrush="Black" BorderThickness="1" />
 
-            <Button Width="32" Height="22" 
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+
+
+                <Button Width="32" Height="22" 
                     Padding="5"
                     HorizontalAlignment="Right"
                     Background="#FF33FFFF"
@@ -40,21 +50,21 @@
                     </Path>
 
                     <Button.Style>
-                    <Style TargetType="{x:Type Button}">
-                        <Setter Property="Foreground" Value="Black" />
-                        <Setter Property="SnapsToDevicePixels" Value="True" />
-                        <Setter Property="OverridesDefaultStyle" Value="True" />
-                        <Setter Property="Template">
-                            <Setter.Value>
-                                <ControlTemplate TargetType="Button">
-                                    <Grid>
-                                        <ContentPresenter x:Name="content" RenderTransformOrigin=".5,.5" >
-                                            <ContentPresenter.RenderTransform>
-                                                <ScaleTransform />
-                                            </ContentPresenter.RenderTransform>
-                                        </ContentPresenter>
-                                        <Border Background="Transparent"/>
-                                    </Grid>
+                        <Style TargetType="{x:Type Button}">
+                            <Setter Property="Foreground" Value="Black" />
+                            <Setter Property="SnapsToDevicePixels" Value="True" />
+                            <Setter Property="OverridesDefaultStyle" Value="True" />
+                            <Setter Property="Template">
+                                <Setter.Value>
+                                    <ControlTemplate TargetType="Button">
+                                        <Grid>
+                                            <ContentPresenter x:Name="content" RenderTransformOrigin=".5,.5" >
+                                                <ContentPresenter.RenderTransform>
+                                                    <ScaleTransform />
+                                                </ContentPresenter.RenderTransform>
+                                            </ContentPresenter>
+                                            <Border Background="Transparent"/>
+                                        </Grid>
                                         <ControlTemplate.Triggers>
                                             <Trigger Property="IsPressed" Value="True">
                                                 <Setter TargetName="content" Property="RenderTransform">
@@ -65,51 +75,53 @@
                                             </Trigger>
                                         </ControlTemplate.Triggers>
                                     </ControlTemplate>
-                            </Setter.Value>
-                        </Setter>
+                                </Setter.Value>
+                            </Setter>
 
-                        <Style.Triggers>
-                            <Trigger Property="IsMouseOver" Value="True">
-                                <Setter Property="Foreground" Value="DarkRed" />
-                                <Setter Property="Background" Value="DimGray" />
-                            </Trigger>
-                        </Style.Triggers>
-                    </Style>
-                </Button.Style>
-            </Button>
+                            <Style.Triggers>
+                                <Trigger Property="IsMouseOver" Value="True">
+                                    <Setter Property="Foreground" Value="DarkRed" />
+                                    <Setter Property="Background" Value="DimGray" />
+                                </Trigger>
+                            </Style.Triggers>
+                        </Style>
+                    </Button.Style>
+                </Button>
 
-            <Grid Margin="20,10" Grid.Row="1">
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="*"/>
-                </Grid.RowDefinitions>
-                <TextBlock Grid.Row="0" HorizontalAlignment="Center" 
+                <Grid Margin="20,10" Grid.Row="1">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+                    <TextBlock Grid.Row="0" HorizontalAlignment="Center" 
                            Margin="0,20"
                            FontWeight="Bold" FontSize="20">
                     Cycle Bell
-                </TextBlock>
-                <TextBlock Grid.Row="1" HorizontalAlignment="Center" 
+                    </TextBlock>
+                    <TextBlock Grid.Row="1" HorizontalAlignment="Center" 
                            TextWrapping="Wrap"
                            FontWeight="Normal" FontSize="14">
                     Бесплатное использование для физических и юридических лиц.
-                </TextBlock>
-                <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Center">
-                    <Button Width="100" Height="24" 
+                    </TextBlock>
+                    <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Center">
+                        <Button Width="100" Height="24" 
                             Command="{Binding OkCommand}"
                             IsDefault="True"
                             FontWeight="Normal"
                             >
-                        Ok
-                    </Button>
+                            Ok
+                        </Button>
 
-                    <!--<Button Width="100" Height="24" Margin="50,0,0,0"
+                        <!--<Button Width="100" Height="24" Margin="50,0,0,0"
                             
                             IsCancel="True">
                         IsCancel
                     </Button>-->
-                </StackPanel>
+                    </StackPanel>
+                </Grid>
             </Grid>
+
         </Grid>
-    </Border>
+    </Grid>
 </Window>
