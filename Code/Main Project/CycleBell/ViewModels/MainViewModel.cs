@@ -1,19 +1,14 @@
 ﻿using System;
-using System.Collections.Concurrent;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.ComponentModel;
-using System.Diagnostics;
 using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Media;
 using System.Windows.Data;
 using System.Windows.Input;
-
 using CycleBell.Base;
-using CycleBell.ViewModels.TimePointViewModels;
 using CycleBellLibrary.Context;
 using CycleBellLibrary.Repository;
 using CycleBellLibrary.Timer;
@@ -35,11 +30,10 @@ namespace CycleBell.ViewModels
         private PresetViewModel _selectedPreset;
         private PresetViewModel _prevSelectedPreset;
 
-        private string _initialDirectory = null;
+        private string _initialDirectory;
 
-        private bool _isNewPreset;
         private bool _isRingOnStartTime = true;
-        private bool _isFocused = false;
+        private bool _isFocused;
 
         #endregion Private
 
@@ -60,8 +54,6 @@ namespace CycleBell.ViewModels
             _timerManager = cycleBellManager.TimerManager;
             _timerManager.TimerStartEvent += UpdateIsRunningAndTimerStateProperties;
             _timerManager.TimerStopEvent += UpdateIsRunningAndTimerStateProperties;
-
-            AppDomain.CurrentDomain.ProcessExit += (s, e) => SavePresetsBeforeExit (null);
 
             RemoveSelectedPresetCommand = new ActionCommand(RemoveSelectedPreset, CanRemoveSelectedPreset);
         }
@@ -142,17 +134,13 @@ namespace CycleBell.ViewModels
         public bool IsRunning => _timerManager.IsRunning;
 
         public bool IsPaused => _timerManager.IsPaused;
-        public bool IsStopped
-        {
-            get => IsRunning == false && IsPlayable;
-            set {
-                if (IsRunning) {
+        public bool IsStopped => IsRunning == false && IsPlayable;
+            //set {
+            //    if (!IsRunning) return;
 
-                    _timerManager.Stop();
-                    OnPropertyChanged();
-                }
-            }
-        }
+            //    _timerManager.Stop();
+            //    OnPropertyChanged();
+            //}
 
         public string StartTimeName => _timerManager.StartTimeTimePointName;
 
@@ -190,38 +178,38 @@ namespace CycleBell.ViewModels
 
         #region Commands
 
-            #region menu
+        // Menu File
         public ICommand CreateNewPresetCommand => new ActionCommand(CreateNewPreset);
 
-        public ICommand SavePresetCommand => new ActionCommand(SavePreset, CanSavePreset);
-        public ICommand SavePresetAsCommand => new ActionCommand(SavePresetAs, CanSavePresetAs);
-
-        public ICommand ImportPresetsCommand => new ActionCommand(ImportPresets);
+        public ICommand ImportPresetsCommand => new ActionCommand(ImportPresets, CanImportPresets);
         public ICommand ExportPresetsCommand => new ActionCommand(ExportPresets, CanExportPresets);
 
         public ICommand ExitCommand => new ActionCommand(Exit);
 
+        // Menu Settings and some timer buttons
+        public ICommand RingOnStartTimeSwitchCommand => new ActionCommand (SwitchIsRingOnStartTime);
         public ICommand InfiniteLoopCommand => new ActionCommand((o) => { IsInfiniteLoop ^= true; });
 
-        public ICommand SavePresetsBeforeExitCommand => new ActionCommand(SavePresetsBeforeExit);
-
+        // Menu Help
         public ICommand ViewHelpCommand => new ActionCommand(About, o => false);
         public ICommand AboutCommand => new ActionCommand(About);
-            #endregion
 
-        public ICommand StopCommand => new ActionCommand (Stop);
-        public ICommand RingOnStartTimeSwitchCommand => new ActionCommand (SwitchIsRingOnStartTime);
-        public ICommand RingCommand => new ActionCommand(Ring);
-        public ICommand PresetComboBoxReturnCommand => new ActionCommand (PresetComboBoxReturnKeyHandler);
+        // Presets ComboBox
+        public ICommand PresetComboBoxReturnCommand => new ActionCommand(PresetComboBoxReturnKeyHandler);
         public ICommand RemoveSelectedPresetCommand { get; }
+        public ICommand PresetLostFocusCommand => new ActionCommand(PresetLostFocus);
 
-        public ICommand MediaTerminalCommand => new ActionCommand (MediaTerminal);
+        // Timer buttons
+        public ICommand MediaTerminalCommand => new ActionCommand(MediaTerminal);
+        public ICommand StopCommand => new ActionCommand(Stop);
+        public ICommand RingCommand => new ActionCommand(Ring);
+
+        // MainWindow Events
         public ICommand OnClosingWindowCommand => new ActionCommand(OnClosingWindow);
 
         #endregion Commands
 
         #region Methods
-
 
         // PresetViewModelCollection changed handler
         /// <summary>
@@ -239,7 +227,7 @@ namespace CycleBell.ViewModels
                 ConnectHandlers(SelectedPreset);
             }
 
-            if (e?.OldItems?[0] != null && e?.NewItems?[0] == null) {
+            if (e?.OldItems?[0] != null && e.NewItems?[0] == null) {
 
                 var deletingPresetVm = PresetViewModelCollection.First(pvm => pvm.Preset.Equals((Preset)e.OldItems[0]));
 
@@ -255,6 +243,7 @@ namespace CycleBell.ViewModels
 
             OnPropertyChanged(nameof(SelectedPreset));
             OnPropertyChanged(nameof(IsNewPreset));
+            ((ActionCommand)ExportPresetsCommand).RaiseCanExecuteChanged();
         }
         
         private void OnCantCreateNewPresetEventHandler(object sender, CantCreateNewPreetEventArgs args)
@@ -344,39 +333,12 @@ namespace CycleBell.ViewModels
             return IsSelectedPreset;
         }
 
-        //  Save Preset
-        private void SavePreset(object obj)
-        {
-            SelectedPreset.Save();
-        }
-        private bool CanSavePreset(object obj)
-        {
-            return SelectedPreset?.IsModified == true;
-        }
-
-        private void SavePresetAs(object obj)
-        {
-            if (_selectedPreset.Name == Preset.DefaultName) {
-
-                var viewModel = new SavePresetAsViewModel();
-                bool? res = _dialogRegistrator.ShowDialog (viewModel);
-
-                if (res == null || res == false) {
-
-                    _manager.DeletePreset (_selectedPreset.Preset);
-
-                    CreateNewPreset(null);
-                }
-            }
-        }
-        private bool CanSavePresetAs(object obj) => _selectedPreset?.IsModified ?? false;
-
         //  Import/Export PresetViewModelCollection
         private void ImportPresets(object obj)
         {
             var ofd = new OpenFileDialog
                 {
-                    InitialDirectory = _initialDirectory ?? System.Environment.GetFolderPath (Environment.SpecialFolder.MyDocuments),
+                    InitialDirectory = _initialDirectory ?? Environment.GetFolderPath (Environment.SpecialFolder.MyDocuments),
                     Filter = "xml files (*.xml)|*.xml",
                 };
 
@@ -388,13 +350,17 @@ namespace CycleBell.ViewModels
 
             _manager.OpenPresets(fileName);
         }
+        private bool CanImportPresets(object obj)
+        {
+            return true;
+        }
 
         private void ExportPresets(object obj)
         {
             var sfd = new SaveFileDialog()
                 {
                     Filter = "xml file (*.xml)|*.xml",
-                    InitialDirectory = _initialDirectory ?? System.Environment.GetFolderPath (Environment.SpecialFolder.MyDocuments),
+                    InitialDirectory = _initialDirectory ?? Environment.GetFolderPath (Environment.SpecialFolder.MyDocuments),
                 };
 
             if (sfd.ShowDialog() != true)
@@ -410,12 +376,16 @@ namespace CycleBell.ViewModels
             return PresetViewModelCollection.Count > 0;
         }
 
-        //  Save presets before exit
-        private void SavePresetsBeforeExit(object obj)
+        // Preset ComboBox
+        private void PresetComboBoxReturnKeyHandler (object newName)
         {
-             _manager.SavePresets();
-        }
+            //SelectedPreset.Name = newName.ToString();
+            OnPropertyChanged(nameof(HasNoName));
 
+            // Change value for call PropertyChangedCallback in attached property
+            IsFocused ^= true;
+        }
+        private void PresetLostFocus(object obj) => OnPropertyChanged(nameof(HasNoName));
 
         // MediaTerminal - timer launcher
         private void MediaTerminal (object o)
@@ -464,7 +434,6 @@ namespace CycleBell.ViewModels
             DefaultSoundPlayer.Play();
         } 
 
-
         //  Exit
         private void Exit(object obj)
         {
@@ -479,20 +448,13 @@ namespace CycleBell.ViewModels
             _dialogRegistrator.ShowDialog(viewModel);
         }
 
+        // Closing MainWindow handler
         private void OnClosingWindow(object o)
         {
             if (_selectedPreset != null)
                 _manager.CheckCreateNewPreset(_selectedPreset.Preset);
         }
 
-        private void PresetComboBoxReturnKeyHandler (object newName)
-        {
-            //SelectedPreset.Name = newName.ToString();
-            OnPropertyChanged(nameof(HasNoName));
-
-            // Change value for call PropertyChangedCallback in attached property
-            IsFocused ^= true;
-        }
 
         #endregion Methods
 

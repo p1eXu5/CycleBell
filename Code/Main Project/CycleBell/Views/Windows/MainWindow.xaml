@@ -148,7 +148,7 @@
                       KeyboardNavigation.IsTabStop="False"
                       >
                 <MenuItem.Header>
-                    <TextBlock VerticalAlignment="Center">About</TextBlock>
+                    <TextBlock VerticalAlignment="Center">Help</TextBlock>
                 </MenuItem.Header>
 
                 <MenuItem Header="View Help" Command="{Binding ViewHelpCommand}" />
@@ -219,13 +219,12 @@
                                         Key="Return"/>
                         </ComboBox.InputBindings>
 
-                        <!--<i:Interaction.Triggers>
+                        <i:Interaction.Triggers>
                             <i:EventTrigger EventName="LostFocus">
-                                <i:InvokeCommandAction Command="{Binding PresetComboBoxReturnCommand}" 
-                                                       CommandParameter="{Binding ElementName=m_presetComboBox, Path=Text}"
+                                <i:InvokeCommandAction Command="{Binding PresetLostFocusCommand}" 
                                                        />
                             </i:EventTrigger>
-                        </i:Interaction.Triggers>-->
+                        </i:Interaction.Triggers>
                     </ComboBox>
 
                     <TextBlock x:Name="tbk_Tip" FontSize="10" FontStyle="Italic" 
