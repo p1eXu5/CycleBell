@@ -25,7 +25,7 @@ namespace CycleBellLibrary.Context
             try {
                 OpenPresets();
             }
-            catch(FileNotFoundException ex) { }
+            catch(FileNotFoundException) { }
         }
 
         public CycleBellManager (IInnerPresetCollectionManager presetCollectionManager, ITimerManager timerManager)
@@ -40,6 +40,9 @@ namespace CycleBellLibrary.Context
         public ITimerManager TimerManager { get; }
 
         public string FileName { get; }
+
+        public bool IsEmptyPresetExists =>
+            PresetCollectionManager.Presets.FirstOrDefault(p => p.PresetName == Preset.DefaultName) != null;
 
         #endregion
 

@@ -25,7 +25,7 @@ namespace CycleBell.ViewModels
         private readonly IDialogRegistrator _dialogRegistrator;
 
         private readonly ICycleBellManager _manager;
-        private readonly ITimerManager _timerManager;
+        private ITimerManager _timerManager;
 
         private PresetViewModel _selectedPreset;
         private PresetViewModel _prevSelectedPreset;
@@ -46,16 +46,31 @@ namespace CycleBell.ViewModels
             _manager = cycleBellManager ?? throw new ArgumentNullException(nameof(cycleBellManager));
             _manager.CantCreateNewPresetEvent += OnCantCreateNewPresetEventHandler;
 
-            var presetManager = cycleBellManager.PresetCollectionManager;
-            PresetViewModelCollection = new ObservableCollection<PresetViewModel>(presetManager.Presets.Select(p => new PresetViewModel(p, this)));
+            RemoveSelectedPresetCommand = new ActionCommand(RemoveSelectedPreset, CanRemoveSelectedPreset);
+            ExportPresetsCommand = new ActionCommand(ExportPresets, CanExportPresets);
 
-            ((INotifyCollectionChanged) (presetManager.Presets)).CollectionChanged += OnPresetCollectionChangedEventHandler;
+            LoadPresetViewModelCollection(_manager);
 
-            _timerManager = cycleBellManager.TimerManager;
+            LoadTimerManager(_manager);
+        }
+
+        private void LoadTimerManager(ICycleBellManager manager)
+        {
+            _timerManager = manager.TimerManager;
             _timerManager.TimerStartEvent += UpdateIsRunningAndTimerStateProperties;
             _timerManager.TimerStopEvent += UpdateIsRunningAndTimerStateProperties;
+        }
 
-            RemoveSelectedPresetCommand = new ActionCommand(RemoveSelectedPreset, CanRemoveSelectedPreset);
+        private void LoadPresetViewModelCollection(ICycleBellManager manager)
+        {
+            PresetViewModelCollection =
+                new ObservableCollection<PresetViewModel>(manager.PresetCollectionManager.Presets.Select(p => new PresetViewModel(p, this)));
+
+            if (PresetViewModelCollection.Count > 0) {
+                SelectedPreset = PresetViewModelCollection[0];
+            }
+
+            ((INotifyCollectionChanged) (_manager.PresetCollectionManager.Presets)).CollectionChanged += OnPresetCollectionChangedEventHandler;
         }
 
         #endregion Constructor
@@ -182,7 +197,7 @@ namespace CycleBell.ViewModels
         public ICommand CreateNewPresetCommand => new ActionCommand(CreateNewPreset);
 
         public ICommand ImportPresetsCommand => new ActionCommand(ImportPresets, CanImportPresets);
-        public ICommand ExportPresetsCommand => new ActionCommand(ExportPresets, CanExportPresets);
+        public ICommand ExportPresetsCommand { get; }
 
         public ICommand ExitCommand => new ActionCommand(Exit);
 
@@ -250,7 +265,6 @@ namespace CycleBell.ViewModels
         {
             if (args.CantCreateNewPresetReason == CantCreateNewPresetReasons.EmptyPresetNotModified) {
 
-                //PresetViewModelCollection.IsNotify = false;
                 _manager.DeletePreset(args.Preset);
                 return;
             }
@@ -259,15 +273,18 @@ namespace CycleBell.ViewModels
 
             if (_dialogRegistrator.ShowDialog(saveViewModel) == true) {
 
-                var renameViewModel = new RenamePresetDialogViewModel(_prevSelectedPreset);
+                var presetViewModel = _prevSelectedPreset ?? _selectedPreset;
+
+                var renameViewModel = new RenamePresetDialogViewModel(presetViewModel);
 
                 _dialogRegistrator.ShowDialog(renameViewModel);
-                _prevSelectedPreset.Name = _prevSelectedPreset.Name;
+                presetViewModel.Name = presetViewModel.Name;
             }
             else {
                 _manager.DeletePreset(args.Preset);
             }
         }
+
         // timer handler
         private void UpdateIsRunningAndTimerStateProperties(object s, EventArgs e)
         {
@@ -451,7 +468,7 @@ namespace CycleBell.ViewModels
         // Closing MainWindow handler
         private void OnClosingWindow(object o)
         {
-            if (_selectedPreset != null)
+            if (_selectedPreset?.Preset.PresetName == Preset.DefaultName)
                 _manager.CheckCreateNewPreset(_selectedPreset.Preset);
         }
 

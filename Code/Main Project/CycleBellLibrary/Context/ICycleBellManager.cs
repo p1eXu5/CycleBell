@@ -31,6 +31,8 @@ namespace CycleBellLibrary.Context
 
         string FileName { get; }
 
+        bool IsEmptyPresetExists { get; }
+
         /// <summary>
         /// Creates a new preset
         /// </summary>
