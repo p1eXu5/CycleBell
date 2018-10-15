@@ -105,17 +105,11 @@
         <controls:TimerBox x:Name="tibx_PointTime" Grid.Column="1" Grid.Row="0"
                            at:AttachedPropertyFactory.IsFocused="{Binding FocusTime}"
                            TabIndex="3"
-                           Margin="0"
-                           VerticalAlignment="Bottom"
-                           VerticalContentAlignment="Bottom"
-                           BorderThickness="0,0,0,1"
-                           Height="22"
                            Text="{Binding Time, 
                                           Mode=TwoWay, 
                                           Converter={StaticResource conv_TimeSpanToString},
                                           UpdateSourceTrigger=PropertyChanged, TargetNullValue=00:00}"
                            FontFamily="{DynamicResource font_SuiGeneris}"
-                           BorderBrush="{DynamicResource brush_Tip}"
                            >
 
             <controls:TimerBox.Style>
