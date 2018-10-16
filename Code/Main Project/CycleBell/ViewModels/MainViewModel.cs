@@ -20,7 +20,7 @@ namespace CycleBell.ViewModels
     {
         #region Fields
 
-        public static SoundPlayer DefaultSoundPlayer = new SoundPlayer("..\\Code\\Main Project\\CycleBell\\Sounds\\default.wav"); 
+        public static SoundPlayer DefaultSoundPlayer;
 
         private readonly IDialogRegistrator _dialogRegistrator;
 
@@ -53,6 +53,8 @@ namespace CycleBell.ViewModels
             LoadPresetViewModelCollection(_manager);
 
             LoadTimerManager(_manager);
+
+            DefaultSoundPlayer = new SoundPlayer(@"Sounds/default.wav"); 
         }
 
         private void LoadTimerManager(ICycleBellManager manager)

@@ -1,4 +1,6 @@
-﻿using System.Globalization;
+﻿using System;
+using System.Diagnostics;
+using System.Globalization;
 using System.Threading;
 using System.Windows;
 using CycleBell.Base;
@@ -25,37 +27,44 @@ namespace CycleBell
             //      7.  Help
             //      8.  License
             //      9.  Deploy
+            try {
 
-            Thread.CurrentThread.CurrentUICulture = new CultureInfo("en-us");
+                Thread.CurrentThread.CurrentUICulture = new CultureInfo ("en-us");
 
-            base.OnStartup (e);
+                base.OnStartup (e);
 
-            TimePoint.DefaultTimePointNameFunc = point => $"Time point {point.Id}";
+                TimePoint.DefaultTimePointNameFunc = point => $"Time point {point.Id}";
 
-            var container = new UnityContainer();
+                var container = new UnityContainer();
 
-            Window wnd = new MainWindow();
+                Window wnd = new MainWindow();
 
-            // IDialogRegistrator:
-            DialogRegistrator dialogRegistrator = new DialogRegistrator(wnd);
-            dialogRegistrator.Register<AboutDialogViewModel,AboutWindow>();
-            dialogRegistrator.Register<SavePresetDialogViewModel, SavePresetDialogWindow>();
-            dialogRegistrator.Register<RenamePresetDialogViewModel, RenamePresetDialogWindow>();
+                // IDialogRegistrator:
+                DialogRegistrator dialogRegistrator = new DialogRegistrator (wnd);
+                dialogRegistrator.Register<AboutDialogViewModel, AboutWindow>();
+                dialogRegistrator.Register<SavePresetDialogViewModel, SavePresetDialogWindow>();
+                dialogRegistrator.Register<RenamePresetDialogViewModel, RenamePresetDialogWindow>();
 
-            container.RegisterInstance<IDialogRegistrator>(dialogRegistrator);
+                container.RegisterInstance<IDialogRegistrator> (dialogRegistrator);
 
-            // ITimerManager:
-            var manager =  new CycleBellManager("test.xml", new PresetCollectionManager(), TimerManager.Instance);;
+                // ITimerManager:
+                var manager = new CycleBellManager ("test.xml", new PresetCollectionManager(), TimerManager.Instance);
+                ;
 
-            container.RegisterInstance<ICycleBellManager>(manager);
+                container.RegisterInstance<ICycleBellManager> (manager);
 
-            container.RegisterType<MainViewModel>();
+                container.RegisterType<MainViewModel>();
 
-            wnd.DataContext = container.Resolve<MainViewModel>();
+                wnd.DataContext = container.Resolve<MainViewModel>();
 
-            wnd.ShowDialog();
+                wnd.ShowDialog();
 
-            manager.SavePresets();
+                manager.SavePresets();
+            }
+            catch (Exception ex) {
+
+                Debug.WriteLine (ex.Message);
+            }
         }
     }
 }

@@ -300,7 +300,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\cycle_bell%403x.ico" />
-    <Content Include="Sounds\default.wav" />
+    <Content Include="Sounds\default.wav">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\CycleBellLibrary\CycleBellLibrary.csproj">
