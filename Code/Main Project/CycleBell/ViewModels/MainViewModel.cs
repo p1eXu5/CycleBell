@@ -237,31 +237,35 @@ namespace CycleBell.ViewModels
         /// <param name="e"></param>
         private void OnPresetCollectionChangedEventHandler(object s, NotifyCollectionChangedEventArgs e)
         {
-            if (e?.NewItems?[0] != null && e.OldItems?[0] == null) { 
+            if (e?.NewItems?[0] != null) { 
 
                 PresetViewModelCollection.Add(new PresetViewModel((Preset)e.NewItems[0], this));
                 SelectedPreset = PresetViewModelCollection[PresetViewModelCollection.Count - 1];
 
                 ConnectHandlers(SelectedPreset);
             }
-
-            if (e?.OldItems?[0] != null && e.NewItems?[0] == null) {
+            else if (e?.OldItems?[0] != null) {
 
                 var deletingPresetVm = PresetViewModelCollection.First(pvm => pvm.Preset.Equals((Preset)e.OldItems[0]));
 
                 DisconnectHandlers(SelectedPreset);
 
                 PresetViewModelCollection.Remove(deletingPresetVm);
-                //if (!PresetViewModelCollection.IsNotify) {
-                //    PresetViewModelCollection.IsNotify = true;
-                //}
+            }
+            else if (e != null && e.OldItems == null && e.NewItems == null) {
 
-                //SelectedPreset = PresetViewModelCollection.Count > 0 ? PresetViewModelCollection[0] : null;
+                foreach (var presetViewModel in PresetViewModelCollection) {
+
+                    DisconnectHandlers(presetViewModel);
+                }
+
+                PresetViewModelCollection.Clear();
             }
 
             OnPropertyChanged(nameof(SelectedPreset));
             OnPropertyChanged(nameof(IsNewPreset));
             ((ActionCommand)ExportPresetsCommand).RaiseCanExecuteChanged();
+            ((ActionCommand)ClearPresetsCommand).RaiseCanExecuteChanged();
         }
         
         private void OnCantCreateNewPresetEventHandler(object sender, CantCreateNewPreetEventArgs args)
