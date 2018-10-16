@@ -197,7 +197,7 @@ namespace CycleBell.ViewModels
         // Menu File
         public ICommand CreateNewPresetCommand => new ActionCommand(CreateNewPreset);
 
-        public ICommand ImportPresetsCommand => new ActionCommand(ImportPresets, CanImportPresets);
+        public ICommand AppendPresetsCommand => new ActionCommand(AppendPresets, CanAppendPresets);
         public ICommand ExportPresetsCommand { get; }
 
         public ICommand ClearPresetsCommand { get; }
@@ -343,25 +343,35 @@ namespace CycleBell.ViewModels
             _manager.CreateNewPreset();
         }
 
-        private void ImportPresets(object obj)
+        private void AppendPresets(object obj)
         {
-            var ofd = new OpenFileDialog
-                {
-                    InitialDirectory = _initialDirectory ?? Environment.GetFolderPath (Environment.SpecialFolder.MyDocuments),
-                    Filter = "xml files (*.xml)|*.xml",
-                };
+            var fileName = GetPresetsFile();
 
-            if (ofd.ShowDialog() != true)
+            if (fileName == null)
                 return;
-
-            var fileName = ofd.FileName;
-            _initialDirectory = Path.GetDirectoryName (fileName);
 
             _manager.OpenPresets(fileName);
         }
-        private bool CanImportPresets(object obj)
+        private bool CanAppendPresets(object obj)
         {
             return true;
+        }
+
+        private string GetPresetsFile()
+        {
+            var ofd = new OpenFileDialog
+            {
+                InitialDirectory = _initialDirectory ?? Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments),
+                Filter = "xml files (*.xml)|*.xml",
+            };
+
+            if (ofd.ShowDialog() != true)
+                return null;
+
+            var fileName = ofd.FileName;
+            _initialDirectory = Path.GetDirectoryName(fileName);
+
+            return fileName;
         }
 
         private void ExportPresets(object obj)
@@ -387,7 +397,7 @@ namespace CycleBell.ViewModels
 
         private void ClearPresets(object obj)
         {
-            PresetViewModelCollection.Clear();
+            _manager.ClearPresets();
             _prevSelectedPreset = null;
         }
 

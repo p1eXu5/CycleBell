@@ -16,7 +16,8 @@
         
         Title="MainWindow" 
         Height="816" Width="444.125" 
-        ResizeMode="CanResize" WindowStartupLocation="CenterScreen">
+        ResizeMode="CanResize" WindowStartupLocation="CenterScreen" 
+        >
 
     <i:Interaction.Triggers>
         <i:EventTrigger EventName="Closing">
@@ -70,16 +71,13 @@
                 </MenuItem.Header>
                 
                 <MenuItem Header="_New Preset" Command="{Binding CreateNewPresetCommand}" />
-                <!--<Separator></Separator>
-                <MenuItem Header="_Save Preset" Command="{Binding SavePresetCommand}"></MenuItem>
-                <MenuItem Header="Save Preset _As..." Command="{Binding SavePresetAsCommand}"></MenuItem>-->
-                <Separator></Separator>
-                <MenuItem Header="_Import Presets..." Command="{Binding ImportPresetsCommand}"></MenuItem>
-                <MenuItem Header="_Export Presets..." Command="{Binding ExportPresetsCommand}"></MenuItem>
+                <Separator />
+                <MenuItem Header="_Append Presets..." Command="{Binding AppendPresetsCommand}" />
+                <MenuItem Header="_Export Presets..." Command="{Binding ExportPresetsCommand}" />
                 <Separator />
                 <MenuItem Header="_Clear Presets" Command="{Binding ClearPresetsCommand}" />
                 <Separator />
-                <MenuItem Header="_Exit" Command="{Binding ExitCommand}"></MenuItem>
+                <MenuItem Header="_Exit" Command="{Binding ExitCommand}" />
             </MenuItem>
             
             <!-- Settings menu -->

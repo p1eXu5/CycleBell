@@ -45,6 +45,8 @@ namespace CycleBellLibrary.Context
 
         void DeletePreset (Preset preset);
 
+        void ClearPresets();
+
         void RenamePreset (Preset preset, string newName);
 
         /// <summary>

@@ -68,5 +68,15 @@ namespace CycleBell.Properties {
                 return ResourceManager.GetStream("_default", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
+        /// </summary>
+        internal static System.Drawing.Icon cycle_bell_3x {
+            get {
+                object obj = ResourceManager.GetObject("cycle_bell_3x", resourceCulture);
+                return ((System.Drawing.Icon)(obj));
+            }
+        }
     }
 }
