@@ -78,6 +78,7 @@
     <Reference Include="PresentationFramework.Aero" />
     <Reference Include="PresentationFramework.Aero2" />
     <Reference Include="System" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Windows.Forms" />
@@ -126,6 +127,7 @@
     <Compile Include="Base\ActionCommand.cs" />
     <Compile Include="Base\ObservableObject.cs" />
     <Compile Include="Base\DialogRegistrator.cs" />
+    <Compile Include="Base\ViewModel.cs" />
     <Compile Include="Controls\TimerBox.cs" />
     <Compile Include="Converters\FromTimeSpanToStringConverter.cs" />
     <Compile Include="DataTemplateSelectors\TimePointVmDataTemplateSelector.cs" />

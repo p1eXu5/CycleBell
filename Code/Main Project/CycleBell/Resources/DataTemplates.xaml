@@ -70,7 +70,8 @@
                          Control.BorderBrush="Black"
                          Focusable="True"
                          KeyboardNavigation.IsTabStop="False"
-                         Text="{Binding LoopCount, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+                         Text="{Binding LoopCount, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}"
+                         >
                     <TextBox.RenderTransform>
                         <TranslateTransform Y="1" />
                     </TextBox.RenderTransform>

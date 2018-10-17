@@ -1,4 +1,6 @@
-﻿using CycleBell.ViewModels;
+﻿using System.ComponentModel;
+using System.Linq;
+using CycleBell.ViewModels;
 using CycleBell.ViewModels.TimePointViewModels;
 using CycleBellLibrary.Models;
 using Moq;
@@ -9,6 +11,14 @@ namespace CycleBell.NUnitTests.ViewModels
     [TestFixture]
     public class TimePointViewModelBaseTests
     {
+        [Test]
+        public void class_IsINotifyPropertyChanged()
+        {
+            var type = typeof(TimePointViewModelBase);
+
+            Assert.IsTrue(typeof(INotifyPropertyChanged).IsAssignableFrom(type));
+        }
+
         [Test]
         public void Equals_EqualTimePoints_ReturnsTrue()
         {

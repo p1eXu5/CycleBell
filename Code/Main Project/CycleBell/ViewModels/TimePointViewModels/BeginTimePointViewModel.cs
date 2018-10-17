@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ComponentModel.DataAnnotations;
 using CycleBellLibrary.Models;
 using CycleBellLibrary.Repository;
 
@@ -13,6 +14,7 @@ namespace CycleBell.ViewModels.TimePointViewModels
 
         public string CycleName => $"loop {LoopNumber}";
 
+        [Range(1, Int32.MaxValue, ErrorMessage = "Loop count must be greater then 0")]
         public int LoopCount
         {
             get => _PresetViewModel.Preset.TimerLoops[LoopNumber];

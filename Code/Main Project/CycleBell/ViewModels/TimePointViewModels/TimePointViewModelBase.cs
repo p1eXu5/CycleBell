@@ -5,7 +5,7 @@ using CycleBellLibrary.Models;
 
 namespace CycleBell.ViewModels.TimePointViewModels
 {
-    public abstract class TimePointViewModelBase : ObservableObject, IEquatable<TimePointViewModelBase>
+    public abstract class TimePointViewModelBase : ViewModel, IEquatable<TimePointViewModelBase>
     {
         #region Fields
 

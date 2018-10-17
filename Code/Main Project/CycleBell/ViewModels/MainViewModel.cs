@@ -45,14 +45,13 @@ namespace CycleBell.ViewModels
 
             _manager = cycleBellManager ?? throw new ArgumentNullException(nameof(cycleBellManager));
             _manager.CantCreateNewPresetEvent += OnCantCreateNewPresetEventHandler;
+            LoadTimerManager(_manager);
 
             RemoveSelectedPresetCommand = new ActionCommand(RemoveSelectedPreset, CanRemoveSelectedPreset);
             ExportPresetsCommand = new ActionCommand(ExportPresets, CanExportPresets);
             ClearPresetsCommand = new ActionCommand(ClearPresets, CanExportPresets);
 
             LoadPresetViewModelCollection(_manager);
-
-            LoadTimerManager(_manager);
 
             DefaultSoundPlayer = new SoundPlayer(@"Sounds/default.wav"); 
         }
@@ -90,7 +89,11 @@ namespace CycleBell.ViewModels
                 var newSelectedPreset = value;
                 _prevSelectedPreset = _selectedPreset;
 
+                if (_selectedPreset != null)
+                    DisconnectHandlers(_selectedPreset);
+
                 _selectedPreset = value;
+                ConnectHandlers(_selectedPreset);
 
                 if (newSelectedPreset != null && _prevSelectedPreset != null && _prevSelectedPreset.Name == Preset.DefaultName)
                     _manager.CheckCreateNewPreset(_prevSelectedPreset.Preset);
@@ -256,12 +259,9 @@ namespace CycleBell.ViewModels
             }
             else if (e != null && e.OldItems == null && e.NewItems == null) {
 
-                foreach (var presetViewModel in PresetViewModelCollection) {
-
-                    DisconnectHandlers(presetViewModel);
-                }
-
+                DisconnectHandlers(SelectedPreset);
                 PresetViewModelCollection.Clear();
+                _prevSelectedPreset = null;
             }
 
             OnPropertyChanged(nameof(SelectedPreset));
@@ -406,7 +406,6 @@ namespace CycleBell.ViewModels
         private void ClearPresets(object obj)
         {
             _manager.ClearPresets();
-            _prevSelectedPreset = null;
         }
 
         private void Exit(object obj)
@@ -453,13 +452,16 @@ namespace CycleBell.ViewModels
                 }
 
                 OnPropertyChanged(nameof(IsPaused));
-                OnPropertyChanged(nameof(TimerState));
             }
             else {
                 // if not running
-                _timerManager.PlayAsync (_selectedPreset.Preset);
+                if (!_selectedPreset.Preset.TimerLoops.Values.Any(tl => tl <= 0)) {
+
+                    _timerManager.PlayAsync(_selectedPreset.Preset);
+                }
             }
 
+            OnPropertyChanged(nameof(TimerState));
         }
 
         // ---- Stop
