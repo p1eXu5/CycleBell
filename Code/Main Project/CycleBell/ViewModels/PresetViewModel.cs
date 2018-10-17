@@ -48,17 +48,17 @@ namespace CycleBell.ViewModels
         private TimePointViewModelBase _selectedTimePoint;
         private AddingTimePointViewModel _addingTimePoint;
 
-        private bool _isModified;
         private bool _canBellOnStartTime;
 
         private readonly HashSet<byte> _settedLoopNumbers;
 
-        private StringBuilder _name;
+        private readonly StringBuilder _name;
 
         private string _nextTimePointName;
         private TimeSpanDigits _timeLeftTo;
 
         public IDictionary<int, SoundPlayer> SoundMap { get; } = new Dictionary<int, SoundPlayer>();
+        private SoundPlayer _lastSoundPlayer;
 
         private TimePointViewModelBase _activeTimePointViewModelBase = null;
 
@@ -136,31 +136,22 @@ namespace CycleBell.ViewModels
         }
 
         public ReadOnlyObservableCollection<TimePointViewModelBase> TimePointVmCollection { get; }
-        public TimePointViewModelBase SelectedTimePoint
-        {
-            get => _selectedTimePoint;
-            set {
-                if (value is TimePointViewModel newValue) {
-                    _selectedTimePoint = newValue;
-                }
-                OnPropertyChanged ();
-            }
-        }
+        //public TimePointViewModelBase SelectedTimePoint
+        //{
+        //    get => _selectedTimePoint;
+        //    set {
+        //        if (value is TimePointViewModel newValue) {
+        //            _selectedTimePoint = newValue;
+        //        }
+        //        OnPropertyChanged ();
+        //    }
+        //}
         public AddingTimePointViewModel AddingTimePoint
         {
             get => _addingTimePoint;
             set {
                 _addingTimePoint = value;
                 OnPropertyChanged ();
-            }
-        }
-
-        public bool IsModified
-        {
-            get => _isModified;
-            set {
-                if (value == true)
-                    AddStarToName();
             }
         }
 
@@ -261,46 +252,11 @@ namespace CycleBell.ViewModels
 
         }
 
-        // RemoveTimePoint
-        public void RemoveTimePoint (TimePoint timePoint)
-        {
-            _preset.RemoveTimePoint (timePoint);
-        }
-
-        // AddTimePointCommand:
-        private void AddTimePoint(object o)
-        {
-            var timePoint = _addingTimePoint.TimePoint.Clone();
-
-            if (String.IsNullOrWhiteSpace (timePoint.Name))
-                timePoint.Name = timePoint.GetDefaultTimePointName();
-
-            _preset.AddTimePoint(timePoint);
-
-            ResetAddingTimePoint();
-        }
-        private bool CanAddTimePoint (object o)
-        {
-            var res = _addingTimePoint.Time == TimeSpan.Zero && _addingTimePoint.TimePointType == TimePointType.Absolute 
-                        || _addingTimePoint.Time > TimeSpan.Zero;
-
-            return res;
-        }
-        private bool CanAddTimePoint (TimePoint timePoint)
-        {
-            var res = timePoint.Time == TimeSpan.Zero && timePoint.TimePointType == TimePointType.Absolute 
-                      || timePoint.Time > TimeSpan.Zero;
-
-            return res;
-        }
-
-        // Sound
+        // SoundBank
         public void UpdateSoundBank (TimePoint timePoint)
         {
             SoundMap[timePoint.Id] = new SoundPlayer((string)timePoint.Tag);
         }
-
-        public void Save() { throw new NotImplementedException(); }
 
         // Service:
         private void LoadTimePointViewModelCollection (Preset preset)
@@ -363,47 +319,106 @@ namespace CycleBell.ViewModels
             OnPropertyChanged (nameof(CanAddTimePoint));
         }
 
+        // RemoveTimePoint
+        public void RemoveTimePoint (TimePoint timePoint)
+        {
+            _preset.RemoveTimePoint (timePoint);
+        }
 
+        // AddTimePointCommand:
+        private void AddTimePoint(object o)
+        {
+            var timePoint = _addingTimePoint.TimePoint.Clone();
+
+            if (String.IsNullOrWhiteSpace (timePoint.Name))
+                timePoint.Name = timePoint.GetDefaultTimePointName();
+
+            _preset.AddTimePoint(timePoint);
+
+            ResetAddingTimePoint();
+        }
+        private bool CanAddTimePoint (object o)
+        {
+            var res = _addingTimePoint.Time == TimeSpan.Zero && _addingTimePoint.TimePointType == TimePointType.Absolute 
+                        || _addingTimePoint.Time > TimeSpan.Zero;
+
+            return res;
+        }
+        private bool CanAddTimePoint (TimePoint timePoint)
+        {
+            var res = timePoint.Time == TimeSpan.Zero && timePoint.TimePointType == TimePointType.Absolute 
+                      || timePoint.Time > TimeSpan.Zero;
+
+            return res;
+        }
 
         // TimerManager handlers:
         internal void OnTimePointChangedEventHandler(object s, TimerEventArgs e)
         {
             if (e == null) return;
-
-            if (e.PrevTimePoint != null) {
-                if (e.PrevTimePoint.Name == _mainViewModel.StartTimeName && _mainViewModel.IsRingOnStartTime) {
-
-                    _mainViewModel.Ring();
-                }
-                else {
-
-                    SoundMap[e.PrevTimePoint.Id].Play();
-                }
-            }
+            Ring(e.PrevTimePoint);
 
             if (e.NextTimePoint == null) return;
+            UpdateTimePointViewModels(e.NextTimePoint);
+            UpdeteLastTimeControls(e);
+        }
 
-            if (e.NextTimePoint.Name == _mainViewModel.StartTimeName) {
+        private void UpdeteLastTimeControls(TimerEventArgs e)
+        {
+            NextTimePointName = e.NextTimePoint.Name;
+            TimeLeftTo = TimeSpanDigits.Parse(-e.LastTime);
+        }
 
+        private void UpdateTimePointViewModels(TimePoint nextTimePoint)
+        {
+            if (nextTimePoint.Name == _mainViewModel.StartTimeName) {
                 if (TimePointVmCollection.Count > 0) {
                     TimePointVmCollection.DisableAll();
                 }
             }
             else {
-
                 if (_activeTimePointViewModelBase != null)
                     _activeTimePointViewModelBase.IsActive = false;
 
-                _activeTimePointViewModelBase = TimePointVmCollection.Activate(tpvmb => tpvmb.Equals (e.NextTimePoint));   
+                _activeTimePointViewModelBase = TimePointVmCollection.Activate(tpvmb => tpvmb.Equals(nextTimePoint));
             }
+        }
 
-            NextTimePointName = e.NextTimePoint.Name;
-            TimeLeftTo = TimeSpanDigits.Parse(-e.LastTime);
+        private void Ring(TimePoint prevTimePoint)
+        {
+            if (prevTimePoint != null && prevTimePoint.Time >= TimeSpan.Zero) {
+                if (prevTimePoint.Name == _mainViewModel.StartTimeName && _mainViewModel.IsRingOnStartTime) {
+                    _mainViewModel.Ring();
+                }
+                else {
+
+                    // TODO (and mute)
+                    if (_activeTimePointViewModelBase != null) {
+
+                        if (((TimePointViewModel) _activeTimePointViewModelBase).MuteFlag) {
+
+                            if (SoundMap.ContainsKey(_activeTimePointViewModelBase.Id)) {
+                                SoundMap[prevTimePoint.Id].Play();
+                                _lastSoundPlayer = SoundMap[prevTimePoint.Id];
+                            }
+                            else {
+                                _mainViewModel.Ring();
+                            }
+                        }
+                    }
+                }
+            }
         }
 
         internal void OnSecondPassedEventHandler(object s, TimerEventArgs e)
         {
             TimeLeftTo = TimeSpanDigits.Parse(-e.LastTime);
+        }
+
+        internal void OnTimerPauseEventHandler(object sender, EventArgs args)
+        {
+            _mainViewModel.Ring(true);
+            _lastSoundPlayer?.Stop();
         }
 
         internal void OnTimerStopEventHandler(object sender, EventArgs args)

@@ -319,6 +319,7 @@ namespace CycleBell.ViewModels
 
             _timerManager.ChangeTimePointEvent += selectedPresetViewModel.OnTimePointChangedEventHandler;
             _timerManager.TimerSecondPassedEvent += selectedPresetViewModel.OnSecondPassedEventHandler;
+            _timerManager.TimerPauseEvent += selectedPresetViewModel.OnTimerPauseEventHandler;
             _timerManager.TimerStopEvent += selectedPresetViewModel.OnTimerStopEventHandler;
         }
 
@@ -328,6 +329,7 @@ namespace CycleBell.ViewModels
         private void DisconnectHandlers(PresetViewModel selectedPresetViewModel)
         {
             _timerManager.TimerStopEvent -= selectedPresetViewModel.OnTimerStopEventHandler;
+            _timerManager.TimerPauseEvent -= selectedPresetViewModel.OnTimerPauseEventHandler;
             _timerManager.TimerSecondPassedEvent -= selectedPresetViewModel.OnSecondPassedEventHandler;
             _timerManager.ChangeTimePointEvent -= selectedPresetViewModel.OnTimePointChangedEventHandler;
 
@@ -478,8 +480,17 @@ namespace CycleBell.ViewModels
         private void Ring (object o)
         {
             IsRingOnStartTime = IsRingOnStartTime;
-            DefaultSoundPlayer.Play();
-        } 
+            Ring();
+        }
+
+        public void Ring(bool stopping = false)
+        {
+            DefaultSoundPlayer.Stop();
+
+            if (!stopping) {
+                DefaultSoundPlayer.Play();
+            }
+        }
 
         //  About
         private void About(object obj)
@@ -495,15 +506,7 @@ namespace CycleBell.ViewModels
                 _manager.CheckCreateNewPreset(_selectedPreset.Preset);
         }
 
-
         #endregion Methods
-
-        #region IMainViewModel impl
-
-        public void Ring() => Ring(null);
-        public void Ring (int id) { throw new NotImplementedException(); }
-
-        #endregion
     }
 
     #region Converters

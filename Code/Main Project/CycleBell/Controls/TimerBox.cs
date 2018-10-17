@@ -11,7 +11,8 @@ namespace CycleBell.Controls
     {
         private const sbyte MinutesTensLimit = 5;
         private const sbyte HoursTensLimit = 2;
-        private const sbyte HoursOnesLimit = 3;
+        private const sbyte HoursOnesByTensLimit = 3;
+        private const sbyte OnesLimit = 9;
 
         private bool _nextOnes = false;
 
@@ -219,7 +220,7 @@ namespace CycleBell.Controls
             }
             else {
                 // if Text[0] == '2'
-                if (num <= HoursOnesLimit) {
+                if (num <= HoursOnesByTensLimit) {
                     Text = "" + Text[0] + num + Text.Substring(2);
                     CaretIndex = 3;
                 }
@@ -242,6 +243,11 @@ namespace CycleBell.Controls
 
                 Text = "" + num + Text;
                 CaretIndex = 1;
+            }
+            else if (!_nextOnes && num <= OnesLimit) {
+
+                Text = "" + num + Text.Substring(1);
+                CaretIndex = 2;
             }
             else if (_nextOnes) {
 

@@ -20,9 +20,9 @@ namespace CycleBellLibrary.Timer
     /// every Accuacy of second, when time point has changes
     /// and when timer has stopped.
     ///
-    /// The signals contains last TimePoint, next TimePoint and last time
+    /// The signals contains "last TimePoint", "next TimePoint" and last time
     /// 
-    /// First TimePointChange signal emits with last TimePoint with
+    /// First TimePointChange signal emits with "last TimePoint" with
     /// negative Time, next TimePoint - created TimePoint with name preset.StartTimePointName
     /// </summary>
     public class TimerManager : ITimerManager, IStartTimeTimePointName
@@ -98,6 +98,14 @@ namespace CycleBellLibrary.Timer
         private void OnTimerSecondPassed(TimePoint nextTimePoint, TimeSpan lastTime)
         {
             TimerSecondPassedEvent?.Invoke(this, new TimerEventArgs(null, nextTimePoint, lastTime));
+        }
+
+        public event EventHandler TimerPauseEvent;
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        private void OnTimerPause()
+        {
+            TimerPauseEvent?.Invoke(this, EventArgs.Empty);
         }
 
         public event EventHandler TimerStopEvent;
@@ -242,70 +250,10 @@ namespace CycleBellLibrary.Timer
             _timer = new System.Threading.Timer(TimerCallbackHandler, null, durTime, Timeout.Infinite);
 
             // Set previous queue element
-            _prevQueueElement = (currentTime, new TimePoint(StartTimeTimePointString, TimeSpan.FromMinutes(-1), TimePointType.Absolute));
+            _prevQueueElement = (currentTime, new TimePoint(TimeSpan.FromMinutes(-1), TimePointType.Absolute));
 
             OnChangeTimePoint(_prevQueueElement.prevTimePoint, _queue.Peek().nextTimePoint, LastTime(currentTime, _queue.Peek().nextChangeTime));
         }
-
-        /// <summary>
-        /// Creates alarm queue
-        /// </summary>
-        /// <param name="preset">Preset</param>
-        /// <returns>The queue of tuples consists of time of the day and TimePoint that will come in this time</returns>
-        //public Queue<(TimeSpan, TimePoint)> GetTimerQueue(Preset preset)
-        //{
-        //    if (preset?.TimePointCollection == null || preset.TimePointCollection.Count == 0)
-        //        return null;
-
-        //    // Смещение по времени следующей временной точки
-        //    TimeSpan startTime = preset.StartTime;
-
-        //    // Очередь кортежей времени будильника и соответствующей ему NextTimePoint
-        //    Queue<(TimeSpan, TimePoint)> queue = new Queue<(TimeSpan, TimePoint)>();
-
-        //    queue.Enqueue((startTime, new TimePoint(StartTimeTimePointName, startTime, TimePointType.Absolute)));
-
-        //    // Заполняем очередь
-
-        //    // Для всех временных сегментов
-        //    foreach (var timerCycle in preset.TimerLoops.Keys) {
-
-        //        TimeSpan nextTime;
-
-        //        if (preset.TimePointCollection.Count > 1) {
-
-        //            // Список временных точек каждого временного сегмента, порядоченный по Id (по порядку создания)
-        //            var timePoints = preset.TimePointCollection.Where(t => t.LoopNumber == timerCycle).OrderBy(t => t.Id)
-        //                                   .ToList();
-
-        //            for (var i = 0; i < preset.TimerLoops[timerCycle]; ++i) {
-
-        //                foreach (var point in timePoints) {
-
-        //                    nextTime = point.GetAbsoluteTime(startTime);
-
-        //                    queue.Enqueue((nextTime, point));
-        //                    startTime = point.GetAbsoluteTime(startTime);
-        //                }
-        //            }
-        //        }
-        //        else {
-
-        //            // If TimePointCollection.Count == 1
-        //            var timePoint = preset.TimePointCollection[0];
-
-        //            for (var i = 0; i < preset.TimerLoops[timerCycle]; ++i) {
-
-        //                nextTime = timePoint.GetAbsoluteTime(startTime);
-
-        //                queue.Enqueue((nextTime, timePoint));
-        //                startTime = timePoint.GetAbsoluteTime(startTime);
-        //            }
-        //        }
-        //    }
-
-        //    return queue;
-        //}
 
         /// <summary>
         /// Timer handler

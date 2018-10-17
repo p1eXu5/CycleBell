@@ -10,6 +10,7 @@ namespace CycleBellLibrary.Timer
         event EventHandler<TimerEventArgs> ChangeTimePointEvent;
         event EventHandler<TimerEventArgs> TimerSecondPassedEvent;
         event EventHandler TimerStartEvent;
+        event EventHandler TimerPauseEvent;
         event EventHandler TimerStopEvent;
 
         bool IsRunning { get; }
