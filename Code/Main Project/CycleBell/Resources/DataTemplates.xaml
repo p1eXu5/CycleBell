@@ -92,7 +92,6 @@
         </Grid>
     </DataTemplate>
 
-    <!--DataType="{x:Type vm:TimePointViewModel}"-->
 
     <!-- TimePointViewModel --> 
     <DataTemplate x:Key="datatempl_TimePointViewModel" >
@@ -191,8 +190,39 @@
                               FontSize="18"
                               Content="{Binding Time, Converter={StaticResource conv_TimeSpanToString}, Mode=OneWay}"
                               Focusable="False"
-                              Style="{StaticResource style_TimeToggleButton}"
-                              />
+                              >
+                    <ToggleButton.Style>
+                        <Style TargetType="ToggleButton" BasedOn="{StaticResource style_TimeToggleButton}">
+                            
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding IsEnabled}" Value="false">
+                                    <DataTrigger.EnterActions>
+                                        <BeginStoryboard>
+                                            <Storyboard>
+                                                <ColorAnimation Storyboard.TargetProperty="(Control.Foreground).(LinearGradientBrush.GradientStops)[0].(GradientStop.Color)" 
+                                                                To="{StaticResource col_TopDisableTime}" Duration="0:0:.2" />
+                                                <ColorAnimation Storyboard.TargetProperty="(Control.Foreground).(LinearGradientBrush.GradientStops)[1].(GradientStop.Color)" 
+                                                                To="{StaticResource col_BottomDisableTime}" Duration="0:0:.2" />
+
+                                            </Storyboard>
+                                        </BeginStoryboard>
+                                    </DataTrigger.EnterActions>
+                                    <DataTrigger.ExitActions>
+                                        <BeginStoryboard>
+                                            <Storyboard>
+                                                <ColorAnimation Storyboard.TargetProperty="(Control.Foreground).(LinearGradientBrush.GradientStops)[0].(GradientStop.Color)" 
+                                                                To="{StaticResource col_TopForeground}" Duration="0:0:.2" />
+                                                <ColorAnimation Storyboard.TargetProperty="(Control.Foreground).(LinearGradientBrush.GradientStops)[1].(GradientStop.Color)" 
+                                                                To="{StaticResource col_BottomForeground}" Duration="0:0:.2" />
+
+                                            </Storyboard>
+                                        </BeginStoryboard>
+                                    </DataTrigger.ExitActions>
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </ToggleButton.Style>
+                </ToggleButton>
 
                 <TextBlock x:Name="absolute" 
                            VerticalAlignment="Top" 
@@ -202,7 +232,7 @@
                                                 Converter={StaticResource conv_BooleanToVisibility}}">
                     <Run>A</Run>
                 </TextBlock>
-
+                
             </StackPanel>
 
             <!-- mute -->
@@ -211,7 +241,6 @@
                           VerticalContentAlignment="Bottom"
                           IsEnabled="True"
                           IsChecked="{Binding MuteFlag}"
-                          Style="{StaticResource style_MuteToggleButton}"
                           Content="mute"
                           HorizontalAlignment="Center" 
                           Focusable="False"
@@ -221,6 +250,37 @@
                     <TranslateTransform Y="-1" X="2" />
                 </ToggleButton.RenderTransform>
 
+                <ToggleButton.Style>
+                    <Style TargetType="ToggleButton" BasedOn="{StaticResource style_MuteToggleButton}">
+
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding IsEnabled}" Value="false">
+                                <DataTrigger.EnterActions>
+                                    <BeginStoryboard>
+                                        <Storyboard>
+                                            <ColorAnimation Storyboard.TargetProperty="(Control.Foreground).(LinearGradientBrush.GradientStops)[0].(GradientStop.Color)" 
+                                                                To="{StaticResource col_TopDisableTime}" Duration="0:0:.2" />
+                                            <ColorAnimation Storyboard.TargetProperty="(Control.Foreground).(LinearGradientBrush.GradientStops)[1].(GradientStop.Color)" 
+                                                                To="{StaticResource col_BottomDisableTime}" Duration="0:0:.2" />
+
+                                        </Storyboard>
+                                    </BeginStoryboard>
+                                </DataTrigger.EnterActions>
+                                <DataTrigger.ExitActions>
+                                    <BeginStoryboard>
+                                        <Storyboard>
+                                            <ColorAnimation Storyboard.TargetProperty="(Control.Foreground).(LinearGradientBrush.GradientStops)[0].(GradientStop.Color)" 
+                                                                To="{StaticResource col_TopForeground}" Duration="0:0:.2" />
+                                            <ColorAnimation Storyboard.TargetProperty="(Control.Foreground).(LinearGradientBrush.GradientStops)[1].(GradientStop.Color)" 
+                                                                To="{StaticResource col_BottomForeground}" Duration="0:0:.2" />
+
+                                        </Storyboard>
+                                    </BeginStoryboard>
+                                </DataTrigger.ExitActions>
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </ToggleButton.Style>
             </ToggleButton>
 
             <!-- sound location -->
@@ -267,6 +327,7 @@
 
     </DataTemplate>
     
+
      <!--EndTimePointViewModel-->
     <DataTemplate x:Key="datatempl_EndTimePointViewModel" DataType="vm:EndTimePointViewModel">
         <Grid SnapsToDevicePixels="True" Margin="5" Height="14">

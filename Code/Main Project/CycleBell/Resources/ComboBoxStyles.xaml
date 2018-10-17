@@ -245,7 +245,7 @@
         <Setter Property="ScrollViewer.VerticalScrollBarVisibility" Value="Auto" />
         <Setter Property="ScrollViewer.CanContentScroll" Value="True" />
         <Setter Property="MaxDropDownHeight" Value="100" />
-        <Setter Property="Foreground" Value="{DynamicResource brush_ForegroundGradient}"/>
+        <Setter Property="Foreground" Value="{StaticResource brush_ForegroundGradient}"/>
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="ComboBox">

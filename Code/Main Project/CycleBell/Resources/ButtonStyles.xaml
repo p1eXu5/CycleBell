@@ -467,13 +467,14 @@
 
     <!-- style_MuteToggleButton -->
     <Style x:Key="style_MuteToggleButton" TargetType="ToggleButton">
+        <Setter Property="OverridesDefaultStyle" Value="True" />
         <Setter Property="VerticalAlignment" Value="Bottom" />
         <Setter Property="FontWeight" Value="Normal" />
         <Setter Property="FontFamily" Value="{StaticResource font_SuiGeneris}" />
         <Setter Property="FontSize" Value="14" />
         <Setter Property="FontStyle" Value="Normal" />
         <Setter Property="BorderThickness" Value="0" />
-        
+        <Setter Property="Control.Foreground" Value="{StaticResource brush_ForegroundGradient}" />
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="ToggleButton">
@@ -487,27 +488,16 @@
                             <SolidColorBrush x:Name="col_Border" Color="{StaticResource col_UncheckedStroke}" />
                         </Border.BorderBrush>
 
-                        
-                            <TextBlock x:Name="tbk_Mute"
-                                       VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
-                                       HorizontalAlignment="Center"
-                                       RenderTransformOrigin=".5,.5"
-                                       FontSize="{TemplateBinding FontSize}"
-                                       FontStyle="{TemplateBinding FontStyle}"
-                                       FontFamily="{TemplateBinding FontFamily}"
-                                       Text="{TemplateBinding Content}"
-                                       >
-
-                                <TextBlock.Foreground>
-                                    <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
-                                        <GradientStop x:Name="col_Top" Color="{DynamicResource col_TopForeground}" Offset="0" />
-                                        <GradientStop x:Name="col_Bottom" Color="{DynamicResource col_BottomForeground}" Offset="1" />
-                                    </LinearGradientBrush>
-                                </TextBlock.Foreground>
-                            </TextBlock>
-
-                            
-
+                        <TextBlock x:Name="tbk_Mute"
+                                   VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+                                   HorizontalAlignment="Center"
+                                   RenderTransformOrigin=".5,.5"
+                                   FontSize="{TemplateBinding FontSize}"
+                                   FontStyle="{TemplateBinding FontStyle}"
+                                   FontFamily="{TemplateBinding FontFamily}"
+                                   Text="{TemplateBinding Content}"
+                                   Foreground="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=Foreground}"
+                                   />
 
                         <VisualStateManager.VisualStateGroups>
                             <VisualStateGroup x:Name="CommonState">
@@ -522,10 +512,12 @@
                                 <VisualState x:Name="Pressed">
                                     <Storyboard TargetName="tbk_Mute">
                                         <DoubleAnimation Storyboard.TargetProperty="FontSize" To="12" Duration="0"/>
-                                        <ColorAnimation Storyboard.TargetName="col_Top" Storyboard.TargetProperty="Color" 
-                                                                To="{DynamicResource col_TopPressed}" Duration="0" />
-                                        <ColorAnimation Storyboard.TargetName="col_Bottom" Storyboard.TargetProperty="Color" 
-                                                                To="{DynamicResource col_BottomPressed}" Duration="0" />
+
+                                        <ColorAnimation Storyboard.TargetProperty="(Control.Foreground).(LinearGradientBrush.GradientStops)[0].(GradientStop.Color)" 
+                                                                To="{StaticResource col_TopPressed}" Duration="0" />
+                                        <ColorAnimation Storyboard.TargetProperty="(Control.Foreground).(LinearGradientBrush.GradientStops)[1].(GradientStop.Color)" 
+                                                                To="{StaticResource col_BottomPressed}" Duration="0" />
+
                                         <ThicknessAnimationUsingKeyFrames Storyboard.TargetName="border" Storyboard.TargetProperty="BorderThickness">
                                             <LinearThicknessKeyFrame Value="0,0,0,1" KeyTime="0" />
                                         </ThicknessAnimationUsingKeyFrames>
@@ -543,10 +535,10 @@
 
                                 <VisualState x:Name="Disabled">
                                     <Storyboard TargetName="tbk_Mute">
-                                        <ColorAnimation Storyboard.TargetName="col_Top" Storyboard.TargetProperty="Color" 
-                                                        To="{DynamicResource col_TopUncheckedIcon}" Duration="0:0:.2" />
-                                        <ColorAnimation Storyboard.TargetName="col_Bottom" Storyboard.TargetProperty="Color" 
-                                                        To="{DynamicResource col_BottomUncheckedIcon}" Duration="0:0:.2" />
+                                        <ColorAnimation Storyboard.TargetProperty="(Control.Foreground).(LinearGradientBrush.GradientStops)[0].(GradientStop.Color)" 
+                                                        To="{StaticResource col_TopUncheckedIcon}" Duration="0:0:.2" />
+                                        <ColorAnimation Storyboard.TargetProperty="(Control.Foreground).(LinearGradientBrush.GradientStops)[1].(GradientStop.Color)" 
+                                                        To="{StaticResource col_BottomUncheckedIcon}" Duration="0:0:.2" />
                                     </Storyboard>
                                 </VisualState>
 
@@ -557,9 +549,9 @@
 
                                 <VisualState x:Name="Checked">
                                     <Storyboard>
-                                        <ColorAnimation Storyboard.TargetName="col_Top" Storyboard.TargetProperty="Color" 
+                                        <ColorAnimation Storyboard.TargetProperty="(Control.Foreground).(LinearGradientBrush.GradientStops)[0].(GradientStop.Color)" 
                                                         To="{DynamicResource col_TopCheckedMute}" Duration="0:0:.2" />
-                                        <ColorAnimation Storyboard.TargetName="col_Bottom" Storyboard.TargetProperty="Color" 
+                                        <ColorAnimation Storyboard.TargetProperty="(Control.Foreground).(LinearGradientBrush.GradientStops)[1].(GradientStop.Color)" 
                                                         To="{DynamicResource col_BottomCheckedMute}" Duration="0:0:.2" />
 
                                     </Storyboard>
@@ -574,13 +566,14 @@
     </Style>
 
     <Style x:Key="style_TimeToggleButton" TargetType="ToggleButton">
+        <Setter Property="OverridesDefaultStyle" Value="True" />
         <Setter Property="VerticalAlignment" Value="Bottom" />
         <Setter Property="FontWeight" Value="Normal" />
         <Setter Property="FontFamily" Value="{StaticResource font_SuiGeneris}" />
         <Setter Property="FontSize" Value="14" />
         <Setter Property="FontStyle" Value="Normal" />
         <Setter Property="BorderThickness" Value="0" />
-
+        <Setter Property="Foreground" Value="{StaticResource brush_ForegroundGradient}" />
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="ToggleButton">
@@ -595,24 +588,18 @@
                         </Border.BorderBrush>
 
 
-                            <TextBlock x:Name="tbk_Mute"
-                                       Width="{TemplateBinding Width}"
-                                       VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
-                                       HorizontalAlignment="Center"
-                                       RenderTransformOrigin=".5,.5"
-                                       FontSize="{TemplateBinding FontSize}"
-                                       FontStyle="{TemplateBinding FontStyle}"
-                                       FontFamily="{TemplateBinding FontFamily}"
-                                       Text="{TemplateBinding Content}"
+                        <TextBlock x:Name="tbk_Mute"
+                                   Width="{TemplateBinding Width}"
+                                   VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+                                   HorizontalAlignment="Center"
+                                   RenderTransformOrigin=".5,.5"
+                                   FontSize="{TemplateBinding FontSize}"
+                                   FontStyle="{TemplateBinding FontStyle}"
+                                   FontFamily="{TemplateBinding FontFamily}"
+                                   Text="{TemplateBinding Content}"
+                                   Foreground="{TemplateBinding Foreground}"
                                        >
-
-                                <TextBlock.Foreground>
-                                    <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
-                                        <GradientStop x:Name="col_Top" Color="{DynamicResource col_TopForeground}" Offset="0" />
-                                        <GradientStop x:Name="col_Bottom" Color="{DynamicResource col_BottomForeground}" Offset="1" />
-                                    </LinearGradientBrush>
-                                </TextBlock.Foreground>
-                            </TextBlock>
+                        </TextBlock>
 
 
 
@@ -629,10 +616,12 @@
                                 <VisualState x:Name="Pressed">
                                     <Storyboard TargetName="tbk_Mute">
                                         <DoubleAnimation Storyboard.TargetProperty="FontSize" To="12" Duration="0"/>
-                                        <ColorAnimation Storyboard.TargetName="col_Top" Storyboard.TargetProperty="Color" 
-                                                                To="{DynamicResource col_TopPressed}" Duration="0" />
-                                        <ColorAnimation Storyboard.TargetName="col_Bottom" Storyboard.TargetProperty="Color" 
-                                                                To="{DynamicResource col_BottomPressed}" Duration="0" />
+
+                                        <ColorAnimation Storyboard.TargetProperty="Foreground.(LinearGradientBrush.GradientStops)[0].(GradientStop.Color)" 
+                                                                To="{StaticResource col_TopPressed}" Duration="0" />
+                                        <ColorAnimation Storyboard.TargetProperty="Foreground.(LinearGradientBrush.GradientStops)[1].(GradientStop.Color)" 
+                                                                To="{StaticResource col_BottomPressed}" Duration="0" />
+
                                         <ThicknessAnimationUsingKeyFrames Storyboard.TargetName="border" Storyboard.TargetProperty="BorderThickness">
                                             <LinearThicknessKeyFrame Value="0,0,0,1" KeyTime="0" />
                                         </ThicknessAnimationUsingKeyFrames>
@@ -650,16 +639,16 @@
 
                                 <VisualState x:Name="Disabled">
                                     <Storyboard TargetName="tbk_Mute">
-                                        <ColorAnimation Storyboard.TargetName="col_Top" Storyboard.TargetProperty="Color" 
-                                                        To="{DynamicResource col_TopUncheckedIcon}" Duration="0:0:.2" />
-                                        <ColorAnimation Storyboard.TargetName="col_Bottom" Storyboard.TargetProperty="Color" 
-                                                        To="{DynamicResource col_BottomUncheckedIcon}" Duration="0:0:.2" />
+                                        <ColorAnimation Storyboard.TargetProperty="(Control.Foreground).(LinearGradientBrush.GradientStops)[0].(GradientStop.Color)" 
+                                                        To="{StaticResource col_TopUncheckedIcon}" Duration="0:0:.2" />
+                                        <ColorAnimation Storyboard.TargetProperty="(Control.Foreground).(LinearGradientBrush.GradientStops)[1].(GradientStop.Color)" 
+                                                        To="{StaticResource col_BottomUncheckedIcon}" Duration="0:0:.2" />
                                     </Storyboard>
                                 </VisualState>
 
                             </VisualStateGroup>
 
-                            <VisualStateGroup x:Name="CheckStates">
+                            <!--<VisualStateGroup x:Name="CheckStates">
                                 <VisualState x:Name="Unchecked" />
 
                                 <VisualState x:Name="Checked">
@@ -671,10 +660,9 @@
 
                                     </Storyboard>
                                 </VisualState>
-                            </VisualStateGroup>
+                            </VisualStateGroup>-->
                         </VisualStateManager.VisualStateGroups>
                     </Border>
-
                 </ControlTemplate>
             </Setter.Value>
         </Setter>

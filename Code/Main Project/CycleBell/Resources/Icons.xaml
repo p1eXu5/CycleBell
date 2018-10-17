@@ -95,6 +95,34 @@
     <Color x:Key="col_TopNormalPathStroke">#C8C8C8</Color>
     <Color x:Key="col_BottomNormalPathStroke">#C8C8C8</Color>
 
+    <Color x:Key="col_TopForeground">#666666</Color>
+    <Color x:Key="col_BottomForeground">#333333</Color>
+
+    <Color x:Key="col_TopUnpressedForeground">#666666</Color>
+    <Color x:Key="col_BottomUnpressedForeground">#222222</Color>
+    
+    <Color x:Key="col_TopPressed">#333333</Color>
+    <Color x:Key="col_BottomPressed">#000000</Color>
+    <Color x:Key="col_PressedBorder">#55888888</Color>
+
+    <Color x:Key="col_TopCheckedMute">#0000FF</Color>
+    <Color x:Key="col_BottomCheckedMute">#000088</Color>
+
+    <Color x:Key="col_TopCheckedTime">#990000</Color>
+    <Color x:Key="col_BottomCheckedTime">#440000</Color>
+
+    <Color x:Key="col_TopDisableTime">#BBBBBB</Color>
+    <Color x:Key="col_BottomDisableTime">#888888</Color>
+
+    <Color x:Key="col_TopCheckedIcon">#7F7F7F</Color>
+    <Color x:Key="col_BottomCheckedIcon">#000000</Color>
+
+    <Color x:Key="col_TopUncheckedIcon">#FFFFFF</Color>
+    <Color x:Key="col_BottomUncheckedIcon">#C8C8C8</Color>
+
+    <Color x:Key="col_Text.Top.Enabled">#666666</Color>
+    <Color x:Key="col_Text.Bottom.Enabled">#222222</Color>
+
     <SolidColorBrush x:Key="BackgroundBrush" Color="{DynamicResource col_Background}" />
     <SolidColorBrush x:Key="brush_Foreground" Color="{DynamicResource col_Foreground}" />
     <SolidColorBrush x:Key="brush_Tip" Color="{DynamicResource col_Tip}" />
@@ -106,16 +134,6 @@
     <SolidColorBrush x:Key="brush_Marker" Color="#008900" />
     <SolidColorBrush x:Key="brush_UnpressedButton" Color="{DynamicResource col_UncheckedStroke}" />
     <SolidColorBrush x:Key="brush_PressedButton" Color="{DynamicResource col_PressedButton}" />
-
-    <Color x:Key="col_TopForeground">#666666</Color>
-    <Color x:Key="col_BottomForeground">#333333</Color>
-
-    <Color x:Key="col_TopUnpressedForeground">#666666</Color>
-    <Color x:Key="col_BottomUnpressedForeground">#222222</Color>
-    
-    <Color x:Key="col_TopPressed">#333333</Color>
-    <Color x:Key="col_BottomPressed">#000000</Color>
-    <Color x:Key="col_PressedBorder">#55888888</Color>
 
 
     <LinearGradientBrush x:Key="brush_BackgroundGradient" StartPoint="0,0" EndPoint="0,1">
@@ -144,22 +162,11 @@
     </LinearGradientBrush>
 
 
-    <Color x:Key="col_TopCheckedMute">#0000FF</Color>
-    <Color x:Key="col_BottomCheckedMute">#000088</Color>
-
-    <Color x:Key="col_TopCheckedTime">#990000</Color>
-    <Color x:Key="col_BottomCheckedTime">#440000</Color>
-
-    <Color x:Key="col_TopCheckedIcon">#7F7F7F</Color>
-    <Color x:Key="col_BottomCheckedIcon">#000000</Color>
 
     <LinearGradientBrush x:Key="brush_CheckedIcon" StartPoint="0,0" EndPoint="0,1">
         <GradientStop Offset="0" Color="{DynamicResource col_TopCheckedIcon}" />
         <GradientStop Offset="1" Color="{DynamicResource col_BottomCheckedIcon}" />
     </LinearGradientBrush>
-
-    <Color x:Key="col_TopUncheckedIcon">#FFFFFF</Color>
-    <Color x:Key="col_BottomUncheckedIcon">#C8C8C8</Color>
 
     <LinearGradientBrush x:Key="brush_UncheckedIcon" StartPoint="0,0" EndPoint="0,1">
         <GradientStop Offset="0" Color="{DynamicResource col_TopUncheckedIcon}" />
@@ -182,9 +189,6 @@
     </LinearGradientBrush>
 
     <!-- TimePointViewModel DataTemplate -->
-
-    <Color x:Key="col_Text.Top.Enabled">#666666</Color>
-    <Color x:Key="col_Text.Bottom.Enabled">#222222</Color>
 
     <LinearGradientBrush x:Key="brush_Text.Enabled.Gradient" StartPoint="0,0" EndPoint="0,1">
         <GradientStop Offset="0" Color="{DynamicResource col_Text.Top.Enabled}" />
