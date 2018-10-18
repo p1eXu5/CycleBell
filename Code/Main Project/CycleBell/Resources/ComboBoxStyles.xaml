@@ -169,7 +169,7 @@
 
     <Style x:Key="style_PresetToggleButton" TargetType="ToggleButton">
         <Setter Property="IsTabStop" Value="False" />
-        <Setter Property="Foreground" Value="{DynamicResource brush_ForegroundGradient}" />
+        <Setter Property="Foreground" Value="{StaticResource brush_ForegroundGradient}" />
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="ToggleButton">
@@ -194,9 +194,9 @@
                                 <VisualState x:Name="Disabled">
                                     <Storyboard>
                                         <ColorAnimation Storyboard.TargetProperty="(Control.Foreground).(LinearGradientBrush.GradientStops)[0].(GradientStop.Color)"
-                                                                                                To="{StaticResource col_DisabledStroke}" Duration="0:0:.2" />
+                                                                                                To="{DynamicResource col_DisabledStroke}" Duration="0:0:.2" />
                                         <ColorAnimation Storyboard.TargetProperty="(Control.Foreground).(LinearGradientBrush.GradientStops)[1].(GradientStop.Color)"
-                                                                                                To="{StaticResource col_DisabledStroke}" Duration="0:0:.2" />
+                                                                                                To="{DynamicResource col_DisabledStroke}" Duration="0:0:.2" />
                                     </Storyboard>
                                 </VisualState>
                                 <VisualState x:Name="MouseOver">
@@ -206,9 +206,9 @@
                                         <DoubleAnimation Storyboard.TargetProperty="ScaleY" Storyboard.TargetName="ScaleTransform"
                                                                                                     To="1.0" Duration="0" />
                                         <ColorAnimation Storyboard.TargetProperty="(Control.Foreground).(LinearGradientBrush.GradientStops)[0].(GradientStop.Color)"
-                                                                                To="{StaticResource col_ComboBox.ToggleButton.TopMouseOver}" Duration="0:0:.2" />
+                                                                                To="{DynamicResource col_ComboBox.ToggleButton.TopMouseOver}" Duration="0:0:.2" />
                                         <ColorAnimation Storyboard.TargetProperty="(Control.Foreground).(LinearGradientBrush.GradientStops)[1].(GradientStop.Color)"
-                                                                                To="{StaticResource col_ComboBox.ToggleButton.BottomMouseOver}" Duration="0:0:.2" />
+                                                                                To="{DynamicResource col_ComboBox.ToggleButton.BottomMouseOver}" Duration="0:0:.2" />
                                     </Storyboard>
                                 </VisualState>
 
@@ -219,9 +219,9 @@
                                         <DoubleAnimation Storyboard.TargetProperty="ScaleY" Storyboard.TargetName="ScaleTransform"
                                                                                                     To=".9" Duration="0" />
                                         <ColorAnimation Storyboard.TargetProperty="(Control.Foreground).(LinearGradientBrush.GradientStops)[0].(GradientStop.Color)"
-                                                                                                To="{StaticResource col_TopPressed}" Duration="0" />
+                                                                                                To="{DynamicResource col_TopPressed}" Duration="0" />
                                         <ColorAnimation Storyboard.TargetProperty="(Control.Foreground).(LinearGradientBrush.GradientStops)[1].(GradientStop.Color)"
-                                                                                                To="{StaticResource col_BottomPressed}" Duration="0" />
+                                                                                                To="{DynamicResource col_BottomPressed}" Duration="0" />
                                     </Storyboard>
                                 </VisualState>
 

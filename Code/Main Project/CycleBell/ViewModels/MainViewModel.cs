@@ -93,7 +93,9 @@ namespace CycleBell.ViewModels
                     DisconnectHandlers(_selectedPreset);
 
                 _selectedPreset = value;
-                ConnectHandlers(_selectedPreset);
+
+                if (_selectedPreset != null)
+                    ConnectHandlers(_selectedPreset);
 
                 if (newSelectedPreset != null && _prevSelectedPreset != null && _prevSelectedPreset.Name == Preset.DefaultName)
                     _manager.CheckCreateNewPreset(_prevSelectedPreset.Preset);
@@ -247,19 +249,19 @@ namespace CycleBell.ViewModels
                 PresetViewModelCollection.Add(new PresetViewModel((Preset)e.NewItems[0], this));
                 SelectedPreset = PresetViewModelCollection[PresetViewModelCollection.Count - 1];
 
-                ConnectHandlers(SelectedPreset);
+                //ConnectHandlers(SelectedPreset);
             }
             else if (e?.OldItems?[0] != null) {
 
                 var deletingPresetVm = PresetViewModelCollection.First(pvm => pvm.Preset.Equals((Preset)e.OldItems[0]));
 
-                DisconnectHandlers(SelectedPreset);
+                //DisconnectHandlers(SelectedPreset);
 
                 PresetViewModelCollection.Remove(deletingPresetVm);
             }
             else if (e != null && e.OldItems == null && e.NewItems == null) {
 
-                DisconnectHandlers(SelectedPreset);
+                //DisconnectHandlers(SelectedPreset);
                 PresetViewModelCollection.Clear();
                 _prevSelectedPreset = null;
             }
