@@ -149,7 +149,7 @@ namespace CycleBell.ViewModels
                     return true;
                 }
                 else {
-
+                    // Default
                     return false;
                 }
             }

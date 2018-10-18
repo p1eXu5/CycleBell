@@ -262,12 +262,6 @@ namespace CycleBell.ViewModels
 
         }
 
-        // SoundBank
-        public void UpdateSoundBank (TimePoint timePoint)
-        {
-            SoundMap[timePoint.Id] = new SoundPlayer((string)timePoint.Tag);
-        }
-
         // Service:
         private void LoadTimePointViewModelCollection (Preset preset)
         {
@@ -344,6 +338,7 @@ namespace CycleBell.ViewModels
                 timePoint.Name = timePoint.GetDefaultTimePointName();
 
             _preset.AddTimePoint(timePoint);
+            timePoint.ChangeTimePointType(TimePointType.Relative);
 
             ResetAddingTimePoint();
         }
@@ -360,6 +355,12 @@ namespace CycleBell.ViewModels
                       || timePoint.Time > TimeSpan.Zero;
 
             return res;
+        }
+
+        // SoundBank
+        public void UpdateSoundBank (TimePoint timePoint)
+        {
+            SoundMap[timePoint.Id] = new SoundPlayer((string)timePoint.Tag);
         }
 
         // TimerManager handlers:
@@ -405,7 +406,7 @@ namespace CycleBell.ViewModels
                     // TODO (and mute)
                     if (_activeTimePointViewModelBase != null) {
 
-                        if (((TimePointViewModel) _activeTimePointViewModelBase).MuteFlag) {
+                        if (!((TimePointViewModel) _activeTimePointViewModelBase).MuteFlag) {
 
                             if (SoundMap.ContainsKey(_activeTimePointViewModelBase.Id)) {
                                 SoundMap[prevTimePoint.Id].Play();
@@ -436,7 +437,8 @@ namespace CycleBell.ViewModels
             if (_activeTimePointViewModelBase != null)
                 _activeTimePointViewModelBase.IsActive = false;
 
-            TimePointVmCollection.EnableAll();
+            if (!Preset.IsInfiniteLoop)
+                TimePointVmCollection.EnableAll();
         }
 
         // Checkers:

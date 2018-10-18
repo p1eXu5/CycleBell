@@ -179,7 +179,7 @@
                         <Viewbox HorizontalAlignment="Center" VerticalAlignment="Bottom">
 
                             <Path Data="{StaticResource gmtry_ArrowDown}"
-                                                            Fill="{DynamicResource brush_ForegroundGradient}"
+                                                            Fill="{TemplateBinding Foreground}"
                                                             Style="{x:Null}"
                                                             >
                                 <Path.RenderTransform>
@@ -267,6 +267,7 @@
                         <ToggleButton Grid.Column="1"
                                       IsChecked="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=IsDropDownOpen}"
                                       Style="{StaticResource style_PresetToggleButton}"
+                                      IsEnabled="{TemplateBinding IsEnabled}"
                                       KeyboardNavigation.IsTabStop="False"
                                       Focusable="False"
                                       />

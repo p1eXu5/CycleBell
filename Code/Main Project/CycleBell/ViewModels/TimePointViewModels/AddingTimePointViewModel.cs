@@ -11,9 +11,10 @@ namespace CycleBell.ViewModels.TimePointViewModels
 {
     public class AddingTimePointViewModel : TimePointViewModel
     {
-        private const byte _loopNumberLimit = 10;
+        private const byte _LOOP_NUMBER_LIMIT = 10;
         private bool _focusTime;
         private bool _focusName;
+        private bool _isAbsolute;
 
         public AddingTimePointViewModel (IPresetViewModel presetViewModel) : base (new TimePoint { Name = "" }, presetViewModel)
         {
@@ -21,18 +22,18 @@ namespace CycleBell.ViewModels.TimePointViewModels
 
             NumberCollection = _PresetViewModel.Preset != null 
                                && _PresetViewModel.Preset.TimerLoops.Values.Any() 
-                               && _PresetViewModel.Preset.TimerLoops.Values.Max() > _loopNumberLimit 
+                               && _PresetViewModel.Preset.TimerLoops.Values.Max() > _LOOP_NUMBER_LIMIT 
                                     ? Enumerable.Range (0, _PresetViewModel.Preset.TimerLoops.Values.Max() + 1).Select (n => (byte) n).ToArray() 
-                                    : Enumerable.Range(0, _loopNumberLimit).Select(n => (byte)n).ToArray();
+                                    : Enumerable.Range(0, _LOOP_NUMBER_LIMIT).Select(n => (byte)n).ToArray();
         }
 
         #region Properties
 
         public override TimeSpan Time
         {
-            get => _TimePoint.Time;
+            get => TimePoint.Time;
             set {
-                _TimePoint.Time = value;
+                TimePoint.Time = value;
                 OnPropertyChanged();
                 OnPropertyChanged(nameof(NoSetTime));
                 ((ActionCommand)AddTimePointCommand).RaiseCanExecuteChanged();
@@ -118,7 +119,7 @@ namespace CycleBell.ViewModels.TimePointViewModels
             Name = "";
             Time = TimeSpan.Zero;
 
-            _TimePoint.ChangeTimePointType(TimePointType.Relative);
+            TimePoint.ChangeTimePointType(TimePointType.Relative);
             OnPropertyChanged(nameof(TimePointType));
 
             LoopNumber = 0;
@@ -126,10 +127,10 @@ namespace CycleBell.ViewModels.TimePointViewModels
 
         public void CopyFrom(TimePoint timePoint)
         {
-            _TimePoint.Name = timePoint.Name;
-            _TimePoint.Time = timePoint.Time;
-            _TimePoint.ChangeTimePointType(timePoint.TimePointType);
-            _TimePoint.LoopNumber = timePoint.LoopNumber;
+            TimePoint.Name = timePoint.Name;
+            TimePoint.Time = timePoint.Time;
+            TimePoint.ChangeTimePointType(timePoint.TimePointType);
+            TimePoint.LoopNumber = timePoint.LoopNumber;
 
             OnPropertyChanged(nameof(Name));
             OnPropertyChanged(nameof(Time));
@@ -137,14 +138,13 @@ namespace CycleBell.ViewModels.TimePointViewModels
             OnPropertyChanged(nameof(LoopNumber));
         }
 
-        protected override void OpenWavFile(SoundPlayer sound)
+        protected override void OpenWavFile()
         {
             OpenFileDialog ofd = new OpenFileDialog { Filter = "Waveform Audio File Format|*.wav" };
 
             if (ofd.ShowDialog() == true) {
 
-                sound.SoundLocation = ofd.FileName;
-                _TimePoint.Tag = ofd.FileName;
+                TimePoint.Tag = ofd.FileName;
                 OnPropertyChanged(nameof(SoundLocation));
             }
         }

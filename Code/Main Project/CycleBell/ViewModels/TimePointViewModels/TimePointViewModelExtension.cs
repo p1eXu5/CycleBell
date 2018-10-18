@@ -31,6 +31,7 @@ namespace CycleBell.ViewModels.TimePointViewModels
             foreach (var timePointViewModel in timePointViewModels) {
 
                 timePointViewModel.IsEnabled = true;
+                timePointViewModel.IsActive = false;
             }
 
             return timePointViewModels;

@@ -1,11 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.IO;
-using System.Linq;
 using System.Media;
 using System.Windows.Input;
-using System.Windows.Navigation;
 using CycleBell.Base;
 using CycleBellLibrary.Models;
 using Microsoft.Win32;
@@ -22,11 +18,10 @@ namespace CycleBell.ViewModels.TimePointViewModels
 
         #region Fields
 
-        protected readonly TimePoint _TimePoint;
+        private readonly TimePoint _timePoint;
+        private bool _isAbsolute;
 
-        protected SoundPlayer _SoundPlayer = new SoundPlayer();
-        protected bool _MuteFlag = false;
-        protected bool _isAbsolute;
+        private bool _muteFlag;
 
         private IPresetViewModel _presetViewModel;
         
@@ -37,13 +32,13 @@ namespace CycleBell.ViewModels.TimePointViewModels
 
         public TimePointViewModel(TimePoint timePoint, IPresetViewModel presetViewModel) : base(timePoint.Id, timePoint.LoopNumber, presetViewModel)
         {
-            _TimePoint = timePoint ?? throw new ArgumentNullException();
+            _timePoint = timePoint ?? throw new ArgumentNullException();
             _presetViewModel = presetViewModel ?? throw new ArgumentNullException();
 
-            if (_TimePoint.Tag is string str) {
+            if (_timePoint.Tag is string str) {
 
                 if (String.IsNullOrWhiteSpace (str) || !File.Exists (str))
-                    _TimePoint.Tag = DefaultSoundLocation;
+                    _timePoint.Tag = DefaultSoundLocation;
                 else {
                     _PresetViewModel.UpdateSoundBank (this);
                 }
@@ -56,13 +51,13 @@ namespace CycleBell.ViewModels.TimePointViewModels
 
         #region TimePointViewModelBase Overrides
 
-        public override int Id => _TimePoint.Id;
+        public override int Id => _timePoint.Id;
 
         public override byte LoopNumber
         {
-            get => _TimePoint.LoopNumber;
+            get => _timePoint.LoopNumber;
             set {
-                _TimePoint.LoopNumber = value;
+                _timePoint.LoopNumber = value;
                 OnPropertyChanged();
             }
         }
@@ -72,16 +67,16 @@ namespace CycleBell.ViewModels.TimePointViewModels
         /// <summary>
         /// Gets TimePoint
         /// </summary>
-        public override TimePoint TimePoint => _TimePoint;
+        public override TimePoint TimePoint => _timePoint;
 
         /// <summary>
         /// SelectedPresetName of TimePoint
         /// </summary>
         public virtual string Name
         {
-            get => _TimePoint.Name;
+            get => _timePoint.Name;
             set {
-                _TimePoint.Name = value;
+                _timePoint.Name = value;
                 OnPropertyChanged();
             } 
         }
@@ -93,14 +88,14 @@ namespace CycleBell.ViewModels.TimePointViewModels
         {
             get {
                 if (IsAbsolute) {
-                    return  _TimePoint.GetAbsoluteTime();
+                    return  _timePoint.GetAbsoluteTime();
                 }
                 else {
-                    return _TimePoint.GetRelativeTime();
+                    return _timePoint.GetRelativeTime();
                 }
             } 
             set {
-                _TimePoint.Time = value;
+                _timePoint.Time = value;
 
                 OnPropertyChanged();
             }
@@ -109,13 +104,13 @@ namespace CycleBell.ViewModels.TimePointViewModels
         /// <summary>
         /// Gets TimePointTime
         /// </summary>
-        public TimePointType TimePointType => _TimePoint.TimePointType;
+        public TimePointType TimePointType => _timePoint.TimePointType;
 
         public bool MuteFlag
         {
-            get => _MuteFlag;
+            get => _muteFlag;
             set {
-                _MuteFlag = value;
+                _muteFlag = value;
                 OnPropertyChanged ();
             }
         }
@@ -133,8 +128,6 @@ namespace CycleBell.ViewModels.TimePointViewModels
             }
         }
 
-        
-
         #endregion
 
         #region Commands
@@ -143,12 +136,7 @@ namespace CycleBell.ViewModels.TimePointViewModels
         public ICommand MuteToggleCommand => new ActionCommand (MuteToggle);
         public ICommand AddSoundCommand => new ActionCommand (AddSound);
 
-        
-
         #endregion
-
-        
-
 
         #region Methods
 
@@ -160,7 +148,7 @@ namespace CycleBell.ViewModels.TimePointViewModels
         /// <param name="o"></param>
         private void RemoveTimePoint(object o)
         {
-            _PresetViewModel.RemoveTimePoint (_TimePoint);
+            _PresetViewModel.RemoveTimePoint (_timePoint);
         }
 
         private void MuteToggle (object o)
@@ -168,29 +156,18 @@ namespace CycleBell.ViewModels.TimePointViewModels
             MuteFlag = (MuteFlag != true);
         }
 
-
-        private void Ring (object o)
-        {
-            _SoundPlayer.Play();
-        }
-        private bool CanRing (object o)
-        {
-            return (_SoundPlayer != null) && !MuteFlag;
-        }
-
         private void AddSound (object o)
         {
-            OpenWavFile (_SoundPlayer);
+            OpenWavFile ();
         }
 
-        protected virtual void OpenWavFile(SoundPlayer sound)
+        protected virtual void OpenWavFile()
         {
             OpenFileDialog ofd = new OpenFileDialog { Filter = "Waveform Audio File Format|*.wav" };
 
             if (ofd.ShowDialog() == true) {
 
-                sound.SoundLocation = ofd.FileName;
-                _TimePoint.Tag = ofd.FileName;
+                _timePoint.Tag = ofd.FileName;
                 OnPropertyChanged(nameof(SoundLocation));
 
                 _PresetViewModel.UpdateSoundBank (this);

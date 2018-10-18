@@ -105,6 +105,23 @@
     </DataTemplate>
 
 
+
+    <Storyboard x:Key="canim_Deactivate">
+        <ColorAnimation Storyboard.TargetProperty="(Control.Foreground).(LinearGradientBrush.GradientStops)[0].(GradientStop.Color)" 
+                        To="{StaticResource col_TopDisableTime}" Duration="0:0:.2" />
+        <ColorAnimation Storyboard.TargetProperty="(Control.Foreground).(LinearGradientBrush.GradientStops)[1].(GradientStop.Color)" 
+                        To="{StaticResource col_BottomDisableTime}" Duration="0:0:.2" />
+    </Storyboard>
+
+    <Storyboard x:Key="canim_Activate">
+        <ColorAnimation Storyboard.TargetProperty="(Control.Foreground).(LinearGradientBrush.GradientStops)[0].(GradientStop.Color)" 
+                        To="{StaticResource col_TopForeground}" Duration="0:0:.2" />
+        <ColorAnimation Storyboard.TargetProperty="(Control.Foreground).(LinearGradientBrush.GradientStops)[1].(GradientStop.Color)" 
+                        To="{StaticResource col_BottomForeground}" Duration="0:0:.2" />
+
+    </Storyboard>
+
+
     <!-- TimePointViewModel --> 
     <DataTemplate x:Key="datatempl_TimePointViewModel" >
         <Grid >
@@ -220,30 +237,40 @@
                         <Style TargetType="ToggleButton" BasedOn="{StaticResource style_TimeToggleButton}">
                             
                             <Style.Triggers>
-                                <DataTrigger Binding="{Binding IsEnabled}" Value="false">
+                                <DataTrigger Binding="{Binding IsActive}" Value="True">
                                     <DataTrigger.EnterActions>
-                                        <BeginStoryboard>
-                                            <Storyboard>
-                                                <ColorAnimation Storyboard.TargetProperty="(Control.Foreground).(LinearGradientBrush.GradientStops)[0].(GradientStop.Color)" 
-                                                                To="{StaticResource col_TopDisableTime}" Duration="0:0:.2" />
-                                                <ColorAnimation Storyboard.TargetProperty="(Control.Foreground).(LinearGradientBrush.GradientStops)[1].(GradientStop.Color)" 
-                                                                To="{StaticResource col_BottomDisableTime}" Duration="0:0:.2" />
-
-                                            </Storyboard>
-                                        </BeginStoryboard>
+                                        <BeginStoryboard Storyboard="{StaticResource canim_Activate}" />
                                     </DataTrigger.EnterActions>
                                     <DataTrigger.ExitActions>
-                                        <BeginStoryboard>
-                                            <Storyboard>
-                                                <ColorAnimation Storyboard.TargetProperty="(Control.Foreground).(LinearGradientBrush.GradientStops)[0].(GradientStop.Color)" 
-                                                                To="{StaticResource col_TopForeground}" Duration="0:0:.2" />
-                                                <ColorAnimation Storyboard.TargetProperty="(Control.Foreground).(LinearGradientBrush.GradientStops)[1].(GradientStop.Color)" 
-                                                                To="{StaticResource col_BottomForeground}" Duration="0:0:.2" />
-
-                                            </Storyboard>
-                                        </BeginStoryboard>
+                                        <BeginStoryboard Storyboard="{StaticResource canim_Deactivate}" />
                                     </DataTrigger.ExitActions>
                                 </DataTrigger>
+
+                                <MultiDataTrigger>
+                                    <MultiDataTrigger.Conditions>
+                                        <Condition Binding="{Binding IsActive}" Value="False" />
+                                        <Condition Binding="{Binding IsEnabled}" Value="True" />
+                                    </MultiDataTrigger.Conditions>
+                                    <MultiDataTrigger.EnterActions>
+                                        <BeginStoryboard Storyboard="{StaticResource canim_Activate}" />
+                                    </MultiDataTrigger.EnterActions>
+                                    <MultiDataTrigger.ExitActions>
+                                        <BeginStoryboard Storyboard="{StaticResource canim_Deactivate}" />
+                                    </MultiDataTrigger.ExitActions>
+                                </MultiDataTrigger>
+
+                                <MultiDataTrigger>
+                                    <MultiDataTrigger.Conditions>
+                                        <Condition Binding="{Binding IsActive}" Value="False" />
+                                        <Condition Binding="{Binding IsEnabled}" Value="False" />
+                                    </MultiDataTrigger.Conditions>
+                                    <MultiDataTrigger.EnterActions>
+                                        <BeginStoryboard Storyboard="{StaticResource canim_Deactivate}" />
+                                    </MultiDataTrigger.EnterActions>
+                                    <MultiDataTrigger.ExitActions>
+                                        <BeginStoryboard Storyboard="{StaticResource canim_Activate}" />
+                                    </MultiDataTrigger.ExitActions>
+                                </MultiDataTrigger>
                             </Style.Triggers>
                         </Style>
                     </ToggleButton.Style>
@@ -279,30 +306,40 @@
                     <Style TargetType="ToggleButton" BasedOn="{StaticResource style_MuteToggleButton}">
 
                         <Style.Triggers>
-                            <DataTrigger Binding="{Binding IsEnabled}" Value="false">
+                            <DataTrigger Binding="{Binding IsActive}" Value="True">
                                 <DataTrigger.EnterActions>
-                                    <BeginStoryboard>
-                                        <Storyboard>
-                                            <ColorAnimation Storyboard.TargetProperty="(Control.Foreground).(LinearGradientBrush.GradientStops)[0].(GradientStop.Color)" 
-                                                                To="{StaticResource col_TopDisableTime}" Duration="0:0:.2" />
-                                            <ColorAnimation Storyboard.TargetProperty="(Control.Foreground).(LinearGradientBrush.GradientStops)[1].(GradientStop.Color)" 
-                                                                To="{StaticResource col_BottomDisableTime}" Duration="0:0:.2" />
-
-                                        </Storyboard>
-                                    </BeginStoryboard>
+                                    <BeginStoryboard Storyboard="{StaticResource canim_Activate}" />
                                 </DataTrigger.EnterActions>
                                 <DataTrigger.ExitActions>
-                                    <BeginStoryboard>
-                                        <Storyboard>
-                                            <ColorAnimation Storyboard.TargetProperty="(Control.Foreground).(LinearGradientBrush.GradientStops)[0].(GradientStop.Color)" 
-                                                                To="{StaticResource col_TopForeground}" Duration="0:0:.2" />
-                                            <ColorAnimation Storyboard.TargetProperty="(Control.Foreground).(LinearGradientBrush.GradientStops)[1].(GradientStop.Color)" 
-                                                                To="{StaticResource col_BottomForeground}" Duration="0:0:.2" />
-
-                                        </Storyboard>
-                                    </BeginStoryboard>
+                                    <BeginStoryboard Storyboard="{StaticResource canim_Deactivate}" />
                                 </DataTrigger.ExitActions>
                             </DataTrigger>
+
+                            <MultiDataTrigger>
+                                <MultiDataTrigger.Conditions>
+                                    <Condition Binding="{Binding IsActive}" Value="False" />
+                                    <Condition Binding="{Binding IsEnabled}" Value="True" />
+                                </MultiDataTrigger.Conditions>
+                                <MultiDataTrigger.EnterActions>
+                                    <BeginStoryboard Storyboard="{StaticResource canim_Activate}" />
+                                </MultiDataTrigger.EnterActions>
+                                <MultiDataTrigger.ExitActions>
+                                    <BeginStoryboard Storyboard="{StaticResource canim_Deactivate}" />
+                                </MultiDataTrigger.ExitActions>
+                            </MultiDataTrigger>
+
+                            <MultiDataTrigger>
+                                <MultiDataTrigger.Conditions>
+                                    <Condition Binding="{Binding IsActive}" Value="False" />
+                                    <Condition Binding="{Binding IsEnabled}" Value="False" />
+                                </MultiDataTrigger.Conditions>
+                                <MultiDataTrigger.EnterActions>
+                                    <BeginStoryboard Storyboard="{StaticResource canim_Deactivate}" />
+                                </MultiDataTrigger.EnterActions>
+                                <MultiDataTrigger.ExitActions>
+                                    <BeginStoryboard Storyboard="{StaticResource canim_Activate}" />
+                                </MultiDataTrigger.ExitActions>
+                            </MultiDataTrigger>
                         </Style.Triggers>
                     </Style>
                 </ToggleButton.Style>
