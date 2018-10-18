@@ -60,7 +60,9 @@ namespace CycleBell.ViewModels
         public IDictionary<int, SoundPlayer> SoundMap { get; } = new Dictionary<int, SoundPlayer>();
         private SoundPlayer _lastSoundPlayer;
 
-        private TimePointViewModelBase _activeTimePointViewModelBase = null;
+        private TimePointViewModelBase _activeTimePointViewModelBase;
+
+        private bool _focusStartTime;
 
         #endregion
 
@@ -177,7 +179,7 @@ namespace CycleBell.ViewModels
             }
         }
 
-        public bool IsNewPreset => _preset.PresetName == Preset.PresetName;
+        public bool IsNewPreset => _preset.PresetName == Preset.DefaultName;
 
         public bool IsNoTimePoints => TimePointVmCollection.Count < 1;
         public bool IsTimePoints => TimePointVmCollection.Count > 0;
@@ -200,6 +202,14 @@ namespace CycleBell.ViewModels
             }
         }
 
+        public bool FocusStartTime
+        {
+            get => _focusStartTime;
+            set {
+                _focusStartTime = value;
+                OnPropertyChanged();
+            }
+        }
 
         #endregion
 

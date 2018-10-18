@@ -118,11 +118,12 @@ namespace CycleBell.ViewModels.TimePointViewModels
 
         public string SoundLocation => Path.GetFileName((String)TimePoint.Tag);
 
-        public bool IsAbsolute
+        public virtual bool IsAbsolute
         {
             get => _isAbsolute;
             set {
                 _isAbsolute = value;
+
                 OnPropertyChanged();
                 OnPropertyChanged(nameof(Time));
             }

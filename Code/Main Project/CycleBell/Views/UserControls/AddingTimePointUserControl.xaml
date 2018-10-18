@@ -155,7 +155,7 @@
 
         <!-- is absolute -->
         <ToggleButton Grid.Column="2" Grid.Row="0"
-                      IsChecked="{Binding IsAbsolute}"
+                      IsChecked="{Binding IsAbsolute, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                       KeyboardNavigation.IsTabStop="False"
                       ToolTip="Indicates is time Absolute (when chacked) or Relative"
                       >

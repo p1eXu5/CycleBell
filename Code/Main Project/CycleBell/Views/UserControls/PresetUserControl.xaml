@@ -57,6 +57,7 @@
                         >
                 <controls:TimerBox x:Name="timer_Box" 
                                    TabIndex="2"
+                                   at:AttachedPropertyFactory.IsFocused="{Binding FocusStartTime}"
                                    Text="{Binding StartTime, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged,
                                                   Converter={StaticResource conv_TimeSpanToString}}"
                                    Foreground="{Binding Foreground, RelativeSource={RelativeSource FindAncestor, AncestorType=Control}}"

@@ -105,6 +105,9 @@ namespace CycleBell.ViewModels
                 OnPropertyChanged(nameof(IsInfiniteLoop));
                 OnPropertyChanged(nameof(HasNoName));
                 OnPropertyChanged(nameof(IsSelectedPreset));
+                OnPropertyChanged(nameof(IsNewPreset));
+                ((ActionCommand)ExportPresetsCommand).RaiseCanExecuteChanged();
+                ((ActionCommand)ClearPresetsCommand).RaiseCanExecuteChanged();
                 ((ActionCommand)RemoveSelectedPresetCommand).RaiseCanExecuteChanged();
             }
         }
@@ -113,9 +116,7 @@ namespace CycleBell.ViewModels
         {
             get => _selectedPreset?.Name;
             set {
-                if (value != "")
-                    _manager.RenamePreset (_selectedPreset?.Preset, value);
-
+                _manager.RenamePreset (_selectedPreset?.Preset, value);
                 OnPropertyChanged ();
             }
         }
@@ -248,28 +249,25 @@ namespace CycleBell.ViewModels
 
                 PresetViewModelCollection.Add(new PresetViewModel((Preset)e.NewItems[0], this));
                 SelectedPreset = PresetViewModelCollection[PresetViewModelCollection.Count - 1];
-
-                //ConnectHandlers(SelectedPreset);
             }
             else if (e?.OldItems?[0] != null) {
 
                 var deletingPresetVm = PresetViewModelCollection.First(pvm => pvm.Preset.Equals((Preset)e.OldItems[0]));
 
-                //DisconnectHandlers(SelectedPreset);
-
+                var index = PresetViewModelCollection.IndexOf(_selectedPreset);
                 PresetViewModelCollection.Remove(deletingPresetVm);
+                if (index > 0) {
+                    SelectedPreset = PresetViewModelCollection[index - 1];
+                }
+                else {
+                    SelectedPreset = PresetViewModelCollection[0];
+                }
             }
             else if (e != null && e.OldItems == null && e.NewItems == null) {
 
-                //DisconnectHandlers(SelectedPreset);
                 PresetViewModelCollection.Clear();
                 _prevSelectedPreset = null;
             }
-
-            OnPropertyChanged(nameof(SelectedPreset));
-            OnPropertyChanged(nameof(IsNewPreset));
-            ((ActionCommand)ExportPresetsCommand).RaiseCanExecuteChanged();
-            ((ActionCommand)ClearPresetsCommand).RaiseCanExecuteChanged();
         }
         
         private void OnCantCreateNewPresetEventHandler(object sender, CantCreateNewPreetEventArgs args)
@@ -434,6 +432,9 @@ namespace CycleBell.ViewModels
 
             // Change value for call PropertyChangedCallback in attached property
             IsFocused ^= true;
+
+            if (_selectedPreset != null)
+                _selectedPreset.FocusStartTime = true;
         }
         private void PresetLostFocus(object obj) => OnPropertyChanged(nameof(HasNoName));
 

@@ -48,6 +48,27 @@ namespace CycleBell.ViewModels.TimePointViewModels
             }
         }
 
+        public override bool IsAbsolute
+        {
+            get => _isAbsolute;
+            set {
+                _isAbsolute = value;
+
+                if (_isAbsolute) {
+                    TimePoint.ChangeTimePointType(TimePointType.Absolute);
+                }
+                else {
+                    TimePoint.ChangeTimePointType(TimePointType.Relative);
+                }
+
+                FocusTime ^= true;
+
+                OnPropertyChanged();
+                OnPropertyChanged(nameof(Time));
+                OnPropertyChanged(nameof(NoSetTime));
+            }
+        }
+
         public bool HasNoName => String.IsNullOrWhiteSpace(Name);
         public bool NoSetTime => Time == TimeSpan.Zero && TimePointType == TimePointType.Relative;
 
@@ -88,6 +109,7 @@ namespace CycleBell.ViewModels.TimePointViewModels
         private void AddTimePoint(object o)
         {
             _PresetViewModel.AddTimePointCommand.Execute(null);
+            IsAbsolute = false; 
             FocusName ^= true;
         }
 

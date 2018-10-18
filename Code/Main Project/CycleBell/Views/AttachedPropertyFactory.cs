@@ -132,8 +132,8 @@ namespace CycleBell.Views
                 if (!elem.IsFocused)
                     elem.Focus();
 
-                if (elem is TimerBox tb)
-                    tb.CaretIndex = 2;
+                //if (elem is TimerBox tb)
+                //    tb.CaretIndex = 2;
             }
         }
 
