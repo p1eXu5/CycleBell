@@ -382,15 +382,15 @@ namespace CycleBell.ViewModels
 
         private void UpdateTimePointViewModels(TimePoint nextTimePoint)
         {
+            if (_activeTimePointViewModelBase != null)
+                _activeTimePointViewModelBase.IsActive = false;
+
             if (nextTimePoint.Name == _mainViewModel.StartTimeName) {
                 if (TimePointVmCollection.Count > 0) {
                     TimePointVmCollection.DisableAll();
                 }
             }
             else {
-                if (_activeTimePointViewModelBase != null)
-                    _activeTimePointViewModelBase.IsActive = false;
-
                 _activeTimePointViewModelBase = TimePointVmCollection.Activate(tpvmb => tpvmb.Equals(nextTimePoint));
             }
         }
@@ -437,8 +437,7 @@ namespace CycleBell.ViewModels
             if (_activeTimePointViewModelBase != null)
                 _activeTimePointViewModelBase.IsActive = false;
 
-            if (!Preset.IsInfiniteLoop)
-                TimePointVmCollection.EnableAll();
+            TimePointVmCollection.EnableAll();
         }
 
         // Checkers:

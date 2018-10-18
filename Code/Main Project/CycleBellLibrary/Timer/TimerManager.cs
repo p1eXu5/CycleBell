@@ -155,6 +155,7 @@ namespace CycleBellLibrary.Timer
                 
             _timer.Change (Timeout.Infinite, Timeout.Infinite);
             IsPaused = true;
+            OnTimerPause();
         }
 
         /// <summary>
@@ -268,6 +269,8 @@ namespace CycleBellLibrary.Timer
 
             if (currentTime > nextTime) {
 
+                //_timer.Change(Timeout.Infinite, Timeout.Infinite);
+
                 if (_deltaTime < TimeSpan.Zero) {
 
                     // Первый запуск или после смены NextTimePoint
@@ -279,6 +282,8 @@ namespace CycleBellLibrary.Timer
 
                         // Точка входа в ChangeTimePoint
                         ChangeTimePoint(ref currentTime);
+
+                        //_timer.Change(GetDueTime(currentTime.Milliseconds), Timeout.Infinite);
                         return;
                     }
                 }
@@ -294,6 +299,7 @@ namespace CycleBellLibrary.Timer
                     _deltaTime = deltaTime;
                 }
 
+                //_timer.Change(GetDueTime(currentTime.Milliseconds), Timeout.Infinite);
                 return;
             }
 
@@ -327,6 +333,9 @@ namespace CycleBellLibrary.Timer
                     Stop();
                     return;
                 }
+
+                _deltaTime = -TimeSpan.FromHours(1);
+                _prevQueueElement = (currentTime, new TimePoint(TimeSpan.FromMinutes(-1), TimePointType.Absolute));
 
                 OnChangeTimePoint(_prevQueueElement.prevTimePoint, _queue.Peek().nextTimePoint, LastTime(currentTime, _queue.Peek().Item1));
                 return;
