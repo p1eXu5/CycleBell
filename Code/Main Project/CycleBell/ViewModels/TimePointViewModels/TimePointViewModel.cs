@@ -26,7 +26,10 @@ namespace CycleBell.ViewModels.TimePointViewModels
 
         protected SoundPlayer _SoundPlayer = new SoundPlayer();
         protected bool _MuteFlag = false;
-        protected bool _isAbsolute; 
+        protected bool _isAbsolute;
+
+        private IPresetViewModel _presetViewModel;
+        
 
         #endregion
 
@@ -34,7 +37,8 @@ namespace CycleBell.ViewModels.TimePointViewModels
 
         public TimePointViewModel(TimePoint timePoint, IPresetViewModel presetViewModel) : base(timePoint.Id, timePoint.LoopNumber, presetViewModel)
         {
-            _TimePoint = timePoint;
+            _TimePoint = timePoint ?? throw new ArgumentNullException();
+            _presetViewModel = presetViewModel ?? throw new ArgumentNullException();
 
             if (_TimePoint.Tag is string str) {
 
@@ -129,6 +133,8 @@ namespace CycleBell.ViewModels.TimePointViewModels
             }
         }
 
+        
+
         #endregion
 
         #region Commands
@@ -137,7 +143,12 @@ namespace CycleBell.ViewModels.TimePointViewModels
         public ICommand MuteToggleCommand => new ActionCommand (MuteToggle);
         public ICommand AddSoundCommand => new ActionCommand (AddSound);
 
+        
+
         #endregion
+
+        
+
 
         #region Methods
 

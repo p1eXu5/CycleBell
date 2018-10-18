@@ -209,7 +209,7 @@
                               IsEditable="True"
                               MaxDropDownHeight="90"
                               IsTextSearchEnabled="False"
-                              local:AttachedPropertyFactory.IsPresetNameFocused="{Binding IsFocused}"
+                              local:AttachedPropertyFactory.MoveFocusRight="{Binding IsFocused}"
                               Text="{Binding SelectedPresetName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                               >
 

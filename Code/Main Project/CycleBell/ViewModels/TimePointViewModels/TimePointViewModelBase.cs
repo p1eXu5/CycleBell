@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Windows.Input;
 using CycleBell.Annotations;
 using CycleBell.Base;
 using CycleBellLibrary.Models;
@@ -16,6 +17,7 @@ namespace CycleBell.ViewModels.TimePointViewModels
 
         private bool _isEnabled = true;
         private bool _isActive = false;
+        private bool _moveFocusNext;
 
         #endregion
 
@@ -27,9 +29,13 @@ namespace CycleBell.ViewModels.TimePointViewModels
 
             _id = id;
             _loopNumber = loopNumber;
+
+            TimePointNameInTemplateReturnCommand = new ActionCommand(TimePointNameReturn);
         }
 
         #endregion
+
+        public ICommand TimePointNameInTemplateReturnCommand { get; }
 
         #region Properties
 
@@ -70,7 +76,21 @@ namespace CycleBell.ViewModels.TimePointViewModels
             }
         }
 
+        public bool MoveFocusNext
+        {
+            get => _moveFocusNext;
+            set {
+                _moveFocusNext = value;
+                OnPropertyChanged();
+            }
+        }
+
         #endregion
+
+        private void TimePointNameReturn(object o)
+        {
+            MoveFocusNext ^= true;
+        }
 
         #region Operators
 

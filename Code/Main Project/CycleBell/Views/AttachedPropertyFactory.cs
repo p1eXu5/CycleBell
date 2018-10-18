@@ -96,20 +96,40 @@ namespace CycleBell.Views
 
         #endregion
 
-        #region IsFocused
+        #region MoveFocusRight
 
-        public static readonly DependencyProperty IsPresetNameFocusedProperty = DependencyProperty.RegisterAttached("IsPresetNameFocused", typeof(bool), typeof(AttachedPropertyFactory)
+        public static readonly DependencyProperty MoveFocusRightProperty = DependencyProperty.RegisterAttached("MoveFocusRight", typeof(bool), typeof(AttachedPropertyFactory)
             , new FrameworkPropertyMetadata(false, ChangeFocus) {BindsTwoWayByDefault = true});
 
-        public static void SetIsPresetNameFocused(DependencyObject d, bool value) => d.SetValue(IsPresetNameFocusedProperty, value);
+        public static void SetMoveFocusRight(DependencyObject d, bool value) => d.SetValue(MoveFocusRightProperty, value);
 
-        public static bool GetIsPresetNameFocused(DependencyObject d) => (bool)d.GetValue(IsPresetNameFocusedProperty);
+        public static bool GetMoveFocusRight(DependencyObject d) => (bool)d.GetValue(MoveFocusRightProperty);
 
         public static void ChangeFocus (DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
             if (d is UIElement elem) {
 
                 elem.MoveFocus (new TraversalRequest (FocusNavigationDirection.Right));
+                //elem.Focus();
+            }
+        }
+
+        #endregion
+
+        #region MoveFocusNext
+
+        public static readonly DependencyProperty MoveFocusNextProperty = DependencyProperty.RegisterAttached("MoveFocusNext", typeof(bool), typeof(AttachedPropertyFactory)
+                                                                                                               , new FrameworkPropertyMetadata(false, MoveFocusNext) { BindsTwoWayByDefault = true });
+
+        public static void SetMoveFocusNext(DependencyObject d, bool value) => d.SetValue(MoveFocusNextProperty, value);
+
+        public static bool GetMoveFocusNext(DependencyObject d) => (bool)d.GetValue(MoveFocusNextProperty);
+
+        public static void MoveFocusNext(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            if (d is UIElement elem) {
+
+                elem.MoveFocus(new TraversalRequest(FocusNavigationDirection.Next));
                 //elem.Focus();
             }
         }
