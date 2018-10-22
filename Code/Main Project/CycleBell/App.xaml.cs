@@ -49,7 +49,6 @@ namespace CycleBell
 
                 // ITimerManager:
                 var manager = new CycleBellManager ("test.xml", new PresetCollectionManager(), TimerManager.Instance);
-                ;
 
                 container.RegisterInstance<ICycleBellManager> (manager);
 

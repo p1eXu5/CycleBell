@@ -36,6 +36,7 @@ namespace CycleBellLibrary.Repository
                     reader.Read();
 
                     // <StartTime> (ReadElementContentAs... - читает и перекидывает на следующий элемент)
+
                     preset.StartTime = TimeSpan.Parse(reader.ReadElementContentAsString());
                     // </StartrTime>
 
@@ -45,37 +46,53 @@ namespace CycleBellLibrary.Repository
                     // </InfiniteLoop>
 
                     // <Tag>
-                    preset.Tag = reader.ReadElementContentAsString();
+                    if (!reader.IsEmptyElement) {
+                        preset.Tag = reader.ReadElementContentAsString();
+                    }
+                    else {
+                        reader.Read();
+                    }
                     // </Tag
 
-                    reader.ReadStartElement("TimePointCollection");
+                    if (!reader.IsEmptyElement) {
 
-                    // <TimePointCollection>
-                    while (reader.NodeType != XmlNodeType.EndElement) {
+                        reader.ReadStartElement("TimePointCollection");
 
-                        TimePoint tp = new TimePoint();
-                        tp.Name = reader.GetAttribute("name");
-                        reader.Read();
-                        tp.Time = TimeSpan.Parse(reader.ReadElementContentAsString());
-                        tp.ChangeTimePointType((TimePointType)(reader.ReadElementContentAsInt()));
-                        tp.LoopNumber = (byte)(reader.ReadElementContentAsInt());
+                        // <TimePointCollection>
+                        while (reader.NodeType != XmlNodeType.EndElement) {
 
-                        if (reader.IsEmptyElement)
+                            TimePoint tp = new TimePoint();
+                            tp.Name = reader.GetAttribute("name");
                             reader.Read();
-                        else {
-                            tp.Tag = reader.ReadElementContentAsString();
+                            tp.Time = TimeSpan.Parse(reader.ReadElementContentAsString());
+                            tp.ChangeTimePointType((TimePointType) (reader.ReadElementContentAsInt()));
+                            tp.LoopNumber = (byte) (reader.ReadElementContentAsInt());
+
+                            if (reader.IsEmptyElement)
+                                reader.Read();
+                            else {
+                                tp.Tag = reader.ReadElementContentAsString();
+                            }
+
+                            reader.ReadEndElement();
+
+                            preset.AddTimePoint(tp);
                         }
 
+                        // </TimePointCollection>
                         reader.ReadEndElement();
-
-                        preset.AddTimePoint(tp);
+                    }
+                    else {
+                        reader.Read();
                     }
 
-                    // </TimePointCollection>
-                    reader.ReadEndElement();
-
                     // <TimerLoops>
-                    preset.TimerLoops = (TimerLoopSortedDictionary) timersCyclesSerializer.Deserialize(reader);
+                    if (!reader.IsEmptyElement) {
+                        preset.TimerLoops = (TimerLoopSortedDictionary) timersCyclesSerializer.Deserialize(reader);
+                    }
+                    else {
+                        reader.Read();
+                    }
                     // </TimerLoops>
 
                     // </Preset>
