@@ -270,6 +270,7 @@ namespace CycleBell.ViewModels
             }
         }
         
+        // OnCan'tCreateNewPreset event handler
         private void OnCantCreateNewPresetEventHandler(object sender, CantCreateNewPreetEventArgs args)
         {
             if (args.CantCreateNewPresetReason == CantCreateNewPresetReasons.EmptyPresetNotModified) {
