@@ -4,6 +4,7 @@ using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Linq;
+using System.Security.Cryptography;
 using CycleBellLibrary.Models;
 
 namespace CycleBellLibrary.Repository
@@ -173,6 +174,34 @@ namespace CycleBellLibrary.Repository
                 UpdateTimePointBaseTimes();
 
             return timePoint;
+        }
+
+        public void AddTimePoints(IEnumerable<TimePoint> timePoints)
+        {
+            if (timePoints == null) {
+                throw new ArgumentNullException(nameof(timePoints), "timePoints can't be null");
+            }
+
+            var tmp = timePoints.ToArray();
+
+            if (!tmp.Any()) {
+                return;
+            }
+
+            var autoUpdt = AutoUpdateTimePointBaseTimes;
+            if (autoUpdt) {
+                AutoUpdateTimePointBaseTimes = false;
+            }
+
+            foreach (var timePoint in tmp) {
+                AddTimePoint(timePoint);
+            }
+
+            if (autoUpdt) {
+                AutoUpdateTimePointBaseTimes = true;
+                UpdateTimePointBaseTimes();
+            }
+
         }
 
         public virtual void PreAddTimePoint (TimePoint timePoint) { timePoint.BaseTime = null; }

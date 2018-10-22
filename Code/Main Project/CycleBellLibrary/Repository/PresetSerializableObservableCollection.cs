@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Xml;
 using System.Xml.Schema;
@@ -58,6 +59,8 @@ namespace CycleBellLibrary.Repository
 
                         reader.ReadStartElement("TimePointCollection");
 
+                        var timePoints = new List<TimePoint>();
+
                         // <TimePointCollection>
                         while (reader.NodeType != XmlNodeType.EndElement) {
 
@@ -76,11 +79,13 @@ namespace CycleBellLibrary.Repository
 
                             reader.ReadEndElement();
 
-                            preset.AddTimePoint(tp);
+                            timePoints.Add(tp);
                         }
 
                         // </TimePointCollection>
                         reader.ReadEndElement();
+
+                        preset.AddTimePoints(timePoints);
                     }
                     else {
                         reader.Read();

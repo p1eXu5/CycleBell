@@ -43,10 +43,6 @@ namespace CycleBell.ViewModels.TimePointViewModels
                     _PresetViewModel.UpdateSoundBank (this);
                 }
             }
-
-            if (_timePoint.TimePointType == TimePointType.Absolute) {
-                _isAbsolute = true;
-            }
         }
 
         #endregion
@@ -97,12 +93,9 @@ namespace CycleBell.ViewModels.TimePointViewModels
                 else {
                     return _timePoint.GetRelativeTime();
                 }
-            } 
-            set {
-                _timePoint.Time = value;
-
-                OnPropertyChanged();
             }
+            // ReSharper disable once ValueParameterNotUsed
+            set { }
         }
 
         /// <summary>

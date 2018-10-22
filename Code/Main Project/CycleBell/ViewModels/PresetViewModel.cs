@@ -329,7 +329,7 @@ namespace CycleBell.ViewModels
                 timePoint.Name = timePoint.GetDefaultTimePointName();
 
             _preset.AddTimePoint(timePoint);
-            //timePoint.ChangeTimePointType(TimePointType.Relative);
+            timePoint.ChangeTimePointType(TimePointType.Relative);
 
             ResetAddingTimePoint();
         }

@@ -131,7 +131,7 @@
                 <!-- 1: marker -->
                 <ColumnDefinition  Width="20"/>
                 <!-- 2: name -->
-                <ColumnDefinition Width="*" MaxWidth="250" MinWidth="100"/>
+                <ColumnDefinition Width="125" />
                 <!-- 3: time -->
                 <ColumnDefinition Width="96"/>
                 <!-- 4: mute -->
@@ -196,14 +196,14 @@
 
             </Path>
 
-            <FrameworkElement x:Name="element" Grid.Column="2" Grid.Row="0" HorizontalAlignment="Stretch"/>
             <!-- Name -->
-            <StackPanel x:Name="container" Grid.Column="2" Grid.Row="0" VerticalAlignment="Bottom" 
-                        Width="{Binding ElementName=element, Path=Width}">
+            <StackPanel Grid.Column="2" Grid.Row="0" VerticalAlignment="Bottom" CanHorizontallyScroll="False" ClipToBounds="True"
+                        >
                 <TextBox x:Name="m_pointName"
+                         MaxLength="15"
                          MaxLines="1"
                          Focusable="True"
-                         TextWrapping="WrapWithOverflow" 
+                         TextWrapping="Wrap" 
                          KeyboardNavigation.IsTabStop="False"
                          at:AttachedPropertyFactory.MoveFocusNext="{Binding MoveFocusNext}"
                          VerticalAlignment="Bottom"
@@ -224,7 +224,6 @@
                         />
                     </TextBox.InputBindings>
                 </TextBox>
-
                 <!-- for focus after preset name renaming -->
                 <FrameworkElement Name="Dummy" Width="0" Focusable="True" />
             </StackPanel>
