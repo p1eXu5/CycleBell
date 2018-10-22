@@ -43,6 +43,10 @@ namespace CycleBell.ViewModels.TimePointViewModels
                     _PresetViewModel.UpdateSoundBank (this);
                 }
             }
+
+            if (_timePoint.TimePointType == TimePointType.Absolute) {
+                _isAbsolute = true;
+            }
         }
 
         #endregion
@@ -141,6 +145,8 @@ namespace CycleBell.ViewModels.TimePointViewModels
         #region Methods
 
         public static implicit operator TimePoint(TimePointViewModel instance) => instance.TimePoint;
+
+        internal void UpdateTime() => OnPropertyChanged(nameof(Time));
         
         /// <summary>
         /// For Button in TimePoint List

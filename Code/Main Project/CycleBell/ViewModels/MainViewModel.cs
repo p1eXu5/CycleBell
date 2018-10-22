@@ -472,7 +472,6 @@ namespace CycleBell.ViewModels
         {
             _timerManager.Stop();
         }
-        
 
         // ---- SwitchIsRingOnStartTime
         private void SwitchIsRingOnStartTime (object o)

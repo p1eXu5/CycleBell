@@ -134,6 +134,10 @@ namespace CycleBell.ViewModels
             set {
                 _preset.StartTime = value;
                 OnPropertyChanged();
+                //OnPropertyChanged(nameof(TimePointVmCollection));
+                foreach (var timePointViewModel in TimePointVmCollection.Where(t => t is TimePointViewModel).ToArray()) {
+                    ((TimePointViewModel)timePointViewModel).UpdateTime();
+                }
             }
         }
 
@@ -296,19 +300,6 @@ namespace CycleBell.ViewModels
             OnPropertyChanged (nameof(IsNoTimePoints));
         }
         
-        private void AddStarToName()
-        {
-            _name.Clear();
-
-            if (IsNewPreset) {
-                _name.Append(NewString);
-            }
-
-            _name.Append(StarString);
-
-            OnPropertyChanged(nameof(Name));
-        }
-
         private string GetPresetName(string presetName)
         {
             if (_preset.PresetName == Preset.DefaultName) {
@@ -338,7 +329,7 @@ namespace CycleBell.ViewModels
                 timePoint.Name = timePoint.GetDefaultTimePointName();
 
             _preset.AddTimePoint(timePoint);
-            timePoint.ChangeTimePointType(TimePointType.Relative);
+            //timePoint.ChangeTimePointType(TimePointType.Relative);
 
             ResetAddingTimePoint();
         }
