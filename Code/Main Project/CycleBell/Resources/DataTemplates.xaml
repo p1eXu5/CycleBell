@@ -18,9 +18,8 @@
     </Storyboard>
 
     <!-- BeginTimePointViewModel -->
-    <DataTemplate x:Key="datatempl_BeginTimePointViewModel" DataType="vm:BeginTimePointViewModel"
-                  >
-        <Grid SnapsToDevicePixels="True" ShowGridLines="False" Margin="5" 
+    <DataTemplate x:Key="datatempl_BeginTimePointViewModel" DataType="vm:BeginTimePointViewModel">
+        <Grid SnapsToDevicePixels="True" ShowGridLines="False" Margin="5,0" 
               TextElement.FontStyle="Normal"
               IsEnabled="{Binding IsEnabled}"
               Focusable="False"
@@ -124,21 +123,25 @@
 
     <!-- TimePointViewModel --> 
     <DataTemplate x:Key="datatempl_TimePointViewModel" >
-        <Grid >
+        <Grid ShowGridLines="False">
             <!--<ToggleButton Width="200" Height="200" Content="mute" Style="{x:Null}" />-->
             <Grid.ColumnDefinitions>
-                <!-- 0: marker -->
-                <ColumnDefinition  Width="*"/>
-                <!-- 1: name -->
-                <ColumnDefinition Width="Auto"/>
-                <!-- 2: time -->
+                <!-- 0: left border -->
+                <ColumnDefinition Width="0.05*" />
+                <!-- 1: marker -->
+                <ColumnDefinition  Width="20"/>
+                <!-- 2: name -->
+                <ColumnDefinition Width="*" MaxWidth="250" MinWidth="100"/>
+                <!-- 3: time -->
                 <ColumnDefinition Width="96"/>
-                <!-- 3: mute -->
+                <!-- 4: mute -->
                 <ColumnDefinition Width="42"/>
-                <!-- 4: sound -->
-                <ColumnDefinition Width="Auto"/>
-                <!-- 5: add -->
-                <ColumnDefinition Width="Auto"/>
+                <!-- 5: sound -->
+                <ColumnDefinition Width="46"/>
+                <!-- 6: add -->
+                <ColumnDefinition Width="56"/>
+                <!-- 7: right border -->
+                <ColumnDefinition Width="0.065*" />
             </Grid.ColumnDefinitions>
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/>
@@ -146,7 +149,7 @@
             </Grid.RowDefinitions>
 
             <!-- marker -->
-            <Path Grid.Column="0" Grid.Row="0"
+            <Path Grid.Column="1" Grid.Row="0"
               Fill="{DynamicResource brush_Marker}"
               Stroke="{DynamicResource brush_Tip}"
               StrokeThickness="1"
@@ -193,14 +196,19 @@
 
             </Path>
 
+            <FrameworkElement x:Name="element" Grid.Column="2" Grid.Row="0" HorizontalAlignment="Stretch"/>
             <!-- Name -->
-            <StackPanel Grid.Column="1" Grid.Row="0" VerticalAlignment="Bottom">
-                <TextBox x:Name="m_pointName" 
+            <StackPanel x:Name="container" Grid.Column="2" Grid.Row="0" VerticalAlignment="Bottom" 
+                        Width="{Binding ElementName=element, Path=Width}">
+                <TextBox x:Name="m_pointName"
+                         MaxLines="1"
                          Focusable="True"
+                         TextWrapping="WrapWithOverflow" 
                          KeyboardNavigation.IsTabStop="False"
                          at:AttachedPropertyFactory.MoveFocusNext="{Binding MoveFocusNext}"
                          VerticalAlignment="Bottom"
                          HorizontalAlignment="Right"
+                         HorizontalContentAlignment="Right"
                          Margin="0,0,5,0"
                          IsEnabled="{Binding IsEnabled}"
                          Text="{Binding Name, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
@@ -222,7 +230,7 @@
             </StackPanel>
 
             <!-- Time -->
-            <StackPanel Orientation="Horizontal" Grid.Column="2" Grid.Row="0" HorizontalAlignment="Center"
+            <StackPanel Orientation="Horizontal" Grid.Column="3" Grid.Row="0" HorizontalAlignment="Center"
                         Width="Auto">
                 <ToggleButton VerticalAlignment="Bottom"
                               VerticalContentAlignment="Bottom"
@@ -288,7 +296,7 @@
             </StackPanel>
 
             <!-- mute -->
-            <ToggleButton Grid.Column="3" Grid.Row="0"
+            <ToggleButton Grid.Column="4" Grid.Row="0"
                           VerticalAlignment="Bottom"
                           VerticalContentAlignment="Bottom"
                           IsEnabled="True"
@@ -347,7 +355,7 @@
 
             <!-- sound location -->
             <TextBlock x:Name="tbx_soundName"
-                       Grid.Column="2" Grid.ColumnSpan="2" Grid.Row="1"
+                       Grid.Column="3" Grid.ColumnSpan="2" Grid.Row="1"
                        Margin="20,0,0,0"
                        HorizontalAlignment="Right"
                        VerticalAlignment="Bottom"
@@ -364,7 +372,7 @@
             <!-- add sound -->
             <Button x:Name="btn_AddSoundButton"
                     IsEnabled="{Binding IsEnabled}"
-                    Grid.Column="4" Grid.Row="0" Grid.RowSpan="2"
+                    Grid.Column="5" Grid.Row="0" Grid.RowSpan="2"
                     Margin="16,5,0,0"
                     Width="30" Height="30"
                     VerticalAlignment="Center"
@@ -376,7 +384,7 @@
             </Button>
 
             <!-- del -->
-            <Button x:Name="btn_RemoveTimePoint" Grid.Column="5" Grid.Row="0" Grid.RowSpan="2"
+            <Button x:Name="btn_RemoveTimePoint" Grid.Column="6" Grid.Row="0" Grid.RowSpan="2"
                     IsEnabled="{Binding IsEnabled}"
                     Width="40" Height="30" Margin="10,5,10,0" 
                     Command="{Binding RemoveTimePointCommand}"
@@ -392,7 +400,7 @@
 
      <!--EndTimePointViewModel-->
     <DataTemplate x:Key="datatempl_EndTimePointViewModel" DataType="vm:EndTimePointViewModel">
-        <Grid SnapsToDevicePixels="True" Margin="5" Height="14">
+        <Grid SnapsToDevicePixels="True" Margin="5.0" Height="14">
             <Polyline Stroke="DimGray" Fill="{x:Null}" Stretch="Fill"
                       StrokeEndLineCap="Square" StrokeStartLineCap="Square"
                       Points="0,0 0,1 1,1 1,0" >

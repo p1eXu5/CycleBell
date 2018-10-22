@@ -38,14 +38,14 @@
             <!-- points list -->
             <RowDefinition Height="*"/>
             <!-- adding point -->
-            <RowDefinition Height="110"/>
+            <RowDefinition Height="90"/>
         </Grid.RowDefinitions>
 
         <!-- start time & upcoming time point -->
         <Grid Grid.Row="0" 
               TextElement.FontFamily="{StaticResource font_SuiGeneris}"
               SnapsToDevicePixels="True"
-              Margin="10,48,10,38"
+              Margin="10,38,10,18"
               >
             
             <!-- start time -->
@@ -236,6 +236,7 @@
                         <Setter Property="ScrollViewer.HorizontalScrollBarVisibility" Value="Auto" />
                         <Setter Property="BorderThickness" Value="0" />
                         <Setter Property="HorizontalAlignment" Value="Stretch" />
+                        <Setter Property="VerticalAlignment" Value="Stretch" />
                         <Setter Property="Margin" Value="20,0" />
                         <Setter Property="MinHeight" Value="110"></Setter>
                         <Setter Property="SelectionMode" Value="Single" />
@@ -277,7 +278,7 @@
         <!-- adding point -->
         <userControls:AddingTimePointUserControl Grid.Row="2"
                                                  VerticalAlignment="Center"
-                                                 Height="Auto" Width="Auto" Margin="20,40,20,20"
+                                                 Height="Auto" Width="Auto" Margin="20,10,20,0"
                                                  DataContext="{Binding AddingTimePoint}">
             <userControls:AddingTimePointUserControl.Style>
                 <Style TargetType="UserControl">
