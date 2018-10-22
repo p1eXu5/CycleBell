@@ -260,7 +260,7 @@ namespace CycleBell.ViewModels
                     SelectedPreset = PresetViewModelCollection[index - 1];
                 }
                 else {
-                    SelectedPreset = PresetViewModelCollection[0];
+                    SelectedPreset = PresetViewModelCollection.Count > 0 ? PresetViewModelCollection[0] : null;
                 }
             }
             else if (e != null && e.OldItems == null && e.NewItems == null) {
