@@ -8,11 +8,11 @@ using CycleBellLibrary.Repository;
 
 namespace CycleBellLibrary.Timer
 {
-    public class BaseTimeCalculator : IBaseTimeCalculator
+    public class TimerQueueCalculator : ITimerQueueCalculator
     {
-        private IStartTimeTimePointName _startTimeTimePointName;
+        private readonly IStartTimeTimePointName _startTimeTimePointName;
 
-        public BaseTimeCalculator(IStartTimeTimePointName startTimeTimePointName)
+        public TimerQueueCalculator(IStartTimeTimePointName startTimeTimePointName)
         {
             _startTimeTimePointName = startTimeTimePointName ?? throw new ArgumentNullException(nameof(startTimeTimePointName));
         }

@@ -59,9 +59,9 @@ namespace CycleBellLibrary.NUnitTests.Timer
 
         public string StartTimeTimePointName => "Test Start TimePoint";
 
-        private BaseTimeCalculator GetBaseTimeCalculator()
+        private TimerQueueCalculator GetBaseTimeCalculator()
         {
-            var btc = new BaseTimeCalculator (this);
+            var btc = new TimerQueueCalculator (this);
 
             return btc;
         }

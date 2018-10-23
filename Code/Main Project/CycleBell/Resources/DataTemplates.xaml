@@ -123,7 +123,7 @@
 
     <!-- TimePointViewModel --> 
     <DataTemplate x:Key="datatempl_TimePointViewModel" >
-        <Grid ShowGridLines="True" MaxWidth="{TemplateBinding ActualWidth}" HorizontalAlignment="Stretch">
+        <Grid ShowGridLines="False" MaxWidth="{TemplateBinding ActualWidth}" HorizontalAlignment="Stretch">
             <!--<ToggleButton Width="200" Height="200" Content="mute" Style="{x:Null}" />-->
             <Grid.ColumnDefinitions>
                 <!-- 0: left border -->

@@ -56,7 +56,7 @@ namespace CycleBellLibrary.Timer
         private byte _isInfiniteLoop;
         private bool _isRunAsync;
 
-        private readonly IBaseTimeCalculator _baseTimeCalculator;
+        private readonly ITimerQueueCalculator _timerQueueCalculator;
 
         #endregion
 
@@ -64,12 +64,12 @@ namespace CycleBellLibrary.Timer
 
         private TimerManager()
         {
-            _baseTimeCalculator = new BaseTimeCalculator (this);
+            _timerQueueCalculator = new TimerQueueCalculator (this);
         }
 
-        private TimerManager(IBaseTimeCalculator baseTimeCalculator)
+        private TimerManager(ITimerQueueCalculator timerQueueCalculator)
         {
-            _baseTimeCalculator = baseTimeCalculator;
+            _timerQueueCalculator = timerQueueCalculator;
         }
 
         /// <summary>
@@ -79,8 +79,8 @@ namespace CycleBellLibrary.Timer
         public static TimerManager Instance 
             => _timerManager ?? (_timerManager = new TimerManager());
         
-        public static TimerManager GetInstance (IBaseTimeCalculator baseTimeCalculator)
-            => _timerManager ?? (_timerManager = new TimerManager(baseTimeCalculator));
+        public static TimerManager GetInstance (ITimerQueueCalculator timerQueueCalculator)
+            => _timerManager ?? (_timerManager = new TimerManager(timerQueueCalculator));
 
         #endregion
 
@@ -225,7 +225,7 @@ namespace CycleBellLibrary.Timer
             if (IsRunning && !_isRunAsync)
                 return;
 
-            _queue = _baseTimeCalculator.GetTimerQueue (preset);
+            _queue = _timerQueueCalculator.GetTimerQueue (preset);
 
 
             if (_queue == null) {

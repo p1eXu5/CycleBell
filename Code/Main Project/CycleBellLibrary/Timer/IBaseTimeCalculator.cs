@@ -8,7 +8,7 @@ using CycleBellLibrary.Repository;
 
 namespace CycleBellLibrary.Timer
 {
-    public interface IBaseTimeCalculator
+    public interface ITimerQueueCalculator
     {
         Queue<(TimeSpan, TimePoint)> GetTimerQueue (Preset _preset);
     }
