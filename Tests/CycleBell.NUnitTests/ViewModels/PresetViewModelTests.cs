@@ -298,12 +298,12 @@ namespace CycleBell.NUnitTests.ViewModels
             Assert.IsFalse (timePoints[0].IsActive);
             Assert.IsFalse (timePoints[1].IsActive);
 
-            _mockTimerManager.Raise (t => t.ChangeTimePointEvent += null, new TimerEventArgs (null, timePoints[0].TimePoint, TimeSpan.Zero));
+            _mockTimerManager.Raise (t => t.ChangeTimePointEvent += null, new TimerEventArgs (null, timePoints[0].TimePoint, TimeSpan.Zero, null));
 
             Assert.IsTrue (timePoints[0].IsActive);
             Assert.IsFalse (timePoints[1].IsActive);
 
-            _mockTimerManager.Raise (t => t.ChangeTimePointEvent += null, new TimerEventArgs (null, timePoints[1].TimePoint, TimeSpan.Zero));
+            _mockTimerManager.Raise (t => t.ChangeTimePointEvent += null, new TimerEventArgs (null, timePoints[1].TimePoint, TimeSpan.Zero, null));
 
             Assert.IsFalse (timePoints[0].IsActive);
             Assert.IsTrue (timePoints[1].IsActive);
