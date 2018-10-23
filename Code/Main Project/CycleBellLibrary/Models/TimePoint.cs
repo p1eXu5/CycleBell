@@ -251,12 +251,13 @@ namespace CycleBellLibrary.Models
         /// <returns></returns>
         public TimeSpan GetAbsoluteTime(TimeSpan baseTime)
         {
-            BaseTime = baseTime;
+            if (BaseTime == null)
+                BaseTime = baseTime;
 
             if (TimePointType == TimePointType.Absolute)
                 return Time;
             else
-                return _GetAbsoluteTime();
+                return _GetAbsoluteTime(baseTime);
         }
         /// <summary>
         /// Gets absolute time
@@ -272,15 +273,15 @@ namespace CycleBellLibrary.Models
                 throw new ArgumentException("BaseTime must be set");
             }
 
-            return _GetAbsoluteTime();
+            return _GetAbsoluteTime((TimeSpan)BaseTime);
         }
-        private TimeSpan _GetAbsoluteTime ()
+        private TimeSpan _GetAbsoluteTime (TimeSpan baseTime)
         {
-            if (BaseTime == TimeSpan.Zero) 
+            if (baseTime == TimeSpan.Zero) 
                 return Time;
 
             // ReSharper disable once PossibleInvalidOperationException
-            var res = (TimeSpan)BaseTime + Time;
+            var res = baseTime + Time;
 
             if (res.Days > 0)
                 res -= TimeSpan.FromDays (1);
