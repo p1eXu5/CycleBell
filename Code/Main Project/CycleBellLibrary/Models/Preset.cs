@@ -329,7 +329,7 @@ namespace CycleBellLibrary.Repository
         /// <summary>
         /// Updates TimePoint BaseTimes
         /// </summary>
-        protected void UpdateTimePointBaseTimes()
+        public void UpdateTimePointBaseTimes()
         {
             var array = GetOrderedTimePoints().ToArray();
 

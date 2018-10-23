@@ -361,20 +361,36 @@ namespace CycleBell.ViewModels
             Ring(e.PrevTimePoint);
 
             if (e.NextTimePoint == null) return;
-            UpdateTimePointViewModels(e.NextTimePoint);
-            UpdeteLastTimeControls(e);
+            UpdateTimePointViewModels(e.NextTimePoint, e.NextPrevTimePointBaseTime);
+            UpdateLastTimeControls(e);
         }
 
-        private void UpdeteLastTimeControls(TimerEventArgs e)
+        private void UpdateLastTimeControls(TimerEventArgs e)
         {
             NextTimePointName = e.NextTimePoint.Name;
             TimeLeftTo = TimeSpanDigits.Parse(-e.LastTime);
         }
 
-        private void UpdateTimePointViewModels(TimePoint nextTimePoint)
+        private void UpdateTimePointViewModels(TimePoint nextTimePoint, TimeSpan? nextPrevTimePointBaseTime)
         {
-            if (_activeTimePointViewModelBase != null)
+            if (_activeTimePointViewModelBase != null) {
+
                 _activeTimePointViewModelBase.IsActive = false;
+
+                if (nextPrevTimePointBaseTime != null) {
+
+                    var relativeTime = _activeTimePointViewModelBase.TimePoint.GetRelativeTime();
+
+                    if (nextPrevTimePointBaseTime >= relativeTime) {
+                        _activeTimePointViewModelBase.TimePoint.BaseTime = nextPrevTimePointBaseTime - relativeTime;
+                    }
+                    else {
+                        _activeTimePointViewModelBase.TimePoint.BaseTime = TimeSpan.FromDays(1) + nextPrevTimePointBaseTime - relativeTime;
+                    }
+
+                    ((TimePointViewModel)_activeTimePointViewModelBase).UpdateTime();
+                }
+            }
 
             if (nextTimePoint.Name == _mainViewModel.StartTimeName) {
                 if (TimePointVmCollection.Count > 0) {
@@ -429,6 +445,17 @@ namespace CycleBell.ViewModels
                 _activeTimePointViewModelBase.IsActive = false;
 
             TimePointVmCollection.EnableAll();
+
+            UpdateBaseTimes();
+        }
+
+        private void UpdateBaseTimes()
+        {
+            Preset.UpdateTimePointBaseTimes();
+            foreach (var viewModel in TimePointVmCollection.Where(tp => tp is TimePointViewModel).ToArray()) {
+
+                ((TimePointViewModel)viewModel).UpdateTime();
+            }
         }
 
         // Checkers:

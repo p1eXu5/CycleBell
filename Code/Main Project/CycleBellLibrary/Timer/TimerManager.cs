@@ -90,14 +90,33 @@ namespace CycleBellLibrary.Timer
 
         private void OnChangeTimePoint(TimePoint prevTimePoint, TimePoint nextTimePoint, TimeSpan lastTime)
         {
-            ChangeTimePointEvent?.Invoke(this, new TimerEventArgs(prevTimePoint, nextTimePoint, lastTime));
+            if (prevTimePoint.Time < TimeSpan.Zero || prevTimePoint.Name == StartTimeTimePointName) {
+
+                ChangeTimePointEvent?.Invoke(this, new TimerEventArgs(prevTimePoint, nextTimePoint, lastTime, null));
+            }
+            else {
+
+                TimeSpan? nextBaseTime = null;
+
+                foreach (var valueTuple in _queue) {
+
+                    if (valueTuple.nextTimePoint.Equals(prevTimePoint) && valueTuple.nextChangeTime > prevTimePoint.BaseTime) {
+
+                        nextBaseTime = valueTuple.nextChangeTime;
+                        break;
+                    }
+                }
+
+                ChangeTimePointEvent?.Invoke(this, new TimerEventArgs(prevTimePoint, nextTimePoint, lastTime, nextBaseTime));
+            }
+
         }
 
         public event EventHandler<TimerEventArgs> TimerSecondPassedEvent;
 
         private void OnTimerSecondPassed(TimePoint nextTimePoint, TimeSpan lastTime)
         {
-            TimerSecondPassedEvent?.Invoke(this, new TimerEventArgs(null, nextTimePoint, lastTime));
+            TimerSecondPassedEvent?.Invoke(this, new TimerEventArgs(null, nextTimePoint, lastTime, null));
         }
 
         public event EventHandler TimerPauseEvent;
