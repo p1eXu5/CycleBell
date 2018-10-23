@@ -1,6 +1,8 @@
 ﻿/*
  *  StrokeColor is setted in BaseButton style and used in Path style
  */
+
+using System;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -159,7 +161,7 @@ namespace CycleBell.Views
 
         #endregion
 
-        #region IsFocused
+        #region IsTimePopints
 
         public static readonly DependencyProperty IsTimePopintsProperty = DependencyProperty.RegisterAttached("IsTimePopints", typeof(bool), typeof(AttachedPropertyFactory)
                                                                                                           , new FrameworkPropertyMetadata(false));
@@ -168,9 +170,61 @@ namespace CycleBell.Views
 
         public static bool GetIsTimePopints(DependencyObject d) => (bool)d.GetValue(IsTimePopintsProperty);
 
-        
+
         #endregion
 
+        #region CalcWidth
 
+        public static readonly DependencyProperty CalcWidthProperty = DependencyProperty.RegisterAttached("CalcWidth", typeof(double), typeof(AttachedPropertyFactory),
+                                                                                                          new FrameworkPropertyMetadata(0.0));
+
+        public static void SetCalcWidth(DependencyObject d, double value) => d.SetValue(CalcWidthProperty, value);
+
+        public static double GetCalcWidth(DependencyObject d) => (double) d.GetValue(CalcWidthProperty);
+
+        public static void CalculateWidth(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            if (d is ColumnDefinition columnObject && columnObject.Width.IsStar) {
+
+                if (columnObject.Parent is Grid gridObject) {
+
+                    var coefficioentSum = 0D;
+                    var notStarColumnWidthSum = 0D;
+
+                    foreach (var columnDefinition in gridObject.ColumnDefinitions) {
+
+                        if (!columnDefinition.Width.IsStar) {
+                            notStarColumnWidthSum += columnDefinition.ActualWidth;
+                        }
+                        else {
+                            double starCoeff = GetStarCoeff(columnDefinition);
+
+                            if (starCoeff.Equals(0.0)) {
+                                coefficioentSum += columnDefinition.Width.Value;
+                            }
+                            else {
+                                coefficioentSum += starCoeff;
+                            }
+                        }
+                    }
+
+                    double starValue = ((double)e.NewValue - notStarColumnWidthSum) / (coefficioentSum);
+                    var newWidth = new GridLength(columnObject.Width.Value * starValue);
+                    d.SetValue(ColumnDefinition.WidthProperty, newWidth);
+                }
+            }
+        }
+
+        #endregion
+
+        #region StarCoeff
+
+        public static readonly DependencyProperty StarCoeffProperty = DependencyProperty.RegisterAttached("StarCoeff", typeof(double), typeof(AttachedPropertyFactory),
+                                                                                                          new FrameworkPropertyMetadata(0.0));
+
+        public static void SetStarCoeff(DependencyObject d, double value) => d.SetValue(StarCoeffProperty, value);
+        public static double GetStarCoeff(DependencyObject d) => (double)d.GetValue(StarCoeffProperty);
+
+        #endregion
     }
 }

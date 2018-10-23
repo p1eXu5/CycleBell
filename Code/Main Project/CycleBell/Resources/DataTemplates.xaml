@@ -123,7 +123,7 @@
 
     <!-- TimePointViewModel --> 
     <DataTemplate x:Key="datatempl_TimePointViewModel" >
-        <Grid ShowGridLines="False">
+        <Grid ShowGridLines="True" MaxWidth="{TemplateBinding ActualWidth}" HorizontalAlignment="Stretch">
             <!--<ToggleButton Width="200" Height="200" Content="mute" Style="{x:Null}" />-->
             <Grid.ColumnDefinitions>
                 <!-- 0: left border -->
@@ -131,7 +131,7 @@
                 <!-- 1: marker -->
                 <ColumnDefinition  Width="20"/>
                 <!-- 2: name -->
-                <ColumnDefinition Width="125" />
+                <ColumnDefinition Width="*" MaxWidth="250" />
                 <!-- 3: time -->
                 <ColumnDefinition Width="96"/>
                 <!-- 4: mute -->
@@ -200,10 +200,9 @@
             <StackPanel Grid.Column="2" Grid.Row="0" VerticalAlignment="Bottom" CanHorizontallyScroll="False" ClipToBounds="True"
                         >
                 <TextBox x:Name="m_pointName"
-                         MaxLength="15"
                          MaxLines="1"
                          Focusable="True"
-                         TextWrapping="Wrap" 
+                         TextWrapping="WrapWithOverflow" 
                          KeyboardNavigation.IsTabStop="False"
                          at:AttachedPropertyFactory.MoveFocusNext="{Binding MoveFocusNext}"
                          VerticalAlignment="Bottom"
