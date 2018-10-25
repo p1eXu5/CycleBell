@@ -1,6 +1,5 @@
 ﻿using System;
 using System.IO;
-using System.Media;
 using System.Windows.Input;
 using CycleBell.Base;
 using CycleBellLibrary.Models;

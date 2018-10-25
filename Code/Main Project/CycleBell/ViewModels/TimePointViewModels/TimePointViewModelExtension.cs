@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.ObjectModel;
 using System.Linq;
-using CycleBell.ViewModels.TimePointViewModels;
 
 namespace CycleBell.ViewModels.TimePointViewModels
 {

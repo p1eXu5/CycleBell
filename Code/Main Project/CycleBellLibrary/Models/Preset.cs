@@ -2,12 +2,9 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
-using System.ComponentModel;
 using System.Linq;
-using System.Security.Cryptography;
-using CycleBellLibrary.Models;
 
-namespace CycleBellLibrary.Repository
+namespace CycleBellLibrary.Models
 {
     /// <summary>
     /// It's a TimePoint repository. If StartTime not set, getter returns negative TimeSpan (TimeSpan.FromSecond(-1))
@@ -201,10 +198,19 @@ namespace CycleBellLibrary.Repository
                 AutoUpdateTimePointBaseTimes = true;
                 UpdateTimePointBaseTimes();
             }
-
         }
 
-        public virtual void PreAddTimePoint (TimePoint timePoint) { timePoint.BaseTime = null; }
+        /// <summary>
+        /// If adding TimePoint has Relative TimePointType and zero Time than
+        /// TimePointType will change to Absolute TimePointType
+        /// </summary>
+        /// <param name="timePoint">Adding TimePoint</param>
+        public virtual void PreAddTimePoint(TimePoint timePoint)
+        {
+            if (timePoint.Time == TimeSpan.Zero && timePoint.TimePointType == TimePointType.Relative) {
+                timePoint.ChangeTimePointType(TimePointType.Absolute);
+            }
+        }
         
         public void RemoveTimePoint(TimePoint timePoint)
         {
@@ -267,6 +273,11 @@ namespace CycleBellLibrary.Repository
             }
         }
 
+        /// <summary>
+        /// If adding TimePoint Id less then max Id in Preset Collection
+        /// than adding time point will be clonned for change Id to global current max
+        /// </summary>
+        /// <param name="timePoint">Adding TimePoint</param>
         private void PrepareTimePointId (ref TimePoint timePoint)
         {
             var maxId = TimePointCollection.Max (tp => tp.Id);

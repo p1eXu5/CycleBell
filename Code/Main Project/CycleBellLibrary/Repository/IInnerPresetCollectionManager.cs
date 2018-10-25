@@ -1,4 +1,6 @@
-﻿namespace CycleBellLibrary.Repository
+﻿using CycleBellLibrary.Models;
+
+namespace CycleBellLibrary.Repository
 {
     public interface IInnerPresetCollectionManager : IPresetCollectionManager
     {

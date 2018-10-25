@@ -1,4 +1,5 @@
 ﻿using System;
+using CycleBellLibrary.Models;
 using CycleBellLibrary.Repository;
 using NUnit.Framework;
 

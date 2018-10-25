@@ -2,17 +2,14 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Collections.Specialized;
 using System.IO;
 using System.Linq;
-using System.Runtime.CompilerServices;
-using System.Xml;
 using System.Xml.Serialization;
-using CycleBellLibrary.Repository;
+using CycleBellLibrary.Models;
 
 namespace CycleBellLibrary.Repository
 {
-    public sealed class PresetCollectionManager :  IPresetCollectionManager, IInnerPresetCollectionManager, IEnumerable<Preset>
+    public sealed class PresetCollectionManager :  IInnerPresetCollectionManager
     {
         #region Fields
 

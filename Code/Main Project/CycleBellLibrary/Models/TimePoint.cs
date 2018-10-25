@@ -1,13 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
-using System.ComponentModel;
-using System.Linq;
-using System.Runtime.CompilerServices;
-using System.Text;
-using System.Threading.Tasks;
 using System.Xml.Serialization;
-using CycleBellLibrary.Annotations;
 
 namespace CycleBellLibrary.Models
 {
@@ -44,8 +38,6 @@ namespace CycleBellLibrary.Models
             //DefaultTimePointNameFunc = (tp) => $"TimePoint {tp.Id}";
 
             // Да хуй его, прикольно было попробовать
-            Type type = MaxId.GetType();
-
             dynamic max = _timePointNum.GetType().GetField ("MaxValue")?.GetValue (null);
 
             if (max == null)
@@ -146,7 +138,7 @@ namespace CycleBellLibrary.Models
         public static Func<TimePoint, String> DefaultTimePointNameFunc
         {
             get => _defaultTimePointNameFunc;
-            set => _defaultTimePointNameFunc = new Func<TimePoint, string>(value);
+            set => _defaultTimePointNameFunc = value;
         }
 
             #endregion
@@ -175,7 +167,7 @@ namespace CycleBellLibrary.Models
             set { _time = value; }
         }
 
-        public TimeSpan? BaseTime { get; set; } = null;
+        public TimeSpan? BaseTime { get; set; }
 
         /// <summary>
         /// Type of Time, absolute or relative
@@ -198,7 +190,7 @@ namespace CycleBellLibrary.Models
         /// <summary>
         /// Sound file location for example.
         /// </summary>
-        public object Tag { get; set; } = null;
+        public object Tag { get; set; }
 
         #endregion
 
@@ -336,7 +328,7 @@ namespace CycleBellLibrary.Models
 
         public TimePoint Clone()
         {
-            var tp = TimePoint.DefaultTimePoint;
+            var tp = DefaultTimePoint;
 
             tp.BaseTime = this.BaseTime;
             tp.Time = this.Time;

@@ -4,7 +4,7 @@ using System.Xml;
 using System.Xml.Schema;
 using System.Xml.Serialization;
 
-namespace CycleBellLibrary.Repository
+namespace CycleBellLibrary.Models
 {
     /// <summary>
     /// For serialization
@@ -31,7 +31,7 @@ namespace CycleBellLibrary.Repository
                 reader.ReadEndElement();
             }
             catch {
-                this.Clear();
+                Clear();
                 throw;
             }
         }

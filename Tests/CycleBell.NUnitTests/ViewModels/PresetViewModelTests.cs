@@ -104,6 +104,7 @@ namespace CycleBell.NUnitTests.ViewModels
 
             TimePointViewModel actual = (TimePointViewModel) pvm.TimePointVmCollection[0];
 
+            // ReSharper disable once ArrangeStaticMemberQualifier
             Assert.IsFalse (Object.ReferenceEquals (pvm.AddingTimePoint.TimePoint, actual.TimePoint));
             Assert.IsTrue (time == actual.Time);
             Assert.IsTrue (type == actual.TimePointType);
@@ -313,9 +314,7 @@ namespace CycleBell.NUnitTests.ViewModels
 
         #region Factory
 
-        private readonly Mock<IMainViewModel> _mockMainViewModel = new Mock<IMainViewModel>();
         private Mock<ITimerManager> _mockTimerManager;
-        private Mock<IPresetViewModel> _mockPresetViewModel;
         private PresetCollectionManager _presetCollectionManager = new PresetCollectionManager();
 
         private PresetViewModel GetPresetViewModel()
@@ -329,7 +328,7 @@ namespace CycleBell.NUnitTests.ViewModels
         {
             var mockDialogRegistrator = new Mock<IDialogRegistrator>();
             var mockCycleBellManager = new Mock<ICycleBellManager>();
-            _mockPresetViewModel = mockCycleBellManager.As<IPresetViewModel>();
+
             _mockTimerManager = mockCycleBellManager.As<ITimerManager>();
 
             mockCycleBellManager.Setup (m => m.PresetCollectionManager).Returns (_presetCollectionManager);
@@ -342,7 +341,6 @@ namespace CycleBell.NUnitTests.ViewModels
 
         private Preset GetEmptyTestPreset() => new Preset("Test preset");
 
-        private TimePoint GetTestRelativeTimePoint() => new TimePoint("0:00:10", TimePointType.Relative);
         private TimePoint GetTestRelativeTimePoint(byte loopNumber) => new TimePoint("0:00:10", TimePointType.Relative, loopNumber);
 
         #endregion

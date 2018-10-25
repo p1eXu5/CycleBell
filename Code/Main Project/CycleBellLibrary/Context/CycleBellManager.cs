@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Linq;
+using CycleBellLibrary.Models;
 using CycleBellLibrary.Repository;
 using CycleBellLibrary.Timer;
 
@@ -73,18 +74,18 @@ namespace CycleBellLibrary.Context
         public void CheckCreateNewPreset(Preset existEmptyPreset)
         {
             if (existEmptyPreset.StartTime != Preset.DefaultStartTime || existEmptyPreset.TimePointCollection.Count > 0 || existEmptyPreset.StartTime != Preset.DefaultStartTime) {
-                OnCantCreateNewPreset(CantCreateNewPresetReasons.EmptyPresetModified, existEmptyPreset);
+                OnCantCreateNewPreset(CantCreateNewPresetReasonsFlags.EmptyPresetModified, existEmptyPreset);
             }
             else {
-                OnCantCreateNewPreset(CantCreateNewPresetReasons.EmptyPresetNotModified, existEmptyPreset);
+                OnCantCreateNewPreset(CantCreateNewPresetReasonsFlags.EmptyPresetNotModified, existEmptyPreset);
             }
         }
 
         public event EventHandler<CantCreateNewPreetEventArgs> CantCreateNewPresetEvent;
 
-        private void OnCantCreateNewPreset(CantCreateNewPresetReasons reason, Preset preset)
+        private void OnCantCreateNewPreset(CantCreateNewPresetReasonsFlags reasonFlags, Preset preset)
         {
-            CantCreateNewPresetEvent?.Invoke(this, new CantCreateNewPreetEventArgs(reason, preset));
+            CantCreateNewPresetEvent?.Invoke(this, new CantCreateNewPreetEventArgs(reasonFlags, preset));
         }
 
         public void OpenPresets() => OpenPresets(FileName);

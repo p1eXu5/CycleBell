@@ -10,7 +10,7 @@ using System.Windows.Data;
 using System.Windows.Input;
 using CycleBell.Base;
 using CycleBellLibrary.Context;
-using CycleBellLibrary.Repository;
+using CycleBellLibrary.Models;
 using CycleBellLibrary.Timer;
 using Microsoft.Win32;
 
@@ -273,7 +273,7 @@ namespace CycleBell.ViewModels
         // OnCan'tCreateNewPreset event handler
         private void OnCantCreateNewPresetEventHandler(object sender, CantCreateNewPreetEventArgs args)
         {
-            if (args.CantCreateNewPresetReason == CantCreateNewPresetReasons.EmptyPresetNotModified) {
+            if (args.CantCreateNewPresetReasonFlags == CantCreateNewPresetReasonsFlags.EmptyPresetNotModified) {
 
                 _manager.DeletePreset(args.Preset);
                 return;
@@ -507,8 +507,9 @@ namespace CycleBell.ViewModels
         // Closing MainWindow handler
         private void OnClosingWindow(object o)
         {
-            if (_selectedPreset?.Preset.PresetName == Preset.DefaultName)
+            if (_selectedPreset != null && _selectedPreset.Preset.PresetName == Preset.DefaultName) {
                 _manager.CheckCreateNewPreset(_selectedPreset.Preset);
+            }
         }
 
         #endregion Methods

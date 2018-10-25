@@ -3,19 +3,15 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.ComponentModel;
-using System.Diagnostics;
 using System.Linq;
 using System.Media;
 using System.Runtime.CompilerServices;
-using System.Text;
 using System.Windows.Data;
 using System.Windows.Input;
 using CycleBell.Base;
 using CycleBell.ViewModels.TimePointViewModels;
 using CycleBell.Views;
-using CycleBellLibrary.Context;
 using CycleBellLibrary.Models;
-using CycleBellLibrary.Repository;
 using CycleBellLibrary.Timer;
 
 namespace CycleBell.ViewModels
@@ -32,27 +28,16 @@ namespace CycleBell.ViewModels
     /// </summary>
     public class PresetViewModel : ObservableObject, IPresetViewModel
     {
-        #region Consts
-
-        private const string StarString = "*";
-        private const string NewString = "new";
-
-        #endregion
-
         #region Fields
-
-        private readonly Preset _preset;
         private readonly IMainViewModel _mainViewModel;
 
         private readonly ObservableCollection<TimePointViewModelBase> _timePointVmCollection;
-        private TimePointViewModelBase _selectedTimePoint;
+        //private TimePointViewModelBase _selectedTimePoint;
         private AddingTimePointViewModel _addingTimePoint;
 
         private bool _canBellOnStartTime;
 
         private readonly HashSet<byte> _settedLoopNumbers;
-
-        private readonly StringBuilder _name;
 
         private string _nextTimePointName;
         private TimeSpanDigits _timeLeftTo;
@@ -71,7 +56,7 @@ namespace CycleBell.ViewModels
         public PresetViewModel(Preset preset, IMainViewModel mainViewModel)
         {
             // _PresetViewModel
-            _preset = preset ?? throw new ArgumentNullException(nameof(preset));
+            Preset = preset ?? throw new ArgumentNullException(nameof(preset));
 
             // _presetCollectionManager
             _mainViewModel = mainViewModel ?? throw new ArgumentNullException(nameof(mainViewModel));
@@ -82,7 +67,7 @@ namespace CycleBell.ViewModels
 
             // _timePointVmCollection
             _timePointVmCollection = new ObservableCollection<TimePointViewModelBase>();
-            LoadTimePointViewModelCollection(_preset);
+            LoadTimePointViewModelCollection(Preset);
             
             // TimePointVmCollection
             TimePointVmCollection = new ReadOnlyObservableCollection<TimePointViewModelBase>(_timePointVmCollection);
@@ -95,10 +80,10 @@ namespace CycleBell.ViewModels
             view.SortDescriptions.Add (new SortDescription ("Id", ListSortDirection.Ascending));
 
             // TimePointCollection INotifyCollectionChanged
-            ((INotifyCollectionChanged) _preset.TimePointCollection).CollectionChanged += OnTimePointCollectionChanged;
+            ((INotifyCollectionChanged) Preset.TimePointCollection).CollectionChanged += OnTimePointCollectionChanged;
 
             // CanBellOnStartTime
-            if (_preset.Tag is string str) {
+            if (Preset.Tag is string str) {
 
                 if (str == "true")
                     CanBellOnStartTime = true;
@@ -106,8 +91,6 @@ namespace CycleBell.ViewModels
                     CanBellOnStartTime = false;
             }
 
-            // _name
-            _name = new StringBuilder(GetPresetName(_preset.PresetName));
 
             // AddingTimePoint
             AddingTimePoint = GetAddingTimePointViewModel();
@@ -118,21 +101,21 @@ namespace CycleBell.ViewModels
         #region Properties
 
         // Preset
-        public Preset Preset => _preset;
+        public Preset Preset { get; }
         public string Name
         {
-            get => _preset?.PresetName ?? null;
+            get => Preset?.PresetName;
             set {
-                _preset.PresetName = value;
+                Preset.PresetName = value;
                 OnPropertyChanged ();
             }
         }
 
         public TimeSpan StartTime
         {
-            get => _preset.StartTime;
+            get => Preset.StartTime;
             set {
-                _preset.StartTime = value;
+                Preset.StartTime = value;
                 OnPropertyChanged();
                 //OnPropertyChanged(nameof(TimePointVmCollection));
                 foreach (var timePointViewModel in TimePointVmCollection.Where(t => t is TimePointViewModel).ToArray()) {
@@ -163,13 +146,13 @@ namespace CycleBell.ViewModels
 
         public bool IsInfiniteLoop
         {
-            get => _preset.IsInfiniteLoop;
+            get => Preset.IsInfiniteLoop;
             set {
                 if (value) {
-                    _preset.SetInfiniteLoop();
+                    Preset.SetInfiniteLoop();
                 }
                 else {
-                    _preset.ResetInfiniteLoop();
+                    Preset.ResetInfiniteLoop();
                 }
                 OnPropertyChanged ();
             }
@@ -183,7 +166,7 @@ namespace CycleBell.ViewModels
             }
         }
 
-        public bool IsNewPreset => _preset.PresetName == Preset.DefaultName;
+        public bool IsNewPreset => Preset.PresetName == Preset.DefaultName;
 
         public bool IsNoTimePoints => TimePointVmCollection.Count < 1;
         public bool IsTimePoints => TimePointVmCollection.Count > 0;
@@ -300,14 +283,6 @@ namespace CycleBell.ViewModels
             OnPropertyChanged (nameof(IsNoTimePoints));
         }
         
-        private string GetPresetName(string presetName)
-        {
-            if (_preset.PresetName == Preset.DefaultName) {
-                return NewString;
-            }
-            else
-                return presetName;
-        }
 
         private void OnTimePropertyChanged (object s, PropertyChangedEventArgs e)
         {
@@ -317,7 +292,7 @@ namespace CycleBell.ViewModels
         // RemoveTimePoint
         public void RemoveTimePoint (TimePoint timePoint)
         {
-            _preset.RemoveTimePoint (timePoint);
+            Preset.RemoveTimePoint (timePoint);
         }
 
         // AddTimePointCommand:
@@ -328,7 +303,7 @@ namespace CycleBell.ViewModels
             if (String.IsNullOrWhiteSpace (timePoint.Name))
                 timePoint.Name = timePoint.GetDefaultTimePointName();
 
-            _preset.AddTimePoint(timePoint);
+            Preset.AddTimePoint(timePoint);
             timePoint.ChangeTimePointType(TimePointType.Relative);
 
             ResetAddingTimePoint();
@@ -483,8 +458,8 @@ namespace CycleBell.ViewModels
             if (point.Time < TimeSpan.Zero)
                 point.Time = point.Time.Negate();
 
-            if (point.Time == TimeSpan.Zero && point.TimePointType == TimePointType.Relative)
-                point.ChangeTimePointType(TimePointType.Absolute);
+            if (point.TimePointType == TimePointType.Absolute)
+                point.ChangeTimePointType(TimePointType.Relative);
         }
 
         internal void RaiseOnIsNoTimePointChanged() => OnPropertyChanged(nameof(IsNoTimePoints));

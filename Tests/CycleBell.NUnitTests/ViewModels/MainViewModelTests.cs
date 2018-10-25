@@ -34,76 +34,7 @@ namespace CycleBell.NUnitTests.ViewModels
            
         }
 
-        //[Test]
-        //public void PlayCommand_SelectedPresetIsNull_CannotExecute()
-        //{
-        //    var pvm = GetMainViewModel();
-
-        //    Assert.IsFalse (pvm.PlayCommand.CanExecute (null));
-        //}
-
-        //[Test]
-        //public void PlayCommand_SelectedPresetIsExistsTimerIsNotRunning_CanExecute()
-        //{
-        //    var mvm = GetMainViewModel();
-
-        //    mvm.SelectedPreset = GetPresetViewModel(mvm);
-        //    _mockTimerManager.Setup (tm => tm.IsRunning).Returns (false);
-
-        //    Assert.IsTrue (mvm.PlayCommand.CanExecute(null));
-        //}
-
-        //[Test]
-        //public void PlayCommand_WhenExecuted_CallsITimerManagerPlayAsync()
-        //{
-        //    var mvm = GetMainViewModel();
-        //    mvm.SelectedPreset = GetPresetViewModel(mvm);
-        //    _mockTimerManager.Setup (tm => tm.IsRunning).Returns (false);
-
-        //    mvm.PlayCommand.Execute (null);
-
-        //    _mockTimerManager.Verify(tm => tm.PlayAsync (It.IsAny<Preset>()));
-        //}
-
-        //[Test]
-        //public void PlayCommand_WhenExecuted_RaiseOnIsRunningChanged()
-        //{
-
-        //}
-
         #endregion
-
-        // PouseCommand
-
-        //[Test]
-        //public void PouseCommand_TimerIsNotRunning_CanNotExecuted()
-        //{
-        //    var pvm = GetMainViewModel();
-
-        //    _mockTimerManager.Setup (tm => tm.IsRunning).Returns (false);
-
-        //    Assert.IsFalse (pvm.PauseCommand.CanExecute (null));
-        //}
-
-        //[Test]
-        //public void PouseCommand_TimerIsRunning_CanExecuted()
-        //{
-        //    var pvm = GetMainViewModel();
-
-        //    _mockTimerManager.Setup (tm => tm.IsRunning).Returns (true);
-
-        //    Assert.IsTrue (pvm.PauseCommand.CanExecute(null));
-        //}
-
-        //[Test]
-        //public void PouseCommand_WhenExecuted_CallsITimerManager()
-        //{
-        //    var pvm = GetMainViewModel();
-
-        //    pvm.PauseCommand.Execute (null);
-
-        //    _mockTimerManager.Verify (tm => tm.Pause());
-        //}
 
         #region Factory
 
@@ -125,17 +56,6 @@ namespace CycleBell.NUnitTests.ViewModels
             var mainViewModel = new MainViewModel (_mockDialogRegistrator.Object, _mockCycleBellManager.Object);
 
             return mainViewModel;
-        }
-
-        private PresetViewModel GetPresetViewModel(MainViewModel mainViewModel)
-        {
-            var preset = new Preset ("Test Preset");
-            var timePoint = new TimePoint("0:00:01");
-            preset.AddTimePoint (timePoint);
-
-            var tpvm = new PresetViewModel(preset, mainViewModel);
-
-            return tpvm;
         }
 
         #endregion

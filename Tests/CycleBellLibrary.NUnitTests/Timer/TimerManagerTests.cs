@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using CycleBellLibrary.Repository;
+﻿using CycleBellLibrary.Models;
 using CycleBellLibrary.Timer;
 using NUnit.Framework;
 

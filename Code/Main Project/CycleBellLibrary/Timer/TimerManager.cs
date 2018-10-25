@@ -6,12 +6,10 @@
 
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Threading;
 using System.Threading.Tasks;
 using CycleBellLibrary.Models;
-using CycleBellLibrary.Repository;
 
 namespace CycleBellLibrary.Timer
 {
@@ -151,7 +149,7 @@ namespace CycleBellLibrary.Timer
 
         public bool IsRunning { get; private set; }
         public bool IsPaused { get; private set; }
-        public string StartTimeTimePointName => TimerManager.StartTimeTimePointString;
+        public string StartTimeTimePointName => StartTimeTimePointString;
 
         #endregion
 
@@ -344,7 +342,7 @@ namespace CycleBellLibrary.Timer
             _queue.Enqueue(_prevQueueElement);
 
             // If StartTimePoint are next:
-            if (_queue.Peek().nextTimePoint.Name == TimerManager.StartTimeTimePointString) {
+            if (_queue.Peek().nextTimePoint.Name == StartTimeTimePointString) {
 
                 // Если цикл не бесконечный:
                 if (_isInfiniteLoop == 0) {

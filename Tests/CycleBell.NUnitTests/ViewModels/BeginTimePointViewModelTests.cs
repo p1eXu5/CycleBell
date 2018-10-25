@@ -1,13 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using CycleBell.ViewModels;
 using CycleBell.ViewModels.TimePointViewModels;
 using CycleBellLibrary.Models;
-using CycleBellLibrary.Repository;
 using Moq;
 using NUnit.Framework;
 
@@ -31,6 +26,7 @@ namespace CycleBell.NUnitTests.ViewModels
 
             Assert.Throws(typeof(NotImplementedException), () =>
                                                            {
+                                                               // ReSharper disable once UnusedVariable
                                                                var error = btpvm.Error;
                                                            });
         }

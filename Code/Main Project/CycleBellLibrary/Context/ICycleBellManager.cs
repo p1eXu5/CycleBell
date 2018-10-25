@@ -1,37 +1,14 @@
 ﻿using System;
+using CycleBellLibrary.Models;
 using CycleBellLibrary.Repository;
 using CycleBellLibrary.Timer;
 
 namespace CycleBellLibrary.Context
 {
-    [Flags]
-    public enum CantCreateNewPresetReasons
-    {
-        EmptyPresetNotModified = 0x0,
-        EmptyPresetModified = 0x2,
-        UnknownReason = 0x128
-    }
-
-    public class CantCreateNewPreetEventArgs : EventArgs
-    {
-        public CantCreateNewPreetEventArgs(CantCreateNewPresetReasons cantCreateNewPresetReason, Preset preset)
-        {
-            Preset = preset ?? throw new ArgumentNullException();
-            CantCreateNewPresetReason = cantCreateNewPresetReason;
-        }
-
-        public CantCreateNewPresetReasons CantCreateNewPresetReason { get; }
-        public Preset Preset { get; }
-    }
-
     public interface ICycleBellManager
     {
         IPresetCollectionManager PresetCollectionManager { get; }
         ITimerManager TimerManager { get; }
-
-        string FileName { get; }
-
-        bool IsEmptyPresetExists { get; }
 
         /// <summary>
         /// Creates a new preset
@@ -48,11 +25,6 @@ namespace CycleBellLibrary.Context
         void ClearPresets();
 
         void RenamePreset (Preset preset, string newName);
-
-        /// <summary>
-        /// Serializes into xml file
-        /// </summary>
-        void SavePresets();
 
         void SavePresets (string fileName);
 
