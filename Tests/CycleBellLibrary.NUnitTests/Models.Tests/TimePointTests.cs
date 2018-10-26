@@ -53,7 +53,28 @@ namespace CycleBellLibrary.NUnitTests.Models.Tests
             Assert.That(timePoint.Name, Is.EqualTo(String.Empty));
         }
 
+        [Test]
+        public void ctor_InvalidTimeAbsoluteTimePoint_Throw()
+        {
+            Assert.That(() => new TimePoint(TimeSpan.FromHours(24), TimePointType.Absolute), Throws.ArgumentException);
+        }
+
+        [Test]
+        public void ctor_InvalidTimeRelativeTimePoint_Throw()
+        {
+            Assert.That(() => new TimePoint(TimeSpan.FromHours(24), TimePointType.Relative), Throws.ArgumentException);
+        }
+
         #endregion ctor
+
+        [Test]
+        public void Time_SetUpWithInvalidTimeAbsoluteTimePoint_TrimsTheTime()
+        {
+            var timePoint = GetAbsoluteTimePoint();
+            timePoint.Time = TimeSpan.FromDays(1);
+
+            Assert.That(timePoint.Time, Is.LessThan(TimeSpan.FromDays(1)));
+        }
 
         #region GetAbsoluteTime
 

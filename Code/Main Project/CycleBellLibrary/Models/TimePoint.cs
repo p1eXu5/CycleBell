@@ -91,7 +91,7 @@ namespace CycleBellLibrary.Models
             if (_timePointNum == MaxId)
                 throw new OverflowException ("Reached the maximum number of TimePointCollection");
 
-            if (Time >= TimeSpan.FromHours(24)) {
+            if (time >= TimeSpan.FromHours(24)) {
                 throw new ArgumentException("Absolute TimePoint can't have Time greater than 23:59:59");
             }
 
@@ -178,7 +178,9 @@ namespace CycleBellLibrary.Models
         public TimeSpan Time
         {
             get => _time; 
-            set { _time = value; }
+            set => _time = value < TimeSpan.FromDays(1) 
+                               ? value
+                               : value - TimeSpan.FromDays(1);
         }
 
         public TimeSpan? BaseTime { get; set; }
