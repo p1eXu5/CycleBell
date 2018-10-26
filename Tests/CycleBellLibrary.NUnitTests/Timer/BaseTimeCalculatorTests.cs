@@ -46,7 +46,7 @@ namespace CycleBellLibrary.NUnitTests.Timer
 
             var actualQueue = btc.GetTimerQueue (preset);
 
-            var comparer = new TimePointReferenceComparer();
+            var comparer = new TimePointComparer();
 
             do {
                 Assert.That(expectedQueue.Dequeue().Item2, Is.EqualTo(actualQueue.Dequeue().Item2).Using<TimePoint>(comparer));

@@ -49,6 +49,7 @@
     <Compile Include="Context\CycleBellManager.cs" />
     <Compile Include="Context\ICycleBellManager.cs" />
     <Compile Include="Models\ObjectExtension.cs" />
+    <Compile Include="Models\TimePointReferenceComparer.cs" />
     <Compile Include="Properties\Annotations.cs" />
     <Compile Include="Repository\IInnerPresetCollectionManager.cs" />
     <Compile Include="Timer\TimerQueueCalculator.cs" />
