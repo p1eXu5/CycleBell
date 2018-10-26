@@ -35,7 +35,7 @@ namespace CycleBell
 
                 base.OnStartup (e);
 
-                TimePoint.DefaultTimePointNameFunc = point => $"Time point {point.Id}";
+                TimePoint.TimePointNameFunc = point => $"Time point {point.Id}";
 
                 var container = new UnityContainer();
 

@@ -224,8 +224,8 @@ namespace CycleBellLibrary.Models
         /// <param name="timePoint">Adding TimePoint</param>
         public virtual void PreAddTimePoint(TimePoint timePoint)
         {
-            if (timePoint.Time == TimeSpan.Zero && timePoint.TimePointType == TimePointType.Relative) {
-                timePoint.ChangeTimePointType(TimePointType.Absolute);
+            if (timePoint.TimePointType == TimePointType.Relative && timePoint.Time == TimeSpan.Zero) {
+                throw new ArgumentException("Relative TimePoint can't have zero Time", nameof(timePoint));
             }
         }
         

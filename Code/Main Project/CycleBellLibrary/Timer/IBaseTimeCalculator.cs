@@ -23,6 +23,6 @@ namespace CycleBellLibrary.Timer
 {
     public interface ITimerQueueCalculator
     {
-        Queue<(TimeSpan, TimePoint)> GetTimerQueue (Preset _preset);
+        Queue<(TimeSpan nextChangeTime, TimePoint nextTimePoint)> GetTimerQueue (Preset preset);
     }
 }

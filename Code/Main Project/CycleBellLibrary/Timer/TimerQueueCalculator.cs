@@ -38,7 +38,7 @@ namespace CycleBellLibrary.Timer
         /// </summary>
         /// <param name="preset">Preset</param>
         /// <returns>The queue of tuples consists of time of the day and TimePoint that will come in this time</returns>
-        public Queue<(TimeSpan, TimePoint)> GetTimerQueue(Preset preset)
+        public Queue<(TimeSpan nextChangeTime, TimePoint nextTimePoint)> GetTimerQueue(Preset preset)
          {
             if (preset?.TimePointCollection == null || preset.TimePointCollection.Count == 0)
                 return null;

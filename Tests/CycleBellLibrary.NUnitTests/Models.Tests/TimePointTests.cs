@@ -37,6 +37,22 @@ namespace CycleBellLibrary.NUnitTests.Models.Tests
             Assert.Null(timePoint.BaseTime);
         }
 
+        [Test]
+        public void ctor_NameParamIsNull_CreatesDefaultNamedTimePoint()
+        {
+            var timePoint = new TimePoint(null, "0:00:00");
+
+            Assert.That(timePoint.Name, Is.EqualTo(timePoint.GetDefaultTimePointName()));
+        }
+
+        [Test]
+        public void ctor_NameParamIsEmpty_CreatesEmptyStringNamedTimePoint()
+        {
+            var timePoint = new TimePoint(String.Empty, "0:00:00");
+
+            Assert.That(timePoint.Name, Is.EqualTo(String.Empty));
+        }
+
         #endregion ctor
 
         #region GetAbsoluteTime

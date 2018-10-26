@@ -52,7 +52,7 @@ namespace CycleBellLibrary.Models
         static TimePoint()
         {
             DefaultTime = InitialDefaultTime;
-            //DefaultTimePointNameFunc = (tp) => $"TimePoint {tp.Id}";
+            TimePointNameFunc = _defaultTimePointNameFunc = (tp) => $"TimePoint {tp.Id}";
 
             // Да хуй его, прикольно было попробовать
             dynamic max = _timePointNum.GetType().GetField ("MaxValue")?.GetValue (null);
@@ -91,22 +91,23 @@ namespace CycleBellLibrary.Models
             if (_timePointNum == MaxId)
                 throw new OverflowException ("Reached the maximum number of TimePointCollection");
 
-            Id = _timePointNum++;
+            if (Time >= TimeSpan.FromHours(24)) {
+                throw new ArgumentException("Absolute TimePoint can't have Time greater than 23:59:59");
+            }
 
             Time = time;
-            _timePointType = timePointType;
 
-            if (timePointType == TimePointType.Absolute)
+            if (timePointType == TimePointType.Absolute) {
                 BaseTime = TimeSpan.Zero;
+            }
+
+            Id = _timePointNum++;
+
+            _timePointType = timePointType;
 
             LoopNumber = loopNumber == Byte.MaxValue ? (byte)(Byte.MaxValue - 1) : loopNumber;
 
-            if (String.IsNullOrWhiteSpace (name)) {
-                Name = GetDefaultTimePointName();
-            }
-            else {
-                Name = name;
-            }
+           Name = name ?? GetDefaultTimePointName();
         }
 
         #region Linked
@@ -152,11 +153,7 @@ namespace CycleBellLibrary.Models
 
         public static TimePoint DefaultTimePoint => new TimePoint();
 
-        public static Func<TimePoint, String> DefaultTimePointNameFunc
-        {
-            get => _defaultTimePointNameFunc;
-            set => _defaultTimePointNameFunc = value;
-        }
+        public static Func<TimePoint, String> TimePointNameFunc { get; set; }
 
             #endregion
 
@@ -250,7 +247,7 @@ namespace CycleBellLibrary.Models
             }
         }
 
-        public string GetDefaultTimePointName() { return DefaultTimePointNameFunc?.Invoke(this) ?? ""; }
+        public string GetDefaultTimePointName() { return TimePointNameFunc?.Invoke(this) ?? _defaultTimePointNameFunc.Invoke(this); }
 
         // GetAbsolute
         /// <summary>
