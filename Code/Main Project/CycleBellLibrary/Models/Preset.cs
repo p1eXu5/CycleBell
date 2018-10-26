@@ -90,7 +90,11 @@ namespace CycleBellLibrary.Models
 
             _readOnlyTimePointCollectionCollection = new ReadOnlyObservableCollection<TimePoint> (_timePoints);
 
-            _startTime = startTime;
+            _startTime = startTime < TimeSpan.Zero ? startTime.Negate() : startTime;
+
+            if (_startTime >= TimeSpan.FromDays(1)) {
+                _startTime -= TimeSpan.FromDays(1);
+            }
         }
 
         #endregion
@@ -135,7 +139,19 @@ namespace CycleBellLibrary.Models
         public TimeSpan StartTime
         {
             get => _startTime;
-            set => _startTime = AutoUpdateTimePointBaseTimes ? OnStartTimeChanged (value, _startTime) : value;
+            set {
+                TimeSpan startTime = value;
+
+                if (startTime < TimeSpan.Zero) {
+                    startTime = startTime.Negate();
+                }
+
+                if (startTime >= TimeSpan.FromDays(1)) {
+                    startTime -= TimeSpan.FromDays(1);
+                }
+
+                _startTime = AutoUpdateTimePointBaseTimes ? OnStartTimeChanged(startTime, _startTime) : startTime;
+            }
         }
 
         /// <summary>

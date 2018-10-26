@@ -53,7 +53,7 @@
     <Compile Include="Properties\Annotations.cs" />
     <Compile Include="Repository\IInnerPresetCollectionManager.cs" />
     <Compile Include="Timer\TimerQueueCalculator.cs" />
-    <Compile Include="Timer\IBaseTimeCalculator.cs" />
+    <Compile Include="Timer\ITimerQueueCalculator.cs" />
     <Compile Include="Timer\IStartTimeTimePointName.cs" />
     <Compile Include="Timer\ITimerManager.cs" />
     <Compile Include="Repository\PresetSerializableObservableCollection.cs" />
