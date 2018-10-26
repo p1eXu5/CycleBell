@@ -130,10 +130,11 @@ namespace CycleBell.ViewModels.TimePointViewModels
 
         public bool Equals (TimePoint timePoint)
         {
-            if (ReferenceEquals (null, timePoint)) return false;
+            if (TimePoint == null) return timePoint == null;
+            if (timePoint == null) return TimePoint == null;
             if (ReferenceEquals (this.TimePoint, timePoint)) return true;
 
-            return TimePoint == timePoint;
+            return TimePoint.Equals(timePoint);
         }
 
         public override int GetHashCode()

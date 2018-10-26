@@ -60,7 +60,7 @@ namespace CycleBell.NUnitTests.ViewModels
 
         private BeginTimePointViewModel GetBeginTimePontViewModel()
         {
-            _mockPresetViewModel.Setup(a => a.Preset).Returns(new Preset(new[] {new TimePoint(),}));
+            _mockPresetViewModel.Setup(a => a.Preset).Returns(new Preset(new[] {new TimePoint("","0:00:01"),}));
 
             var btpvm = new BeginTimePointViewModel(0, _mockPresetViewModel.Object);
 

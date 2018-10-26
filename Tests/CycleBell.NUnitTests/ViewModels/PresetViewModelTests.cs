@@ -60,8 +60,8 @@ namespace CycleBell.NUnitTests.ViewModels
         {
             var pvm = GetPresetViewModel();
 
-            pvm.AddingTimePoint.Time = TimeSpan.Parse (time);
             pvm.AddingTimePoint.TimePoint.ChangeTimePointType(timePointType);
+            pvm.AddingTimePoint.Time = TimeSpan.Parse (time);
 
             Assert.IsFalse(pvm.AddTimePointCommand.CanExecute(null));
         }

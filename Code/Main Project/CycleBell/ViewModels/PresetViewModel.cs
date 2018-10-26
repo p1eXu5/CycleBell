@@ -327,8 +327,9 @@ namespace CycleBell.ViewModels
         }
         private bool CanAddTimePoint (object o)
         {
-            var res = _addingTimePoint.Time == TimeSpan.Zero && _addingTimePoint.TimePointType == TimePointType.Absolute 
-                        || _addingTimePoint.Time > TimeSpan.Zero;
+            var res = _addingTimePoint.Time < TimeSpan.FromDays(1) 
+                      && ((_addingTimePoint.TimePointType == TimePointType.Relative && _addingTimePoint.Time > TimeSpan.Zero) 
+                      || (_addingTimePoint.TimePointType == TimePointType.Absolute && _addingTimePoint.Time >= TimeSpan.Zero));
 
             return res;
         }

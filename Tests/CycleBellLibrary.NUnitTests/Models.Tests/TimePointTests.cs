@@ -16,7 +16,7 @@ namespace CycleBellLibrary.NUnitTests.Models.Tests
         [Test]
         public void ctor_ParameterlessCalled_CreatsTimePointWithNullBaseTime()
         {
-            var timePoint = TimePoint.DefaultTimePoint;
+            var timePoint = new TimePoint();
 
             Assert.IsTrue (timePoint.BaseTime == null);
         }
@@ -65,6 +65,18 @@ namespace CycleBellLibrary.NUnitTests.Models.Tests
             Assert.That(() => new TimePoint(TimeSpan.FromHours(24), TimePointType.Relative), Throws.ArgumentException);
         }
 
+        [Test]
+        public void ctor_InvalidNegativeTimeAbsoluteTimePoint_Throw()
+        {
+            Assert.That(() => new TimePoint(TimeSpan.FromHours(-24), TimePointType.Absolute), Throws.ArgumentException);
+        }
+
+        [Test]
+        public void ctor_InvalidNegativeTimeRelativeTimePoint_Throw()
+        {
+            Assert.That(() => new TimePoint(TimeSpan.FromHours(-24), TimePointType.Relative), Throws.ArgumentException);
+        }
+
         #endregion ctor
 
         [Test]
@@ -74,6 +86,23 @@ namespace CycleBellLibrary.NUnitTests.Models.Tests
             timePoint.Time = TimeSpan.FromDays(1);
 
             Assert.That(timePoint.Time, Is.LessThan(TimeSpan.FromDays(1)));
+        }
+
+        [Test]
+        public void Time_SetUpWithInvalidNegativeTimeAbsoluteTimePoint_TrimsTheTime()
+        {
+            var timePoint = GetAbsoluteTimePoint();
+            timePoint.Time = TimeSpan.FromDays(-1);
+
+            Assert.That(timePoint.Time, Is.GreaterThan(TimeSpan.FromDays(-1)));
+        }
+
+        [Test]
+        public void DefaultTimePoint_HasZeroRelativeTime()
+        {
+            var tp = TimePoint.DefaultTimePoint;
+
+            Assert.That(tp.GetRelativeTime() == TimeSpan.Zero);
         }
 
         #region GetAbsoluteTime
@@ -200,16 +229,6 @@ namespace CycleBellLibrary.NUnitTests.Models.Tests
                     ++i;
                 }
             }
-        }
-
-        [Test]
-        public void Equality_EqualTimePoints_ReturnsTrue()
-        {
-            var tp1 = TimePoint.DefaultTimePoint;
-            var tp2 = TimePoint.DefaultTimePoint;
-
-            Assert.AreNotSame(tp1, tp2);
-            Assert.IsTrue(tp1 == tp2);
         }
 
         [Test]

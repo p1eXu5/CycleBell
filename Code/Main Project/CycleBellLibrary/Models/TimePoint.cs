@@ -18,6 +18,7 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
+using System.Runtime.Remoting.Messaging;
 using System.Xml.Serialization;
 
 namespace CycleBellLibrary.Models
@@ -95,6 +96,10 @@ namespace CycleBellLibrary.Models
                 throw new ArgumentException("Absolute TimePoint can't have Time greater than 23:59:59");
             }
 
+            if (time <= TimeSpan.FromHours(-24)) {
+                throw new ArgumentException("Absolute TimePoint can't have Time greater than 23:59:59");
+            }
+
             Time = time;
 
             if (timePointType == TimePointType.Absolute) {
@@ -107,7 +112,7 @@ namespace CycleBellLibrary.Models
 
             LoopNumber = loopNumber == Byte.MaxValue ? (byte)(Byte.MaxValue - 1) : loopNumber;
 
-           Name = name ?? GetDefaultTimePointName();
+            Name = name ?? GetDefaultTimePointName();
         }
 
         #region Linked
@@ -151,7 +156,7 @@ namespace CycleBellLibrary.Models
         public static Int64 MaxId { get; }
         public static Int64 MinId { get; }
 
-        public static TimePoint DefaultTimePoint => new TimePoint();
+        public static TimePoint DefaultTimePoint => new TimePoint(TimeSpan.Zero, TimePointType.Absolute);
 
         public static Func<TimePoint, String> TimePointNameFunc { get; set; }
 
@@ -177,10 +182,19 @@ namespace CycleBellLibrary.Models
         /// </summary>
         public TimeSpan Time
         {
-            get => _time; 
-            set => _time = value < TimeSpan.FromDays(1) 
-                               ? value
-                               : value - TimeSpan.FromDays(1);
+            get => _time;
+            set {
+                if (value >= TimeSpan.Zero){
+                    _time = value < TimeSpan.FromDays(1)
+                                ? value
+                                : value - TimeSpan.FromDays(1);
+                }
+                else {
+                    _time = value > TimeSpan.FromDays(-1)
+                                ? value
+                                : value - TimeSpan.FromDays(-1);
+                }
+            }
         }
 
         public TimeSpan? BaseTime { get; set; }
@@ -366,41 +380,19 @@ namespace CycleBellLibrary.Models
 
         #region Operators
 
-        public static bool operator == (TimePoint tp1, TimePoint tp2)
-        {
-            if (ReferenceEquals(tp1, null) || ReferenceEquals(tp2, null)) {
-
-                return ReferenceEquals(tp1, tp2);
-            }
-
-            var res = (String.Equals(tp1.Name, tp2.Name))
-                && (tp1.Time == tp2.Time)
-                && (tp1.BaseTime == tp2.BaseTime)
-                && (tp1.TimePointType == tp2.TimePointType)
-                && (tp1.LoopNumber == tp2.LoopNumber)
-                && (Object.Equals(tp1.Tag, tp2.Tag));
-
-            return res;
-        }
-
-        public static bool operator != (TimePoint tp1, TimePoint tp2)
-        {
-            return !(tp1 == tp2);
-        }
-
-
         public override bool Equals(object obj)
         {
-            if (ReferenceEquals (null, obj)) return false;
-            if (ReferenceEquals (this, obj)) return true;
-            if (obj.GetType() != this.GetType()) return false;
-            return Equals ((TimePoint) obj);
+            if (obj is TimePoint timePoint)
+                return Equals (timePoint);
+            
+            return false;
         }
 
         public bool Equals (TimePoint other)
         {
-            if (ReferenceEquals (null, other)) return false;
-            if (ReferenceEquals (this, other)) return true;
+            if (other == null)
+                return false;
+
             return Id == other.Id;
         }
 
@@ -422,5 +414,24 @@ namespace CycleBellLibrary.Models
 
         #endregion
 
+    }
+
+    public class TimePointReferenceComparer : EqualityComparer<TimePoint>
+    {
+        public override bool Equals(TimePoint x, TimePoint y)
+        {
+            if (x == null || y == null )
+                return Object.Equals(x, y);
+
+            return (x.Time == y.Time
+                   && x.BaseTime.Equals(y.BaseTime)
+                   && x.TimePointType == y.TimePointType
+                   && x.LoopNumber == y.LoopNumber);
+        }
+
+        public override int GetHashCode(TimePoint obj)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

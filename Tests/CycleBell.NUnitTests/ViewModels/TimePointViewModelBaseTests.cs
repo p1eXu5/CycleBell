@@ -23,9 +23,9 @@ namespace CycleBell.NUnitTests.ViewModels
         public void Equals_EqualTimePoints_ReturnsTrue()
         {
             TimePointViewModelBase tpvmb = GetTimePointViewModel(TimePoint.DefaultTimePoint);
-            var tp = TimePoint.DefaultTimePoint;
+            var tp = tpvmb.TimePoint;
 
-            Assert.IsTrue(tpvmb.Equals(tp));
+            Assert.That(tpvmb.Equals(tp));
         }
 
         [Test]

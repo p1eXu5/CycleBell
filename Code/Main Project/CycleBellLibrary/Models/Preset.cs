@@ -173,7 +173,7 @@ namespace CycleBellLibrary.Models
             if (TimePointCollection.Contains (timePoint))
                 throw new ArgumentException("timePoint already exists", nameof(timePoint));
 
-            PreAddTimePoint(timePoint);
+            CheckAddingTimePoint(timePoint);
 
             if (TimePointCollection.Count > 0)
                 PrepareTimePointId (ref timePoint);
@@ -218,14 +218,16 @@ namespace CycleBellLibrary.Models
         }
 
         /// <summary>
-        /// If adding TimePoint has Relative TimePointType and zero Time than
-        /// TimePointType will change to Absolute TimePointType
+        /// If adding timePoint has Relative TimePointType and zero Time
+        /// or adding timePoint less than zero than throw.
         /// </summary>
         /// <param name="timePoint">Adding TimePoint</param>
-        public virtual void PreAddTimePoint(TimePoint timePoint)
+        /// <exception cref="ArgumentException"></exception>
+        public virtual void CheckAddingTimePoint(TimePoint timePoint)
         {
-            if (timePoint.TimePointType == TimePointType.Relative && timePoint.Time == TimeSpan.Zero) {
-                throw new ArgumentException("Relative TimePoint can't have zero Time", nameof(timePoint));
+            if ((timePoint.TimePointType == TimePointType.Relative && timePoint.Time == TimeSpan.Zero)
+                || (timePoint.Time < TimeSpan.Zero)) {
+                throw new ArgumentException("Relative TimePoint can't have zero Time or be less than zero", nameof(timePoint));
             }
         }
         
