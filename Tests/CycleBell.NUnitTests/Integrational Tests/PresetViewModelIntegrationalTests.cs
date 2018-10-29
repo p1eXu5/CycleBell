@@ -21,16 +21,19 @@ namespace CycleBell.NUnitTests.Integrational_Tests
             var preset = GetPreset(TimeSpan.Parse(startTime));
             var pvm = GetPresetViewModel(preset);
 
+            Assert.IsNotNull (pvm);
+
             var queue = GetQueue().GetTimerQueue(preset);
             var absoluteTimes = GetAbsoluteTimes(queue);
 
-
+            _mockTimerManager.Raise (t => t.ChangeTimePointEvent += null, new TimerEventArgs (null, timePoints[0].TimePoint, TimeSpan.Zero, null));
         }
 
         #region Factory
 
         public string StartTimeTimePointName { get; } = "StartTime";
-        private readonly Mock<ITimerManager> _mockTimerManager = new Mock<ITimerManager>();
+        private Mock<ITimerManager> _mockTimerManager;
+        private readonly PresetCollectionManager _presetCollectionManager = new PresetCollectionManager();
 
         private Preset GetPreset(TimeSpan startTime) => new Preset(new []
                                                         {
@@ -50,11 +53,16 @@ namespace CycleBell.NUnitTests.Integrational_Tests
         private PresetViewModel GetPresetViewModel(Preset preset)
         {
             Mock<IDialogRegistrator> stub_DialogRegistrator = new Mock<IDialogRegistrator>();
-            CycleBellManager cycleBellManager = new CycleBellManager(null, new PresetCollectionManager(), _mockTimerManager.Object);
 
-            var mainViewModel = new MainViewModel(stub_DialogRegistrator.Object, cycleBellManager);
+            var mockCycleBellManager = new Mock<ICycleBellManager>();
+            _mockTimerManager = mockCycleBellManager.As<ITimerManager>();
 
-            cycleBellManager.AddPreset(preset);
+            mockCycleBellManager.Setup (m => m.PresetCollectionManager).Returns (_presetCollectionManager);
+            mockCycleBellManager.Setup (m => m.TimerManager).Returns (_mockTimerManager.Object);
+
+            var mainViewModel = new MainViewModel(stub_DialogRegistrator.Object, mockCycleBellManager.Object);
+
+            _presetCollectionManager.Add (preset);
 
             return mainViewModel.SelectedPreset;
         }
