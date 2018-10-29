@@ -114,11 +114,17 @@ namespace CycleBell.NUnitTests.Integrational_Tests
             var queue = GetQueue().GetTimerQueue(preset).ToArray();
             TimeSpan dontExpectedAbsoluteTime = queue[1].nextTimePoint.GetAbsoluteTime();
 
-            _mockTimerManager.Raise(t => t.ChangeTimePointEvent += null, new TimerEventArgs(prevTimePoint: queue[1].nextTimePoint,
-                                                                                            nextTimePoint: queue[2].nextTimePoint,
-                                                                                            lastTimeToNextChange: default(TimeSpan),
-                                                                                            prevTimePointNextBaseTime: TimeSpan.FromHours (1)
-                                                                                           ));
+            _mockTimerManager.Raise(t => t.ChangeTimePointEvent += null, new TimerEventArgs ( prevTimePoint: queue[0].nextTimePoint,
+                                                                                              nextTimePoint: queue[1].nextTimePoint,
+                                                                                              lastTimeToNextChange: default(TimeSpan),
+                                                                                              prevTimePointNextBaseTime: null
+                                                                                            ));
+
+            _mockTimerManager.Raise(t => t.ChangeTimePointEvent += null, new TimerEventArgs ( prevTimePoint: queue[1].nextTimePoint,
+                                                                                              nextTimePoint: queue[2].nextTimePoint,
+                                                                                              lastTimeToNextChange: default(TimeSpan),
+                                                                                              prevTimePointNextBaseTime: TimeSpan.FromHours (1)
+                                                                                            ));
 
             Assert.AreNotEqual(dontExpectedAbsoluteTime, queue[1].nextTimePoint.GetAbsoluteTime());
         }
