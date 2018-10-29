@@ -31,15 +31,16 @@ namespace CycleBellLibrary.NUnitTests.Timer
         public void GetTimerQueue_PresetContainsTimePoint_ReturnsExpectedTimePoints()
         {
             var btc = GetBaseTimeCalculator();
+            var startTime = TimeSpan.Parse ("12:00:00");
             var preset = new Preset (new[]
                 {
                     new TimePoint("Test point 1", "0:00:10", TimePointType.Relative, 10),
                     new TimePoint("Test point 2", "12:00:20", TimePointType.Absolute, 20),
-                }) { StartTime = TimeSpan.FromHours (12) };
+                }) { StartTime = startTime };
 
             Queue<(TimeSpan, TimePoint)> expectedQueue = new Queue<(TimeSpan, TimePoint)>(new []
                 {
-                    (TimeSpan.Parse ("12:00:00"), new TimePoint(StartTimePointName, "12:00:00", TimePointType.Absolute) {BaseTime = TimeSpan.Parse ("12:00:00")}),
+                    (TimeSpan.Parse ("12:00:00"), TimerManager.GetStartTimePoint (startTime)),
                     (TimeSpan.Parse ("12:00:10"), preset.TimePointCollection[0]),
                     (TimeSpan.Parse ("12:00:20"), preset.TimePointCollection[1]),
                 });

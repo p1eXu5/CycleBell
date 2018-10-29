@@ -22,7 +22,7 @@ namespace CycleBell.NUnitTests.ViewModels
         [Test]
         public void Equals_EqualTimePoints_ReturnsTrue()
         {
-            TimePointViewModelBase tpvmb = GetTimePointViewModel(TimePoint.DefaultTimePoint);
+            TimePointViewModelBase tpvmb = GetTimePointViewModel(TimePoint.GetAbsoluteTimePoint());
             var tp = tpvmb.TimePoint;
 
             Assert.That(tpvmb.Equals(tp));
@@ -33,8 +33,8 @@ namespace CycleBell.NUnitTests.ViewModels
         {
             TimePoint.DefaultTimePointType = TimePointType.Relative;
 
-            TimePointViewModelBase tpvmb = GetTimePointViewModel(TimePoint.DefaultTimePoint);
-            var tp = TimePoint.DefaultTimePoint;
+            TimePointViewModelBase tpvmb = GetTimePointViewModel(TimePoint.GetAbsoluteTimePoint());
+            var tp = TimePoint.GetAbsoluteTimePoint();
 
             tp.ChangeTimePointType(TimePointType.Absolute);
 
@@ -44,7 +44,7 @@ namespace CycleBell.NUnitTests.ViewModels
         [Test]
         public void Equals_CompareToNull_ReturnsFalse()
         {
-            TimePointViewModelBase tpvmb = GetTimePointViewModel(TimePoint.DefaultTimePoint);
+            TimePointViewModelBase tpvmb = GetTimePointViewModel(TimePoint.GetAbsoluteTimePoint());
 
             Assert.IsFalse(tpvmb == null);
         }

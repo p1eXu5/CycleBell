@@ -112,12 +112,12 @@ namespace CycleBell.NUnitTests.Integrational_Tests
             var preset = GetPreset(TimeSpan.Zero);
             var pvm = GetPresetViewModel(preset);
             var queue = GetQueue().GetTimerQueue(preset).ToArray();
-            TimeSpan? dontExpectedAbsoluteTime = queue[1].nextTimePoint.GetAbsoluteTime();
+            TimeSpan dontExpectedAbsoluteTime = queue[1].nextTimePoint.GetAbsoluteTime();
 
             _mockTimerManager.Raise(t => t.ChangeTimePointEvent += null, new TimerEventArgs(prevTimePoint: queue[1].nextTimePoint,
                                                                                             nextTimePoint: queue[2].nextTimePoint,
                                                                                             lastTimeToNextChange: default(TimeSpan),
-                                                                                            prevTimePointNextBaseTime: null
+                                                                                            prevTimePointNextBaseTime: TimeSpan.FromHours (1)
                                                                                            ));
 
             Assert.AreNotEqual(dontExpectedAbsoluteTime, queue[1].nextTimePoint.GetAbsoluteTime());

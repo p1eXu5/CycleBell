@@ -14,11 +14,27 @@ namespace CycleBellLibrary.NUnitTests.Models.Tests
         #region ctor
 
         [Test]
-        public void ctor_ParameterlessCalled_CreatsTimePointWithNullBaseTime()
+        public void ctor_ByDefault_CreatsTimePointWithNullBaseTime()
         {
             var timePoint = new TimePoint();
 
             Assert.IsTrue (timePoint.BaseTime == null);
+        }
+
+        [Test]
+        public void ctor_ByDefault_CreatsRelativeTimePoint()
+        {
+            var timePoint = new TimePoint();
+
+            Assert.IsTrue (timePoint.TimePointType == TimePointType.Relative);
+        }
+
+        [Test]
+        public void ctor_ByDefault_CreatsTimePointWithDefaultTime()
+        {
+            var timePoint = new TimePoint();
+
+            Assert.IsTrue (timePoint.Time == TimePoint.DefaultTime);
         }
 
         [Test]
@@ -42,7 +58,7 @@ namespace CycleBellLibrary.NUnitTests.Models.Tests
         {
             var timePoint = new TimePoint(null, "0:00:00");
 
-            Assert.That(timePoint.Name, Is.EqualTo(timePoint.GetDefaultTimePointName()));
+            Assert.That(timePoint.Name, Is.EqualTo(TimePoint.GetDefaultTimePointName(timePoint)));
         }
 
         [Test]
@@ -53,62 +69,57 @@ namespace CycleBellLibrary.NUnitTests.Models.Tests
             Assert.That(timePoint.Name, Is.EqualTo(String.Empty));
         }
 
-        [Test]
-        public void ctor_InvalidTimeAbsoluteTimePoint_Throw()
-        {
-            Assert.That(() => new TimePoint(TimeSpan.FromHours(24), TimePointType.Absolute), Throws.ArgumentException);
-        }
+        //[Test]
+        //public void ctor_ReachedMaximumOfTimePoints_Throw()
+        //{
+        //    var ex = Assert.Catch<OverflowException>(() =>
+        //        {
+        //            for (int i = 1; i <= TimePoint.MaxId; ++i) {
+        //                var timePoint = new TimePoint();
+        //            } 
+        //        });
 
-        [Test]
-        public void ctor_InvalidTimeRelativeTimePoint_Throw()
-        {
-            Assert.That(() => new TimePoint(TimeSpan.FromHours(24), TimePointType.Relative), Throws.ArgumentException);
-        }
-
-        [Test]
-        public void ctor_InvalidNegativeTimeAbsoluteTimePoint_Throw()
-        {
-            Assert.That(() => new TimePoint(TimeSpan.FromHours(-24), TimePointType.Absolute), Throws.ArgumentException);
-        }
-
-        [Test]
-        public void ctor_InvalidNegativeTimeRelativeTimePoint_Throw()
-        {
-            Assert.That(() => new TimePoint(TimeSpan.FromHours(-24), TimePointType.Relative), Throws.ArgumentException);
-        }
+        //    StringAssert.Contains ("Reached the maximum number of TimePointCollection", ex.Message);
+        //}
 
         #endregion ctor
 
-        [Test]
-        public void Time_SetUpWithInvalidTimeAbsoluteTimePoint_TrimsTheTime()
-        {
-            var timePoint = GetAbsoluteTimePoint();
-            timePoint.Time = TimeSpan.FromDays(1);
+        #region Time & BaseTime
 
-            Assert.That(timePoint.Time, Is.LessThan(TimeSpan.FromDays(1)));
+        [TestCase ("24:00:00")]
+        [TestCase ("1:23:00:00")]
+        [TestCase ("-1:23:00:00")]
+        [TestCase ("-586:23:00:00")]
+        public void TimeSetter_NewTimeValueWithDays_CropsTheDays(string newTimeStr)
+        {
+            var timePoint = TimePoint.GetAbsoluteTimePoint();
+            var newTime = TimeSpan.Parse (newTimeStr);
+
+            timePoint.Time = newTime;
+
+            Assert.That (timePoint.Time.Days == 0);
         }
 
-        [Test]
-        public void Time_SetUpWithInvalidNegativeTimeAbsoluteTimePoint_TrimsTheTime()
+        [TestCase ("24:00:00")]
+        [TestCase ("1:23:00:00")]
+        [TestCase ("-1:23:00:00")]
+        [TestCase ("-586:23:00:00")]
+        public void BaseTimeSetter_NewTimeValueWithDays_CropsTheDays(string newTimeStr)
         {
-            var timePoint = GetAbsoluteTimePoint();
-            timePoint.Time = TimeSpan.FromDays(-1);
+            var timePoint = TimePoint.GetAbsoluteTimePoint();
+            var newTime = TimeSpan.Parse (newTimeStr);
 
-            Assert.That(timePoint.Time, Is.GreaterThan(TimeSpan.FromDays(-1)));
+            timePoint.BaseTime = newTime;
+
+            Assert.That (((TimeSpan)timePoint.BaseTime).Days == 0);
         }
 
-        [Test]
-        public void DefaultTimePoint_HasZeroRelativeTime()
-        {
-            var tp = TimePoint.DefaultTimePoint;
-
-            Assert.That(tp.GetRelativeTime() == TimeSpan.Zero);
-        }
+        #endregion
 
         #region GetAbsoluteTime
 
         [Test]
-        public void GetAbsoluteTime_RelativeTimePointBaseTimeNotSet_Throws()
+        public void GetAbsoluteTime_ByDefaultRelativeTimePointBaseTimeNotSet_Throws()
         {
             var timePoint = GetRelativeTimePoint();
 
@@ -118,7 +129,7 @@ namespace CycleBellLibrary.NUnitTests.Models.Tests
         }
 
         [Test]
-        public void GetAbsoluteTime_AbsoluteTimePointBaseTimeNotSet_ReturnsTime()
+        public void GetAbsoluteTime_ByDefaultAbsoluteTimePointBaseTimeNotSet_ReturnsTime()
         {
             var timePoint = GetAbsoluteTimePoint();
 
@@ -127,20 +138,31 @@ namespace CycleBellLibrary.NUnitTests.Models.Tests
             Assert.AreEqual(timePoint.Time, actualAbsoluteTime);
         }
 
+        [Test]
+        public void GetAbsoluteTime_ValidBaseTimeAbsoluteTimePointBaseTimeNotSet_ChangeBaseTime()
+        {
+            var timePoint = GetAbsoluteTimePoint();
+
+            timePoint.GetAbsoluteTime(TimeSpan.FromHours (13));
+
+            Assert.AreNotEqual (TimeSpan.Zero, timePoint.BaseTime);
+        }
+
         [TestCase("0:00:30", "23:59:59", "0:00:29")]
         [TestCase("0:00:30", "23:59:29", "23:59:59")]
         [TestCase("0:00:30", "-23:59:30", "-23:59:00")]
         [TestCase("0:00:30", "0:00:00", "0:00:30")]
         [TestCase("23:59:59", "23:59:59", "23:59:58")]
         [TestCase("00:00:00", "23:59:59", "23:59:59")]
-        public void GetAbsoluteTime_RelativeTimePointValidBaseTime_ReturnsExpectedAbsoluteTime(string time, string baseTime, string expectedAbsoluteTime)
+        [TestCase("-00:00:00", "23:59:59", "23:59:59")]
+        public void GetAbsoluteTime_ValidBaseTimeRelativeTimePoint_ReturnsExpectedAbsoluteTime(string time, string baseTime, string expectedAbsoluteTime)
         {
-            var timePoint = GetRelativeTimePoint();
+            var timePoint = GetRelativeTimePoint(time);
+            var expectedTime = TimeSpan.Parse (expectedAbsoluteTime);
 
-            timePoint.Time = TimeSpan.Parse(time);
             var actualAbsoluteTime = timePoint.GetAbsoluteTime(TimeSpan.Parse(baseTime));
 
-            Assert.AreEqual(TimeSpan.Parse(expectedAbsoluteTime), actualAbsoluteTime);
+            Assert.AreEqual(expectedTime, actualAbsoluteTime);
         }
 
         #endregion
@@ -186,6 +208,15 @@ namespace CycleBellLibrary.NUnitTests.Models.Tests
         #endregion
 
         [Test]
+        public void AbsoluteTimePoint_CreatedWithZeroRelativeTime()
+        {
+            var tp = TimePoint.GetAbsoluteTimePoint();
+
+            Assert.That(tp.GetRelativeTime() == TimeSpan.Zero);
+        }
+
+
+        [Test]
         public void Clone_WhenCalled_GetsClone()
         {
             var timePoint = GetRelativeTimePoint(7);
@@ -202,61 +233,38 @@ namespace CycleBellLibrary.NUnitTests.Models.Tests
             Assert.AreEqual(timePoint.BaseTime, timePointClone.BaseTime);
         }
 
-        [Test]
-        public void TimePointInLinqTest()
-        {
-            TimePoint[] points = new[]
-            {
-                new TimePoint {LoopNumber = 0, Name = "A"},
-                new TimePoint {LoopNumber = 1, Name = "B"},
-                new TimePoint {LoopNumber = 0, Name = "D"},
-                new TimePoint {LoopNumber = 1, Name = "C"}
-            };
-
-            IEnumerable<byte> query = points.OrderBy(t => t.LoopNumber).Select(t => t.LoopNumber).Distinct();
-
-            IEnumerable<TimePoint> queryPoint = (from t in points
-                                                 orderby t.Id ascending
-                                                 select t).ToList();
-
-            foreach (var timePoint in query) {
-
-                int i = 0;
-
-                foreach (var point in queryPoint) {
-
-                    Assert.AreEqual(points[i], point);
-                    ++i;
-                }
-            }
-        }
-
-        [Test]
-        public void Equality_NotEqualTimePoints_ReturnsFalse()
-        {
-            TimePoint.DefaultTimePointType = TimePointType.Relative;
-
-            var tp1 = TimePoint.DefaultTimePoint;
-            var tp2 = TimePoint.DefaultTimePoint;
-            tp2.ChangeTimePointType(TimePointType.Absolute);
-
-            Assert.AreNotSame(tp1, tp2);
-            Assert.IsTrue(tp1 != tp2);
-        }
-
         #region Factory
 
         private TimePoint GetRelativeTimePoint()
         {
-            TimePoint.DefaultTimePointType = TimePointType.Relative;
-            return new TimePoint("0:00:30");
+            var tp = new TimePoint("Test TimePoint");
+            tp.ChangeTimePointType (TimePointType.Relative);
+
+            return tp;
         }
 
-        private TimePoint GetRelativeTimePoint(byte loopNumber) => new TimePoint("Test Relative TimePoint", "0:00:07", TimePointType.Relative, loopNumber);
+        private TimePoint GetRelativeTimePoint (byte loopNumber)
+        {
+            var tp = GetRelativeTimePoint();
+            tp.LoopNumber = loopNumber;
+
+            return tp;
+        }
+
+        private TimePoint GetRelativeTimePoint (string time)
+        {
+            var tp = GetRelativeTimePoint();
+            tp.Time = TimeSpan.Parse (time);
+
+            return tp;
+        }
 
         private TimePoint GetAbsoluteTimePoint()
         {
-            return new TimePoint("0:00:30", TimePointType.Absolute);
+            var tp = new TimePoint("Test TimePoint");
+            tp.ChangeTimePointType (TimePointType.Absolute);
+
+            return tp;
         }
 
         #endregion

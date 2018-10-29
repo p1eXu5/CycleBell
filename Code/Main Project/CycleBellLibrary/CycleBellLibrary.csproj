@@ -67,6 +67,7 @@
     <Compile Include="Models\TimerLoopSortedDictionary.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Models.TimePoint.cd" />
     <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

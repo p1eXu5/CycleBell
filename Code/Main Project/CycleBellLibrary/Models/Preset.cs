@@ -359,11 +359,9 @@ namespace CycleBellLibrary.Models
 
             foreach (var timePoint in TimePointCollection) {
 
-                if (timePoint.TimePointType == TimePointType.Relative) {
-                    timePoint.BaseTime += diff;
-                }
-                else {
-                    timePoint.BaseTime += diff;
+                timePoint.BaseTime += diff;
+
+                if (timePoint.TimePointType == TimePointType.Absolute) {
                     timePoint.Time += diff;
                 }
             }

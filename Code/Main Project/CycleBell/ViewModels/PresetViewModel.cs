@@ -317,7 +317,7 @@ namespace CycleBell.ViewModels
             var timePoint = _addingTimePoint.TimePoint.Clone();
 
             if (String.IsNullOrWhiteSpace (timePoint.Name))
-                timePoint.Name = timePoint.GetDefaultTimePointName();
+                timePoint.Name = TimePoint.GetDefaultTimePointName(timePoint);
 
             Preset.AddTimePoint(timePoint);
             timePoint.ChangeTimePointType(TimePointType.Relative);

@@ -43,7 +43,7 @@ namespace CycleBell.NUnitTests.ViewModels
             var preset = pvm.Preset;
 
             // Action
-             preset.AddTimePoint (TimePoint.DefaultTimePoint);
+             preset.AddTimePoint (TimePoint.GetAbsoluteTimePoint());
 
             // Assert
             Assert.IsTrue (pvm.TimePointVmCollection.Count == 3);
@@ -86,7 +86,7 @@ namespace CycleBell.NUnitTests.ViewModels
 
             pvm.AddTimePointCommand.Execute (null);
 
-            Assert.AreEqual (pvm.TimePointVmCollection[0].TimePoint.GetDefaultTimePointName(), pvm.TimePointVmCollection[0].TimePoint.Name);
+            Assert.AreEqual (TimePoint.GetDefaultTimePointName (pvm.TimePointVmCollection[0].TimePoint), pvm.TimePointVmCollection[0].TimePoint.Name);
         }
         
         // WhenExecuted

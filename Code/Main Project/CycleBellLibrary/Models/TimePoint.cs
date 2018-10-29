@@ -34,15 +34,14 @@ namespace CycleBellLibrary.Models
     {
         #region Fields
 
-        public static readonly TimeSpan InitialDefaultTime = TimeSpan.Zero;
-
         private static byte _timePointNum = Byte.MinValue + 1;
 
         private string _name;
         private TimeSpan _time;
+        private TimeSpan? _baseTime;
         private byte _loopNumber;
 
-        private static Func<TimePoint, String> _defaultTimePointNameFunc;
+        private static readonly Func<byte, String> _defaultTimePointNameFunc;
         private TimePointType _timePointType;
 
         #endregion
@@ -52,24 +51,8 @@ namespace CycleBellLibrary.Models
         // Static!
         static TimePoint()
         {
-            DefaultTime = InitialDefaultTime;
-            TimePointNameFunc = _defaultTimePointNameFunc = (tp) => $"TimePoint {tp.Id}";
-
-            // Да хуй его, прикольно было попробовать
-            dynamic max = _timePointNum.GetType().GetField ("MaxValue")?.GetValue (null);
-
-            if (max == null)
-                throw new InvalidOperationException();
-
-            MaxId = (Int64) max;
-
-            dynamic min = _timePointNum.GetType().GetField ("MinValue")?.GetValue (null);
-
-            if (min == null)
-                throw new InvalidOperationException();
-
-            MinId = (Int64) min;
-
+            DefaultTime = TimeSpan.Zero;
+            TimePointNameFunc = _defaultTimePointNameFunc = (id) => $"TimePoint {id}";
         }
 
         // Instance
@@ -92,14 +75,6 @@ namespace CycleBellLibrary.Models
             if (_timePointNum == MaxId)
                 throw new OverflowException ("Reached the maximum number of TimePointCollection");
 
-            if (time >= TimeSpan.FromHours(24)) {
-                throw new ArgumentException("Absolute TimePoint can't have Time greater than 23:59:59");
-            }
-
-            if (time <= TimeSpan.FromHours(-24)) {
-                throw new ArgumentException("Absolute TimePoint can't have Time greater than 23:59:59");
-            }
-
             Time = time;
 
             if (timePointType == TimePointType.Absolute) {
@@ -110,22 +85,27 @@ namespace CycleBellLibrary.Models
 
             _timePointType = timePointType;
 
-            LoopNumber = loopNumber == Byte.MaxValue ? (byte)(Byte.MaxValue - 1) : loopNumber;
+            LoopNumber = loopNumber == MaxId ? (byte)(MaxId - 1) : loopNumber;
 
-            Name = name ?? GetDefaultTimePointName();
+            Name = name ?? _defaultTimePointNameFunc(Id);
         }
 
         #region Linked
 
         public TimePoint(TimeSpan time, TimePointType timePointType)
-            : this("Time point " + _timePointNum, time, timePointType)
+            : this(null, time, timePointType)
         { }
         public TimePoint(string time, TimePointType timePointType, byte loopNumber = 0)
-            : this("Time point " + _timePointNum, TimeSpan.Parse(time), timePointType, loopNumber)
+            : this(null, TimeSpan.Parse(time), timePointType, loopNumber)
         { }
-        public TimePoint(string time)
-            :this("Time point " + _timePointNum, TimeSpan.Parse(time), DefaultTimePointType)
+        public TimePoint(TimeSpan time)
+            :this(null, time, DefaultTimePointType)
         { }
+
+        public TimePoint(string name)
+            :this(name, DefaultTime, DefaultTimePointType)
+        { }
+
         public TimePoint(string name, string time)
             :this(name, TimeSpan.Parse(time), DefaultTimePointType)
         { }
@@ -133,13 +113,17 @@ namespace CycleBellLibrary.Models
             :this(name, TimeSpan.Parse(time), timePointType, loopNumber)
         { }
 
-        #endregion
+        public TimePoint (string name, string time, TimeSpan baseTime, TimePointType timePointType, byte loopNumber = 0)
+            : this (name, TimeSpan.Parse (time), timePointType, loopNumber)
+        {
+            BaseTime = baseTime;
+        }
 
         #endregion
 
-        #region Properties
+        #endregion
 
-            #region Static
+        #region Preperties Static 
 
         /// <summary>
         /// Дефолтное смещение временной точки относительно текущего времени
@@ -153,20 +137,22 @@ namespace CycleBellLibrary.Models
         /// </summary>-
         public static string FirstPointName { get; set; } = "Launch Time";
 
-        public static Int64 MaxId { get; }
-        public static Int64 MinId { get; }
+        public static Byte MaxId { get; } = Byte.MaxValue;
+        public static Byte MinId { get; } = Byte.MinValue;
 
-        public static TimePoint DefaultTimePoint => new TimePoint(TimeSpan.Zero, TimePointType.Absolute);
+        public static TimePoint GetAbsoluteTimePoint() => new TimePoint(time: TimeSpan.Zero, timePointType: TimePointType.Absolute);
 
-        public static Func<TimePoint, String> TimePointNameFunc { get; set; }
+        public static Func<byte, String> TimePointNameFunc { get; set; }
 
-            #endregion
+        #endregion
+
+        #region Properties
 
         /// <summary>
         /// Уникальный порядковый номер временной точки
         /// </summary>
         [XmlIgnore]
-        public int Id { get; }
+        public byte Id { get; }
 
         /// <summary>
         /// Name of NextTimePoint
@@ -183,21 +169,21 @@ namespace CycleBellLibrary.Models
         public TimeSpan Time
         {
             get => _time;
+            set => _time = new TimeSpan(value.Hours, value.Minutes, value.Seconds);
+        }
+
+        public TimeSpan? BaseTime
+        {
+            get => _baseTime;
             set {
-                if (value >= TimeSpan.Zero){
-                    _time = value < TimeSpan.FromDays(1)
-                                ? value
-                                : value - TimeSpan.FromDays(1);
+                if (value == null) {
+                    _baseTime = null;
                 }
                 else {
-                    _time = value > TimeSpan.FromDays(-1)
-                                ? value
-                                : value - TimeSpan.FromDays(-1);
+                    _baseTime = new TimeSpan(((TimeSpan)value).Hours, ((TimeSpan)value).Minutes, ((TimeSpan)value).Seconds);
                 }
             }
         }
-
-        public TimeSpan? BaseTime { get; set; }
 
         /// <summary>
         /// Type of Time, absolute or relative
@@ -235,7 +221,7 @@ namespace CycleBellLibrary.Models
                     if (TimePointType == TimePointType.Relative) {
 
                         if (BaseTime == null) {
-                            Time = _GetAbsoluteTime(TimeSpan.Zero, false);
+                            Time = GetAbsoluteTime(TimeSpan.Zero);
                         }
                         else {
                             Time = GetAbsoluteTime();
@@ -263,14 +249,15 @@ namespace CycleBellLibrary.Models
             }
         }
 
-        public string GetDefaultTimePointName() { return TimePointNameFunc?.Invoke(this) ?? _defaultTimePointNameFunc.Invoke(this); }
+        public static string GetDefaultTimePointName(TimePoint tp) { return TimePointNameFunc?.Invoke(tp.Id) ?? _defaultTimePointNameFunc.Invoke(tp.Id); }
 
-        // GetAbsolute
+        // GetAbsoluteTime:
+
         /// <summary>
-        /// Gets absolute time
+        /// Gets absolute time.
         /// </summary>
         /// <returns>Absolute time</returns>
-        /// <exception cref="ArgumentException"></exception>
+        /// <exception cref="ArgumentException">Throws if BaseTime is null.</exception>
         public TimeSpan GetAbsoluteTime()
         {
             if (TimePointType == TimePointType.Absolute)
@@ -280,53 +267,45 @@ namespace CycleBellLibrary.Models
                 throw new ArgumentException("BaseTime must be set");
             }
 
-            return _GetAbsoluteTime((TimeSpan)BaseTime);
+            return _GetAbsoluteTime();
         }
 
         /// <summary>
-        /// Returns absolute time by baseTime
+        /// Returns absolute time by baseTime and sets BaseTime equaled to baseTime.
         /// </summary>
         /// <param name="baseTime"></param>
-        /// <returns></returns>
+        /// <returns><see cref="TimeSpan"/></returns>
         public TimeSpan GetAbsoluteTime(TimeSpan baseTime)
         {
+            BaseTime = baseTime;
+
             if (TimePointType == TimePointType.Absolute)
                 return Time;
 
-            return _GetAbsoluteTime(baseTime);
+            return _GetAbsoluteTime();
         }
 
-        private TimeSpan _GetAbsoluteTime (TimeSpan baseTime, bool storing = true)
+        private TimeSpan _GetAbsoluteTime ()
         {
-            var newBaseTime = baseTime;
-
-            if (storing) {
-                BaseTime = newBaseTime;
-            }
-
-            if (newBaseTime == TimeSpan.Zero) 
+            if (BaseTime == TimeSpan.Zero) 
                 return Time;
 
             // ReSharper disable once PossibleInvalidOperationException
-            var res = newBaseTime + Time;
+            var res = (TimeSpan)BaseTime + Time;
 
             if (res.Days > 0)
-                res -= TimeSpan.FromDays (1);
+                res -= TimeSpan.FromDays (res.Days);
 
             return res;
         }
 
-        // GetRelative
-        public TimeSpan GetRelativeTime(TimeSpan baseTime)
-        {
-            BaseTime = baseTime;
+        // GetRelativeTime:
 
-            if (TimePointType == TimePointType.Relative) {       
-                return Time;
-            }
-
-            return _GetRelativeTime(baseTime);
-        }
+        /// <summary>
+        /// Gets relative time.
+        /// </summary>
+        /// <returns></returns>
+        /// <exception cref="ArgumentException">Throws if BaseTime is null.</exception>
         public TimeSpan GetRelativeTime()
         {
             if (TimePointType == TimePointType.Relative)
@@ -336,34 +315,53 @@ namespace CycleBellLibrary.Models
                 throw new ArgumentException("BaseTime must be set");
             }
 
-            return _GetRelativeTime((TimeSpan)BaseTime);
+            return _GetRelativeTime();
         }
-        private TimeSpan _GetRelativeTime (TimeSpan baseTime)
+
+        /// <summary>
+        /// Returns relative time by baseTime and sets BaseTime equaled to baseTime.
+        /// </summary>
+        /// <param name="baseTime"></param>
+        /// <returns><see cref="TimeSpan"/></returns>
+        public TimeSpan GetRelativeTime(TimeSpan baseTime)
         {
-            if (baseTime == TimeSpan.Zero) 
+            BaseTime = baseTime;
+
+            if (TimePointType == TimePointType.Relative) {       
+                return Time;
+            }
+
+            return _GetRelativeTime();
+        }
+
+        private TimeSpan _GetRelativeTime ()
+        {
+            if (BaseTime == TimeSpan.Zero) 
                 return Time;
 
-            if (baseTime == Time)
+            if (BaseTime == Time)
                 return TimeSpan.Zero;
 
             TimeSpan res;
 
-            if (Time <= baseTime)
-                res = TimeSpan.FromHours (24) - (TimeSpan)baseTime + Time;
+            if (Time <= BaseTime)
+                res = TimeSpan.FromHours (24) - (TimeSpan)BaseTime + Time;
             else
                 // ReSharper disable once PossibleInvalidOperationException
-                res = Time - (TimeSpan)baseTime;
+                res = Time - (TimeSpan)BaseTime;
 
             return res;
         }
 
+        // Clone:
         public TimePoint Clone()
         {
-            var tp = DefaultTimePoint;
+            var tp = GetAbsoluteTimePoint();
 
-            tp.BaseTime = this.BaseTime;
             tp.Time = this.Time;
+
             tp.ChangeTimePointType(this._timePointType);
+            tp.BaseTime = this.BaseTime;
 
             tp.Name = this.Name;
             tp.LoopNumber = this.LoopNumber;

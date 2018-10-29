@@ -69,7 +69,7 @@ namespace CycleBell.NUnitTests.ViewModels
 
         private TimePointViewModel GetTimePointViewModel()
         {
-            TimePoint tp = TimePoint.DefaultTimePoint;
+            TimePoint tp = TimePoint.GetAbsoluteTimePoint();
 
             return new TimePointViewModel (tp, _mockPresetViewModel.Object);
         }
