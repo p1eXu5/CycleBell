@@ -94,21 +94,14 @@ namespace CycleBellLibrary.NUnitTests.Context.Tests
         #pragma warning disable 0067
         internal class FakeTimerManager : ITimerManager
         {
-            public event NotifyCollectionChangedEventHandler PresetCollectionChanged;
             public event EventHandler<TimerEventArgs> ChangeTimePointEvent;
             public event EventHandler<TimerEventArgs> TimerSecondPassedEvent;
             public event EventHandler TimerStartEvent;
             public event EventHandler TimerPauseEvent;
             public event EventHandler TimerStopEvent;
-            public ReadOnlyObservableCollection<Preset> Presets { get; }
-            public bool IsRunning { get; }
-            public bool IsPaused { get; }
-            public string StartTimeTimePointName { get; }
-
-            public void AddPreset (Preset preset)
-            {
-                throw new NotImplementedException();
-            }
+            public bool IsRunning { get; } = false;
+            public bool IsPaused { get; } = false;
+            public string StartTimePointName { get; } = null;
 
             public void Pause()
             {
@@ -131,16 +124,6 @@ namespace CycleBellLibrary.NUnitTests.Context.Tests
             }
 
             public void Play (Preset preset)
-            {
-                throw new NotImplementedException();
-            }
-
-            public Queue<(TimeSpan, TimePoint)> GetTimerQueue(Preset preset)
-            {
-                throw new NotImplementedException();
-            }
-
-            public int GetIndex (string name)
             {
                 throw new NotImplementedException();
             }

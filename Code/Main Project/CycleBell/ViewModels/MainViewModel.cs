@@ -70,7 +70,12 @@ namespace CycleBell.ViewModels
 
             LoadPresetViewModelCollection(_manager);
 
-            DefaultSoundPlayer = new SoundPlayer(@"Sounds/default.wav"); 
+            if (File.Exists(@"Sounds/default.wav")) {
+                DefaultSoundPlayer = new SoundPlayer(@"Sounds/default.wav");
+            }
+            else {
+                DefaultSoundPlayer = new SoundPlayer();
+            }
         }
 
         private void LoadTimerManager(ICycleBellManager manager)
@@ -183,7 +188,7 @@ namespace CycleBell.ViewModels
             //    OnPropertyChanged();
             //}
 
-        public string StartTimeName => _timerManager.StartTimeTimePointName;
+        public string StartTimeName => _timerManager.StartTimePointName;
 
         public bool IsRingOnStartTime 
         { 

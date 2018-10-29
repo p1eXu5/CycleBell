@@ -220,7 +220,6 @@ namespace CycleBell.ViewModels
         #region Commands
 
         public ICommand AddTimePointCommand => new ActionCommand (AddTimePoint, CanAddTimePoint);
-        public ICommand TestCommand => new ActionCommand((o) => OnPropertyChanged(nameof(IsNoTimePoints)));
 
         #endregion
 
@@ -347,54 +346,6 @@ namespace CycleBell.ViewModels
             SoundMap[timePoint.Id] = new SoundPlayer((string)timePoint.Tag);
         }
 
-        // TimerManager handlers:
-        internal void OnTimePointChangedEventHandler(object s, TimerEventArgs e)
-        {
-            if (e == null) return;
-            Ring(e.PrevTimePoint);
-
-            if (e.NextTimePoint == null) return;
-            UpdateTimePointViewModels(e.NextTimePoint, e.NextPrevTimePointBaseTime);
-            UpdateLastTimeControls(e);
-        }
-
-        private void UpdateLastTimeControls(TimerEventArgs e)
-        {
-            NextTimePointName = e.NextTimePoint.Name;
-            TimeLeftTo = TimeSpanDigits.Parse(-e.LastTime);
-        }
-
-        private void UpdateTimePointViewModels(TimePoint nextTimePoint, TimeSpan? nextPrevTimePointBaseTime)
-        {
-            if (_activeTimePointViewModelBase != null) {
-
-                _activeTimePointViewModelBase.IsActive = false;
-
-                if (nextPrevTimePointBaseTime != null) {
-
-                    var relativeTime = _activeTimePointViewModelBase.TimePoint.GetRelativeTime();
-
-                    if (nextPrevTimePointBaseTime >= relativeTime) {
-                        _activeTimePointViewModelBase.TimePoint.BaseTime = nextPrevTimePointBaseTime - relativeTime;
-                    }
-                    else {
-                        _activeTimePointViewModelBase.TimePoint.BaseTime = TimeSpan.FromDays(1) + nextPrevTimePointBaseTime - relativeTime;
-                    }
-
-                    ((TimePointViewModel)_activeTimePointViewModelBase).UpdateTime();
-                }
-            }
-
-            if (nextTimePoint.Name == _mainViewModel.StartTimeName) {
-                if (TimePointVmCollection.Count > 0) {
-                    TimePointVmCollection.DisableAll();
-                }
-            }
-            else {
-                _activeTimePointViewModelBase = TimePointVmCollection.Activate(tpvmb => tpvmb.Equals(nextTimePoint));
-            }
-        }
-
         private void Ring(TimePoint prevTimePoint)
         {
             if (prevTimePoint != null && prevTimePoint.Time >= TimeSpan.Zero) {
@@ -421,9 +372,52 @@ namespace CycleBell.ViewModels
             }
         }
 
+        // TimerManager handlers:
+        internal void OnTimePointChangedEventHandler(object s, TimerEventArgs e)
+        {
+            if (e == null) return;
+            Ring(e.PrevTimePoint);
+
+            if (e.NextTimePoint == null) return;
+            UpdateActiveTimePointViewModel (e.NextTimePoint, e.PrevTimePointNextBaseTime);
+            UpdateUiTimerProperties (e);
+        }
+
+        private void UpdateUiTimerProperties(TimerEventArgs e)
+        {
+            NextTimePointName = e.NextTimePoint.Name;
+            TimeLeftTo = TimeSpanDigits.Parse (-e.LastTimeToNextChange);
+        }
+
+        private void UpdateActiveTimePointViewModel(TimePoint nextTimePoint, TimeSpan? prevTimePointNextBaseTime)
+        {
+            // deactivate:
+            if (_activeTimePointViewModelBase != null) {
+
+                _activeTimePointViewModelBase.IsActive = false;
+
+                if (prevTimePointNextBaseTime != null) {
+
+                    _activeTimePointViewModelBase.TimePoint.BaseTime = prevTimePointNextBaseTime;
+
+                    ((TimePointViewModel)_activeTimePointViewModelBase).UpdateTime();
+                }
+            }
+
+            // activate:
+            if (nextTimePoint.Name == _mainViewModel.StartTimeName) {
+                if (TimePointVmCollection.Count > 0) {
+                    TimePointVmCollection.DisableAll();
+                }
+            }
+            else {
+                _activeTimePointViewModelBase = TimePointVmCollection.Activate(tpvmb => tpvmb.Equals(nextTimePoint));
+            }
+        }
+
         internal void OnSecondPassedEventHandler(object s, TimerEventArgs e)
         {
-            TimeLeftTo = TimeSpanDigits.Parse(-e.LastTime);
+            TimeLeftTo = TimeSpanDigits.Parse(-e.LastTimeToNextChange);
         }
 
         internal void OnTimerPauseEventHandler(object sender, EventArgs args)

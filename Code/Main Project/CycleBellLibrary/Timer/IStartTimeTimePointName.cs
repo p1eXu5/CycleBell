@@ -15,10 +15,13 @@
  *  
  */
 
+using System;
+using CycleBellLibrary.Models;
+
 namespace CycleBellLibrary.Timer
 {
     public interface IStartTimeTimePointName
     {
-        string StartTimeTimePointName { get; }
+        TimePoint GetStartTimePoint(TimeSpan startTime);
     }
 }

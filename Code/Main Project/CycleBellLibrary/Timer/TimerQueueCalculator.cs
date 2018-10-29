@@ -38,54 +38,55 @@ namespace CycleBellLibrary.Timer
         /// </summary>
         /// <param name="preset">Preset</param>
         /// <returns>The queue of tuples consists of time of the day and TimePoint that will come in this time</returns>
-        public Queue<(TimeSpan nextChangeTime, TimePoint nextTimePoint)> GetTimerQueue(Preset preset)
-         {
+         public Queue<(TimeSpan nextChangeTime, TimePoint nextTimePoint)> GetTimerQueue(Preset preset)
+        {
             if (preset?.TimePointCollection == null || preset.TimePointCollection.Count == 0)
                 return null;
 
-            // Смещение по времени следующей временной точки
-            TimeSpan startTime = preset.StartTime;
+            Queue<(TimeSpan nextChangeTime, TimePoint nextTimePoint)> queue = new Queue<(TimeSpan, TimePoint)>();
 
-            // Очередь кортежей времени будильника и соответствующей ему NextTimePoint
-            Queue<(TimeSpan, TimePoint)> queue = new Queue<(TimeSpan, TimePoint)>();
+            TimeSpan time = preset.StartTime;
+            TimePoint startTimePoint = _startTimeTimePointName.GetStartTimePoint (time);
 
-            queue.Enqueue((startTime, new TimePoint(_startTimeTimePointName.StartTimeTimePointName, startTime, TimePointType.Absolute){BaseTime = startTime}));
+            time = startTimePoint.GetAbsoluteTime();
+            queue.Enqueue((time, startTimePoint));
 
-            // Заполняем очередь
-
-            // Для всех временных сегментов
             foreach (var timerCycle in preset.TimerLoops.Keys) {
-
-                TimeSpan nextTime;
 
                 if (preset.TimePointCollection.Count > 1) {
 
                     // Список временных точек каждого временного сегмента, порядоченный по Id (по порядку создания)
-                    var timePoints = preset.TimePointCollection.Where(t => t.LoopNumber == timerCycle).OrderBy(t => t.Id)
+                    var timePoints = preset.TimePointCollection
+                                           .Where(t => t.LoopNumber == timerCycle)
+                                           .OrderBy(t => t.Id)
                                            .ToList();
 
-                    for (var i = 0; i < preset.TimerLoops[timerCycle]; ++i) {
+                    if (timePoints.Count > 1) {
+                        for (var i = 0; i < preset.TimerLoops[timerCycle]; ++i) {
 
-                        foreach (var point in timePoints) {
+                            foreach (var nextTimePoint in timePoints) {
 
-                            nextTime = point.GetAbsoluteTime(startTime);
+                                time = nextTimePoint.GetAbsoluteTime(time);
+                                queue.Enqueue((time, nextTimePoint));
+                            }
+                        }
+                    }
+                    else if (timePoints.Count == 1) {
+                        for (var i = 0; i < preset.TimerLoops[timerCycle]; ++i) {
 
-                            queue.Enqueue((nextTime, point));
-                            startTime = point.GetAbsoluteTime(startTime);
+                            time = timePoints[0].GetAbsoluteTime(time);
+                            queue.Enqueue((time, timePoints[0]));
                         }
                     }
                 }
-                else {
+                else if(preset.TimePointCollection.Count == 1) {
 
-                    // If TimePointCollection.Count == 1
                     var timePoint = preset.TimePointCollection[0];
 
                     for (var i = 0; i < preset.TimerLoops[timerCycle]; ++i) {
 
-                        nextTime = timePoint.GetAbsoluteTime(startTime);
-
-                        queue.Enqueue((nextTime, timePoint));
-                        startTime = timePoint.GetAbsoluteTime(startTime);
+                        time = timePoint.GetAbsoluteTime(time);
+                        queue.Enqueue((time, timePoint));
                     }
                 }
             }

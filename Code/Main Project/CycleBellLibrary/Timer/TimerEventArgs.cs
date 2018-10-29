@@ -22,20 +22,20 @@ using CycleBellLibrary.Models;
 
 namespace CycleBellLibrary.Timer
 {
-    // LastTime - duration of a PrevTimePoint
+    // LastTimeToNextChange - duration of a PrevTimePoint
     public class TimerEventArgs : EventArgs
     {
-        public TimerEventArgs(TimePoint prevTimePoint, TimePoint nextTimePoint, TimeSpan lastTime, TimeSpan? nextPrevTimePointBaseTime)
+        public TimerEventArgs(TimePoint prevTimePoint, TimePoint nextTimePoint, TimeSpan lastTimeToNextChange, TimeSpan? prevTimePointNextBaseTime)
         {
             PrevTimePoint = prevTimePoint;
             NextTimePoint = nextTimePoint;
-            LastTime = lastTime;
-            NextPrevTimePointBaseTime = nextPrevTimePointBaseTime;
+            LastTimeToNextChange = lastTimeToNextChange;
+            PrevTimePointNextBaseTime = prevTimePointNextBaseTime;
         }
 
         public TimePoint PrevTimePoint { get; }
         public TimePoint NextTimePoint { get; }
-        public TimeSpan LastTime { get; }
-        public TimeSpan? NextPrevTimePointBaseTime { get; }
+        public TimeSpan LastTimeToNextChange { get; }
+        public TimeSpan? PrevTimePointNextBaseTime { get; }
     }
 }

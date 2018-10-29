@@ -235,7 +235,7 @@ namespace CycleBellLibrary.Models
                     if (TimePointType == TimePointType.Relative) {
 
                         if (BaseTime == null) {
-                            Time = GetAbsoluteTime(TimeSpan.Zero);
+                            Time = _GetAbsoluteTime(TimeSpan.Zero, false);
                         }
                         else {
                             Time = GetAbsoluteTime();
@@ -267,21 +267,6 @@ namespace CycleBellLibrary.Models
 
         // GetAbsolute
         /// <summary>
-        /// Returns absolute time by baseTime
-        /// </summary>
-        /// <param name="baseTime"></param>
-        /// <returns></returns>
-        public TimeSpan GetAbsoluteTime(TimeSpan baseTime)
-        {
-            if (BaseTime == null)
-                BaseTime = baseTime;
-
-            if (TimePointType == TimePointType.Absolute)
-                return Time;
-            else
-                return _GetAbsoluteTime(baseTime);
-        }
-        /// <summary>
         /// Gets absolute time
         /// </summary>
         /// <returns>Absolute time</returns>
@@ -297,13 +282,33 @@ namespace CycleBellLibrary.Models
 
             return _GetAbsoluteTime((TimeSpan)BaseTime);
         }
-        private TimeSpan _GetAbsoluteTime (TimeSpan baseTime)
+
+        /// <summary>
+        /// Returns absolute time by baseTime
+        /// </summary>
+        /// <param name="baseTime"></param>
+        /// <returns></returns>
+        public TimeSpan GetAbsoluteTime(TimeSpan baseTime)
         {
-            if (baseTime == TimeSpan.Zero) 
+            if (TimePointType == TimePointType.Absolute)
+                return Time;
+
+            return _GetAbsoluteTime(baseTime);
+        }
+
+        private TimeSpan _GetAbsoluteTime (TimeSpan baseTime, bool storing = true)
+        {
+            var newBaseTime = baseTime;
+
+            if (storing) {
+                BaseTime = newBaseTime;
+            }
+
+            if (newBaseTime == TimeSpan.Zero) 
                 return Time;
 
             // ReSharper disable once PossibleInvalidOperationException
-            var res = baseTime + Time;
+            var res = newBaseTime + Time;
 
             if (res.Days > 0)
                 res -= TimeSpan.FromDays (1);
@@ -314,17 +319,13 @@ namespace CycleBellLibrary.Models
         // GetRelative
         public TimeSpan GetRelativeTime(TimeSpan baseTime)
         {
+            BaseTime = baseTime;
+
             if (TimePointType == TimePointType.Relative) {       
                 return Time;
             }
 
-            var oldBase = BaseTime;
-            BaseTime = baseTime;
-
-            var res = _GetRelativeTime();
-
-            BaseTime = oldBase;
-            return res;
+            return _GetRelativeTime(baseTime);
         }
         public TimeSpan GetRelativeTime()
         {
@@ -335,23 +336,23 @@ namespace CycleBellLibrary.Models
                 throw new ArgumentException("BaseTime must be set");
             }
 
-            return _GetRelativeTime();
+            return _GetRelativeTime((TimeSpan)BaseTime);
         }
-        private TimeSpan _GetRelativeTime ()
+        private TimeSpan _GetRelativeTime (TimeSpan baseTime)
         {
-            if (BaseTime == TimeSpan.Zero) 
+            if (baseTime == TimeSpan.Zero) 
                 return Time;
 
-            if (BaseTime == Time)
+            if (baseTime == Time)
                 return TimeSpan.Zero;
 
             TimeSpan res;
 
-            if (Time <= BaseTime)
-                res = TimeSpan.FromHours (24) - (TimeSpan)BaseTime + Time;
+            if (Time <= baseTime)
+                res = TimeSpan.FromHours (24) - (TimeSpan)baseTime + Time;
             else
                 // ReSharper disable once PossibleInvalidOperationException
-                res = Time - (TimeSpan)BaseTime;
+                res = Time - (TimeSpan)baseTime;
 
             return res;
         }

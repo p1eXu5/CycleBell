@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using CycleBell.Base;
 using CycleBell.ViewModels;
 using CycleBellLibrary.Context;
@@ -14,33 +15,133 @@ namespace CycleBell.NUnitTests.Integrational_Tests
     [TestFixture]
     class PresetViewModelIntegrationalTests : IStartTimeTimePointName
     {
-        [TestCase("0:00:00")]
-        [TestCase("23:59:00")]
-        public void OnTimePointChangedEventHandler_ChangesTimePointsBaseTimesCorrect(string startTime)
+        [Test]
+        public void OnTimePointChangedEventHandler_InitialTimePointIsPrevStartTimePointIsNext_DoesntActivateAnyTimePointViewModel()
         {
-            var preset = GetPreset(TimeSpan.Parse(startTime));
+            var preset = GetPreset(TimeSpan.Zero);
             var pvm = GetPresetViewModel(preset);
+            var queue = GetQueue().GetTimerQueue(preset).ToArray();
 
-            Assert.IsNotNull (pvm);
+            _mockTimerManager.Raise(t => t.ChangeTimePointEvent += null, new TimerEventArgs ( prevTimePoint: TimerManager.GetInitialTimePoint(),
+                                                                                              nextTimePoint: queue[0].nextTimePoint,
+                                                                                              lastTimeToNextChange: default(TimeSpan),
+                                                                                              prevTimePointNextBaseTime: null
+                                                                                             ));
 
-            var queue = GetQueue().GetTimerQueue(preset);
-            var absoluteTimes = GetAbsoluteTimes(queue);
-
-            _mockTimerManager.Raise (t => t.ChangeTimePointEvent += null, new TimerEventArgs (null, timePoints[0].TimePoint, TimeSpan.Zero, null));
+            Assert.IsFalse(pvm.TimePointVmCollection.Any(tp => tp.IsActive));
         }
+
+        [Test]
+        public void OnTimePointChangedEventHandler_StartTimePointIsPrevExistedTimePointIsNext_ActivateTimePointViewModelEqualedNextTimePoint()
+        {
+            var preset = GetPreset(TimeSpan.Zero);
+            var pvm = GetPresetViewModel(preset);
+            var queue = GetQueue().GetTimerQueue(preset).ToArray();
+
+            _mockTimerManager.Raise(t => t.ChangeTimePointEvent += null, new TimerEventArgs(prevTimePoint: queue[0].nextTimePoint,
+                                                                                            nextTimePoint: queue[1].nextTimePoint,
+                                                                                            lastTimeToNextChange: default(TimeSpan),
+                                                                                            prevTimePointNextBaseTime: null
+                                                                                           ));
+
+            Assert.AreEqual(queue[1].nextTimePoint, pvm.TimePointVmCollection.First(tp => tp.IsActive).TimePoint);
+        }
+
+        [Test]
+        public void OnTimePointChangedEventHandler_StartTimePointIsPrevExistedTimePointIsNext_DoesntChangeStartTimePointBaseTime()
+        {
+            var preset = GetPreset(TimeSpan.Zero);
+            var pvm = GetPresetViewModel(preset);
+            var queue = GetQueue().GetTimerQueue(preset).ToArray();
+            TimeSpan? expectedBaseTime = queue[0].nextTimePoint.BaseTime;
+
+            _mockTimerManager.Raise(t => t.ChangeTimePointEvent += null, new TimerEventArgs(prevTimePoint: queue[0].nextTimePoint,
+                                                                                            nextTimePoint: queue[1].nextTimePoint,
+                                                                                            lastTimeToNextChange: default(TimeSpan),
+                                                                                            prevTimePointNextBaseTime: null
+                                                                                           ));
+
+            Assert.AreEqual(expectedBaseTime, queue[0].nextTimePoint.BaseTime);
+        }
+
+
+        [Test]
+        public void OnTimePointChangedEventHandler_ExistedTimePointIsPrevExistedTimePointIsNext_ActivateTimePointViewModelEqualedNextTimePoint()
+        {
+            var preset = GetPreset(TimeSpan.Zero);
+            var pvm = GetPresetViewModel(preset);
+            var queue = GetQueue().GetTimerQueue(preset).ToArray();
+            TimeSpan? expectedBaseTime = queue[0].nextTimePoint.BaseTime;
+
+            _mockTimerManager.Raise(t => t.ChangeTimePointEvent += null, new TimerEventArgs(prevTimePoint: queue[1].nextTimePoint,
+                                                                                            nextTimePoint: queue[2].nextTimePoint,
+                                                                                            lastTimeToNextChange: default(TimeSpan),
+                                                                                            prevTimePointNextBaseTime: null
+                                                                                           ));
+
+            Assert.AreEqual(queue[2].nextTimePoint, pvm.TimePointVmCollection.First(tp => tp.IsActive).TimePoint);
+        }
+
+        [Test]
+        public void OnTimePointChangedEventHandler_ExistedTimePointIsPrevExistedTimePointIsNext_DeactivateTimePointViewModelEqualedPrevTimePoint()
+        {
+            var preset = GetPreset(TimeSpan.Zero);
+            var pvm = GetPresetViewModel(preset);
+            var queue = GetQueue().GetTimerQueue(preset).ToArray();
+            TimeSpan? expectedBaseTime = queue[0].nextTimePoint.BaseTime;
+
+            _mockTimerManager.Raise(t => t.ChangeTimePointEvent += null, new TimerEventArgs(prevTimePoint: queue[0].nextTimePoint,
+                                                                                            nextTimePoint: queue[1].nextTimePoint,
+                                                                                            lastTimeToNextChange: default(TimeSpan),
+                                                                                            prevTimePointNextBaseTime: null
+                                                                                           ));
+
+            _mockTimerManager.Raise(t => t.ChangeTimePointEvent += null, new TimerEventArgs(prevTimePoint: queue[1].nextTimePoint,
+                                                                                            nextTimePoint: queue[2].nextTimePoint,
+                                                                                            lastTimeToNextChange: default(TimeSpan),
+                                                                                            prevTimePointNextBaseTime: null
+                                                                                           ));
+
+            Assert.IsFalse(pvm.TimePointVmCollection.First(tp => tp.Equals(queue[1].nextTimePoint)).IsActive);
+        }
+
+
+        [Test]
+        public void OnTimePointChangedEventHandler_ExistedTimePointIsPrevExistedTimePointIsNext_ChangesPrevTimePointBaseTime()
+        {
+            var preset = GetPreset(TimeSpan.Zero);
+            var pvm = GetPresetViewModel(preset);
+            var queue = GetQueue().GetTimerQueue(preset).ToArray();
+            TimeSpan? dontExpectedAbsoluteTime = queue[1].nextTimePoint.GetAbsoluteTime();
+
+            _mockTimerManager.Raise(t => t.ChangeTimePointEvent += null, new TimerEventArgs(prevTimePoint: queue[1].nextTimePoint,
+                                                                                            nextTimePoint: queue[2].nextTimePoint,
+                                                                                            lastTimeToNextChange: default(TimeSpan),
+                                                                                            prevTimePointNextBaseTime: null
+                                                                                           ));
+
+            Assert.AreNotEqual(dontExpectedAbsoluteTime, queue[1].nextTimePoint.GetAbsoluteTime());
+        }
+
 
         #region Factory
 
-        public string StartTimeTimePointName { get; } = "StartTime";
+        public string StartTimePointName { get; } = "StartTime";
+        public TimePoint GetStartTimePoint(TimeSpan startTime)
+        {
+            return new TimePoint(StartTimePointName, startTime, TimePointType.Absolute);
+        }
+
+
         private Mock<ITimerManager> _mockTimerManager;
         private readonly PresetCollectionManager _presetCollectionManager = new PresetCollectionManager();
 
         private Preset GetPreset(TimeSpan startTime) => new Preset(new []
                                                         {
-                                                            new TimePoint("Test TimePoint # 1", "0:01:00", TimePointType.Relative, 0),
-                                                            new TimePoint("Test TimePoint # 2", "0:01:00", TimePointType.Relative, 0),
-                                                            new TimePoint("Test TimePoint # 3", "0:01:00", TimePointType.Relative, 1),
-                                                            new TimePoint("Test TimePoint # 4", "0:01:00", TimePointType.Relative, 1),
+                                                            new TimePoint("Test TimePoint # 1", "0:02:00", TimePointType.Relative, 0),
+                                                            new TimePoint("Test TimePoint # 2", "0:02:00", TimePointType.Relative, 0),
+                                                            new TimePoint("Test TimePoint # 3", "0:02:00", TimePointType.Relative, 1),
+                                                            new TimePoint("Test TimePoint # 4", "0:02:00", TimePointType.Relative, 1),
                                                         }) { StartTime = startTime, TimerLoops = { [0] = 2, [1] = 2 } };
 
         private ITimerQueueCalculator GetQueue() => new TimerQueueCalculator(this);

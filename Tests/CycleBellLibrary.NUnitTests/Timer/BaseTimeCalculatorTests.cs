@@ -28,7 +28,7 @@ namespace CycleBellLibrary.NUnitTests.Timer
         }
 
         [Test]
-        public void GetTimerQueue_PresetContainsTimePoint_ReturnsEqualTimePoints()
+        public void GetTimerQueue_PresetContainsTimePoint_ReturnsExpectedTimePoints()
         {
             var btc = GetBaseTimeCalculator();
             var preset = new Preset (new[]
@@ -39,7 +39,7 @@ namespace CycleBellLibrary.NUnitTests.Timer
 
             Queue<(TimeSpan, TimePoint)> expectedQueue = new Queue<(TimeSpan, TimePoint)>(new []
                 {
-                    (TimeSpan.Parse ("12:00:00"), new TimePoint(StartTimeTimePointName, "12:00:00", TimePointType.Absolute) {BaseTime = TimeSpan.Parse ("12:00:00")}),
+                    (TimeSpan.Parse ("12:00:00"), new TimePoint(StartTimePointName, "12:00:00", TimePointType.Absolute) {BaseTime = TimeSpan.Parse ("12:00:00")}),
                     (TimeSpan.Parse ("12:00:10"), preset.TimePointCollection[0]),
                     (TimeSpan.Parse ("12:00:20"), preset.TimePointCollection[1]),
                 });
@@ -80,7 +80,12 @@ namespace CycleBellLibrary.NUnitTests.Timer
 
         #region Factory
 
-        public string StartTimeTimePointName => "Test Start TimePoint";
+        public string StartTimePointName => "Test Start TimePoint";
+
+        public TimePoint GetStartTimePoint(TimeSpan startTime)
+        {
+            return new TimePoint(StartTimePointName, startTime, TimePointType.Absolute);
+        }
 
         private TimerQueueCalculator GetBaseTimeCalculator()
         {
@@ -139,5 +144,6 @@ namespace CycleBellLibrary.NUnitTests.Timer
         }
 
         #endregion
+
     }
 }

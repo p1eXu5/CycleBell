@@ -30,7 +30,7 @@ namespace CycleBellLibrary.Timer
 
         bool IsRunning { get; }
         bool IsPaused { get; }
-        string StartTimeTimePointName { get; }
+        string StartTimePointName { get; }
 
         /// <summary>
         /// Pause timer loop
@@ -54,7 +54,5 @@ namespace CycleBellLibrary.Timer
         /// </summary>
         /// <param name="preset">Запускаемый пресет</param>
         void Play(Preset preset);
-
-
     }
 }
