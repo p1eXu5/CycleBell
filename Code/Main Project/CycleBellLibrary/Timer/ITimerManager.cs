@@ -54,5 +54,8 @@ namespace CycleBellLibrary.Timer
         /// </summary>
         /// <param name="preset">Запускаемый пресет</param>
         void Play(Preset preset);
+
+        void DontPreserveBaseTime();
+        void PreserveBaseTime();
     }
 }

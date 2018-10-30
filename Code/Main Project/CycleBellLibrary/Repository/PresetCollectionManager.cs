@@ -38,6 +38,8 @@ namespace CycleBellLibrary.Repository
 
         public PresetCollectionManager()
         {
+            Preset.AutoUpdateTimePointBaseTimes = true;
+
             _presetSerializableCollection = new PresetSerializableObservableCollection();
             Presets = new ReadOnlyObservableCollection<Preset>(_presetSerializableCollection);
         }

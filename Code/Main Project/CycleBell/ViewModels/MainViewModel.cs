@@ -70,12 +70,7 @@ namespace CycleBell.ViewModels
 
             LoadPresetViewModelCollection(_manager);
 
-            if (File.Exists(@"Sounds/default.wav")) {
-                DefaultSoundPlayer = new SoundPlayer(@"Sounds/default.wav");
-            }
-            else {
-                DefaultSoundPlayer = new SoundPlayer();
-            }
+            DefaultSoundPlayer = File.Exists(@"Sounds/default.wav") ? new SoundPlayer(@"Sounds/default.wav") : new SoundPlayer();
         }
 
         private void LoadTimerManager(ICycleBellManager manager)

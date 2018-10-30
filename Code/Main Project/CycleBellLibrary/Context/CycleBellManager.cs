@@ -39,6 +39,7 @@ namespace CycleBellLibrary.Context
             FileName = fileName;
            _presetCollectionManager = presetCollectionManager ?? throw new ArgumentNullException(nameof(presetCollectionManager), "presetCollectionManager can't be null");
             TimerManager = timerManager ?? throw new ArgumentNullException(nameof(timerManager), "timerManager can't be null");
+            TimerManager.DontPreserveBaseTime();
 
             try {
                 OpenPresets();

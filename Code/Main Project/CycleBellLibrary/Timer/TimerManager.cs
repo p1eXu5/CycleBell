@@ -64,6 +64,7 @@ namespace CycleBellLibrary.Timer
         private TimeSpan _deltaTime;
         private byte _isInfiniteLoop;
         private bool _isRunAsync;
+        private bool _isPreserveBaseTime = true;
 
         private readonly ITimerQueueCalculator _timerQueueCalculator;
 
@@ -143,7 +144,9 @@ namespace CycleBellLibrary.Timer
         }
 
         public static TimePoint GetInitialTimePoint() => new TimePoint(INITIAL_TIMEPOINT_NAME, TimeSpan.FromMinutes(-1), TimePointType.Absolute);
-        
+
+        public void DontPreserveBaseTime() => _isPreserveBaseTime = false;
+        public void PreserveBaseTime() => _isPreserveBaseTime = true;
 
         /// <summary>
         /// dueTime for _timer
@@ -232,7 +235,7 @@ namespace CycleBellLibrary.Timer
             if (IsRunning && !_isRunAsync)
                 return;
 
-            _queue = _timerQueueCalculator.GetTimerQueue (preset);
+            _queue = _timerQueueCalculator.GetTimerQueue (preset, _isPreserveBaseTime);
 
 
             if (_queue == null) {
