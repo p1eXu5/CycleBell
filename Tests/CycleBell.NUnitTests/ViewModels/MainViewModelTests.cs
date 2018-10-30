@@ -8,6 +8,7 @@ using CycleBellLibrary.Repository;
 using CycleBellLibrary.Timer;
 using Moq;
 using NUnit.Framework;
+// ReSharper disable AccessToModifiedClosure
 
 namespace CycleBell.NUnitTests.ViewModels
 {
@@ -69,6 +70,9 @@ namespace CycleBell.NUnitTests.ViewModels
 
         private MainViewModel GetMainViewModel(Preset[] presets = null)
         {
+            var obscol = new ObservableCollection<Preset>();
+            var rObscol = new ReadOnlyObservableCollection<Preset>(obscol);
+
             _mockTimerManager = _mockCycleBellManager.As<ITimerManager>();
             _mockPresetCollectionManager = _mockCycleBellManager.As<IPresetCollectionManager>();
 
@@ -77,13 +81,27 @@ namespace CycleBell.NUnitTests.ViewModels
             _mockCycleBellManager.Setup(cbm => cbm.IsNewPreset(It.IsAny<Preset>()))
                                  .Returns((Preset preset) => CycleBellManager.PresetChecker.IsNewPreset(preset));
 
+            _mockCycleBellManager.Setup (m => m.CreateNewPreset()).Returns(() => 
+                                                    { 
+                                                        obscol.Add (Preset.GetDefaultPreset());
+                                                        return true;
+                                                    });
+
+
             if (presets == null) {
+
+                obscol = new ObservableCollection<Preset>();
+                rObscol = new ReadOnlyObservableCollection<Preset>(obscol);
+
                 _mockPresetCollectionManager.Setup(pcm => pcm.Presets)
-                                            .Returns(new ReadOnlyObservableCollection<Preset>(new ObservableCollection<Preset>()));
+                    .Returns(rObscol);
             }
             else {
+                obscol = new ObservableCollection<Preset>(presets);
+                rObscol = new ReadOnlyObservableCollection<Preset>(obscol);
+                
                 _mockPresetCollectionManager.Setup(pcm => pcm.Presets)
-                                            .Returns(new ReadOnlyObservableCollection<Preset>(new ObservableCollection<Preset>(presets)));
+                    .Returns(rObscol);
             }
 
             var mainViewModel = new MainViewModel (_mockDialogRegistrator.Object, _mockCycleBellManager.Object);

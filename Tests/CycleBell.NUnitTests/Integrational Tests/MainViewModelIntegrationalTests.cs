@@ -13,6 +13,7 @@ using CycleBellLibrary.Timer;
 using Moq;
 using NUnit.Framework;
 using NUnit.Framework.Internal;
+// ReSharper disable AccessToModifiedClosure
 
 namespace CycleBell.NUnitTests.Integrational_Tests
 {
@@ -20,12 +21,29 @@ namespace CycleBell.NUnitTests.Integrational_Tests
     public class MainViewModelIntegrationalTests
     {
         [Test]
-        public void CreateNewPreset_SelectedPresetNotANewPreset_SetsSelectedPresetEqualedToANewPreset()
+        public void CreateNewPreset__SelectedPresetNotANewPreset_NewPresetDoesntExist__SetsSelectedPresetEqualedToANewPreset()
         {
             // Arrange:
             var mvm = GetMainViewModel();
             mvm.CreateNewPresetCommand.Execute (null);
             mvm.SelectedPreset.Preset.PresetName = "Some Name";
+
+            // Action:
+            mvm.CreateNewPresetCommand.Execute (null);
+
+            // Assert:
+            Assert.That (CycleBellManager.PresetChecker.IsNewPreset (mvm.SelectedPreset.Preset), Is.EqualTo (true));
+        }
+
+        [Test]
+        public void CreateNewPreset__SelectedPresetNotANewPreset_NewPresetExists__SetsSelectedPresetEqualedToANewPreset()
+        {
+            // Arrange:
+            var mvm = GetMainViewModel();
+            mvm.CreateNewPresetCommand.Execute (null);
+            mvm.SelectedPreset.Preset.PresetName = "Some Name";
+            mvm.CreateNewPresetCommand.Execute (null);
+            mvm.SelectedPreset = mvm.PresetViewModelCollection[0];
 
             // Action:
             mvm.CreateNewPresetCommand.Execute (null);
@@ -43,24 +61,16 @@ namespace CycleBell.NUnitTests.Integrational_Tests
 
         private MainViewModel GetMainViewModel(Preset[] presets = null)
         {
+            var obscol = new ObservableCollection<Preset>();
+            var rObscol = new ReadOnlyObservableCollection<Preset>(obscol);
+
             _mockTimerManager = _mockCycleBellManager.As<ITimerManager>();
             _mockPresetCollectionManager = _mockCycleBellManager.As<IPresetCollectionManager>();
 
-            _mockCycleBellManager.Setup (cbm => cbm.TimerManager).Returns (_mockTimerManager.Object);
-            _mockCycleBellManager.Setup (cbm => cbm.PresetCollectionManager).Returns (_mockPresetCollectionManager.Object);
-            _mockCycleBellManager.Setup(cbm => cbm.IsNewPreset(It.IsAny<Preset>()))
-                                 .Returns((Preset preset) => CycleBellManager.PresetChecker.IsNewPreset(preset));
+            var pcm = new PresetCollectionManager();
+            var cbm = new CycleBellManager (null, pcm, _mockTimerManager.Object);
 
-            if (presets == null) {
-                _mockPresetCollectionManager.Setup(pcm => pcm.Presets)
-                                            .Returns(new ReadOnlyObservableCollection<Preset>(new ObservableCollection<Preset>()));
-            }
-            else {
-                _mockPresetCollectionManager.Setup(pcm => pcm.Presets)
-                                            .Returns(new ReadOnlyObservableCollection<Preset>(new ObservableCollection<Preset>(presets)));
-            }
-
-            var mainViewModel = new MainViewModel (_mockDialogRegistrator.Object, _mockCycleBellManager.Object);
+            var mainViewModel = new MainViewModel (_mockDialogRegistrator.Object, cbm);
 
             return mainViewModel;
         }
