@@ -274,15 +274,20 @@ namespace CycleBellLibrary.Models
         /// Returns absolute time by baseTime and sets BaseTime equaled to baseTime.
         /// </summary>
         /// <param name="baseTime"></param>
+        /// <param name="preserveBaseTime">Does TimePoint BaseTime assigned new value?</param>
         /// <returns><see cref="TimeSpan"/></returns>
-        public TimeSpan GetAbsoluteTime(TimeSpan baseTime)
+        public TimeSpan GetAbsoluteTime(TimeSpan baseTime, bool preserveBaseTime = true)
         {
+            var oldBaseTime = BaseTime; 
             BaseTime = baseTime;
 
-            if (TimePointType == TimePointType.Absolute)
-                return Time;
+            TimeSpan res = TimePointType == TimePointType.Absolute ? Time : _GetAbsoluteTime();
 
-            return _GetAbsoluteTime();
+            if (!preserveBaseTime) {
+                BaseTime = oldBaseTime;
+            }
+
+            return res;
         }
 
         private TimeSpan _GetAbsoluteTime ()

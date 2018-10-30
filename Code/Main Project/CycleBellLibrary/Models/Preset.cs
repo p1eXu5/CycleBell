@@ -41,6 +41,28 @@ namespace CycleBellLibrary.Models
 
         #region Constructors
 
+        static Preset()
+        {
+            DefaultStartTime = InitDefaultStartTime;
+        }
+
+        // Instance
+        private Preset(string name, TimeSpan startTime)
+        {
+            PresetName = name;
+
+            TimerLoops = new TimerLoopSortedDictionary();
+            _timePoints = new ObservableCollection<TimePoint>();
+
+            _readOnlyTimePointCollectionCollection = new ReadOnlyObservableCollection<TimePoint> (_timePoints);
+
+            _startTime = startTime < TimeSpan.Zero ? startTime.Negate() : startTime;
+
+            if (_startTime >= TimeSpan.FromDays(1)) {
+                _startTime -= TimeSpan.FromDays(1);
+            }
+        }
+
         #region Linked Constructors
 
         public Preset()
@@ -49,6 +71,10 @@ namespace CycleBellLibrary.Models
 
         public Preset (string name)
             : this (name, DefaultStartTime)
+        { }
+
+        public Preset(TimeSpan startTime)
+            : this(DefaultName, startTime)
         { }
 
         public Preset (IEnumerable<TimePoint> timePoints)
@@ -73,29 +99,6 @@ namespace CycleBellLibrary.Models
         }
 
         #endregion
-
-        // Static
-        static Preset()
-        {
-            DefaultStartTime = InitDefaultStartTime;
-        }
-
-        // Instance
-        private Preset(string name, TimeSpan startTime)
-        {
-            PresetName = name;
-
-            TimerLoops = new TimerLoopSortedDictionary();
-            _timePoints = new ObservableCollection<TimePoint>();
-
-            _readOnlyTimePointCollectionCollection = new ReadOnlyObservableCollection<TimePoint> (_timePoints);
-
-            _startTime = startTime < TimeSpan.Zero ? startTime.Negate() : startTime;
-
-            if (_startTime >= TimeSpan.FromDays(1)) {
-                _startTime -= TimeSpan.FromDays(1);
-            }
-        }
 
         #endregion
 

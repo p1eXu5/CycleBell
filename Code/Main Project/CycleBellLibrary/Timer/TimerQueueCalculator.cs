@@ -33,12 +33,13 @@ namespace CycleBellLibrary.Timer
             _startTimeTimePointName = startTimeTimePointName ?? throw new ArgumentNullException(nameof(startTimeTimePointName));
         }
 
-         /// <summary>
+        /// <summary>
         /// Creates alarm queue
         /// </summary>
         /// <param name="preset">Preset</param>
+        /// <param name="preserveBaseTime">Does TimePoint BaseTime preserve?</param>
         /// <returns>The queue of tuples consists of time of the day and TimePoint that will come in this time</returns>
-         public Queue<(TimeSpan nextChangeTime, TimePoint nextTimePoint)> GetTimerQueue(Preset preset)
+        public Queue<(TimeSpan nextChangeTime, TimePoint nextTimePoint)> GetTimerQueue(Preset preset, bool preserveBaseTime = true)
         {
             if (preset?.TimePointCollection == null || preset.TimePointCollection.Count == 0)
                 return null;
@@ -66,7 +67,7 @@ namespace CycleBellLibrary.Timer
 
                             foreach (var nextTimePoint in timePoints) {
 
-                                time = nextTimePoint.GetAbsoluteTime(time);
+                                time = nextTimePoint.GetAbsoluteTime (time, preserveBaseTime);
                                 queue.Enqueue((time, nextTimePoint));
                             }
                         }
@@ -74,7 +75,7 @@ namespace CycleBellLibrary.Timer
                     else if (timePoints.Count == 1) {
                         for (var i = 0; i < preset.TimerLoops[timerCycle]; ++i) {
 
-                            time = timePoints[0].GetAbsoluteTime(time);
+                            time = timePoints[0].GetAbsoluteTime (time, preserveBaseTime);
                             queue.Enqueue((time, timePoints[0]));
                         }
                     }
@@ -85,7 +86,7 @@ namespace CycleBellLibrary.Timer
 
                     for (var i = 0; i < preset.TimerLoops[timerCycle]; ++i) {
 
-                        time = timePoint.GetAbsoluteTime(time);
+                        time = timePoint.GetAbsoluteTime (time, preserveBaseTime);
                         queue.Enqueue((time, timePoint));
                     }
                 }

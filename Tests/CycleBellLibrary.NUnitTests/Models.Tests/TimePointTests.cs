@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using CycleBellLibrary.Models;
 using NUnit.Framework;
 
@@ -117,6 +113,50 @@ namespace CycleBellLibrary.NUnitTests.Models.Tests
         #endregion
 
         #region GetAbsoluteTime
+
+        [Test]
+        public void GetAbsoluteTime__ValidBaseTime_PreserveBaseTimeByDefaultIsTrue_TimePointIsAbsolute__PreservesBaseTime()
+        {
+            var timePoint = GetAbsoluteTimePoint();
+            var newBaseTime = TimeSpan.Parse("1:11:11");
+
+            timePoint.GetAbsoluteTime(newBaseTime);
+
+            Assert.That(timePoint.BaseTime == newBaseTime);
+        }
+
+        [Test]
+        public void GetAbsoluteTime__ValidBaseTime_PreserveBaseTimeByDefaultIsTrue_TimePointIsRelative__PreservesBaseTime()
+        {
+            var timePoint = GetRelativeTimePoint();
+            var newBaseTime = TimeSpan.Parse("1:11:11");
+
+            timePoint.GetAbsoluteTime(newBaseTime);
+
+            Assert.That(timePoint.BaseTime == newBaseTime);
+        }
+
+        [Test]
+        public void GetAbsoluteTime__ValidBaseTime_PreserveBaseTimeIsFalse_TimePointIsAbsolute__DoesntPreserveBaseTime()
+        {
+            var timePoint = GetAbsoluteTimePoint();
+            var newBaseTime = TimeSpan.Parse("1:11:11");
+
+            timePoint.GetAbsoluteTime(newBaseTime, false);
+
+            Assert.That(timePoint.BaseTime == TimeSpan.Zero);
+        }
+
+        [Test]
+        public void GetAbsoluteTime__ValidBaseTime_PreserveBaseTimeIsFalse_TimePointIsRelative__DoesntPreserveBaseTime()
+        {
+            var timePoint = GetRelativeTimePoint();
+            var newBaseTime = TimeSpan.Parse("1:11:11");
+
+            timePoint.GetAbsoluteTime(newBaseTime, false);
+
+            Assert.That(timePoint.BaseTime == null);
+        }
 
         [Test]
         public void GetAbsoluteTime_ByDefaultRelativeTimePointBaseTimeNotSet_Throws()

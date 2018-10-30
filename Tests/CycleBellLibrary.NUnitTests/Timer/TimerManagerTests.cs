@@ -1,4 +1,5 @@
-﻿using CycleBellLibrary.Models;
+﻿using System;
+using CycleBellLibrary.Models;
 using CycleBellLibrary.Timer;
 using NUnit.Framework;
 
@@ -7,6 +8,22 @@ namespace CycleBellLibrary.NUnitTests.Timer
     [TestFixture]
     public class TimerManagerTests
     {
+        [Test]
+        public void GetStartTimePoint_ByDefault_CreatesZeroBaseTimeTimePoint()
+        {
+            var tp = TimerManager.GetStartTimePoint(TimeSpan.Parse("1:11:11"));
+
+            Assert.That(tp.BaseTime == TimeSpan.Zero);
+        }
+
+        [Test]
+        public void GetStartTimePoint_ByDefault_CreatesAbsoluteTimePoint()
+        {
+            var tp = TimerManager.GetStartTimePoint(TimeSpan.Parse("1:11:11"));
+
+            Assert.That(tp.TimePointType == TimePointType.Absolute);
+        }
+
         #region Play
 
         [Test]
