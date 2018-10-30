@@ -33,7 +33,7 @@ namespace CycleBellLibrary.NUnitTests.Context.Tests
             // Arrange:
             var cbm = GetCycleBellManager();
             var defaultPreset = Preset.GetDefaultPreset();
-            var comparer = new PresetEqualityComparer();
+            var comparer = new EasyPresetEqualityComparer();
 
             // Action:
             cbm.CreateNewPreset();
@@ -249,7 +249,7 @@ namespace CycleBellLibrary.NUnitTests.Context.Tests
 
         #endregion
 
-        public class PresetEqualityComparer : IEqualityComparer<Preset>
+        public class EasyPresetEqualityComparer : IEqualityComparer<Preset>
         {
             public bool Equals (Preset x, Preset y)
             {
@@ -257,10 +257,10 @@ namespace CycleBellLibrary.NUnitTests.Context.Tests
 
                 return x.PresetName.Equals (y.PresetName, StringComparison.InvariantCulture)
                        && x.StartTime.Equals (y.StartTime)
-                       && x.TimePointCollection.Equals (y.TimePointCollection)
-                       && x.TimerLoops.Equals (y.TimerLoops)
                        && x.IsInfiniteLoop.Equals (y.IsInfiniteLoop)
-                       && Object.Equals (x.Tag, y.Tag);
+                       && Object.Equals (x.Tag, y.Tag)
+                       && x.TimePointCollection.Count.Equals (y.TimePointCollection.Count)
+                       && x.TimerLoops.Count.Equals (y.TimerLoops.Count);
             }
 
             public int GetHashCode (Preset obj)
