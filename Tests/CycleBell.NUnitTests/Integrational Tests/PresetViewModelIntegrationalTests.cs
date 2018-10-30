@@ -16,7 +16,7 @@ namespace CycleBell.NUnitTests.Integrational_Tests
     class PresetViewModelIntegrationalTests : IStartTimeTimePointName
     {
         [Test]
-        public void OnTimePointChangedEventHandler_InitialTimePointIsPrevStartTimePointIsNext_DoesntActivateAnyTimePointViewModel()
+        public void OnTimePointChangedEventHandler__InitialTimePointIsPrev_StartTimePointIsNext__DoesntActivateAnyTimePointViewModel()
         {
             var preset = GetPreset(TimeSpan.Zero);
             var pvm = GetPresetViewModel(preset);
@@ -32,7 +32,7 @@ namespace CycleBell.NUnitTests.Integrational_Tests
         }
 
         [Test]
-        public void OnTimePointChangedEventHandler_StartTimePointIsPrevExistedTimePointIsNext_ActivateTimePointViewModelEqualedNextTimePoint()
+        public void OnTimePointChangedEventHandler__StartTimePointIsPrev_ExistedTimePointIsNext__ActivateTimePointViewModelEqualedNextTimePoint()
         {
             var preset = GetPreset(TimeSpan.Zero);
             var pvm = GetPresetViewModel(preset);
@@ -48,7 +48,7 @@ namespace CycleBell.NUnitTests.Integrational_Tests
         }
 
         [Test]
-        public void OnTimePointChangedEventHandler_StartTimePointIsPrevExistedTimePointIsNext_DoesntChangeStartTimePointBaseTime()
+        public void OnTimePointChangedEventHandler__StartTimePointIsPrev_ExistedTimePointIsNext__DoesntChangeStartTimePointBaseTime()
         {
             var preset = GetPreset(TimeSpan.Zero);
             var pvm = GetPresetViewModel(preset);
@@ -64,14 +64,12 @@ namespace CycleBell.NUnitTests.Integrational_Tests
             Assert.AreEqual(expectedBaseTime, queue[0].nextTimePoint.BaseTime);
         }
 
-
         [Test]
-        public void OnTimePointChangedEventHandler_ExistedTimePointIsPrevExistedTimePointIsNext_ActivateTimePointViewModelEqualedNextTimePoint()
+        public void OnTimePointChangedEventHandler__ExistedTimePointIsPrev_ExistedTimePointIsNext__ActivateTimePointViewModelEqualedNextTimePoint()
         {
             var preset = GetPreset(TimeSpan.Zero);
             var pvm = GetPresetViewModel(preset);
             var queue = GetQueue().GetTimerQueue(preset).ToArray();
-            TimeSpan? expectedBaseTime = queue[0].nextTimePoint.BaseTime;
 
             _mockTimerManager.Raise(t => t.ChangeTimePointEvent += null, new TimerEventArgs(prevTimePoint: queue[1].nextTimePoint,
                                                                                             nextTimePoint: queue[2].nextTimePoint,
@@ -83,7 +81,7 @@ namespace CycleBell.NUnitTests.Integrational_Tests
         }
 
         [Test]
-        public void OnTimePointChangedEventHandler_ExistedTimePointIsPrevExistedTimePointIsNext_DeactivateTimePointViewModelEqualedPrevTimePoint()
+        public void OnTimePointChangedEventHandler__ExistedTimePointIsPrev_ExistedTimePointIsNext__DeactivateTimePointViewModelEqualedPrevTimePoint()
         {
             var preset = GetPreset(TimeSpan.Zero);
             var pvm = GetPresetViewModel(preset);
@@ -105,9 +103,8 @@ namespace CycleBell.NUnitTests.Integrational_Tests
             Assert.IsFalse(pvm.TimePointVmCollection.First(tp => tp.Equals(queue[1].nextTimePoint)).IsActive);
         }
 
-
         [Test]
-        public void OnTimePointChangedEventHandler_ExistedTimePointIsPrevExistedTimePointIsNext_ChangesPrevTimePointBaseTime()
+        public void OnTimePointChangedEventHandler__ExistedTimePointIsPrev_ExistedTimePointIsNext__ChangesPrevTimePointBaseTime()
         {
             // Arrange
             var preset = GetPreset(TimeSpan.Zero);
