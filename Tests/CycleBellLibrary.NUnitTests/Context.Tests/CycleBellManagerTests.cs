@@ -116,7 +116,7 @@ namespace CycleBellLibrary.NUnitTests.Context.Tests
         }
 
         [Test]
-        public void CreateNewPreset_NewPresetExistsAndNameIsModidied_RiseEventWithEmptyPresetNotModifiedReasonFlag()
+        public void CreateNewPreset_ExistNewPresetWithNotDefaultStartTime_RiseEventWithEmptyPresetModifiedReasonFlag()
         {
             // Arrange:
             var cbm = GetCycleBellManager();
@@ -128,7 +128,28 @@ namespace CycleBellLibrary.NUnitTests.Context.Tests
             cbm.CreateNewPreset();
 
             var preset = cbm.PresetCollectionManager.Presets[0];
-            preset.PresetName = "Modified name";
+            preset.StartTime = TimeSpan.FromSeconds (7352930);
+
+            cbm.CreateNewPreset();
+
+            // Assert:
+            Assert.That (reason, Is.EqualTo (CantCreateNewPresetReasonsEnum.NewPresetModified));
+        }
+
+        [Test]
+        public void CreateNewPreset_ExistNewPresetWithNotDefaultTimePointCollection_RiseEventWithEmptyPresetModifiedReasonFlag()
+        {
+            // Arrange:
+            var cbm = GetCycleBellManager();
+            var reason = CantCreateNewPresetReasonsEnum.UnknownReason;
+
+            cbm.CantCreateNewPresetEvent += (s, e) => { reason = e.CantCreateNewPresetReasonEnum; };
+
+            // Action:
+            cbm.CreateNewPreset();
+
+            var preset = cbm.PresetCollectionManager.Presets[0];
+            preset.AddTimePoint (new TimePoint(TimeSpan.FromSeconds (7352930)));
 
             cbm.CreateNewPreset();
 
@@ -181,21 +202,21 @@ namespace CycleBellLibrary.NUnitTests.Context.Tests
         
         #region Factory
 
-        private Mock<IInnerPresetCollectionManager> _mockPresetsManager;
+        private Mock<IInnerPresetCollectionManager> _mockPresetCollectionManager;
 
         private CycleBellManager GetCycleBellManager()
         {
             FakeTimerManager stubTimerManager = new FakeTimerManager();
 
-            _mockPresetsManager = new Mock<IInnerPresetCollectionManager>();
+            _mockPresetCollectionManager = new Mock<IInnerPresetCollectionManager>();
 
             List<Preset> presetList = new List<Preset>();
 
-            _mockPresetsManager.Setup (m => m.Add (It.IsAny<Preset>())).Callback ((Preset p) => presetList.Add (p));
-            _mockPresetsManager.Setup (m => m.Presets).Returns (() => new ReadOnlyObservableCollection<Preset>(new ObservableCollection<Preset>(presetList)));
-            _mockPresetsManager.Setup (m => m.Remove (It.IsAny<Preset>())).Callback ((Preset p) => presetList.Remove (p));
+            _mockPresetCollectionManager.Setup (m => m.Add (It.IsAny<Preset>())).Callback ((Preset p) => presetList.Add (p));
+            _mockPresetCollectionManager.Setup (m => m.Presets).Returns (() => new ReadOnlyObservableCollection<Preset>(new ObservableCollection<Preset>(presetList)));
+            _mockPresetCollectionManager.Setup (m => m.Remove (It.IsAny<Preset>())).Callback ((Preset p) => presetList.Remove (p));
 
-            return new CycleBellManager (_mockPresetsManager.Object, stubTimerManager);
+            return new CycleBellManager (_mockPresetCollectionManager.Object, stubTimerManager);
         }
 
         #endregion

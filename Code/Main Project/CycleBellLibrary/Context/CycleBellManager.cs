@@ -97,11 +97,17 @@ namespace CycleBellLibrary.Context
 
         public void CheckCreateNewPreset(Preset existEmptyPreset)
         {
-            if (Preset.IsDefaultPreset(existEmptyPreset)) {
+            if (IsDefaultPreset(existEmptyPreset)) {
                 OnCantCreateNewPreset(CantCreateNewPresetReasonsEnum.NewPresetNotModified, existEmptyPreset);
             }
             else {
                 OnCantCreateNewPreset(CantCreateNewPresetReasonsEnum.NewPresetModified, existEmptyPreset);
+            }
+
+            bool IsDefaultPreset(Preset preset)
+            {
+                return (!preset.TimePointCollection.Any())
+                       && (preset.StartTime.Equals(Preset.DefaultStartTime));
             }
         }
 
