@@ -39,7 +39,7 @@ namespace CycleBellLibrary.Models
         private string _name;
         private TimeSpan _time;
         private TimeSpan? _baseTime;
-        private byte _loopNumber;
+        private UInt16 _loopNumber;
 
         private static readonly Func<byte, String> _defaultTimePointNameFunc;
         private TimePointType _timePointType;
@@ -137,8 +137,8 @@ namespace CycleBellLibrary.Models
         /// </summary>-
         public static string FirstPointName { get; set; } = "Launch Time";
 
-        public static Byte MaxId { get; } = Byte.MaxValue;
-        public static Byte MinId { get; } = Byte.MinValue;
+        public static int MaxId { get; } = UInt16.MaxValue;
+        public static int MinId { get; } = UInt16.MinValue;
 
         public static TimePoint GetAbsoluteTimePoint() => new TimePoint(time: TimeSpan.Zero, timePointType: TimePointType.Absolute);
 
@@ -193,12 +193,12 @@ namespace CycleBellLibrary.Models
         /// <summary>
         /// Number of queue where this NextTimePoint will measure off
         /// </summary>
-        public byte LoopNumber 
+        public int LoopNumber 
         { 
             get => _loopNumber;
             set {
-                byte oldValue = _loopNumber;
-                _loopNumber = value;
+                int oldValue = _loopNumber;
+                _loopNumber = Convert.ToUInt16(value);
                 OnCollectionChanged (_loopNumber, oldValue, NotifyCollectionChangedAction.Replace);
             }
         }
@@ -411,9 +411,9 @@ namespace CycleBellLibrary.Models
 
         public event NotifyCollectionChangedEventHandler CollectionChanged;
 
-        protected virtual void OnCollectionChanged (byte newValue, byte oldValue, NotifyCollectionChangedAction action)
+        protected virtual void OnCollectionChanged (int newValue, int oldValue, NotifyCollectionChangedAction action)
         {
-            CollectionChanged?.Invoke (this, new NotifyCollectionChangedEventArgs (action, new List<byte> { newValue }, new List<byte> { oldValue }) );
+            CollectionChanged?.Invoke (this, new NotifyCollectionChangedEventArgs (action, new List<int> { newValue }, new List<int> { oldValue }) );
         }
 
         #endregion

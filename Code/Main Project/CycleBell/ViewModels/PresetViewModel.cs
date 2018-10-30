@@ -54,7 +54,7 @@ namespace CycleBell.ViewModels
 
         private bool _canBellOnStartTime;
 
-        private readonly HashSet<byte> _settedLoopNumbers;
+        private readonly HashSet<int> _settedLoopNumbers;
 
         private string _nextTimePointName;
         private TimeSpanDigits _timeLeftTo;
@@ -80,7 +80,7 @@ namespace CycleBell.ViewModels
 
 
             // _settedLoopNumbers
-            _settedLoopNumbers = new HashSet<byte>();
+            _settedLoopNumbers = new HashSet<int>();
 
             // _timePointVmCollection
             _timePointVmCollection = new ObservableCollection<TimePointViewModelBase>();

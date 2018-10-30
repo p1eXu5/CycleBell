@@ -28,7 +28,7 @@ namespace CycleBell.ViewModels.TimePointViewModels
         #region Fields
 
         private int _id;
-        private byte _loopNumber;
+        private int _loopNumber;
 
         protected IPresetViewModel _PresetViewModel;
 
@@ -40,7 +40,7 @@ namespace CycleBell.ViewModels.TimePointViewModels
 
         #region Constructors
 
-        protected TimePointViewModelBase (int id, byte loopNumber, IPresetViewModel presetViewModel)
+        protected TimePointViewModelBase (int id, int loopNumber, IPresetViewModel presetViewModel)
         {
             _PresetViewModel = presetViewModel;
 
@@ -66,7 +66,7 @@ namespace CycleBell.ViewModels.TimePointViewModels
                 OnPropertyChanged();
             }
         }
-        public virtual byte LoopNumber
+        public virtual int LoopNumber
         {
             get => _loopNumber;
             set {

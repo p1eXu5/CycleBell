@@ -69,7 +69,7 @@ namespace CycleBell.ViewModels.TimePointViewModels
 
         public override int Id => _timePoint.Id;
 
-        public override byte LoopNumber
+        public override int LoopNumber
         {
             get => _timePoint.LoopNumber;
             set {
