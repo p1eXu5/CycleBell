@@ -22,13 +22,13 @@ namespace CycleBellLibrary.Context
 {
     public class CantCreateNewPreetEventArgs : EventArgs
     {
-        public CantCreateNewPreetEventArgs(CantCreateNewPresetReasonsFlags cantCreateNewPresetReasonFlags, Preset preset)
+        public CantCreateNewPreetEventArgs(CantCreateNewPresetReasonsEnum cantCreateNewPresetReasonEnum, Preset preset)
         {
             Preset = preset ?? throw new ArgumentNullException();
-            CantCreateNewPresetReasonFlags = cantCreateNewPresetReasonFlags;
+            CantCreateNewPresetReasonEnum = cantCreateNewPresetReasonEnum;
         }
 
-        public CantCreateNewPresetReasonsFlags CantCreateNewPresetReasonFlags { get; }
+        public CantCreateNewPresetReasonsEnum CantCreateNewPresetReasonEnum { get; }
         public Preset Preset { get; }
     }
 }

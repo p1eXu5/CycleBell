@@ -20,6 +20,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.Linq;
+using System.Text;
 
 namespace CycleBellLibrary.Models
 {
@@ -394,6 +395,14 @@ namespace CycleBellLibrary.Models
 
                     array[i].BaseTime = array[i - 1].GetAbsoluteTime();
             }
+        }
+
+        public override string ToString()
+        {
+            return new StringBuilder().Append("PresetName: ").Append(PresetName).Append("\n")
+                                      .Append("StartTime: ").Append(StartTime).Append("\n")
+                                      .Append("TimePoint's Count: ").Append(TimePointCollection.Count)
+                                      .ToString();
         }
 
         #endregion

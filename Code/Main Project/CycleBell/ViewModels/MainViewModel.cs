@@ -324,7 +324,7 @@ namespace CycleBell.ViewModels
         // OnCan'tCreateNewPreset event handler
         private void OnCantCreateNewPresetEventHandler(object sender, CantCreateNewPreetEventArgs args)
         {
-            if (args.CantCreateNewPresetReasonFlags == CantCreateNewPresetReasonsFlags.EmptyPresetNotModified) {
+            if (args.CantCreateNewPresetReasonEnum == CantCreateNewPresetReasonsEnum.NewPresetNotModified) {
 
                 //_manager.DeletePreset(args.Preset);
                 StatusBarText = "New Preset already exists.";

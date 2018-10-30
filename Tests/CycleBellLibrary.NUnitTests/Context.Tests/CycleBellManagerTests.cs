@@ -13,23 +13,38 @@ namespace CycleBellLibrary.NUnitTests.Context.Tests
     [TestFixture]
     public class CycleBellManagerTests
     {
-        #region Fields
-
-        private readonly Mock<IInnerPresetCollectionManager> _mockPresetsManager = new Mock<IInnerPresetCollectionManager>();
-
-        #endregion
-
-        [SetUp]
-        public void TestInitializer()
+        [Test]
+        public void CreateNewPreset_ByDefault_CreatesTheNewPreset()
         {
-            List<Preset> presetList = new List<Preset>();
-            _mockPresetsManager.Setup (m => m.Add (It.IsAny<Preset>())).Callback ((Preset p) => presetList.Add (p));
-            _mockPresetsManager.Setup (m => m.Presets).Returns (() => new ReadOnlyObservableCollection<Preset>(new ObservableCollection<Preset>(presetList)));
-            _mockPresetsManager.Setup (m => m.Remove (It.IsAny<Preset>())).Callback ((Preset p) => presetList.Remove (p));
+            // Arrange:
+            var cbm = GetCycleBellManager();
+
+            // Action:
+            cbm.CreateNewPreset();
+
+            // Assert:
+            Assert.That (cbm.PresetCollectionManager.Presets.Count
+                        ,Is.GreaterThan (0));
         }
 
         [Test]
-        public void CreateNewPreset_EmptyPresetDoesntExist_CallsPresetManager()
+        public void CreateNewPreset_ByDefault_CreatesTheNewPresetEqualedDefaultPreset()
+        {
+            // Arrange:
+            var cbm = GetCycleBellManager();
+            var defaultPreset = Preset.GetDefaultPreset();
+            var comparer = new PresetEqualityComparer();
+
+            // Action:
+            cbm.CreateNewPreset();
+
+            // Assert:
+            Assert.That (cbm.PresetCollectionManager.Presets[0]
+                ,Is.EqualTo (defaultPreset).Using(comparer));
+        }
+
+        [Test]
+        public void CreateNewPreset_NewPresetDoesntExist_CallsPresetManager()
         {
             var cbm = GetCycleBellManager();
 
@@ -39,14 +54,86 @@ namespace CycleBellLibrary.NUnitTests.Context.Tests
         }
 
         [Test]
-        public void CreateNewPreset_DoubleCallEmptyPresetExists_DoesNotCallPresetManager()
+        public void CreateNewPreset_NewPresetExists_DoesNotCallPresetManager()
         {
+            // Arrange
             var cbm = GetCycleBellManager();
+            cbm.CreateNewPreset();
 
+            // Action
+            cbm.CreateNewPreset();
+
+            // Assert
+            Assert.IsTrue(cbm.PresetCollectionManager.Presets.Count == 1); 
+        }
+
+        [Test]
+        public void CreateNewPreset_NewPresetDoesntExists_DoesntRiseCantCreateNewPresetEvent()
+        {
+            // Arrange:
+            var cbm = GetCycleBellManager();
+            var isRised = false;
+            cbm.CantCreateNewPresetEvent += (s, e) => { isRised = true; };
+
+            // Action:
+            cbm.CreateNewPreset();
+
+            // Assert:
+            Assert.That (isRised, Is.EqualTo (false));
+        }
+
+        [Test]
+        public void CreateNewPreset_NewPresetExistsAndIsDefalt_RiseCantCreateNewPresetEvent()
+        {
+            // Arrange:
+            var cbm = GetCycleBellManager();
+            var isRised = false;
+            cbm.CantCreateNewPresetEvent += (s, e) => { isRised = true; };
+
+            // Action:
             cbm.CreateNewPreset();
             cbm.CreateNewPreset();
 
-            Assert.IsTrue(cbm.PresetCollectionManager.Presets.Count == 1);
+            // Assert:
+            Assert.That (isRised, Is.EqualTo (true));
+        }
+
+        [Test]
+        public void CreateNewPreset_NewPresetExistsAndIsDefalt_RiseEventWithEmptyPresetNotModifiedReasonFlag()
+        {
+            // Arrange:
+            var cbm = GetCycleBellManager();
+            var reason = CantCreateNewPresetReasonsEnum.UnknownReason;
+
+            cbm.CantCreateNewPresetEvent += (s, e) => { reason = e.CantCreateNewPresetReasonEnum; };
+
+            // Action:
+            cbm.CreateNewPreset();
+            cbm.CreateNewPreset();
+
+            // Assert:
+            Assert.That (reason, Is.EqualTo (CantCreateNewPresetReasonsEnum.NewPresetNotModified));
+        }
+
+        [Test]
+        public void CreateNewPreset_NewPresetExistsAndNameIsModidied_RiseEventWithEmptyPresetNotModifiedReasonFlag()
+        {
+            // Arrange:
+            var cbm = GetCycleBellManager();
+            var reason = CantCreateNewPresetReasonsEnum.UnknownReason;
+
+            cbm.CantCreateNewPresetEvent += (s, e) => { reason = e.CantCreateNewPresetReasonEnum; };
+
+            // Action:
+            cbm.CreateNewPreset();
+
+            var preset = cbm.PresetCollectionManager.Presets[0];
+            preset.PresetName = "Modified name";
+
+            cbm.CreateNewPreset();
+
+            // Assert:
+            Assert.That (reason, Is.EqualTo (CantCreateNewPresetReasonsEnum.NewPresetModified));
         }
 
         [Test]
@@ -91,11 +178,22 @@ namespace CycleBellLibrary.NUnitTests.Context.Tests
             Assert.That(cbm.IsNewPreset(preset), Is.EqualTo(false));
         }
 
+        
         #region Factory
+
+        private Mock<IInnerPresetCollectionManager> _mockPresetsManager;
 
         private CycleBellManager GetCycleBellManager()
         {
             FakeTimerManager stubTimerManager = new FakeTimerManager();
+
+            _mockPresetsManager = new Mock<IInnerPresetCollectionManager>();
+
+            List<Preset> presetList = new List<Preset>();
+
+            _mockPresetsManager.Setup (m => m.Add (It.IsAny<Preset>())).Callback ((Preset p) => presetList.Add (p));
+            _mockPresetsManager.Setup (m => m.Presets).Returns (() => new ReadOnlyObservableCollection<Preset>(new ObservableCollection<Preset>(presetList)));
+            _mockPresetsManager.Setup (m => m.Remove (It.IsAny<Preset>())).Callback ((Preset p) => presetList.Remove (p));
 
             return new CycleBellManager (_mockPresetsManager.Object, stubTimerManager);
         }
@@ -150,5 +248,25 @@ namespace CycleBellLibrary.NUnitTests.Context.Tests
         #pragma warning restore 0067
 
         #endregion
+
+        public class PresetEqualityComparer : IEqualityComparer<Preset>
+        {
+            public bool Equals (Preset x, Preset y)
+            {
+                if (x == null) return y == null;
+
+                return x.PresetName.Equals (y.PresetName, StringComparison.InvariantCulture)
+                       && x.StartTime.Equals (y.StartTime)
+                       && x.TimePointCollection.Equals (y.TimePointCollection)
+                       && x.TimerLoops.Equals (y.TimerLoops)
+                       && x.IsInfiniteLoop.Equals (y.IsInfiniteLoop)
+                       && Object.Equals (x.Tag, y.Tag);
+            }
+
+            public int GetHashCode (Preset obj)
+            {
+                return obj?.GetHashCode() ?? 0;
+            }
+        }
     }
 }

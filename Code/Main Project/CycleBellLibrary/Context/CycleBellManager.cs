@@ -78,8 +78,8 @@ namespace CycleBellLibrary.Context
         /// <exception cref="InvalidOperationException">Throws when empty preset already exists and it is particulary filled</exception>
         public bool CreateNewPreset()
         {
-            var existEmptyPreset = PresetCollectionManager.Presets.FirstOrDefault (IsNewPreset);
             bool res;
+            var existEmptyPreset = PresetCollectionManager.Presets.FirstOrDefault (IsNewPreset);
 
             if (existEmptyPreset == null) {
 
@@ -98,10 +98,10 @@ namespace CycleBellLibrary.Context
         public void CheckCreateNewPreset(Preset existEmptyPreset)
         {
             if (Preset.IsDefaultPreset(existEmptyPreset)) {
-                OnCantCreateNewPreset(CantCreateNewPresetReasonsFlags.EmptyPresetNotModified, existEmptyPreset);
+                OnCantCreateNewPreset(CantCreateNewPresetReasonsEnum.NewPresetNotModified, existEmptyPreset);
             }
             else {
-                OnCantCreateNewPreset(CantCreateNewPresetReasonsFlags.EmptyPresetModified, existEmptyPreset);
+                OnCantCreateNewPreset(CantCreateNewPresetReasonsEnum.NewPresetModified, existEmptyPreset);
             }
         }
 
@@ -109,9 +109,9 @@ namespace CycleBellLibrary.Context
 
         public event EventHandler<CantCreateNewPreetEventArgs> CantCreateNewPresetEvent;
 
-        private void OnCantCreateNewPreset(CantCreateNewPresetReasonsFlags reasonFlags, Preset preset)
+        private void OnCantCreateNewPreset(CantCreateNewPresetReasonsEnum reasonEnum, Preset preset)
         {
-            CantCreateNewPresetEvent?.Invoke(this, new CantCreateNewPreetEventArgs(reasonFlags, preset));
+            CantCreateNewPresetEvent?.Invoke(this, new CantCreateNewPreetEventArgs(reasonEnum, preset));
         }
 
         public void OpenPresets() => OpenPresets(FileName);

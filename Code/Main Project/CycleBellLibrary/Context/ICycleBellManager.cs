@@ -27,29 +27,20 @@ namespace CycleBellLibrary.Context
         IPresetCollectionManager PresetCollectionManager { get; }
         ITimerManager TimerManager { get; }
 
-        /// <summary>
-        /// Creates a new preset
-        /// </summary>
-        /// <exception cref="InvalidOperationException"></exception>
-        bool CreateNewPreset();
-
         void CheckCreateNewPreset(Preset existEmptyPreset);
-
-        void OpenPresets (string fileName);
-
-        void DeletePreset (Preset preset);
-
         void ClearPresets();
-
+        bool CreateNewPreset();
+        void DeletePreset (Preset preset);
+        bool IsNewPreset(Preset preset);
+        void OpenPresets (string fileName);
+        void RemoveNewPresets();
+        void RemovePresets(Preset[] presets);
         void RenamePreset (Preset preset, string newName);
-
         void SavePresets (string fileName);
 
         event EventHandler<CantCreateNewPreetEventArgs> CantCreateNewPresetEvent;
 
-        bool IsNewPreset(Preset preset);
 
-        void RemovePresets(Preset[] presets);
-        void RemoveNewPresets();
+
     }
 }
