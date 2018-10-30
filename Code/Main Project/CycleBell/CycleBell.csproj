@@ -137,6 +137,7 @@
     <Compile Include="ViewModels\IPresetViewModel.cs" />
     <Compile Include="ViewModels\RenamePresetDialogViewModel.cs" />
     <Compile Include="ViewModels\SavePresetDialogViewModel.cs" />
+    <Compile Include="ViewModels\ServiceExtensions.cs" />
     <Compile Include="ViewModels\TimePointViewModels\TimePointViewModelExtension.cs" />
     <Compile Include="ViewModels\TimePointViewModels\AddingTimePointViewModel.cs" />
     <Compile Include="ViewModels\TimePointViewModels\EndTimePointViewModel.cs" />

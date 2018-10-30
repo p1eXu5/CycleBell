@@ -219,7 +219,7 @@
                               IsEditable="True"
                               MaxDropDownHeight="90"
                               IsTextSearchEnabled="False"
-                              local:AttachedPropertyFactory.MoveFocusRight="{Binding IsFocused}"
+                              local:AttachedPropertyFactory.MoveFocusRight="{Binding MoveFocusRightTrigger}"
                               Text="{Binding SelectedPresetName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                               >
 

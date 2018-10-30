@@ -53,7 +53,7 @@ namespace CycleBell.ViewModels
         private string _initialDirectory;
 
         private bool _isRingOnStartTime = true;
-        private bool _isFocused;
+        private bool _moveFocusRightTrigger;
 
         private string _statusBarText = "";
 
@@ -212,11 +212,11 @@ namespace CycleBell.ViewModels
             }
         }
 
-        public bool IsFocused
+        public bool MoveFocusRightTrigger
         {
-            get => _isFocused;
+            get => _moveFocusRightTrigger;
             set {
-                _isFocused = value;
+                _moveFocusRightTrigger = value;
                 OnPropertyChanged ();
             }
         }
@@ -319,8 +319,18 @@ namespace CycleBell.ViewModels
                 PresetViewModelCollection.Clear();
                 _prevSelectedPreset = null;
             }
+
+            MoveFocusRight();
         }
-        
+
+        /// <summary>
+        /// Move ui element's focus to the right  
+        /// </summary>
+        private void MoveFocusRight()
+        {
+            MoveFocusRightTrigger ^= true;
+        }
+
         // OnCan'tCreateNewPreset event handler
         private void OnCantCreateNewPresetEventHandler(object sender, CantCreateNewPreetEventArgs args)
         {
@@ -411,7 +421,6 @@ namespace CycleBell.ViewModels
         //  File
         private void CreateNewPreset(object obj)
         {
-            IsFocused ^= true;
             _manager.CreateNewPreset();
         }
 
@@ -495,7 +504,7 @@ namespace CycleBell.ViewModels
             OnPropertyChanged(nameof(HasNoName));
 
             // Change value for call PropertyChangedCallback in attached property
-            IsFocused ^= true;
+            MoveFocusRightTrigger ^= true;
 
             if (_selectedPreset != null)
                 _selectedPreset.FocusStartTime = true;
@@ -577,14 +586,6 @@ namespace CycleBell.ViewModels
 
         #endregion Methods
 
-    }
-
-    public static class ServiceExtensions
-    {
-        public static bool IsNotNew(this Preset preset)
-        {
-            return !Preset.IsDefaultPreset(preset);
-        }
     }
 
     #region Converters
