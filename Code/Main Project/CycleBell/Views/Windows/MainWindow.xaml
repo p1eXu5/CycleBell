@@ -157,6 +157,16 @@
             </MenuItem>
         </Menu>
 
+        <!-- Status Bar -->
+        <StatusBar DockPanel.Dock="Bottom" 
+                   Background="Transparent"
+                   BorderThickness="0"
+                   Foreground="{DynamicResource brush_StatusBarTextGradient}"
+                   FontSize="10"
+                   >
+            <TextBlock Text="{Binding StatusBarText, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"/>
+        </StatusBar>
+
         <!-- Window Content -->
         <Grid TextElement.FontSize="14" VerticalAlignment="Stretch">
             <Grid.RowDefinitions>

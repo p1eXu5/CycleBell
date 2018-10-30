@@ -146,6 +146,11 @@
         <GradientStop Color="{DynamicResource col_BottomForeground}" Offset="1" />
     </LinearGradientBrush>
 
+    <LinearGradientBrush x:Key="brush_StatusBarTextGradient" StartPoint="0,0" EndPoint="0,1">
+        <GradientStop Color="{DynamicResource col_TopDisableTime}" Offset="0.0" />
+        <GradientStop Color="{DynamicResource col_BottomDisableTime}" Offset="1" />
+    </LinearGradientBrush>
+
     <LinearGradientBrush x:Key="brush_Play" StartPoint="0,0" EndPoint="0,1">
         <GradientStop Offset="0" Color="#00FF00" />
         <GradientStop Offset="1" Color="#008900" />

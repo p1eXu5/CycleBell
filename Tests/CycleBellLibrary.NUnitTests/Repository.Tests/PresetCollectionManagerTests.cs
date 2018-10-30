@@ -22,7 +22,7 @@ namespace CycleBellLibrary.NUnitTests.Repository.Tests
         public void AddPreset_ValidPreset_AddsPreset()
         {
             var presetsManager = GetPresetsManager();
-            var preset = Preset.EmptyPreset;
+            var preset = Preset.GetDefaultPreset();
 
             presetsManager.Add (preset);
 
@@ -33,9 +33,9 @@ namespace CycleBellLibrary.NUnitTests.Repository.Tests
         public void AddPreset_ExistingPreset_NotThrows()
         {
             var presetsManager = GetPresetsManager();
-            presetsManager.Add(Preset.EmptyPreset);
+            presetsManager.Add(Preset.GetDefaultPreset());
 
-            Assert.DoesNotThrow (() => presetsManager.Add (Preset.EmptyPreset));
+            Assert.DoesNotThrow (() => presetsManager.Add (Preset.GetDefaultPreset()));
         }
 
         [Test]
@@ -51,7 +51,7 @@ namespace CycleBellLibrary.NUnitTests.Repository.Tests
         public void Remove_ExistingPreset_RemovesPreset()
         {
             var pm = GetPresetsManager();
-            pm.Add(Preset.EmptyPreset);
+            pm.Add(Preset.GetDefaultPreset());
             var addedPreset = pm.Presets[0];
 
             pm.Remove (addedPreset);

@@ -23,6 +23,7 @@ using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Media;
+using System.Threading;
 using System.Windows.Data;
 using System.Windows.Input;
 using CycleBell.Base;
@@ -35,6 +36,8 @@ namespace CycleBell.ViewModels
 {
     public class MainViewModel : ObservableObject, IMainViewModel
     {
+        private const int _DUE_TIME = 5000;
+
         #region Fields
 
         public static SoundPlayer DefaultSoundPlayer;
@@ -52,6 +55,10 @@ namespace CycleBell.ViewModels
         private bool _isRingOnStartTime = true;
         private bool _isFocused;
 
+        private string _statusBarText = "";
+
+        private readonly Timer _timer;
+
         #endregion Private
 
         #region Constructor
@@ -64,13 +71,20 @@ namespace CycleBell.ViewModels
             _manager.CantCreateNewPresetEvent += OnCantCreateNewPresetEventHandler;
             LoadTimerManager(_manager);
 
-            RemoveSelectedPresetCommand = new ActionCommand(RemoveSelectedPreset, CanRemoveSelectedPreset);
-            ExportPresetsCommand = new ActionCommand(ExportPresets, CanExportPresets);
-            ClearPresetsCommand = new ActionCommand(ClearPresets, CanExportPresets);
+            InitializeCommands();
 
             LoadPresetViewModelCollection(_manager);
 
             DefaultSoundPlayer = File.Exists(@"Sounds/default.wav") ? new SoundPlayer(@"Sounds/default.wav") : new SoundPlayer();
+
+            _timer = new Timer(ClearStatusBarText, null, Timeout.Infinite, Timeout.Infinite);
+        }
+
+        private void InitializeCommands()
+        {
+            RemoveSelectedPresetCommand = new ActionCommand(RemoveSelectedPreset, CanRemoveSelectedPreset);
+            ExportPresetsCommand = new ActionCommand(ExportPresets, CanExportPresets);
+            ClearPresetsCommand = new ActionCommand(ClearPresets, CanExportPresets);
         }
 
         private void LoadTimerManager(ICycleBellManager manager)
@@ -82,8 +96,10 @@ namespace CycleBell.ViewModels
 
         private void LoadPresetViewModelCollection(ICycleBellManager manager)
         {
+            var presets = manager.PresetCollectionManager.Presets.Where(p => !manager.IsNewPreset(p)).ToArray();
+
             PresetViewModelCollection =
-                new ObservableCollection<PresetViewModel>(manager.PresetCollectionManager.Presets.Select(p => new PresetViewModel(p, this)));
+                new ObservableCollection<PresetViewModel>(presets.Select(p => new PresetViewModel(p, this)));
 
             if (PresetViewModelCollection.Count > 0) {
                 SelectedPreset = PresetViewModelCollection[0];
@@ -213,7 +229,20 @@ namespace CycleBell.ViewModels
 
                 return false;
             }
-        } 
+        }
+
+        public string StatusBarText
+        {
+            get => _statusBarText;
+            set {
+                _statusBarText = value;
+                OnPropertyChanged();
+
+                if (String.IsNullOrWhiteSpace(_statusBarText)) {
+                    RunTimer();
+                }
+            }
+        }
 
         #endregion
 
@@ -223,9 +252,11 @@ namespace CycleBell.ViewModels
         public ICommand CreateNewPresetCommand => new ActionCommand(CreateNewPreset);
 
         public ICommand AppendPresetsCommand => new ActionCommand(AppendPresets, CanAppendPresets);
-        public ICommand ExportPresetsCommand { get; }
+        // Is initialized in ctor
+        public ICommand ExportPresetsCommand { get; set; }
 
-        public ICommand ClearPresetsCommand { get; }
+        // Is initialized in ctor
+        public ICommand ClearPresetsCommand { get; set; }
 
         public ICommand ExitCommand => new ActionCommand(Exit);
 
@@ -239,7 +270,8 @@ namespace CycleBell.ViewModels
 
         // Presets ComboBox
         public ICommand PresetComboBoxReturnCommand => new ActionCommand(PresetComboBoxReturnKeyHandler);
-        public ICommand RemoveSelectedPresetCommand { get; }
+        // Is initialized in ctor
+        public ICommand RemoveSelectedPresetCommand { get; set; }
         public ICommand PresetLostFocusCommand => new ActionCommand(PresetLostFocus);
 
         // Timer buttons
@@ -292,7 +324,8 @@ namespace CycleBell.ViewModels
         {
             if (args.CantCreateNewPresetReasonFlags == CantCreateNewPresetReasonsFlags.EmptyPresetNotModified) {
 
-                _manager.DeletePreset(args.Preset);
+                //_manager.DeletePreset(args.Preset);
+                StatusBarText = "New Preset already exists.";
                 return;
             }
 
@@ -323,6 +356,16 @@ namespace CycleBell.ViewModels
         {
             OnPropertyChanged (nameof(IsPlayable));
             OnPropertyChanged (nameof(IsStopped));
+        }
+
+        private void RunTimer()
+        {
+            _timer.Change(_DUE_TIME, Timeout.Infinite);
+        }
+
+        private void ClearStatusBarText (object state)
+        {
+            StatusBarText = "";
         }
 
         // add/remove SelectedPreset handlers
@@ -530,6 +573,15 @@ namespace CycleBell.ViewModels
         }
 
         #endregion Methods
+
+    }
+
+    public static class ServiceExtensions
+    {
+        public static bool IsNotNew(this Preset preset)
+        {
+            return !Preset.IsDefaultPreset(preset);
+        }
     }
 
     #region Converters

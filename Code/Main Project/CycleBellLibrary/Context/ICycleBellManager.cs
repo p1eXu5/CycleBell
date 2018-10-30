@@ -46,5 +46,7 @@ namespace CycleBellLibrary.Context
         void SavePresets (string fileName);
 
         event EventHandler<CantCreateNewPreetEventArgs> CantCreateNewPresetEvent;
+
+        bool IsNewPreset(Preset preset);
     }
 }

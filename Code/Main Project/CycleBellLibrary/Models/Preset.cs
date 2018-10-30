@@ -49,7 +49,7 @@ namespace CycleBellLibrary.Models
         // Instance
         private Preset(string name, TimeSpan startTime)
         {
-            PresetName = name;
+            PresetName = name ?? DefaultName;
 
             TimerLoops = new TimerLoopSortedDictionary();
             _timePoints = new ObservableCollection<TimePoint>();
@@ -118,7 +118,14 @@ namespace CycleBellLibrary.Models
         /// <summary>
         /// Returns Preset with default settings
         /// </summary>
-        public static Preset EmptyPreset => new Preset();
+        public static Preset GetDefaultPreset() => new Preset();
+
+        public static bool IsDefaultPreset(Preset preset)
+        {
+            return (preset.PresetName.Equals(DefaultName))
+                   && (!preset.TimePointCollection.Any())
+                   && (preset.StartTime.Equals(DefaultStartTime));
+        }
 
         /// <summary>
         /// Start TimePoint name
@@ -161,6 +168,7 @@ namespace CycleBellLibrary.Models
         /// Indicates whether the loop is infinite
         /// </summary>
         public bool IsInfiniteLoop => _isInfiniteLoop != 0;
+
 
         public ReadOnlyObservableCollection<TimePoint> TimePointCollection => _readOnlyTimePointCollectionCollection;
 

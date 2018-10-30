@@ -429,6 +429,40 @@ namespace CycleBellLibrary.NUnitTests.Models.Tests
         #region else
 
         [Test]
+        public void IsDefaultPreset_DefaultPreset_ReturnsTrue()
+        {
+            var preset = new Preset();
+
+            Assert.That (Preset.IsDefaultPreset(preset), Is.EqualTo(true));
+        }
+
+        [TestCase(1)]
+        [TestCase(-1)]
+        public void IsDefaultPreset_StartTimeHaveNotDefaultValue_ReturnsFalse(int milliseconds)
+        {
+            var preset = new Preset(Preset.DefaultStartTime + TimeSpan.FromMilliseconds(milliseconds));
+
+            Assert.That(Preset.IsDefaultPreset(preset), Is.EqualTo(false));
+        }
+
+        [Test]
+        public void IsDefaultPreset_NameHaveNotDefaultValue_ReturnsFalse()
+        {
+            var preset = new Preset("Test Preset");
+
+            Assert.That(Preset.IsDefaultPreset(preset), Is.EqualTo(false));
+        }
+
+        [Test]
+        public void IsDefaultPreset_TimePointCollectionNotEmpty_ReturnsFalse()
+        {
+            var preset = new Preset();
+            preset.AddTimePoint(TimePoint.GetAbsoluteTimePoint());
+
+            Assert.That(Preset.IsDefaultPreset(preset), Is.EqualTo(false));
+        }
+
+        [Test]
         public void AutoUpdateTimePointBaseTimes_ByDefault_IsTrue()
         {
             var autoUpdateFlag = Preset.AutoUpdateTimePointBaseTimes;

@@ -60,8 +60,8 @@ namespace CycleBellLibrary.Context
 
         public string FileName { get; }
 
-        public bool IsEmptyPresetExists =>
-            PresetCollectionManager.Presets.FirstOrDefault(p => p.PresetName == Preset.DefaultName) != null;
+        public bool IsNewPresetExists =>
+            PresetCollectionManager.Presets.FirstOrDefault (IsNewPreset) != null;
 
         #endregion
 
@@ -73,11 +73,12 @@ namespace CycleBellLibrary.Context
         /// <exception cref="InvalidOperationException">Throws when empty preset already exists and it is particulary filled</exception>
         public bool CreateNewPreset()
         {
-            var existEmptyPreset = PresetCollectionManager.Presets.FirstOrDefault (p => p.PresetName == Preset.DefaultName);
+            var existEmptyPreset = PresetCollectionManager.Presets.FirstOrDefault (IsNewPreset);
             bool res;
 
             if (existEmptyPreset == null) {
-                _presetCollectionManager.Add (Preset.EmptyPreset);
+
+                _presetCollectionManager.Add (Preset.GetDefaultPreset());
                 res = true;
             }
             else {
@@ -91,13 +92,15 @@ namespace CycleBellLibrary.Context
 
         public void CheckCreateNewPreset(Preset existEmptyPreset)
         {
-            if (existEmptyPreset.StartTime != Preset.DefaultStartTime || existEmptyPreset.TimePointCollection.Count > 0 || existEmptyPreset.StartTime != Preset.DefaultStartTime) {
-                OnCantCreateNewPreset(CantCreateNewPresetReasonsFlags.EmptyPresetModified, existEmptyPreset);
-            }
-            else {
+            if (Preset.IsDefaultPreset(existEmptyPreset)) {
                 OnCantCreateNewPreset(CantCreateNewPresetReasonsFlags.EmptyPresetNotModified, existEmptyPreset);
             }
+            else {
+                OnCantCreateNewPreset(CantCreateNewPresetReasonsFlags.EmptyPresetModified, existEmptyPreset);
+            }
         }
+
+        public bool IsNewPreset(Preset preset) => PresetChecker.IsNewPreset(preset);
 
         public event EventHandler<CantCreateNewPreetEventArgs> CantCreateNewPresetEvent;
 
@@ -130,7 +133,7 @@ namespace CycleBellLibrary.Context
         {
             _presetCollectionManager.Add (preset);
         }
-
+        
         /// <summary>
         /// Remove preset
         /// </summary>
@@ -162,5 +165,10 @@ namespace CycleBellLibrary.Context
         }
 
         #endregion
+
+        public static class PresetChecker
+        {
+            public static bool IsNewPreset(Preset preset) => preset.PresetName == Preset.DefaultName;
+        }
     }
 }

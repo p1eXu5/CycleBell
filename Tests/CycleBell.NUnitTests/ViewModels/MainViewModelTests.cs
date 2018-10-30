@@ -1,9 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using CycleBell.Base;
 using CycleBell.ViewModels;
-using CycleBell.ViewModels.TimePointViewModels;
 using CycleBellLibrary.Context;
 using CycleBellLibrary.Models;
 using CycleBellLibrary.Repository;
@@ -25,16 +23,60 @@ namespace CycleBell.NUnitTests.ViewModels
             Assert.AreEqual(expectedType, actualType);
         }
 
-        #region PlayCommand
+        #region ctor
 
         [Test]
-        public void MediaTerminal_TimerStateIsTrue_CallsTimerManager()
+        public void ctor__ByDefault_PresetCollectionContainsOnlyDefaultNamedPresets__CreatesEmptyTimePointViewModelCollection()
         {
-            var mvm = GetMainViewModel();
-           
+            var presets = new[]
+            {
+                GetDefaultPreset(),
+                GetDefaultPreset()
+            };
+            
+            var mvm = GetMainViewModel(presets);
+
+            Assert.That(mvm.PresetViewModelCollection.Count, Is.EqualTo(0));
+        }
+
+        [Test]
+        public void ctor__ByDefault_PresetCollectionContainsNotOnlyDefaultNamedPresets__CreatesNotEmptyTimePointViewModelCollection()
+        {
+            var presets = new[]
+            {
+                GetDefaultPreset(),
+                GetDefaultPreset("Some name"),
+                GetDefaultPreset("Some name2"),
+            };
+
+            var mvm = GetMainViewModel(presets);
+
+            Assert.That(mvm.PresetViewModelCollection.Count, Is.EqualTo(2));
+
+            _mockPresetCollectionManager.Object.Clear();
         }
 
         #endregion
+
+        #region PlayCommand
+
+        [Test]
+        public void MediaTerminal_TimerStateIsTrue_CallsTimerManagerPlayAsync()
+        {
+            var mvm = GetMainViewModel(new [] {GetTestFilledPreset()});
+
+            mvm.MediaTerminalCommand.Execute(null);
+           
+            _mockTimerManager.Verify(a => a.PlayAsync(It.IsAny<Preset>()));
+        }
+
+        #endregion
+
+        [TearDown]
+        public void ClearPresetCollection()
+        {
+            _mockPresetCollectionManager?.Object.Clear();
+        }
 
         #region Factory
 
@@ -43,19 +85,39 @@ namespace CycleBell.NUnitTests.ViewModels
         private Mock<ITimerManager> _mockTimerManager;
         private Mock<IPresetCollectionManager> _mockPresetCollectionManager;
 
-        private MainViewModel GetMainViewModel()
+        private MainViewModel GetMainViewModel(Preset[] presets = null)
         {
             _mockTimerManager = _mockCycleBellManager.As<ITimerManager>();
             _mockPresetCollectionManager = _mockCycleBellManager.As<IPresetCollectionManager>();
 
             _mockCycleBellManager.Setup (cbm => cbm.TimerManager).Returns (_mockTimerManager.Object);
             _mockCycleBellManager.Setup (cbm => cbm.PresetCollectionManager).Returns (_mockPresetCollectionManager.Object);
+            _mockCycleBellManager.Setup(cbm => cbm.IsNewPreset(It.IsAny<Preset>()))
+                                 .Returns((Preset preset) => CycleBellManager.PresetChecker.IsNewPreset(preset));
 
-            _mockPresetCollectionManager.Setup (pcm => pcm.Presets).Returns (new ReadOnlyObservableCollection<Preset>(new ObservableCollection<Preset>()));
+            if (presets == null) {
+                _mockPresetCollectionManager.Setup(pcm => pcm.Presets)
+                                            .Returns(new ReadOnlyObservableCollection<Preset>(new ObservableCollection<Preset>()));
+            }
+            else {
+                _mockPresetCollectionManager.Setup(pcm => pcm.Presets)
+                                            .Returns(new ReadOnlyObservableCollection<Preset>(new ObservableCollection<Preset>(presets)));
+            }
 
             var mainViewModel = new MainViewModel (_mockDialogRegistrator.Object, _mockCycleBellManager.Object);
 
             return mainViewModel;
+        }
+
+        private Preset GetDefaultPreset(string name = null) => new Preset(name);
+
+        private Preset GetTestFilledPreset()
+        {
+            var preset = new Preset("Test Preset");
+
+            preset.AddTimePoint(TimePoint.GetAbsoluteTimePoint());
+
+            return preset;
         }
 
         #endregion

@@ -1,10 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Collections.Specialized;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using CycleBellLibrary.Context;
 using CycleBellLibrary.Models;
 using CycleBellLibrary.Repository;
@@ -19,7 +15,6 @@ namespace CycleBellLibrary.NUnitTests.Context.Tests
     {
         #region Fields
 
-        private readonly PresetCollectionManager _presetCollectionManager = new PresetCollectionManager();
         private readonly Mock<IInnerPresetCollectionManager> _mockPresetsManager = new Mock<IInnerPresetCollectionManager>();
 
         #endregion
@@ -58,7 +53,7 @@ namespace CycleBellLibrary.NUnitTests.Context.Tests
         public void AddPreset_WhenCalled_CallsPresetManager()
         {
             var cbm = GetCycleBellManager();
-            var addingPreset = Preset.EmptyPreset;
+            var addingPreset = Preset.GetDefaultPreset;
             
             cbm.AddPreset (addingPreset);
 
@@ -69,13 +64,31 @@ namespace CycleBellLibrary.NUnitTests.Context.Tests
         public void RemovePreset_WhenCalled_CallsPresetsManager()
         {
             var cbm = GetCycleBellManager();
-            var addingPreset = Preset.EmptyPreset;
+            var addingPreset = Preset.GetDefaultPreset;
             
             cbm.AddPreset (addingPreset);
 
             cbm.RemovePreset (addingPreset);
 
             Assert.IsTrue (cbm.PresetCollectionManager.Presets.Count == 0);
+        }
+
+        [Test]
+        public void IsNewPreset_DefaulPreset_ReturnsTrue()
+        {
+            var preset = new Preset();
+            var cbm = GetCycleBellManager();
+
+            Assert.That(cbm.IsNewPreset(preset), Is.EqualTo(true));
+        }
+
+        [Test]
+        public void IsNewPreset_NamedPreset_ReturnsFalse()
+        {
+            var preset = new Preset("asd");
+            var cbm = GetCycleBellManager();
+
+            Assert.That(cbm.IsNewPreset(preset), Is.EqualTo(false));
         }
 
         #region Factory
@@ -127,6 +140,12 @@ namespace CycleBellLibrary.NUnitTests.Context.Tests
             {
                 throw new NotImplementedException();
             }
+
+            public void DontPreserveBaseTime()
+            {}
+
+            public void PreserveBaseTime()
+            {}
         }
         #pragma warning restore 0067
 
