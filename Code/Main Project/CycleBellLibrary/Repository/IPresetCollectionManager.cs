@@ -28,5 +28,6 @@ namespace CycleBellLibrary.Repository
         void Clear();
         void OpenPresets(string fileName);
         void SavePresets(string fileName);
+        void Remove(Preset preset);
     }
 }

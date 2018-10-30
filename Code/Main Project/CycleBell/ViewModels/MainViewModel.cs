@@ -96,10 +96,12 @@ namespace CycleBell.ViewModels
 
         private void LoadPresetViewModelCollection(ICycleBellManager manager)
         {
-            var presets = manager.PresetCollectionManager.Presets.Where(p => !manager.IsNewPreset(p)).ToArray();
+            if (manager.PresetCollectionManager.Presets.Any(manager.IsNewPreset)) {
+                throw new ArgumentException("ICycleBellManager.IPresetCollectionManager.Presets contain NewPreset");
+            }
 
             PresetViewModelCollection =
-                new ObservableCollection<PresetViewModel>(presets.Select(p => new PresetViewModel(p, this)));
+                new ObservableCollection<PresetViewModel>(manager.PresetCollectionManager.Presets.Select(p => new PresetViewModel(p, this)));
 
             if (PresetViewModelCollection.Count > 0) {
                 SelectedPreset = PresetViewModelCollection[0];
@@ -238,7 +240,7 @@ namespace CycleBell.ViewModels
                 _statusBarText = value;
                 OnPropertyChanged();
 
-                if (String.IsNullOrWhiteSpace(_statusBarText)) {
+                if (!String.IsNullOrWhiteSpace(_statusBarText)) {
                     RunTimer();
                 }
             }
@@ -409,6 +411,7 @@ namespace CycleBell.ViewModels
         //  File
         private void CreateNewPreset(object obj)
         {
+            IsFocused ^= true;
             _manager.CreateNewPreset();
         }
 

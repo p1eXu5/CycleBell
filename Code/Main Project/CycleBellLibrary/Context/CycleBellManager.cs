@@ -16,6 +16,7 @@
  */
 
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using CycleBellLibrary.Models;
@@ -37,14 +38,18 @@ namespace CycleBellLibrary.Context
         public CycleBellManager (string fileName, IInnerPresetCollectionManager presetCollectionManager, ITimerManager timerManager)
         {
             FileName = fileName;
-           _presetCollectionManager = presetCollectionManager ?? throw new ArgumentNullException(nameof(presetCollectionManager), "presetCollectionManager can't be null");
+
             TimerManager = timerManager ?? throw new ArgumentNullException(nameof(timerManager), "timerManager can't be null");
             TimerManager.DontPreserveBaseTime();
+
+           _presetCollectionManager = presetCollectionManager ?? throw new ArgumentNullException(nameof(presetCollectionManager), "presetCollectionManager can't be null");
+           PresetCollectionManager.Clear();
 
             try {
                 OpenPresets();
             }
             catch(FileNotFoundException) { }
+
         }
 
         public CycleBellManager (IInnerPresetCollectionManager presetCollectionManager, ITimerManager timerManager)
@@ -60,8 +65,8 @@ namespace CycleBellLibrary.Context
 
         public string FileName { get; }
 
-        public bool IsNewPresetExists =>
-            PresetCollectionManager.Presets.FirstOrDefault (IsNewPreset) != null;
+        public Preset[] GetNewPresets() =>
+            PresetCollectionManager.Presets.Where(IsNewPreset).ToArray();
 
         #endregion
 
@@ -113,6 +118,27 @@ namespace CycleBellLibrary.Context
         public void OpenPresets (string fileName)
         {
             PresetCollectionManager.OpenPresets(fileName);
+            RemoveNewPresets();
+        }
+
+        public void RemoveNewPresets()
+        {
+            var newPresets = GetNewPresets();
+
+            if (newPresets.Length > 0) {
+                RemovePresets(newPresets);
+            }
+        }
+
+        public void RemovePresets(Preset[] presets)
+        {
+            if (presets.Any()) {
+
+                foreach (var preset in presets) {
+
+                    PresetCollectionManager.Remove(preset);
+                }
+            }
         }
 
         public void ClearPresets()

@@ -26,21 +26,7 @@ namespace CycleBell.NUnitTests.ViewModels
         #region ctor
 
         [Test]
-        public void ctor__ByDefault_PresetCollectionContainsOnlyDefaultNamedPresets__CreatesEmptyTimePointViewModelCollection()
-        {
-            var presets = new[]
-            {
-                GetDefaultPreset(),
-                GetDefaultPreset()
-            };
-            
-            var mvm = GetMainViewModel(presets);
-
-            Assert.That(mvm.PresetViewModelCollection.Count, Is.EqualTo(0));
-        }
-
-        [Test]
-        public void ctor__ByDefault_PresetCollectionContainsNotOnlyDefaultNamedPresets__CreatesNotEmptyTimePointViewModelCollection()
+        public void ctor__ByDefault_PresetCollectionContainsTheNewPresets__Trow()
         {
             var presets = new[]
             {
@@ -49,11 +35,7 @@ namespace CycleBell.NUnitTests.ViewModels
                 GetDefaultPreset("Some name2"),
             };
 
-            var mvm = GetMainViewModel(presets);
-
-            Assert.That(mvm.PresetViewModelCollection.Count, Is.EqualTo(2));
-
-            _mockPresetCollectionManager.Object.Clear();
+            Assert.Throws(typeof(ArgumentException), () => GetMainViewModel(presets));
         }
 
         #endregion

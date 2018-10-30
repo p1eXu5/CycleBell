@@ -53,7 +53,7 @@ namespace CycleBellLibrary.NUnitTests.Context.Tests
         public void AddPreset_WhenCalled_CallsPresetManager()
         {
             var cbm = GetCycleBellManager();
-            var addingPreset = Preset.GetDefaultPreset;
+            var addingPreset = Preset.GetDefaultPreset();
             
             cbm.AddPreset (addingPreset);
 
@@ -64,7 +64,7 @@ namespace CycleBellLibrary.NUnitTests.Context.Tests
         public void RemovePreset_WhenCalled_CallsPresetsManager()
         {
             var cbm = GetCycleBellManager();
-            var addingPreset = Preset.GetDefaultPreset;
+            var addingPreset = Preset.GetDefaultPreset();
             
             cbm.AddPreset (addingPreset);
 

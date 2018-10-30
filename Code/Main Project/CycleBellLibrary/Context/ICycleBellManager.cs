@@ -48,5 +48,8 @@ namespace CycleBellLibrary.Context
         event EventHandler<CantCreateNewPreetEventArgs> CantCreateNewPresetEvent;
 
         bool IsNewPreset(Preset preset);
+
+        void RemovePresets(Preset[] presets);
+        void RemoveNewPresets();
     }
 }
