@@ -140,7 +140,7 @@ namespace CycleBell.NUnitTests.Integrational_Tests
 
 
         private Mock<ITimerManager> _mockTimerManager;
-        private readonly PresetCollectionManager _presetCollectionManager = new PresetCollectionManager();
+        private PresetCollectionManager _presetCollectionManager;
 
         private Preset GetPreset(TimeSpan startTime) => new Preset(new []
                                                         {
@@ -159,6 +159,8 @@ namespace CycleBell.NUnitTests.Integrational_Tests
 
         private PresetViewModel GetPresetViewModel(Preset preset)
         {
+            _presetCollectionManager = new PresetCollectionManager();
+
             Mock<IDialogRegistrator> stub_DialogRegistrator = new Mock<IDialogRegistrator>();
 
             var mockCycleBellManager = new Mock<ICycleBellManager>();
