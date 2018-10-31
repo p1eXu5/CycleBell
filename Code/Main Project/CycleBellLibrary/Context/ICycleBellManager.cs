@@ -27,11 +27,13 @@ namespace CycleBellLibrary.Context
         IPresetCollectionManager PresetCollectionManager { get; }
         ITimerManager TimerManager { get; }
 
+        Preset GetNewPreset();
+
         void CheckCreateNewPreset(Preset existEmptyPreset);
         void ClearPresets();
 
         /// <summary>
-        /// Creates a new preset when equaled a new preset doesn't
+        /// Creates and adds a new preset when equaled a new preset doesn't
         /// exist in <see cref="Repository.PresetCollectionManager.Presets"/> collection.
         /// </summary>
         /// <returns><see cref="Boolean"/> if preset added</returns>

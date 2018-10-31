@@ -19,6 +19,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using CycleBellLibrary.Models;
 using CycleBellLibrary.Repository;
 using CycleBellLibrary.Timer;
@@ -73,7 +74,7 @@ namespace CycleBellLibrary.Context
         #region Methods
 
         /// <summary>
-        /// Creates a new preset when equaled a new preset doesn't
+        /// Creates and adds a new preset when equaled a new preset doesn't
         /// exist in <see cref="Repository.PresetCollectionManager.Presets"/> collection.
         /// </summary>
         /// <returns><see cref="Boolean"/> if preset added</returns>
@@ -84,7 +85,7 @@ namespace CycleBellLibrary.Context
 
             if (existEmptyPreset == null) {
 
-                _presetCollectionManager.Add (Preset.GetDefaultPreset());
+                _presetCollectionManager.Add (GetNewPreset());
                 res = true;
             }
             else {
@@ -95,6 +96,9 @@ namespace CycleBellLibrary.Context
 
             return res;
         }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public Preset GetNewPreset() => Preset.GetDefaultPreset();
 
         public void CheckCreateNewPreset(Preset existEmptyPreset)
         {
