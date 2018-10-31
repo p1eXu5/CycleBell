@@ -67,11 +67,12 @@ namespace CycleBell.NUnitTests.ViewModels
         private readonly Mock<ICycleBellManager> _mockCycleBellManager = new Mock<ICycleBellManager>();
         private Mock<ITimerManager> _mockTimerManager;
         private Mock<IPresetCollectionManager> _mockPresetCollectionManager;
+        private ReadOnlyObservableCollection<Preset> _presets;
 
         private MainViewModel GetMainViewModel(Preset[] presets = null)
         {
-            var obscol = new ObservableCollection<Preset>();
-            var rObscol = new ReadOnlyObservableCollection<Preset>(obscol);
+            var presetColl = new ObservableCollection<Preset>();
+            _presets = new ReadOnlyObservableCollection<Preset>(presetColl);
 
             _mockTimerManager = _mockCycleBellManager.As<ITimerManager>();
             _mockPresetCollectionManager = _mockCycleBellManager.As<IPresetCollectionManager>();
@@ -83,25 +84,25 @@ namespace CycleBell.NUnitTests.ViewModels
 
             _mockCycleBellManager.Setup (m => m.CreateNewPreset()).Returns(() => 
                                                     { 
-                                                        obscol.Add (Preset.GetDefaultPreset());
+                                                        presetColl.Add (Preset.GetDefaultPreset());
                                                         return true;
                                                     });
 
 
             if (presets == null) {
 
-                obscol = new ObservableCollection<Preset>();
-                rObscol = new ReadOnlyObservableCollection<Preset>(obscol);
+                presetColl = new ObservableCollection<Preset>();
+                _presets = new ReadOnlyObservableCollection<Preset>(presetColl);
 
                 _mockPresetCollectionManager.Setup(pcm => pcm.Presets)
-                    .Returns(rObscol);
+                    .Returns(_presets);
             }
             else {
-                obscol = new ObservableCollection<Preset>(presets);
-                rObscol = new ReadOnlyObservableCollection<Preset>(obscol);
+                presetColl = new ObservableCollection<Preset>(presets);
+                _presets = new ReadOnlyObservableCollection<Preset>(presetColl);
                 
                 _mockPresetCollectionManager.Setup(pcm => pcm.Presets)
-                    .Returns(rObscol);
+                    .Returns(_presets);
             }
 
             var mainViewModel = new MainViewModel (_mockDialogRegistrator.Object, _mockCycleBellManager.Object);

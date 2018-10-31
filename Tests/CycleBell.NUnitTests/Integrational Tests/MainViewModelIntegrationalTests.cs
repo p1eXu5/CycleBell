@@ -70,7 +70,7 @@ namespace CycleBell.NUnitTests.Integrational_Tests
             mvm.CreateNewPresetCommand.Execute(null);
 
             bool isRised = false;
-            cbm.CantCreateNewPresetEvent += (s, e) => { isRised = true; };
+            _cycleBellManager.CantCreateNewPresetEvent += (s, e) => { isRised = true; };
 
             // Action:
             mvm.SelectedPreset = mvm.PresetViewModelCollection[0];
@@ -103,7 +103,8 @@ namespace CycleBell.NUnitTests.Integrational_Tests
         private readonly Mock<ICycleBellManager> _mockCycleBellManager = new Mock<ICycleBellManager>();
         private Mock<ITimerManager> _mockTimerManager;
         private Mock<IPresetCollectionManager> _mockPresetCollectionManager;
-        private ICycleBellManager cbm; 
+        private ICycleBellManager _cycleBellManager;
+        private PresetCollectionManager _presetCollectionManager;
 
         private MainViewModel GetMainViewModel(Preset[] presets = null)
         {
@@ -111,21 +112,17 @@ namespace CycleBell.NUnitTests.Integrational_Tests
                 throw new ThreadStateException("The current threads apartment state is not STA");
             }
 
-            var obscol = new ObservableCollection<Preset>();
-            var rObscol = new ReadOnlyObservableCollection<Preset>(obscol);
-
             _mockTimerManager = _mockCycleBellManager.As<ITimerManager>();
             _mockPresetCollectionManager = _mockCycleBellManager.As<IPresetCollectionManager>();
 
-
-            var pcm = new PresetCollectionManager();
+            _presetCollectionManager = new PresetCollectionManager();
 
             try {
-                cbm = new CycleBellManager("some_file_name", pcm, _mockTimerManager.Object);
+                _cycleBellManager = new CycleBellManager("some_file_name", _presetCollectionManager, _mockTimerManager.Object);
             }
             catch (ArgumentNullException) { }
 
-            var mainViewModel = cbm != null ? new MainViewModel (_mockDialogRegistrator.Object, cbm) : throw new ArgumentNullException(nameof(cbm), @"Instance of ICycleBellManager is null");
+            var mainViewModel = _cycleBellManager != null ? new MainViewModel (_mockDialogRegistrator.Object, _cycleBellManager) : throw new ArgumentNullException(nameof(_cycleBellManager), @"Instance of ICycleBellManager is null");
 
             Window wnd = new FakeMainWindow();
             wnd.DataContext = mainViewModel;
