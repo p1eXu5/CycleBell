@@ -200,7 +200,12 @@ namespace CycleBellLibrary.Context
 
         public static class PresetChecker
         {
-            public static bool IsNewPreset(Preset preset) => preset.PresetName == Preset.DefaultName;
+            public static bool IsNewPreset(Preset preset)
+            {
+                if (preset == null) return false;
+
+                return preset.PresetName == Preset.DefaultName;
+            }
         }
     }
 }

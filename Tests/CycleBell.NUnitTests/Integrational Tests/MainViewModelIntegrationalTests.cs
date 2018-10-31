@@ -7,8 +7,10 @@ using CycleBellLibrary.Context;
 using CycleBellLibrary.Models;
 using CycleBellLibrary.Repository;
 using CycleBellLibrary.Timer;
+
 using Moq;
 using NUnit.Framework;
+
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
@@ -24,7 +26,7 @@ namespace CycleBell.NUnitTests.Integrational_Tests
     public class MainViewModelIntegrationalTests
     {
         [Test]
-        public void CreateNewPreset__SelectedPresetNotANewPreset_NewPresetDoesntExist__SetsSelectedPresetEqualedToANewPreset()
+        public void CreateNewPreset__SelectedPresetHasNotANewPreset_NewPresetDoesntExist__SetsSelectedPresetEqualedToANewPreset()
         {
             // Arrange:
             var mvm = GetMainViewModel();
@@ -39,13 +41,15 @@ namespace CycleBell.NUnitTests.Integrational_Tests
         }
 
         [Test]
-        public void CreateNewPreset__SelectedPresetNotANewPreset_NewPresetExists__SetsSelectedPresetEqualedToANewPreset()
+        public void CreateNewPreset__SelectedPresetHasNotANewPreset_NewPresetExists__SetsSelectedPresetEqualedToANewPreset()
         {
             // Arrange:
             var mvm = GetMainViewModel();
             mvm.CreateNewPresetCommand.Execute (null);
+
             mvm.SelectedPreset.Preset.PresetName = "Some Name";
             mvm.CreateNewPresetCommand.Execute (null);
+
             mvm.SelectedPreset = mvm.PresetViewModelCollection[0];
 
             // Action:
@@ -55,12 +59,51 @@ namespace CycleBell.NUnitTests.Integrational_Tests
             Assert.That (CycleBellManager.PresetChecker.IsNewPreset (mvm.SelectedPreset.Preset), Is.EqualTo (true));
         }
 
+        [Test]
+        public void SelectedPresetSet__SelectedPresetHasANewPresetAndSettedToANotNewPreset__DontRiseOnCantCreateNewPresetEvent()
+        {
+            // Arrange:
+            var mvm = GetMainViewModel();
+            mvm.CreateNewPresetCommand.Execute(null);
+
+            mvm.SelectedPreset.Preset.PresetName = "Some Name";
+            mvm.CreateNewPresetCommand.Execute(null);
+
+            bool isRised = false;
+            cbm.CantCreateNewPresetEvent += (s, e) => { isRised = true; };
+
+            // Action:
+            mvm.SelectedPreset = mvm.PresetViewModelCollection[0];
+
+            // Assert:
+            Assert.That(isRised, Is.EqualTo(false));
+        }
+
+        [Test]
+        public void SelectedPresetSet__SelectedPresetHasANewAndModifiedPreset_SettedToANotNewPreset__CallsDialog()
+        {
+            // Arrange:
+            var mvm = GetMainViewModel();
+            mvm.CreateNewPresetCommand.Execute(null);
+            mvm.SelectedPreset.Preset.PresetName = "Some Name";
+
+            mvm.CreateNewPresetCommand.Execute(null);
+            mvm.SelectedPreset.Preset.StartTime = TimeSpan.FromSeconds(1234567890);
+
+            // Action:
+            mvm.SelectedPreset = mvm.PresetViewModelCollection[0];
+
+            // Assert:
+            _mockDialogRegistrator.Verify(d => d.ShowDialog(It.IsAny<IDialogCloseRequested>(), It.IsAny<Predicate<object>>()));
+        }
+
         #region Factory
 
         private readonly Mock<IDialogRegistrator> _mockDialogRegistrator = new Mock<IDialogRegistrator>();
         private readonly Mock<ICycleBellManager> _mockCycleBellManager = new Mock<ICycleBellManager>();
         private Mock<ITimerManager> _mockTimerManager;
         private Mock<IPresetCollectionManager> _mockPresetCollectionManager;
+        private ICycleBellManager cbm; 
 
         private MainViewModel GetMainViewModel(Preset[] presets = null)
         {
@@ -76,7 +119,6 @@ namespace CycleBell.NUnitTests.Integrational_Tests
 
 
             var pcm = new PresetCollectionManager();
-            ICycleBellManager cbm = null; 
 
             try {
                 cbm = new CycleBellManager("some_file_name", pcm, _mockTimerManager.Object);

@@ -132,8 +132,11 @@ namespace CycleBell.ViewModels
                 if (_selectedPreset != null)
                     ConnectHandlers(_selectedPreset);
 
-                if (newSelectedPreset != null && _prevSelectedPreset != null && _prevSelectedPreset.Name == Preset.DefaultName)
-                    _manager.CheckCreateNewPreset(_prevSelectedPreset.Preset);
+                //if (newSelectedPreset != null && _prevSelectedPreset != null && _prevSelectedPreset.IsNewPreset) {
+
+                //    // TODO:
+                //    _manager.CheckCreateNewPreset(_prevSelectedPreset.Preset);
+                //}
 
                 OnPropertyChanged();
 
@@ -337,7 +340,13 @@ namespace CycleBell.ViewModels
             if (args.CantCreateNewPresetReasonEnum == CantCreateNewPresetReasonsEnum.NewPresetNotModified) {
 
                 //_manager.DeletePreset(args.Preset);
-                StatusBarText = "New Preset already exists.";
+                if (SelectedPreset.IsNewPreset) {
+                    StatusBarText = "New Preset already exists.";
+                }
+                else {
+                    SelectedPreset = GetExistNewPreset();
+                    StatusBarText = "Switched to the new preset.";
+                }
                 return;
             }
 
@@ -355,6 +364,11 @@ namespace CycleBell.ViewModels
             else {
                 _manager.DeletePreset(args.Preset);
             }
+        }
+
+        private PresetViewModel GetExistNewPreset()
+        {
+            return PresetViewModelCollection.First(p => p.IsNewPreset);
         }
 
         // timer handler

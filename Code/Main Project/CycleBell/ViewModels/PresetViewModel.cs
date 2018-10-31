@@ -28,6 +28,7 @@ using System.Windows.Input;
 using CycleBell.Base;
 using CycleBell.ViewModels.TimePointViewModels;
 using CycleBell.Views;
+using CycleBellLibrary.Context;
 using CycleBellLibrary.Models;
 using CycleBellLibrary.Timer;
 
@@ -183,7 +184,7 @@ namespace CycleBell.ViewModels
             }
         }
 
-        public bool IsNewPreset => Preset.PresetName == Preset.DefaultName;
+        public bool IsNewPreset => CycleBellManager.PresetChecker.IsNewPreset(Preset);
 
         public bool IsNoTimePoints => TimePointVmCollection.Count < 1;
         public bool IsTimePoints => TimePointVmCollection.Count > 0;
