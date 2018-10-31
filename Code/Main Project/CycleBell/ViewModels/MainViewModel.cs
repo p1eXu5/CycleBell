@@ -48,7 +48,7 @@ namespace CycleBell.ViewModels
         private ITimerManager _timerManager;
 
         private PresetViewModel _selectedPreset;
-        private PresetViewModel _prevSelectedPreset;
+        //private PresetViewModel _prevSelectedPreset;
 
         private string _initialDirectory;
 
@@ -160,10 +160,12 @@ namespace CycleBell.ViewModels
 
             // coerse:
             if (newSelectedPreset.IsModified) {
+
                 UpdateConnections (GetExistNewPreset());
             }
 
             //_prevSelectedPreset = _selectedPreset;
+            return;
 
             // connections:
             void UpdateConnections (PresetViewModel newValue)
@@ -188,7 +190,7 @@ namespace CycleBell.ViewModels
         }
         
         public bool IsSelectedPreset => SelectedPreset != null;
-        public bool IsNewPreset => SelectedPreset?.IsNewPreset ?? false;
+        public bool IsNewPreset => SelectedPreset?.IsNew ?? false;
         public bool IsInfiniteLoop
         {
             get => SelectedPreset?.IsInfiniteLoop ?? false;
@@ -368,7 +370,7 @@ namespace CycleBell.ViewModels
             if (args.CantCreateNewPresetReasonEnum == CantCreateNewPresetReasonsEnum.NewPresetNotModified) {
 
                 //_manager.DeletePreset(args.Preset);
-                if (SelectedPreset.IsNewPreset) {
+                if (SelectedPreset.IsNew) {
                     StatusBarText = "New Preset already exists.";
                 }
                 else {
@@ -387,13 +389,13 @@ namespace CycleBell.ViewModels
                 _dialogRegistrator.ShowDialog(renamePresetDialogViewModel);
             }
             else {
-                _manager.DeletePreset(SelectedPreset.P);
+                _manager.DeletePreset(SelectedPreset.Preset);
             }
         }
 
         private PresetViewModel GetExistNewPreset()
         {
-            return PresetViewModelCollection.First(p => p.IsNewPreset);
+            return PresetViewModelCollection.First(p => p.IsNew);
         }
 
         // timer handler
@@ -451,7 +453,7 @@ namespace CycleBell.ViewModels
 
         private void OnIsNewPresetChangedHandler(object s, PropertyChangedEventArgs e)
         {
-            if (e?.PropertyName == "IsNewPreset") {
+            if (e?.PropertyName == "IsNew") {
 
                 OnPropertyChanged(nameof(IsNewPreset));
             }

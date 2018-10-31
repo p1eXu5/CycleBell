@@ -162,8 +162,8 @@ namespace CycleBell.ViewModels
             }
         }
 
-        public bool IsNewPreset => CycleBellManager.PresetChecker.IsNewPreset (Preset);
-        public bool IsModifiedPreset => CycleBellManager.PresetChecker.IsModifiedPreset (Preset);
+        public bool IsNew => PresetChecker.IsNewPreset (Preset);
+        public bool IsModified => PresetChecker.IsModifiedPreset (Preset);
 
         public bool IsInfiniteLoop
         {
