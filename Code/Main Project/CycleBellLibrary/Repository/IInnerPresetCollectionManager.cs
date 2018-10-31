@@ -19,9 +19,8 @@ using CycleBellLibrary.Models;
 
 namespace CycleBellLibrary.Repository
 {
-    public interface IInnerPresetCollectionManager : IPresetCollectionManager
-    {
-        void Add(Preset preset);
-        void Remove (Preset preset);
-    }
+    //public interface IInnerPresetCollectionManager : IPresetCollectionManager
+    //{
+        
+    //}
 }

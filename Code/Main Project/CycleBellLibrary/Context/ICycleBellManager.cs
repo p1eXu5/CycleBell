@@ -29,7 +29,13 @@ namespace CycleBellLibrary.Context
 
         void CheckCreateNewPreset(Preset existEmptyPreset);
         void ClearPresets();
+
+        /// <summary>
+        /// Creates new and unmodified preset when equaled preset doesn't exist in <see cref="Repository.PresetCollectionManager.Presets"/> collection.
+        /// </summary>
+        /// <returns></returns>
         bool CreateNewPreset();
+
         void DeletePreset (Preset preset);
         bool IsNewPreset(Preset preset);
         void OpenPresets (string fileName);

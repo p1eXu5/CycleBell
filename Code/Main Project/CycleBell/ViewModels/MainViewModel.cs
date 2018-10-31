@@ -124,7 +124,6 @@ namespace CycleBell.ViewModels
                 var newSelectedPreset = value;
 
                 UpdateSelectedPreset(newSelectedPreset);
-                OnPropertyChanged();
                 OnSelectedPresetPropertyChanged();
             }
         }
@@ -135,6 +134,7 @@ namespace CycleBell.ViewModels
         /// </summary>
         private void OnSelectedPresetPropertyChanged()
         {
+            OnPropertyChanged(nameof(SelectedPreset));
             OnPropertyChanged(nameof(IsInfiniteLoop));
             OnPropertyChanged(nameof(HasNoName));
             OnPropertyChanged(nameof(IsSelectedPreset));
@@ -151,14 +151,13 @@ namespace CycleBell.ViewModels
         /// <param name="newSelectedPreset"></param>
         private void UpdateSelectedPreset (PresetViewModel newSelectedPreset)
         {
-            // callback:
+            // if null was anccidentally deliberatory pushed or last pvm was deleted
             if (newSelectedPreset == null) {
+                UpdateConnections (null);
 
-                UpdateConnections(PresetViewModelCollection.FirstOrDefault());
                 return;
             }
 
-            // coerse:
             if (newSelectedPreset.IsModified) {
 
                 UpdateConnections (GetExistNewPreset());

@@ -25,6 +25,7 @@ namespace CycleBellLibrary.Repository
     {
         ReadOnlyObservableCollection<Preset> Presets { get; }
 
+        void Add (Preset preset);
         void Clear();
         void OpenPresets(string fileName);
         void SavePresets(string fileName);

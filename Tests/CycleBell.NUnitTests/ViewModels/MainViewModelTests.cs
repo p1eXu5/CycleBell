@@ -55,6 +55,13 @@ namespace CycleBell.NUnitTests.ViewModels
 
         #endregion
 
+        #region SelectedPreset
+
+
+
+        #endregion
+
+
         [TearDown]
         public void ClearPresetCollection()
         {
