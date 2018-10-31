@@ -122,31 +122,59 @@ namespace CycleBell.ViewModels
             get => _selectedPreset;
             set {
                 var newSelectedPreset = value;
-                _prevSelectedPreset = _selectedPreset;
 
-                if (_selectedPreset != null)
-                    DisconnectHandlers(_selectedPreset);
-
-                _selectedPreset = value;
-
-                if (_selectedPreset != null)
-                    ConnectHandlers(_selectedPreset);
-
-                //if (newSelectedPreset != null && _prevSelectedPreset != null && _prevSelectedPreset.IsNewPreset) {
-
-                //    // TODO:
-                //    _manager.CheckCreateNewPreset(_prevSelectedPreset.Preset);
-                //}
-
+                UpdateSelectedPreset(newSelectedPreset);
                 OnPropertyChanged();
+                OnSelectedPresetPropertyChanged();
+            }
+        }
 
-                OnPropertyChanged(nameof(IsInfiniteLoop));
-                OnPropertyChanged(nameof(HasNoName));
-                OnPropertyChanged(nameof(IsSelectedPreset));
-                OnPropertyChanged(nameof(IsNewPreset));
-                ((ActionCommand)ExportPresetsCommand).RaiseCanExecuteChanged();
-                ((ActionCommand)ClearPresetsCommand).RaiseCanExecuteChanged();
-                ((ActionCommand)RemoveSelectedPresetCommand).RaiseCanExecuteChanged();
+
+        /// <summary>
+        /// Updates properties and commands after SelectedPreset change.
+        /// </summary>
+        private void OnSelectedPresetPropertyChanged()
+        {
+            OnPropertyChanged(nameof(IsInfiniteLoop));
+            OnPropertyChanged(nameof(HasNoName));
+            OnPropertyChanged(nameof(IsSelectedPreset));
+            OnPropertyChanged(nameof(IsNewPreset));
+            ((ActionCommand)ExportPresetsCommand).RaiseCanExecuteChanged();
+            ((ActionCommand)ClearPresetsCommand).RaiseCanExecuteChanged();
+            ((ActionCommand)RemoveSelectedPresetCommand).RaiseCanExecuteChanged();
+        }
+
+        /// <summary>
+        /// Deletes Timer handlers from the oldValue of SelectedPreset
+        /// than connects to the newValue of SelectedPreset.
+        /// </summary>
+        /// <param name="value"></param>
+        private void UpdateSelectedPreset (PresetViewModel value)
+        {
+            // callback:
+            if (value == null) {
+
+                UpdateConnections(PresetViewModelCollection.FirstOrDefault());
+                return;
+            }
+
+            // coerse:
+            if (value.IsModified) {
+                UpdateConnections (GetExistNewPreset());
+            }
+
+            //_prevSelectedPreset = _selectedPreset;
+
+            // connections:
+            void UpdateConnections (PresetViewModel newValue)
+            {
+                if (_selectedPreset != null)
+                    DisconnectHandlers (_selectedPreset);
+
+                _selectedPreset = newValue;
+
+                if (_selectedPreset != null)
+                    ConnectHandlers (_selectedPreset);
             }
         }
 
@@ -320,7 +348,7 @@ namespace CycleBell.ViewModels
             else if (e != null && e.OldItems == null && e.NewItems == null) {
 
                 PresetViewModelCollection.Clear();
-                _prevSelectedPreset = null;
+                //_prevSelectedPreset = null;
             }
 
             MoveFocusRight();
@@ -354,15 +382,12 @@ namespace CycleBell.ViewModels
 
             if (_dialogRegistrator.ShowDialog(saveViewModel) == true) {
 
-                var presetViewModel = _prevSelectedPreset ?? _selectedPreset;
+                var renamePresetDialogViewModel = new RenamePresetDialogViewModel(_selectedPreset);
 
-                var renameViewModel = new RenamePresetDialogViewModel(presetViewModel);
-
-                _dialogRegistrator.ShowDialog(renameViewModel);
-                presetViewModel.Name = presetViewModel.Name;
+                _dialogRegistrator.ShowDialog(renamePresetDialogViewModel);
             }
             else {
-                _manager.DeletePreset(args.Preset);
+                _manager.DeletePreset(SelectedPreset.P);
             }
         }
 
