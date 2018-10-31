@@ -265,7 +265,7 @@
                     <Run Text="    "></Run><Run>1. Set the Time in section bellow</Run>
                     <LineBreak />
                     <Run Text="    "></Run><Run>2. Push the "add" button on the right in same section</Run>
-                    <LineBreak /><LineBreak /><LineBreak />
+                    <LineBreak />
                 </TextBlock>
                 <TextBlock HorizontalAlignment="Center" Style="{x:Null}">
                     <LineBreak /><LineBreak />
