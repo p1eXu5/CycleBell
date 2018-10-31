@@ -81,39 +81,47 @@ namespace CycleBellLibrary.Context
         public bool CreateNewPreset()
         {
             bool res;
-            var existEmptyPreset = PresetCollectionManager.Presets.FirstOrDefault (IsNewPreset);
+            var existingNewPreset = FindNewPreset();
 
-            if (existEmptyPreset == null) {
+            // if new Preset does not exist
+            if (existingNewPreset == null) {
 
                 _presetCollectionManager.Add (GetNewPreset());
                 res = true;
             }
             else {
-                CheckCreateNewPreset(existEmptyPreset);
-
+                RiseCantCreateNewPreset (existingNewPreset);
                 res = false;
             }
 
             return res;
         }
 
+        /// <summary>
+        /// Searches the new Preset. Returns null if new Preset does not exist.
+        /// </summary>
+        /// <returns></returns>
+        private Preset FindNewPreset()
+        {
+            return PresetCollectionManager.Presets.FirstOrDefault (IsNewPreset);
+        }
+
+        /// <summary>
+        /// Gets instance of a new Preset
+        /// </summary>
+        /// <returns></returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public Preset GetNewPreset() => Preset.GetDefaultPreset();
 
-        public void CheckCreateNewPreset(Preset existEmptyPreset)
+        public void RiseCantCreateNewPreset(Preset existingNewPreset)
         {
-            if (IsDefaultPreset(existEmptyPreset)) {
-                OnCantCreateNewPreset(CantCreateNewPresetReasonsEnum.NewPresetNotModified, existEmptyPreset);
+            if (PresetChecker.IsModifiedPreset (existingNewPreset)) {
+                OnCantCreateNewPreset(CantCreateNewPresetReasonsEnum.NewPresetModified, existingNewPreset);
             }
             else {
-                OnCantCreateNewPreset(CantCreateNewPresetReasonsEnum.NewPresetModified, existEmptyPreset);
+                OnCantCreateNewPreset(CantCreateNewPresetReasonsEnum.NewPresetNotModified, existingNewPreset);
             }
 
-            bool IsDefaultPreset(Preset preset)
-            {
-                return (!preset.TimePointCollection.Any())
-                       && (preset.StartTime.Equals(Preset.DefaultStartTime));
-            }
         }
 
         public bool IsNewPreset(Preset preset) => PresetChecker.IsNewPreset(preset);

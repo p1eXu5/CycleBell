@@ -29,7 +29,7 @@ namespace CycleBellLibrary.Context
 
         Preset GetNewPreset();
 
-        void CheckCreateNewPreset(Preset existEmptyPreset);
+        void RiseCantCreateNewPreset(Preset existNewPreset);
         void ClearPresets();
 
         /// <summary>

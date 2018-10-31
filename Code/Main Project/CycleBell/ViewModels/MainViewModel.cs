@@ -620,7 +620,7 @@ namespace CycleBell.ViewModels
         private void OnClosingWindow(object o)
         {
             if (_selectedPreset != null && _selectedPreset.Preset.PresetName == Preset.DefaultName) {
-                _manager.CheckCreateNewPreset(_selectedPreset.Preset);
+                _manager.RiseCantCreateNewPreset(_selectedPreset.Preset);
             }
         }
 
