@@ -73,9 +73,10 @@ namespace CycleBellLibrary.Context
         #region Methods
 
         /// <summary>
-        /// Creates empty preset when it doesn't exist.
+        /// Creates a new preset when equaled a new preset doesn't
+        /// exist in <see cref="Repository.PresetCollectionManager.Presets"/> collection.
         /// </summary>
-        /// <exception cref="InvalidOperationException">Throws when empty preset already exists and it is particulary filled</exception>
+        /// <returns><see cref="Boolean"/> if preset added</returns>
         public bool CreateNewPreset()
         {
             bool res;
