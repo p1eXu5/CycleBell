@@ -148,18 +148,18 @@ namespace CycleBell.ViewModels
         /// Deletes Timer handlers from the oldValue of SelectedPreset
         /// than connects to the newValue of SelectedPreset.
         /// </summary>
-        /// <param name="value"></param>
-        private void UpdateSelectedPreset (PresetViewModel value)
+        /// <param name="newSelectedPreset"></param>
+        private void UpdateSelectedPreset (PresetViewModel newSelectedPreset)
         {
             // callback:
-            if (value == null) {
+            if (newSelectedPreset == null) {
 
                 UpdateConnections(PresetViewModelCollection.FirstOrDefault());
                 return;
             }
 
             // coerse:
-            if (value.IsModified) {
+            if (newSelectedPreset.IsModified) {
                 UpdateConnections (GetExistNewPreset());
             }
 
@@ -542,7 +542,7 @@ namespace CycleBell.ViewModels
             //SelectedPreset.Name = newName.ToString();
             OnPropertyChanged(nameof(HasNoName));
 
-            // Change value for call PropertyChangedCallback in attached property
+            // Change newSelectedPreset for call PropertyChangedCallback in attached property
             MoveFocusRightTrigger ^= true;
 
             if (_selectedPreset != null)

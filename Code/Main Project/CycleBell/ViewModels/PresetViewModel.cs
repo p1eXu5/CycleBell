@@ -162,6 +162,9 @@ namespace CycleBell.ViewModels
             }
         }
 
+        public bool IsNewPreset => CycleBellManager.PresetChecker.IsNewPreset (Preset);
+        public bool IsModifiedPreset => CycleBellManager.PresetChecker.IsModifiedPreset (Preset);
+
         public bool IsInfiniteLoop
         {
             get => Preset.IsInfiniteLoop;
@@ -184,7 +187,6 @@ namespace CycleBell.ViewModels
             }
         }
 
-        public bool IsNewPreset => CycleBellManager.PresetChecker.IsNewPreset(Preset);
 
         public bool IsNoTimePoints => TimePointVmCollection.Count < 1;
         public bool IsTimePoints => TimePointVmCollection.Count > 0;
