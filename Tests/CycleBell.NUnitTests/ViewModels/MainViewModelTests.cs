@@ -78,22 +78,12 @@ namespace CycleBell.NUnitTests.ViewModels
 
         private MainViewModel GetMainViewModel(Preset[] presets = null)
         {
-            var presetColl = new ObservableCollection<Preset>();
-            _presets = new ReadOnlyObservableCollection<Preset>(presetColl);
 
             _mockTimerManager = _mockCycleBellManager.As<ITimerManager>();
             _mockPresetCollectionManager = _mockCycleBellManager.As<IPresetCollectionManager>();
 
-            _mockCycleBellManager.Setup (cbm => cbm.TimerManager).Returns (_mockTimerManager.Object);
-            _mockCycleBellManager.Setup (cbm => cbm.PresetCollectionManager).Returns (_mockPresetCollectionManager.Object);
-            _mockCycleBellManager.Setup(cbm => cbm.IsNewPreset(It.IsAny<Preset>()))
-                                 .Returns((Preset preset) => PresetChecker.IsNewPreset(preset));
 
-            _mockCycleBellManager.Setup (m => m.CreateNewPreset()).Returns(() => 
-                                                    { 
-                                                        presetColl.Add (Preset.GetDefaultPreset());
-                                                        return true;
-                                                    });
+            ObservableCollection<Preset> presetColl = null;
 
 
             if (presets == null) {
@@ -111,6 +101,18 @@ namespace CycleBell.NUnitTests.ViewModels
                 _mockPresetCollectionManager.Setup(pcm => pcm.Presets)
                     .Returns(_presets);
             }
+
+            _mockCycleBellManager.Setup (m => m.CreateNewPreset()).Returns(() => 
+                                                    { 
+                                                        presetColl.Add (Preset.GetDefaultPreset());
+                                                        return true;
+                                                    });
+            _mockCycleBellManager.Setup (cbm => cbm.TimerManager).Returns (_mockTimerManager.Object);
+            _mockCycleBellManager.Setup (cbm => cbm.PresetCollectionManager).Returns (_mockPresetCollectionManager.Object);
+            _mockCycleBellManager.Setup(cbm => cbm.IsNewPreset(It.IsAny<Preset>()))
+                                 .Returns((Preset preset) => PresetChecker.IsNewPreset(preset));
+
+
 
             var mainViewModel = new MainViewModel (_mockDialogRegistrator.Object, _mockCycleBellManager.Object);
 

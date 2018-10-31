@@ -19,5 +19,6 @@ namespace CycleBell.ViewModels
 {
     public class SavePresetDialogViewModel : DialogViewModelBase
     {
+
     }
 }

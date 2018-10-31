@@ -123,8 +123,9 @@ namespace CycleBell.ViewModels
             set {
                 var newSelectedPreset = value;
 
-                UpdateSelectedPreset(newSelectedPreset);
-                OnSelectedPresetPropertyChanged();
+                if (UpdateSelectedPreset (newSelectedPreset)) {
+                    OnSelectedPresetPropertyChanged();
+                }
             }
         }
 
@@ -149,34 +150,26 @@ namespace CycleBell.ViewModels
         /// than connects to the newValue of SelectedPreset.
         /// </summary>
         /// <param name="newSelectedPreset"></param>
-        private void UpdateSelectedPreset (PresetViewModel newSelectedPreset)
+        private bool UpdateSelectedPreset (PresetViewModel newSelectedPreset)
         {
-            // if null was anccidentally deliberatory pushed or last pvm was deleted
-            if (newSelectedPreset == null) {
-                UpdateConnections (null);
+            if (_selectedPreset != null)
+                DisconnectHandlers (_selectedPreset);
 
-                return;
+            if (_selectedPreset != null && _selectedPreset.IsNew && _selectedPreset.IsModified) {
+                
+                if (!ShowSaveDialog()) {
+
+                    _manager.RemoveNewPresets();
+                    return false;
+                }
             }
 
-            if (newSelectedPreset.IsModified) {
+            _selectedPreset = newSelectedPreset;
 
-                UpdateConnections (GetExistNewPreset());
-            }
+            if (_selectedPreset != null)
+                ConnectHandlers (_selectedPreset);
 
-            //_prevSelectedPreset = _selectedPreset;
-            return;
-
-            // connections:
-            void UpdateConnections (PresetViewModel newValue)
-            {
-                if (_selectedPreset != null)
-                    DisconnectHandlers (_selectedPreset);
-
-                _selectedPreset = newValue;
-
-                if (_selectedPreset != null)
-                    ConnectHandlers (_selectedPreset);
-            }
+            return true;
         }
 
         public string SelectedPresetName
@@ -320,6 +313,23 @@ namespace CycleBell.ViewModels
 
         #region Methods
 
+        private bool ShowSaveDialog ()
+        {
+            var saveViewModel = new SavePresetDialogViewModel();
+
+            if (_dialogRegistrator.ShowDialog (saveViewModel) != true) 
+                return false;
+
+            var renamePresetDialogViewModel = new RenamePresetDialogViewModel(_selectedPreset);
+            if (_dialogRegistrator.ShowDialog (renamePresetDialogViewModel) != true) {
+
+                throw new InvalidOperationException($"_dialogRegistrator.ShowDialog returns not true.");
+            };
+
+            return true;
+
+        }
+
         // PresetViewModelCollection changed handler
         /// <summary>
         /// Refreshes SelectedPreset when a new preset was added.
@@ -394,7 +404,8 @@ namespace CycleBell.ViewModels
 
         private PresetViewModel GetExistNewPreset()
         {
-            return PresetViewModelCollection.First(p => p.IsNew);
+            PresetViewModel presetVm = PresetViewModelCollection.FirstOrDefault(p => p.IsNew);
+            return presetVm;
         }
 
         // timer handler
