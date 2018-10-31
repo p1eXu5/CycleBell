@@ -57,7 +57,7 @@ namespace CycleBell.NUnitTests.ViewModels
 
         #region SelectedPreset
 
-
+        
 
         #endregion
 
@@ -87,7 +87,7 @@ namespace CycleBell.NUnitTests.ViewModels
             _mockCycleBellManager.Setup (cbm => cbm.TimerManager).Returns (_mockTimerManager.Object);
             _mockCycleBellManager.Setup (cbm => cbm.PresetCollectionManager).Returns (_mockPresetCollectionManager.Object);
             _mockCycleBellManager.Setup(cbm => cbm.IsNewPreset(It.IsAny<Preset>()))
-                                 .Returns((Preset preset) => CycleBellManager.PresetChecker.IsNewPreset(preset));
+                                 .Returns((Preset preset) => PresetChecker.IsNewPreset(preset));
 
             _mockCycleBellManager.Setup (m => m.CreateNewPreset()).Returns(() => 
                                                     { 

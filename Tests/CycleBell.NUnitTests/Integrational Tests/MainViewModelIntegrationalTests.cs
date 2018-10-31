@@ -37,7 +37,7 @@ namespace CycleBell.NUnitTests.Integrational_Tests
             mvm.CreateNewPresetCommand.Execute (null);
 
             // Assert:
-            Assert.That (CycleBellManager.PresetChecker.IsNewPreset (mvm.SelectedPreset.Preset), Is.EqualTo (true));
+            Assert.That (PresetChecker.IsNewPreset (mvm.SelectedPreset.Preset), Is.EqualTo (true));
         }
 
         [Test]
@@ -56,7 +56,7 @@ namespace CycleBell.NUnitTests.Integrational_Tests
             mvm.CreateNewPresetCommand.Execute (null);
 
             // Assert:
-            Assert.That (CycleBellManager.PresetChecker.IsNewPreset (mvm.SelectedPreset.Preset), Is.EqualTo (true));
+            Assert.That (PresetChecker.IsNewPreset (mvm.SelectedPreset.Preset), Is.EqualTo (true));
         }
 
         [Test]
