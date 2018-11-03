@@ -100,11 +100,13 @@ namespace CycleBell.NUnitTests.Integrational_Tests
         #region Factory
 
         private readonly Mock<IDialogRegistrator> _mockDialogRegistrator = new Mock<IDialogRegistrator>();
-        private readonly Mock<ICycleBellManager> _mockCycleBellManager = new Mock<ICycleBellManager>();
-        private Mock<ITimerManager> _mockTimerManager;
-        private Mock<IPresetCollectionManager> _mockPresetCollectionManager;
+
         private ICycleBellManager _cycleBellManager;
+        //private readonly Mock<ICycleBellManager> _mockCycleBellManager = new Mock<ICycleBellManager>();
+
         private PresetCollectionManager _presetCollectionManager;
+
+        private Mock<ITimerManager> _mockTimerManager;
 
         private MainViewModel GetMainViewModel(Preset[] presets = null)
         {
@@ -112,8 +114,7 @@ namespace CycleBell.NUnitTests.Integrational_Tests
                 throw new ThreadStateException("The current threads apartment state is not STA");
             }
 
-            _mockTimerManager = _mockCycleBellManager.As<ITimerManager>();
-            _mockPresetCollectionManager = _mockCycleBellManager.As<IPresetCollectionManager>();
+            _mockTimerManager = new Mock<ITimerManager>();
 
             _presetCollectionManager = new PresetCollectionManager();
 

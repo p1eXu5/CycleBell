@@ -64,6 +64,7 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Helpers\TimePointsCaseSource.cs" />
     <Compile Include="Integrational Tests\MainViewModelIntegrationalTests.cs" />
     <Compile Include="Integrational Tests\PresetViewModelIntegrationalTests.cs" />
     <Compile Include="ViewModels\AddingTimePointViewModelTests.cs" />
