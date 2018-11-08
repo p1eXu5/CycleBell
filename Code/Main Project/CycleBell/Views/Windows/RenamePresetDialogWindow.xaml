@@ -40,13 +40,15 @@
                              FontWeight ="Light"
                              Text="{Binding PresetName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
 
-                    <TextBlock x:Name="tbk_Tip" FontSize="10" FontStyle="Italic"
-                           Width="200"
-                       Foreground="#CCCCCC"
-                       VerticalAlignment="Bottom"
-                           Margin="10,0,0,2"
-                       Text="new_preset" IsHitTestVisible="False"
-                       Visibility="{Binding HasNoName, Converter={StaticResource conv_BooleanToVisibility}}">
+                    <TextBlock x:Name="tbk_Tip" 
+                               VerticalAlignment="Bottom"
+                               Foreground="#CCCCCC"
+                               FontSize="10" 
+                               FontStyle="Italic"
+                               Margin="0,0,0,2"
+                               HorizontalAlignment="Center"
+                               Text="new_preset" IsHitTestVisible="False"
+                               Visibility="{Binding HasNoName, Converter={StaticResource conv_BooleanToVisibility}}">
                     </TextBlock>
 
                     <Grid.Triggers>
