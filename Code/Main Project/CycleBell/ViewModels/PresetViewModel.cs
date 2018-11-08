@@ -384,10 +384,10 @@ namespace CycleBell.ViewModels
 
             if (e.NextTimePoint == null) return;
             UpdateActiveTimePointViewModel (e.NextTimePoint, e.PrevTimePointNextBaseTime);
-            UpdateUiTimerProperties (e);
+            UpdateTimerCounter (e);
         }
 
-        private void UpdateUiTimerProperties(TimerEventArgs e)
+        private void UpdateTimerCounter(TimerEventArgs e)
         {
             NextTimePointName = e.NextTimePoint.Name;
             TimeLeftTo = TimeSpanDigits.Parse (-e.LastTimeToNextChange);
@@ -410,8 +410,11 @@ namespace CycleBell.ViewModels
 
             // activate:
             if (nextTimePoint.Name == _mainViewModel.StartTimeName) {
+
                 if (TimePointVmCollection.Count > 0) {
+
                     TimePointVmCollection.DisableAll();
+                    ResetBaseTimes();
                 }
             }
             else {
@@ -437,12 +440,13 @@ namespace CycleBell.ViewModels
 
             TimePointVmCollection.EnableAll();
 
-            UpdateBaseTimes();
+            ResetBaseTimes();
         }
 
-        private void UpdateBaseTimes()
+        private void ResetBaseTimes()
         {
             Preset.UpdateTimePointBaseTimes();
+
             foreach (var viewModel in TimePointVmCollection.Where(tp => tp is TimePointViewModel).ToArray()) {
 
                 ((TimePointViewModel)viewModel).UpdateTime();
