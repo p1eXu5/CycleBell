@@ -290,6 +290,7 @@
                         </EventTrigger>
                     </Grid.Triggers>
                 </Grid>
+
                 <!-- for focus after preset renaming -->
                 <FrameworkElement Name="Dummy" Width="0" Focusable="True" />
 

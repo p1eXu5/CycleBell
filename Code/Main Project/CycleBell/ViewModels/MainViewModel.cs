@@ -121,14 +121,10 @@ namespace CycleBell.ViewModels
         {
             get => _selectedPreset;
             set {
-                var newSelectedPreset = value;
-
-                if (UpdateSelectedPreset (newSelectedPreset)) {
-                    OnSelectedPresetPropertyChanged();
-                }
+                _selectedPreset = value;
+                OnSelectedPresetPropertyChanged();
             }
         }
-
 
         /// <summary>
         /// Updates properties and commands after SelectedPreset change.
@@ -342,17 +338,20 @@ namespace CycleBell.ViewModels
             if (e?.NewItems?[0] != null) { 
 
                 PresetViewModelCollection.Add(new PresetViewModel((Preset)e.NewItems[0], this));
+
+                // При добавлении пресета в коллекцию SelectedPreset не изменяется
                 SelectedPreset = PresetViewModelCollection[PresetViewModelCollection.Count - 1];
             }
             // remove
             else if (e?.OldItems?[0] != null) {
 
                 var deletingPresetVm = PresetViewModelCollection.First(pvm => pvm.Preset.Equals((Preset)e.OldItems[0]));
+                var selectedPresetIndex = PresetViewModelCollection.IndexOf(_selectedPreset);
 
-                var index = PresetViewModelCollection.IndexOf(_selectedPreset);
                 PresetViewModelCollection.Remove(deletingPresetVm);
-                if (index > 0) {
-                    SelectedPreset = PresetViewModelCollection[index - 1];
+
+                if (selectedPresetIndex > 0) {
+                    SelectedPreset = PresetViewModelCollection[selectedPresetIndex - 1];
                 }
                 else {
                     SelectedPreset = PresetViewModelCollection.Count > 0 ? PresetViewModelCollection[0] : null;
@@ -362,16 +361,15 @@ namespace CycleBell.ViewModels
             else if (e != null && e.OldItems == null && e.NewItems == null) {
 
                 PresetViewModelCollection.Clear();
-                //_prevSelectedPreset = null;
             }
 
-            MoveFocusRight();
+            MoveFocusRightFromPresetComboBox();
         }
 
         /// <summary>
         /// Move ui element's focus to the right  
         /// </summary>
-        private void MoveFocusRight()
+        private void MoveFocusRightFromPresetComboBox()
         {
             MoveFocusRightTrigger ^= true;
         }
