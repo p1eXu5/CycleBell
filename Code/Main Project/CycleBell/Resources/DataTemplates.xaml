@@ -398,7 +398,7 @@
 
      <!--EndTimePointViewModel-->
     <DataTemplate x:Key="datatempl_EndTimePointViewModel" DataType="vm:EndTimePointViewModel">
-        <Grid SnapsToDevicePixels="True" Margin="5.0" Height="14">
+        <Grid SnapsToDevicePixels="True" Margin="5,0" Height="14">
             <Polyline Stroke="DimGray" Fill="{x:Null}" Stretch="Fill"
                       StrokeEndLineCap="Square" StrokeStartLineCap="Square"
                       Points="0,0 0,1 1,1 1,0" >
