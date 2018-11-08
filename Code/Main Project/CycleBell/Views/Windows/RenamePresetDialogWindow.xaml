@@ -35,8 +35,10 @@
 
                 <Grid>
 
-                    <TextBox Height="30" Width="200" 
-                         Text="{Binding PresetName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                    <TextBox Height="30" Width="200"
+                             HorizontalContentAlignment="Center"
+                             FontWeight ="Light"
+                             Text="{Binding PresetName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
 
                     <TextBlock x:Name="tbk_Tip" FontSize="10" FontStyle="Italic"
                            Width="200"
@@ -71,7 +73,7 @@
                     Content="Ok"
                     VerticalAlignment="Bottom" HorizontalAlignment="Center"
                     IsEnabled="{Binding HasName}"
-                    Command="{Binding CancelCommand}"
+                    Command="{Binding OkCommand}"
                 />
 
             </Grid>

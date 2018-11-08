@@ -125,6 +125,10 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Base\ActionCommand.cs" />
+    <Compile Include="Base\DialogRequestCloseEventArgs.cs" />
+    <Compile Include="Base\IDialog.cs" />
+    <Compile Include="Base\IDialogCloseRequested.cs" />
+    <Compile Include="Base\IDialogRegistrator.cs" />
     <Compile Include="Base\ObservableObject.cs" />
     <Compile Include="Base\DialogRegistrator.cs" />
     <Compile Include="Base\ViewModel.cs" />
@@ -145,8 +149,6 @@
     <Compile Include="ViewModels\TimePointViewModels\BeginTimePointViewModel.cs" />
     <Compile Include="ViewModels\PresetViewModel.cs" />
     <Compile Include="Properties\Annotations.cs" />
-    <Compile Include="ViewModels\SavePresetAsDialogViewModel.cs" />
-    <Compile Include="ViewModels\SavePresetAsViewModel.cs" />
     <Compile Include="ViewModels\TimePointViewModels\TimePointViewModel.cs" />
     <Compile Include="ViewModels\TimePointViewModels\TimePointViewModelBase.cs" />
     <Compile Include="Views\AttachedPropertyFactory.cs" />

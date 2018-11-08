@@ -42,6 +42,5 @@ namespace CycleBell.ViewModels
 
         public bool HasNoName => String.IsNullOrWhiteSpace(PresetName);
         public bool HasName => !HasNoName;
-
     }
 }

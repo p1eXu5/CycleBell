@@ -157,7 +157,7 @@ namespace CycleBell.ViewModels
 
             if (_selectedPreset != null && _selectedPreset.IsNew && _selectedPreset.IsModified) {
                 
-                if (!ShowSaveDialog()) {
+                if (!ShowSavePresetDialog()) {
 
                     _manager.RemoveNewPresets();
                     return false;
@@ -313,7 +313,11 @@ namespace CycleBell.ViewModels
 
         #region Methods
 
-        private bool ShowSaveDialog ()
+        /// <summary>
+        /// Shows SavePresetDialog, then if true RenamePresetDialog.
+        /// </summary>
+        /// <returns>false - if user cansel save preset, true - if preset renamed</returns>
+        private bool ShowSavePresetDialog ()
         {
             var saveViewModel = new SavePresetDialogViewModel();
 
@@ -321,16 +325,12 @@ namespace CycleBell.ViewModels
                 return false;
 
             var renamePresetDialogViewModel = new RenamePresetDialogViewModel(_selectedPreset);
-            if (_dialogRegistrator.ShowDialog (renamePresetDialogViewModel) != true) {
 
-                throw new InvalidOperationException($"_dialogRegistrator.ShowDialog returns not true.");
-            };
+            _dialogRegistrator.ShowDialog (renamePresetDialogViewModel);
 
             return true;
-
         }
 
-        // PresetViewModelCollection changed handler
         /// <summary>
         /// Refreshes SelectedPreset when a new preset was added.
         /// </summary>
@@ -338,11 +338,13 @@ namespace CycleBell.ViewModels
         /// <param name="e"></param>
         private void OnPresetCollectionChangedEventHandler(object s, NotifyCollectionChangedEventArgs e)
         {
+            // add
             if (e?.NewItems?[0] != null) { 
 
                 PresetViewModelCollection.Add(new PresetViewModel((Preset)e.NewItems[0], this));
                 SelectedPreset = PresetViewModelCollection[PresetViewModelCollection.Count - 1];
             }
+            // remove
             else if (e?.OldItems?[0] != null) {
 
                 var deletingPresetVm = PresetViewModelCollection.First(pvm => pvm.Preset.Equals((Preset)e.OldItems[0]));
@@ -356,6 +358,7 @@ namespace CycleBell.ViewModels
                     SelectedPreset = PresetViewModelCollection.Count > 0 ? PresetViewModelCollection[0] : null;
                 }
             }
+            // clear
             else if (e != null && e.OldItems == null && e.NewItems == null) {
 
                 PresetViewModelCollection.Clear();

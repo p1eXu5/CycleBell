@@ -1,51 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
 
 namespace CycleBell.Base
 {
-    public interface IDialog
-    {
-        bool? ShowDialog();
-        bool? DialogResult { get; set; }
-        Window Owner { get; set; }
-        Object DataContext { get; set; }
-        void Close();
-    }
-
-    public interface IDialogCloseRequested
-    {
-        event EventHandler<DialogRequestCloseEventArgs> DialogCloseRequested;
-    }
-
-    public class DialogRequestCloseEventArgs : EventArgs
-    {
-        public DialogRequestCloseEventArgs(bool? dialogResult, object tag = null)
-        {
-            DialogResult = dialogResult;
-            Tag = tag;
-        }
-
-        public bool? DialogResult { get; }
-        public object Tag { get; }
-    }
-
-    public interface IDialogRegistrator
-    {
-        void Register<TViewModel, TView>() where      TView : IDialog
-            where TViewModel : IDialogCloseRequested;
-
-        bool? ShowDialog<TViewModel>(TViewModel viewModel, Predicate<object> predicate = null) where TViewModel: IDialogCloseRequested;
-    }
-
     public class DialogRegistrator : IDialogRegistrator
     {
-        private Dictionary<Type, Type> _map;
-        private Window _owner;
+        private readonly Dictionary<Type, Type> _map;
+        private readonly Window _owner;
 
         public DialogRegistrator(Window window)
         {
@@ -75,6 +37,7 @@ namespace CycleBell.Base
                 wnd.Owner = _owner;
                 wnd.DataContext = viewModel;
 
+                // create tmp delegate
                 EventHandler<DialogRequestCloseEventArgs> handler = null;
 
                 handler += (sender, args) =>
@@ -90,7 +53,6 @@ namespace CycleBell.Base
                         wnd.DialogResult = args.DialogResult;
                     }
                     else {
-
                         wnd.Close();
                     }
                 };
