@@ -323,6 +323,7 @@ namespace CycleBell.ViewModels
                 timePoint.Name = TimePoint.GetDefaultTimePointName(timePoint);
 
             Preset.AddTimePoint(timePoint);
+
             timePoint.ChangeTimePointType(TimePointType.Relative);
 
             ResetAddingTimePoint();
@@ -472,9 +473,6 @@ namespace CycleBell.ViewModels
         {
             if (point.Time < TimeSpan.Zero)
                 point.Time = point.Time.Negate();
-
-            if (point.TimePointType == TimePointType.Absolute)
-                point.ChangeTimePointType(TimePointType.Relative);
         }
 
         internal void RaiseOnIsNoTimePointChanged() => OnPropertyChanged(nameof(IsNoTimePoints));

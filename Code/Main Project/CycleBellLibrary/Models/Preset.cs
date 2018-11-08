@@ -207,6 +207,7 @@ namespace CycleBellLibrary.Models
                 PrepareTimePointId (ref timePoint);
 
             _timePoints.Add(timePoint);
+            // time point added to TimePointViewModelCollection 
 
             AddLoopNumber(timePoint);
 
