@@ -23,6 +23,7 @@ using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Media;
+using System.Runtime.CompilerServices;
 using System.Threading;
 using System.Windows.Data;
 using System.Windows.Input;
@@ -60,6 +61,7 @@ namespace CycleBell.ViewModels
         private readonly Timer _timer;
 
         private bool _dontSwitchSelectedPreset;
+        private bool _checked;
 
         #endregion Private
 
@@ -363,7 +365,7 @@ namespace CycleBell.ViewModels
 
                 PresetViewModelCollection.Add(new PresetViewModel((Preset)e.NewItems[0], this));
 
-                if (_selectedPreset == null || !_selectedPreset.IsNew) {
+                if (!_dontSwitchSelectedPreset && (_selectedPreset == null || !_selectedPreset.IsNew)) {
 
                     // При добавлении пресета в коллекцию SelectedPreset не изменяется
                     SelectedPreset = PresetViewModelCollection[PresetViewModelCollection.Count - 1];
@@ -374,8 +376,13 @@ namespace CycleBell.ViewModels
 
                 var deletingPresetVm = PresetViewModelCollection.First(pvm => pvm.Preset.Equals((Preset)e.OldItems[0]));
 
-                // Collection switches selected preset manualy
+                // Collection switches selected preset to null
                 PresetViewModelCollection.Remove(deletingPresetVm);
+
+                if (_selectedPreset == null && PresetViewModelCollection.Count > 0) {
+
+                    SelectedPreset = PresetViewModelCollection[0];
+                }
             }
             // clear
             else if (e != null && e.OldItems == null && e.NewItems == null) {
@@ -487,7 +494,9 @@ namespace CycleBell.ViewModels
             if (fileName == null)
                 return;
 
+            _dontSwitchSelectedPreset = true;
             _manager.OpenPresets(fileName);
+            _dontSwitchSelectedPreset = false;
         }
         private bool CanAppendPresets(object obj)
         {
@@ -539,8 +548,9 @@ namespace CycleBell.ViewModels
 
         private void Exit(object obj)
         {
-            //_manager.SavePresets();
+            CheckSelectedPresetBeforeExit();
             System.Windows.Application.Current.Shutdown();
+            // -> OnClosingWindow(object o);
         }
 
         // Remove SelectedPreset
@@ -635,13 +645,33 @@ namespace CycleBell.ViewModels
         // Closing MainWindow handler
         private void OnClosingWindow(object o)
         {
-            if (_selectedPreset != null && _selectedPreset.Preset.PresetName == Preset.DefaultName) {
-                _manager.RiseCantCreateNewPreset(_selectedPreset.Preset);
+            CheckSelectedPresetBeforeExit();
+        }
+        
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        private void CheckSelectedPresetBeforeExit()
+        {
+            if (_checked) {
+                return;
             }
+
+            if (_selectedPreset?.IsNew == true) {
+
+                if (_selectedPreset.IsModified) {
+
+                    if (!ShowSavePresetDialog()) {
+                        _manager.RemovePreset(_selectedPreset.Preset);
+                    }
+                }
+                else {
+                    _manager.RemovePreset(_selectedPreset.Preset);
+                }
+            }
+
+            _checked = true;
         }
 
         #endregion Methods
-
     }
 
     #region Converters

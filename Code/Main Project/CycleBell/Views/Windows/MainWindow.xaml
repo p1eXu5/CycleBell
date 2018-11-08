@@ -9,6 +9,7 @@
         xmlns:vmodels="clr-namespace:CycleBell.ViewModels;assembly="
         xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
         xmlns:userControls="clr-namespace:CycleBell.Views.UserControls"
+        xmlns:conv="clr-namespace:CycleBell.Converters"
 
         mc:Ignorable="d"
         
@@ -30,6 +31,7 @@
 
 
             <BooleanToVisibilityConverter x:Key="conv_BooleanToVisibility" />
+            <conv:BooleanInverseConverter x:Key="conv_BooleanInverseConverter" />
 
             <sys:Double x:Key="SeparatorSpaseKey">15</sys:Double>
 
@@ -70,12 +72,21 @@
                     <TextBlock VerticalAlignment="Center">File</TextBlock>
                 </MenuItem.Header>
                 
-                <MenuItem Header="_New Preset" Command="{Binding CreateNewPresetCommand}" />
+                <MenuItem Header="_New Preset" 
+                          Command="{Binding CreateNewPresetCommand}"
+                          IsEnabled="{Binding IsRunning, Converter={StaticResource conv_BooleanInverseConverter}}"
+                          />
                 <Separator />
-                <MenuItem Header="_Append Presets..." Command="{Binding AppendPresetsCommand}" />
+                <MenuItem Header="_Append Presets..." 
+                          Command="{Binding AppendPresetsCommand}" 
+                          IsEnabled="{Binding IsRunning, Converter={StaticResource conv_BooleanInverseConverter}}"
+                          />
                 <MenuItem Header="_Export Presets..." Command="{Binding ExportPresetsCommand}" />
                 <Separator />
-                <MenuItem Header="_Clear Presets" Command="{Binding ClearPresetsCommand}" />
+                <MenuItem Header="_Clear Presets" 
+                          Command="{Binding ClearPresetsCommand}"
+                          IsEnabled="{Binding IsRunning, Converter={StaticResource conv_BooleanInverseConverter}}"
+                          />
                 <Separator />
                 <MenuItem Header="_Exit" Command="{Binding ExitCommand}" />
             </MenuItem>

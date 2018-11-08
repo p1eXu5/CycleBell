@@ -153,7 +153,7 @@ namespace CycleBellLibrary.Repository
                 var presets = (PresetSerializableObservableCollection)xmlSerializer.Deserialize(fStream);
 
                 if (presets.Count > 0) {
-                    _presetSerializableCollection.Clear();
+
                     foreach (var preset in presets) {
                         _presetSerializableCollection.Add (preset);
                     }

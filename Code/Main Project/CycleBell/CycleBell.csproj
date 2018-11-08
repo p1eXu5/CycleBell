@@ -133,6 +133,7 @@
     <Compile Include="Base\DialogRegistrator.cs" />
     <Compile Include="Base\ViewModel.cs" />
     <Compile Include="Controls\TimerBox.cs" />
+    <Compile Include="Converters\BooleanInverseConverter.cs" />
     <Compile Include="Converters\FromTimeSpanToStringConverter.cs" />
     <Compile Include="DataTemplateSelectors\TimePointVmDataTemplateSelector.cs" />
     <Compile Include="ViewModels\AboutDialogViewModel.cs" />
