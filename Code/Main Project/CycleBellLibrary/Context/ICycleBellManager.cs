@@ -39,10 +39,10 @@ namespace CycleBellLibrary.Context
         /// <returns><see cref="Boolean"/> if preset added</returns>
         bool CreateNewPreset();
 
-        void DeletePreset (Preset preset);
         bool IsNewPreset(Preset preset);
         void OpenPresets (string fileName);
         void RemoveNewPresets();
+        void RemovePreset(Preset preset);
         void RemovePresets(Preset[] presets);
         void RenamePreset (Preset preset, string newName);
         void SavePresets (string fileName);

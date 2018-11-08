@@ -48,6 +48,7 @@ namespace CycleBellLibrary.Context
 
             try {
                 OpenPresets();
+                RemoveNewPresets();
             }
             catch(FileNotFoundException) { }
 
@@ -66,8 +67,6 @@ namespace CycleBellLibrary.Context
 
         public string FileName { get; }
 
-        public Preset[] GetNewPresets() =>
-            PresetCollectionManager.Presets.Where(IsNewPreset).ToArray();
 
         #endregion
 
@@ -113,6 +112,9 @@ namespace CycleBellLibrary.Context
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public Preset GetNewPreset() => Preset.GetDefaultPreset();
 
+        public Preset[] GetNewPresets() =>
+            PresetCollectionManager.Presets.Where(IsNewPreset).ToArray();
+
         public void RiseCantCreateNewPreset(Preset existingNewPreset)
         {
             if (PresetChecker.IsModifiedPreset (existingNewPreset)) {
@@ -137,7 +139,6 @@ namespace CycleBellLibrary.Context
         public void OpenPresets (string fileName)
         {
             PresetCollectionManager.OpenPresets(fileName);
-            RemoveNewPresets();
         }
 
         public void RemoveNewPresets()
@@ -147,6 +148,15 @@ namespace CycleBellLibrary.Context
             if (newPresets.Length > 0) {
                 RemovePresets(newPresets);
             }
+        }
+
+        /// <summary>
+        /// Remove preset
+        /// </summary>
+        /// <param name="preset"></param>
+        public void RemovePreset (Preset preset)
+        {
+            _presetCollectionManager.Remove (preset);
         }
 
         public void RemovePresets(Preset[] presets)
@@ -165,11 +175,6 @@ namespace CycleBellLibrary.Context
             PresetCollectionManager.Clear();
         }
 
-        public void DeletePreset (Preset preset)
-        {
-            _presetCollectionManager.Remove (preset);
-        }
-
         /// <summary>
         /// Adds preset
         /// </summary>
@@ -179,15 +184,6 @@ namespace CycleBellLibrary.Context
             _presetCollectionManager.Add (preset);
         }
         
-        /// <summary>
-        /// Remove preset
-        /// </summary>
-        /// <param name="preset"></param>
-        public void RemovePreset (Preset preset)
-        {
-            _presetCollectionManager.Remove (preset);
-        }
-
         /// <summary>
         /// Serialize presets
         /// </summary>

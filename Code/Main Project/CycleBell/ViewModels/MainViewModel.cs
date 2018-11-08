@@ -59,6 +59,8 @@ namespace CycleBell.ViewModels
 
         private readonly Timer _timer;
 
+        private bool _dontSwitchSelectedPreset;
+
         #endregion Private
 
         #region Constructor
@@ -101,7 +103,7 @@ namespace CycleBell.ViewModels
             }
 
             PresetViewModelCollection =
-                new ObservableCollection<PresetViewModel>(manager.PresetCollectionManager.Presets.Select(p => new PresetViewModel(p, this)));
+                new ObservableCollection<PresetViewModel>(manager.PresetCollectionManager.Presets.Where(p => p.IsNotNew()).Select(p => new PresetViewModel(p, this)));
 
             if (PresetViewModelCollection.Count > 0) {
                 SelectedPreset = PresetViewModelCollection[0];
@@ -121,8 +123,9 @@ namespace CycleBell.ViewModels
         {
             get => _selectedPreset;
             set {
-                _selectedPreset = value;
-                OnSelectedPresetPropertyChanged();
+                if (UpdateSelectedPreset(value)) {
+                    OnSelectedPresetPropertyChanged();
+                }
             }
         }
 
@@ -148,22 +151,43 @@ namespace CycleBell.ViewModels
         /// <param name="newSelectedPreset"></param>
         private bool UpdateSelectedPreset (PresetViewModel newSelectedPreset)
         {
-            if (_selectedPreset != null)
-                DisconnectHandlers (_selectedPreset);
 
-            if (_selectedPreset != null && _selectedPreset.IsNew && _selectedPreset.IsModified) {
-                
-                if (!ShowSavePresetDialog()) {
+            if (ReferenceEquals(_selectedPreset, newSelectedPreset)) {
+                return false;
+            }
 
-                    _manager.RemoveNewPresets();
-                    return false;
+            if (_selectedPreset != null) {
+                DisconnectHandlers(_selectedPreset);
+            }
+
+            if (newSelectedPreset == null) {
+
+                _selectedPreset = null;
+                return true;
+            }
+
+            bool dialogRes = false;
+
+            if (_selectedPreset?.IsNew == true) {
+
+                if (_selectedPreset.IsModified) {
+                    dialogRes = !ShowSavePresetDialog();
+                }
+                else {
+                    dialogRes = true;
                 }
             }
 
-            _selectedPreset = newSelectedPreset;
+            var deletingPreset = _selectedPreset;
 
-            if (_selectedPreset != null)
-                ConnectHandlers (_selectedPreset);
+            _selectedPreset = newSelectedPreset;
+            ConnectHandlers (_selectedPreset);
+
+            if (dialogRes) {
+
+                // ReSharper disable once PossibleNullReferenceException
+                _manager.RemovePreset(deletingPreset.Preset);
+            }
 
             return true;
         }
@@ -339,23 +363,19 @@ namespace CycleBell.ViewModels
 
                 PresetViewModelCollection.Add(new PresetViewModel((Preset)e.NewItems[0], this));
 
-                // При добавлении пресета в коллекцию SelectedPreset не изменяется
-                SelectedPreset = PresetViewModelCollection[PresetViewModelCollection.Count - 1];
+                if (_selectedPreset == null || !_selectedPreset.IsNew) {
+
+                    // При добавлении пресета в коллекцию SelectedPreset не изменяется
+                    SelectedPreset = PresetViewModelCollection[PresetViewModelCollection.Count - 1];
+                }
             }
             // remove
             else if (e?.OldItems?[0] != null) {
 
                 var deletingPresetVm = PresetViewModelCollection.First(pvm => pvm.Preset.Equals((Preset)e.OldItems[0]));
-                var selectedPresetIndex = PresetViewModelCollection.IndexOf(_selectedPreset);
 
+                // Collection switches selected preset manualy
                 PresetViewModelCollection.Remove(deletingPresetVm);
-
-                if (selectedPresetIndex > 0) {
-                    SelectedPreset = PresetViewModelCollection[selectedPresetIndex - 1];
-                }
-                else {
-                    SelectedPreset = PresetViewModelCollection.Count > 0 ? PresetViewModelCollection[0] : null;
-                }
             }
             // clear
             else if (e != null && e.OldItems == null && e.NewItems == null) {
@@ -377,33 +397,17 @@ namespace CycleBell.ViewModels
         // OnCan'tCreateNewPreset event handler
         private void OnCantCreateNewPresetEventHandler(object sender, CantCreateNewPreetEventArgs args)
         {
-            if (args.CantCreateNewPresetReasonEnum == CantCreateNewPresetReasonsEnum.NewPresetNotModified) {
+            if (_selectedPreset?.IsNew == true) {
 
-                //_manager.DeletePreset(args.Preset);
-                if (SelectedPreset.IsNew) {
-                    StatusBarText = "New Preset already exists.";
-                }
-                else {
-                    SelectedPreset = GetExistNewPreset();
-                    StatusBarText = "Switched to the new preset.";
-                }
+                StatusBarText = "The new preset.";
                 return;
             }
 
-            var saveViewModel = new SavePresetDialogViewModel();
-
-            if (_dialogRegistrator.ShowDialog(saveViewModel) == true) {
-
-                var renamePresetDialogViewModel = new RenamePresetDialogViewModel(_selectedPreset);
-
-                _dialogRegistrator.ShowDialog(renamePresetDialogViewModel);
-            }
-            else {
-                _manager.DeletePreset(SelectedPreset.Preset);
-            }
+            SelectedPreset = GetPresetViewModelWithNewPreset();
+            StatusBarText = "Switched to the new preset.";
         }
 
-        private PresetViewModel GetExistNewPreset()
+        private PresetViewModel GetPresetViewModelWithNewPreset()
         {
             PresetViewModel presetVm = PresetViewModelCollection.FirstOrDefault(p => p.IsNew);
             return presetVm;
@@ -542,7 +546,7 @@ namespace CycleBell.ViewModels
         // Remove SelectedPreset
         private void RemoveSelectedPreset(object o)
         {
-            _manager.DeletePreset(SelectedPreset?.Preset);
+            _manager.RemovePreset(SelectedPreset?.Preset);
         }
         private bool CanRemoveSelectedPreset(object o)
         {
