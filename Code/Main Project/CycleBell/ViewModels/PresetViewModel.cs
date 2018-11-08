@@ -233,39 +233,31 @@ namespace CycleBell.ViewModels
             // Add
             if (e.NewItems?[0] is TimePoint newTimePoint) {
 
-                //var newTimePoint = (TimePoint) e.NewItems[0];
-
-                PrepareTimePoint(newTimePoint);
-                _timePointVmCollection.Add (new TimePointViewModel (newTimePoint, this));
-
+                _timePointVmCollection.Add (GetTimePointViewModel(newTimePoint));
                 CheckBounds (newTimePoint);
-
-                OnPropertyChanged(nameof(IsTimePoints));
-                return;
             }
-
             // Remove
-            if (e.OldItems?[0] is TimePoint oldTimePoint) {
+            else if (e.OldItems?[0] is TimePoint oldTimePoint) {
 
                 var loopNumber = oldTimePoint.LoopNumber;
                 var timePoints = _timePointVmCollection.Where (tpvm => tpvm.LoopNumber == loopNumber).ToArray();
 
-                if (timePoints.Length == 3) {
+                if (timePoints.Length > 3) {
 
-                    _timePointVmCollection.Remove(timePoints[0]);
-                    _timePointVmCollection.Remove(timePoints[1]);
-                    _timePointVmCollection.Remove(timePoints[2]);
-
-                    _settedLoopNumbers.Remove(loopNumber);
-
-                    OnPropertyChanged(nameof(IsTimePoints));
-                    return;
+                    var removingTimePointVm = timePoints.First (tpvm => tpvm.Id == oldTimePoint.Id);
+                    _timePointVmCollection.Remove (removingTimePointVm);
                 }
+                else if (timePoints.Length <= 3) {
 
-                var removingTimePointVm = timePoints.First (tpvm => tpvm.Id == oldTimePoint.Id);
-                _timePointVmCollection.Remove (removingTimePointVm);
+                    foreach (var timePointViewModel in timePoints) {
+                        _timePointVmCollection.Remove (timePointViewModel);
+                    }
+
+                    _settedLoopNumbers.Remove (loopNumber);
+                }
             }
 
+            OnPropertyChanged (nameof(IsTimePoints));
         }
 
         // Service:
@@ -275,7 +267,7 @@ namespace CycleBell.ViewModels
 
                 foreach (var point in preset.TimePointCollection) {
 
-                    PrepareTimePoint (point);
+                    GetTimePointViewModel (point);
                     _timePointVmCollection.Add (new TimePointViewModel (point, this));
 
                     CheckBounds (point);
@@ -324,7 +316,7 @@ namespace CycleBell.ViewModels
 
             Preset.AddTimePoint(timePoint);
 
-            timePoint.ChangeTimePointType(TimePointType.Relative);
+            //timePoint.ChangeTimePointType(TimePointType.Relative);
 
             ResetAddingTimePoint();
         }
@@ -473,10 +465,20 @@ namespace CycleBell.ViewModels
         /// Checks TimePoint conditions
         /// </summary>
         /// <param name="point"></param>
-        private static void PrepareTimePoint (TimePoint point)
+        private TimePointViewModel GetTimePointViewModel (TimePoint point)
         {
             if (point.Time < TimeSpan.Zero)
                 point.Time = point.Time.Negate();
+
+            var tp = new TimePointViewModel (point, this);
+
+            if (point.TimePointType == TimePointType.Absolute) {
+
+                point.ChangeTimePointType (TimePointType.Relative);
+                tp.IsAbsolute = true;
+            }
+
+            return tp;
         }
 
         internal void RaiseOnIsNoTimePointChanged() => OnPropertyChanged(nameof(IsNoTimePoints));
