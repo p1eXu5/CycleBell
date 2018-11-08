@@ -82,7 +82,7 @@ namespace CycleBell.NUnitTests.ViewModels
         {
             private readonly List<TimePoint> _timePoints = new List<TimePoint>();
 
-            public override void CheckAddingTimePoint (TimePoint timePoint)
+            public override void CheckTime (TimePoint timePoint)
             {
                 _timePoints.Add (timePoint);
             }

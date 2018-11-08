@@ -467,8 +467,9 @@ namespace CycleBell.ViewModels
         /// <param name="point"></param>
         private TimePointViewModel GetTimePointViewModel (TimePoint point)
         {
-            if (point.Time < TimeSpan.Zero)
+            if (point.Time < TimeSpan.Zero) {
                 point.Time = point.Time.Negate();
+            }
 
             var tp = new TimePointViewModel (point, this);
 

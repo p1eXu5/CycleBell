@@ -201,20 +201,13 @@ namespace CycleBellLibrary.Models
             if (TimePointCollection.Contains (timePoint))
                 throw new ArgumentException("timePoint already exists", nameof(timePoint));
 
-            CheckAddingTimePoint(timePoint);
-
-            if (TimePointCollection.Count > 0)
-                PrepareTimePointId (ref timePoint);
-
+            PrepareTimePoint (timePoint);
             _timePoints.Add(timePoint);
-            // time point added to TimePointViewModelCollection 
+
+            // -> time point added to TimePointViewModelCollection 
 
             AddLoopNumber(timePoint);
-
             timePoint.CollectionChanged += OnTimePointLoopNumberChanged;
-
-            if (AutoUpdateTimePointBaseTimes)
-                UpdateTimePointBaseTimes();
 
             return timePoint;
         }
@@ -246,13 +239,28 @@ namespace CycleBellLibrary.Models
             }
         }
 
+        private void PrepareTimePoint (TimePoint timePoint)
+        {
+            CheckTime(timePoint);
+
+            if (TimePointCollection.Count > 0)
+                PrepareTimePointId (ref timePoint);
+
+
+            if (AutoUpdateTimePointBaseTimes) {
+
+                var points = new List<TimePoint> (TimePointCollection) { timePoint };
+                UpdateTimePointBaseTimes(points.OrderBy (tp => tp.LoopNumber).ThenBy (tp => tp.Id), StartTime);
+            }
+        }
+
         /// <summary>
         /// If adding timePoint has Relative TimePointType and zero Time
-        /// or adding timePoint less than zero than throw.
+        /// or adding timePoint less than zero then throw.
         /// </summary>
         /// <param name="timePoint">Adding TimePoint</param>
         /// <exception cref="ArgumentException"></exception>
-        public virtual void CheckAddingTimePoint(TimePoint timePoint)
+        public virtual void CheckTime(TimePoint timePoint)
         {
             if ((timePoint.TimePointType == TimePointType.Relative && timePoint.Time == TimeSpan.Zero)
                 || (timePoint.Time < TimeSpan.Zero)) {
@@ -260,6 +268,21 @@ namespace CycleBellLibrary.Models
             }
         }
         
+        /// <summary>
+        /// If adding TimePoint Id less then max Id in Preset Collection
+        /// than adding time point will be clonned for change Id to global current max
+        /// </summary>
+        /// <param name="timePoint">Adding TimePoint</param>
+        private void PrepareTimePointId (ref TimePoint timePoint)
+        {
+            var maxId = TimePointCollection.Max (tp => tp.Id);
+
+            if (timePoint.Id <= maxId) {
+
+                timePoint = timePoint.Clone();
+            }
+        }
+
         public void RemoveTimePoint(TimePoint timePoint)
         {
             if (timePoint == null)
@@ -322,21 +345,6 @@ namespace CycleBellLibrary.Models
         }
 
         /// <summary>
-        /// If adding TimePoint Id less then max Id in Preset Collection
-        /// than adding time point will be clonned for change Id to global current max
-        /// </summary>
-        /// <param name="timePoint">Adding TimePoint</param>
-        private void PrepareTimePointId (ref TimePoint timePoint)
-        {
-            var maxId = TimePointCollection.Max (tp => tp.Id);
-
-            if (timePoint.Id <= maxId) {
-
-                timePoint = timePoint.Clone();
-            }
-        }
-
-        /// <summary>
         /// Calls when TimePoint LoopNumber changed
         /// </summary>
         /// <param name="sender">TimePoint</param>
@@ -381,6 +389,18 @@ namespace CycleBellLibrary.Models
 
             exit:
             return newStartTime;
+        }
+
+        public static void UpdateTimePointBaseTimes(IEnumerable<TimePoint> timePointCollection, TimeSpan startTime)
+        {
+            var array = timePointCollection.ToArray();
+
+            array[0].BaseTime = startTime;
+
+            for (int i = 1; i < array.Length; ++i) {
+
+                array[i].BaseTime = array[i - 1].GetAbsoluteTime();
+            }
         }
 
         /// <summary>
