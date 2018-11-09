@@ -473,7 +473,6 @@
         <Setter Property="FontFamily" Value="{StaticResource font_SuiGeneris}" />
         <Setter Property="FontSize" Value="14" />
         <Setter Property="FontStyle" Value="Normal" />
-        <Setter Property="BorderThickness" Value="0" />
         <Setter Property="Control.Foreground" Value="{StaticResource brush_ForegroundGradient}" />
         <Setter Property="Template">
             <Setter.Value>
@@ -481,9 +480,15 @@
                     <Border x:Name="border"
                             HorizontalAlignment="{TemplateBinding HorizontalAlignment}"
                             Height="{TemplateBinding Height}" Width="{TemplateBinding Width}"
-                            BorderThickness="{TemplateBinding BorderThickness}"
+                            BorderThickness="0,0,0,0"
                             Background="Transparent"
+                            RenderTransformOrigin="0.5,0.5"
+                            SnapsToDevicePixels="True"
                             >
+                        <Border.RenderTransform>
+                            <ScaleTransform x:Name="scale"/>
+                        </Border.RenderTransform>
+
                         <Border.BorderBrush>
                             <SolidColorBrush x:Name="col_Border" Color="{StaticResource col_UncheckedStroke}" />
                         </Border.BorderBrush>
@@ -497,21 +502,21 @@
                                    FontFamily="{TemplateBinding FontFamily}"
                                    Text="{TemplateBinding Content}"
                                    Foreground="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=Foreground}"
-                                   />
+                                   >
+                            <TextBlock.CacheMode>
+                                <BitmapCache RenderAtScale="1" SnapsToDevicePixels="True" />
+                            </TextBlock.CacheMode>
+                        </TextBlock>
 
                         <VisualStateManager.VisualStateGroups>
                             <VisualStateGroup x:Name="CommonState">
 
-                                <!--<VisualStateGroup.Transitions>
-                                    <VisualTransition GeneratedDuration="0:0:.2"></VisualTransition>
-                                </VisualStateGroup.Transitions>-->
-
-                                <VisualState x:Name="Normal" >
-                                </VisualState>
+                                <VisualState x:Name="Normal" />
 
                                 <VisualState x:Name="Pressed">
                                     <Storyboard TargetName="tbk_Mute">
-                                        <DoubleAnimation Storyboard.TargetProperty="FontSize" To="12" Duration="0"/>
+                                        <DoubleAnimation Storyboard.TargetName="scale" Storyboard.TargetProperty="ScaleX" To="0.9" Duration="0:0:0.01" />
+                                        <DoubleAnimation Storyboard.TargetName="scale" Storyboard.TargetProperty="ScaleY" To="0.9" Duration="0:0:0.01" />
 
                                         <ColorAnimation Storyboard.TargetProperty="(Control.Foreground).(LinearGradientBrush.GradientStops)[0].(GradientStop.Color)" 
                                                                 To="{StaticResource col_TopPressed}" Duration="0" />
@@ -526,7 +531,6 @@
 
                                 <VisualState x:Name="MouseOver">
                                     <Storyboard TargetName="tbk_Mute">
-                                        <!--<DoubleAnimation Storyboard.TargetProperty="FontSize" To="14" Duration="0"/>-->
                                         <ThicknessAnimationUsingKeyFrames Storyboard.TargetName="border" Storyboard.TargetProperty="BorderThickness">
                                             <LinearThicknessKeyFrame Value="0,0,0,1" KeyTime="0" />
                                         </ThicknessAnimationUsingKeyFrames>
@@ -565,6 +569,7 @@
         </Setter>
     </Style>
 
+    <!-- style_TimeToggleButton -->
     <Style x:Key="style_TimeToggleButton" TargetType="ToggleButton">
         <Setter Property="OverridesDefaultStyle" Value="True" />
         <Setter Property="VerticalAlignment" Value="Bottom" />
@@ -582,13 +587,19 @@
                             Height="{TemplateBinding Height}" Width="{TemplateBinding Width}"
                             BorderThickness="{TemplateBinding BorderThickness}"
                             Background="Transparent"
+                            RenderTransformOrigin="0.5,0.5"
+                            SnapsToDevicePixels="True"
                             >
+                        <Border.RenderTransform>
+                            <ScaleTransform x:Name="scale"/>
+                        </Border.RenderTransform>
+
                         <Border.BorderBrush>
                             <SolidColorBrush x:Name="col_Border" Color="{StaticResource col_UncheckedStroke}" />
                         </Border.BorderBrush>
 
 
-                        <TextBlock x:Name="tbk_Mute"
+                        <TextBlock x:Name="tbk_Time"
                                    Width="{TemplateBinding Width}"
                                    VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
                                    HorizontalAlignment="Center"
@@ -598,24 +609,22 @@
                                    FontFamily="{TemplateBinding FontFamily}"
                                    Text="{TemplateBinding Content}"
                                    Foreground="{TemplateBinding Foreground}"
-                                       >
+                                   >
+                            <TextBlock.CacheMode>
+                                <BitmapCache RenderAtScale="1" SnapsToDevicePixels="True" />
+                            </TextBlock.CacheMode>
                         </TextBlock>
-
-
 
                         <VisualStateManager.VisualStateGroups>
                             <VisualStateGroup x:Name="CommonState">
 
-                                <!--<VisualStateGroup.Transitions>
-                                    <VisualTransition GeneratedDuration="0:0:.2"></VisualTransition>
-                                </VisualStateGroup.Transitions>-->
-
-                                <VisualState x:Name="Normal" >
-                                </VisualState>
+                                <VisualState x:Name="Normal" />
 
                                 <VisualState x:Name="Pressed">
-                                    <Storyboard TargetName="tbk_Mute">
-                                        <DoubleAnimation Storyboard.TargetProperty="FontSize" To="12" Duration="0"/>
+                                    <Storyboard TargetName="tbk_Time">
+                                        <DoubleAnimation Storyboard.TargetName="scale" Storyboard.TargetProperty="ScaleX" To="0.9" Duration="0:0:0.01" />
+                                        <DoubleAnimation Storyboard.TargetName="scale" Storyboard.TargetProperty="ScaleY" To="0.9" Duration="0:0:0.01" />
+
 
                                         <ColorAnimation Storyboard.TargetProperty="Foreground.(LinearGradientBrush.GradientStops)[0].(GradientStop.Color)" 
                                                                 To="{StaticResource col_TopPressed}" Duration="0" />
@@ -629,8 +638,7 @@
                                 </VisualState>
 
                                 <VisualState x:Name="MouseOver">
-                                    <Storyboard TargetName="tbk_Mute">
-                                        <!--<DoubleAnimation Storyboard.TargetProperty="FontSize" To="14" Duration="0"/>-->
+                                    <Storyboard TargetName="tbk_Time">
                                         <ThicknessAnimationUsingKeyFrames Storyboard.TargetName="border" Storyboard.TargetProperty="BorderThickness">
                                             <LinearThicknessKeyFrame Value="0,0,0,1" KeyTime="0" />
                                         </ThicknessAnimationUsingKeyFrames>
@@ -638,7 +646,7 @@
                                 </VisualState>
 
                                 <VisualState x:Name="Disabled">
-                                    <Storyboard TargetName="tbk_Mute">
+                                    <Storyboard TargetName="tbk_Time">
                                         <ColorAnimation Storyboard.TargetProperty="(Control.Foreground).(LinearGradientBrush.GradientStops)[0].(GradientStop.Color)" 
                                                         To="{StaticResource col_TopUncheckedIcon}" Duration="0:0:.2" />
                                         <ColorAnimation Storyboard.TargetProperty="(Control.Foreground).(LinearGradientBrush.GradientStops)[1].(GradientStop.Color)" 
@@ -647,20 +655,6 @@
                                 </VisualState>
 
                             </VisualStateGroup>
-
-                            <!--<VisualStateGroup x:Name="CheckStates">
-                                <VisualState x:Name="Unchecked" />
-
-                                <VisualState x:Name="Checked">
-                                    <Storyboard>
-                                        <ColorAnimation Storyboard.TargetName="col_Top" Storyboard.TargetProperty="Color" 
-                                                        To="{DynamicResource col_TopCheckedTime}" Duration="0:0:.2" />
-                                        <ColorAnimation Storyboard.TargetName="col_Bottom" Storyboard.TargetProperty="Color" 
-                                                        To="{DynamicResource col_BottomCheckedTime}" Duration="0:0:.2" />
-
-                                    </Storyboard>
-                                </VisualState>
-                            </VisualStateGroup>-->
                         </VisualStateManager.VisualStateGroups>
                     </Border>
                 </ControlTemplate>
