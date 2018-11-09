@@ -28,7 +28,7 @@ namespace CycleBell.ViewModels.TimePointViewModels
 {
     public class AddingTimePointViewModel : TimePointViewModel
     {
-        private const byte _LOOP_NUMBER_LIMIT = 10;
+        private const int _LOOP_NUMBER_LIMIT = 10;
         private bool _focusTime;
         private bool _focusName;
         private bool _isAbsolute;
@@ -40,8 +40,8 @@ namespace CycleBell.ViewModels.TimePointViewModels
             NumberCollection = _PresetViewModel.Preset != null 
                                && _PresetViewModel.Preset.TimerLoops.Values.Any() 
                                && _PresetViewModel.Preset.TimerLoops.Values.Max() > _LOOP_NUMBER_LIMIT 
-                                    ? Enumerable.Range (0, _PresetViewModel.Preset.TimerLoops.Values.Max() + 1).Select (n => (byte) n).ToArray() 
-                                    : Enumerable.Range(0, _LOOP_NUMBER_LIMIT).Select(n => (byte)n).ToArray();
+                                    ? Enumerable.Range (0, _PresetViewModel.Preset.TimerLoops.Values.Max() + 1).Select (n => (int) n).ToArray() 
+                                    : Enumerable.Range(0, _LOOP_NUMBER_LIMIT).Select(n => (int)n).ToArray();
         }
 
         #region Properties
@@ -66,6 +66,8 @@ namespace CycleBell.ViewModels.TimePointViewModels
             }
         }
 
+        public int[] NumberCollection { get; private set; }
+
         public override bool IsAbsolute
         {
             get => _isAbsolute;
@@ -88,6 +90,7 @@ namespace CycleBell.ViewModels.TimePointViewModels
         }
 
         public bool HasNoName => String.IsNullOrWhiteSpace(Name);
+
         public bool NoSetTime => Time == TimeSpan.Zero && TimePointType == TimePointType.Relative;
 
         public bool FocusTime
@@ -108,7 +111,6 @@ namespace CycleBell.ViewModels.TimePointViewModels
             }
         }
 
-        public byte[] NumberCollection { get; private set; }
 
         #endregion
 

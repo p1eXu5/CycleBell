@@ -316,8 +316,6 @@ namespace CycleBell.ViewModels
 
             Preset.AddTimePoint(timePoint);
 
-            //timePoint.ChangeTimePointType(TimePointType.Relative);
-
             ResetAddingTimePoint();
         }
         private bool CanAddTimePoint (object o)

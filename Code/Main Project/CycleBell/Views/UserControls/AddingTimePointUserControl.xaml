@@ -213,7 +213,7 @@
                   VerticalAlignment="Center"
                   Style="{StaticResource style_NumericComboBox}"
                   ItemsSource="{Binding NumberCollection}"
-                  SelectedItem="{Binding LoopNumber}"
+                  SelectedItem="{Binding LoopNumber, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                   />
 
         <!-- add -->
