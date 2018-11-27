@@ -22,12 +22,9 @@ namespace CycleBell
     {
         protected override void OnStartup(StartupEventArgs e)
         {
-            // TODO tasks:
+            // TODO CycleBell tasks for:
             //      7.  Help
-            //      8.  License
-            //      9.  Reizable time point name in grid
             //      10. Drug&Drop time points
-            //      11. Loop counter and change absolute time when loop passes
             //      12. Export Selected preset
             try {
 

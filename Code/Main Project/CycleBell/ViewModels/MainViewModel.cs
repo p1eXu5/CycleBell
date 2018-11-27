@@ -494,9 +494,15 @@ namespace CycleBell.ViewModels
             if (fileName == null)
                 return;
 
-            _dontSwitchSelectedPreset = true;
+            if (SelectedPreset != null) {
+                _dontSwitchSelectedPreset = true;
+            }
+
             _manager.OpenPresets(fileName);
-            _dontSwitchSelectedPreset = false;
+
+            if (_dontSwitchSelectedPreset) {
+                _dontSwitchSelectedPreset = false;
+            }
         }
         private bool CanAppendPresets(object obj)
         {

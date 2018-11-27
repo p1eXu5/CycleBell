@@ -347,8 +347,6 @@ namespace CycleBell.ViewModels
                     _mainViewModel.Ring();
                 }
                 else {
-
-                    // TODO (and mute)
                     if (_activeTimePointViewModelBase != null) {
 
                         if (!((TimePointViewModel) _activeTimePointViewModelBase).MuteFlag) {

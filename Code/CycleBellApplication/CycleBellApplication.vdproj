@@ -464,7 +464,7 @@
             "SourcePath" = "8:G:\\dns.xml"
             "TargetName" = "8:dns.xml"
             "Tag" = "8:"
-            "Folder" = "8:_43BDB1CD16C8434BB0ABE3195EDA864B"
+            "Folder" = "8:_A720C2C8B2B04B548D34224E35AB0E93"
             "Condition" = "8:"
             "Transitive" = "11:FALSE"
             "Vital" = "11:TRUE"
@@ -566,7 +566,7 @@
             "SourcePath" = "8:..\\Main Project\\CycleBell\\Sounds\\Пьём чай, жрём плюхи.wav"
             "TargetName" = "8:Pjem chaj.wav"
             "Tag" = "8:"
-            "Folder" = "8:_65093A28BB52463489A49E623735E655"
+            "Folder" = "8:_BD64F4FC98894DD591ECAD57A5ACA50D"
             "Condition" = "8:"
             "Transitive" = "11:FALSE"
             "Vital" = "11:TRUE"
@@ -679,7 +679,7 @@
             "SourcePath" = "8:..\\Main Project\\CycleBell\\Sounds\\Перекур, пацаны.wav"
             "TargetName" = "8:Perekur.wav"
             "Tag" = "8:"
-            "Folder" = "8:_65093A28BB52463489A49E623735E655"
+            "Folder" = "8:_BD64F4FC98894DD591ECAD57A5ACA50D"
             "Condition" = "8:"
             "Transitive" = "11:FALSE"
             "Vital" = "11:TRUE"
@@ -906,26 +906,37 @@
             "Property" = "8:PersonalFolder"
                 "Folders"
                 {
-                    "{9EF0B969-E518-4E46-987F-47570745A589}:_43BDB1CD16C8434BB0ABE3195EDA864B"
+                    "{9EF0B969-E518-4E46-987F-47570745A589}:_9A36E09E8CF244738F6235D1793C4A13"
                     {
-                    "Name" = "8:Presets"
+                    "Name" = "8:CycleBell"
                     "AlwaysCreate" = "11:FALSE"
                     "Condition" = "8:"
                     "Transitive" = "11:FALSE"
-                    "Property" = "8:_3C42643FE27B4BA78C0FE3F943044CAC"
+                    "Property" = "8:_FA0A91F0B75D47CD91057A6236E29D91"
                         "Folders"
                         {
-                        }
-                    }
-                    "{9EF0B969-E518-4E46-987F-47570745A589}:_65093A28BB52463489A49E623735E655"
-                    {
-                    "Name" = "8:CycleBell Sounds"
-                    "AlwaysCreate" = "11:FALSE"
-                    "Condition" = "8:"
-                    "Transitive" = "11:FALSE"
-                    "Property" = "8:_546E10433423436896CC8CA42A4CBFA5"
-                        "Folders"
-                        {
+                            "{9EF0B969-E518-4E46-987F-47570745A589}:_A720C2C8B2B04B548D34224E35AB0E93"
+                            {
+                            "Name" = "8:Presets"
+                            "AlwaysCreate" = "11:FALSE"
+                            "Condition" = "8:"
+                            "Transitive" = "11:FALSE"
+                            "Property" = "8:_3C42643FE27B4BA78C0FE3F943044CAC"
+                                "Folders"
+                                {
+                                }
+                            }
+                            "{9EF0B969-E518-4E46-987F-47570745A589}:_BD64F4FC98894DD591ECAD57A5ACA50D"
+                            {
+                            "Name" = "8:CycleBell Sounds"
+                            "AlwaysCreate" = "11:FALSE"
+                            "Condition" = "8:"
+                            "Transitive" = "11:FALSE"
+                            "Property" = "8:_546E10433423436896CC8CA42A4CBFA5"
+                                "Folders"
+                                {
+                                }
+                            }
                         }
                     }
                 }
@@ -981,7 +992,7 @@
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:CycleBellApplication"
         "ProductCode" = "8:{39CBE67C-08D6-402C-9324-0BCCA93171F0}"
-        "PackageCode" = "8:{74B25322-10B3-42BC-B14A-D534F6DCA9BF}"
+        "PackageCode" = "8:{A710A3F7-5E70-4291-9A12-ED10969A603D}"
         "UpgradeCode" = "8:{68E756E0-DB4D-41DD-9B1A-5AC606D3A8BF}"
         "AspNetVersion" = "8:4.0.30319.0"
         "RestartWWWService" = "11:FALSE"
