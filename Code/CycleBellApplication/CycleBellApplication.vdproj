@@ -51,6 +51,12 @@
         }
         "Entry"
         {
+        "MsmKey" = "8:_3CB6363DC018437DB6F0D9D00804EA34"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
         "MsmKey" = "8:_4193CC8F602D4C5F811D658BFA8BAF7F"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
@@ -451,6 +457,26 @@
             "Register" = "3:1"
             "Exclude" = "11:FALSE"
             "IsDependency" = "11:TRUE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_3CB6363DC018437DB6F0D9D00804EA34"
+            {
+            "SourcePath" = "8:G:\\dns.xml"
+            "TargetName" = "8:dns.xml"
+            "Tag" = "8:"
+            "Folder" = "8:_43BDB1CD16C8434BB0ABE3195EDA864B"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_4193CC8F602D4C5F811D658BFA8BAF7F"
@@ -880,6 +906,17 @@
             "Property" = "8:PersonalFolder"
                 "Folders"
                 {
+                    "{9EF0B969-E518-4E46-987F-47570745A589}:_43BDB1CD16C8434BB0ABE3195EDA864B"
+                    {
+                    "Name" = "8:Presets"
+                    "AlwaysCreate" = "11:FALSE"
+                    "Condition" = "8:"
+                    "Transitive" = "11:FALSE"
+                    "Property" = "8:_3C42643FE27B4BA78C0FE3F943044CAC"
+                        "Folders"
+                        {
+                        }
+                    }
                     "{9EF0B969-E518-4E46-987F-47570745A589}:_65093A28BB52463489A49E623735E655"
                     {
                     "Name" = "8:CycleBell Sounds"
@@ -944,7 +981,7 @@
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:CycleBellApplication"
         "ProductCode" = "8:{39CBE67C-08D6-402C-9324-0BCCA93171F0}"
-        "PackageCode" = "8:{732464F8-3706-4E70-9FF1-C9E9A54DF982}"
+        "PackageCode" = "8:{74B25322-10B3-42BC-B14A-D534F6DCA9BF}"
         "UpgradeCode" = "8:{68E756E0-DB4D-41DD-9B1A-5AC606D3A8BF}"
         "AspNetVersion" = "8:4.0.30319.0"
         "RestartWWWService" = "11:FALSE"
