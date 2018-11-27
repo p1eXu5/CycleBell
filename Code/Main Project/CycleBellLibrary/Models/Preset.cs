@@ -201,7 +201,7 @@ namespace CycleBellLibrary.Models
             if (TimePointCollection.Contains (timePoint))
                 throw new ArgumentException("timePoint already exists", nameof(timePoint));
 
-            PrepareTimePoint (timePoint);
+            PrepareTimePoint (ref timePoint);
             _timePoints.Add(timePoint);
 
             // -> time point added to TimePointViewModelCollection 
@@ -239,13 +239,12 @@ namespace CycleBellLibrary.Models
             }
         }
 
-        private void PrepareTimePoint (TimePoint timePoint)
+        private void PrepareTimePoint (ref TimePoint timePoint)
         {
             CheckTime(timePoint);
 
             if (TimePointCollection.Count > 0)
                 PrepareTimePointId (ref timePoint);
-
 
             if (AutoUpdateTimePointBaseTimes) {
 
