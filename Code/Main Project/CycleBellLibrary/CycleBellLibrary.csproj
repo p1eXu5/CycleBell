@@ -70,6 +70,7 @@
   <ItemGroup>
     <None Include="Models.TimePoint.cd" />
     <None Include="packages.config" />
+    <None Include="TimerManagerClassDiagram.cd" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

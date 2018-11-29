@@ -46,6 +46,8 @@ namespace CycleBellLibrary.Timer
         /// </summary>
         private static TimerManager _timerManager;
 
+        private Preset _preset;
+
         /// <summary>
         /// The main queue. The next (TimeSpan startTimeForNextStartPoint, TimePoint nextPoint) always on the top.
         /// </summary>
@@ -62,7 +64,6 @@ namespace CycleBellLibrary.Timer
         private System.Threading.Timer _timer;
 
         private TimeSpan _deltaTime;
-        private byte _isInfiniteLoop;
         private bool _isRunAsync;
         private bool _isPreserveBaseTime = true;
 
@@ -232,6 +233,8 @@ namespace CycleBellLibrary.Timer
         /// <param name="preset">Запускаемый пресет</param>
         public void Play(Preset preset)
         {
+            _preset = preset;
+
             if (IsRunning && !_isRunAsync)
                 return;
 
@@ -248,11 +251,6 @@ namespace CycleBellLibrary.Timer
             OnTimerStart();
 
             var currentTime = DateTime.Now.TimeOfDay;
-
-            if (preset.IsInfiniteLoop)
-                _isInfiniteLoop = 1;
-            else
-                _isInfiniteLoop ^= _isInfiniteLoop;
 
             ResetDeltaTime();
 
@@ -281,8 +279,7 @@ namespace CycleBellLibrary.Timer
             // If StartTimePoint are next:
             if (_queue.Peek().nextTimePoint.Name == START_TIMEPOINT_NAME) {
 
-                // Если цикл не бесконечный:
-                if (_isInfiniteLoop == 0) {
+                if (!_preset.IsInfiniteLoop) {
 
                     Stop();
                     return;
@@ -339,7 +336,6 @@ namespace CycleBellLibrary.Timer
                         // Точка входа в ChangeTimePoint
                         ChangeTimePoint(ref currentTime);
 
-                        //_timer.Change(GetDueTime(currentTime.Milliseconds), Timeout.Infinite);
                         return;
                     }
                 }
@@ -355,7 +351,6 @@ namespace CycleBellLibrary.Timer
                     _deltaTime = deltaTime;
                 }
 
-                //_timer.Change(GetDueTime(currentTime.Milliseconds), Timeout.Infinite);
                 return;
             }
 
@@ -373,7 +368,7 @@ namespace CycleBellLibrary.Timer
         {
             var lastTime = LastTime(currentTime, nextQueueElement.nextChangeTime);
 
-            // if previous TimePoint is the Initial TimePoint or the StartPoint then
+            // if previous TimePoint is the initial out of queue TimePoint or the StartPoint then
             // modify previous base time TimePoint will unnecessary
             if (prevTimePoint.Time < TimeSpan.Zero || prevTimePoint.Name == StartTimePointName) {
 
