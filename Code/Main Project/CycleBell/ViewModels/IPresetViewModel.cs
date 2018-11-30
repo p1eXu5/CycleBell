@@ -25,6 +25,7 @@ namespace CycleBell.ViewModels
         void UpdateSoundBank (TimePoint timePoint);
         void RemoveTimePoint (TimePoint timePoint);
         Preset Preset { get; }
+        string Name { get; set; }
         ICommand AddTimePointCommand { get; }
     }
 }

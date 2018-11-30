@@ -137,6 +137,7 @@ namespace CycleBell.ViewModels
         private void OnSelectedPresetPropertyChanged()
         {
             OnPropertyChanged(nameof(SelectedPreset));
+            OnPropertyChanged(nameof(SelectedPresetName));
             OnPropertyChanged(nameof(IsInfiniteLoop));
             OnPropertyChanged(nameof(HasNoName));
             OnPropertyChanged(nameof(IsSelectedPreset));
@@ -153,43 +154,32 @@ namespace CycleBell.ViewModels
         /// <param name="newSelectedPreset"></param>
         private bool UpdateSelectedPreset (PresetViewModel newSelectedPreset)
         {
-
-            if (ReferenceEquals(_selectedPreset, newSelectedPreset)) {
-                return false;
-            }
-
-            if (_selectedPreset != null) {
-                DisconnectHandlers(_selectedPreset);
-            }
-
             if (newSelectedPreset == null) {
 
                 _selectedPreset = null;
                 return true;
             }
 
-            bool dialogRes = false;
+            var currentPreset = _selectedPreset;
 
-            if (_selectedPreset?.IsNew == true) {
-
-                if (_selectedPreset.IsModified) {
-                    dialogRes = !ShowSavePresetDialog();
-                }
-                else {
-                    dialogRes = true;
-                }
+            if (ReferenceEquals(currentPreset, newSelectedPreset)) {
+                return false;
             }
 
-            var deletingPreset = _selectedPreset;
+            if (currentPreset != null) {
+                DisconnectHandlers(currentPreset);
+            }
+
+            if (currentPreset != null && currentPreset.IsNew && currentPreset.IsModified && !ShowSavePresetDialog(currentPreset)) {
+                // The deleting preset will be deleted. After that
+                // the selected preset will be try to set himself again
+                // and UpdateSelectedPreset will be invoked again.
+                _selectedPreset = null;
+                _manager.RemovePreset (currentPreset.Preset);
+            }
 
             _selectedPreset = newSelectedPreset;
             ConnectHandlers (_selectedPreset);
-
-            if (dialogRes) {
-
-                // ReSharper disable once PossibleNullReferenceException
-                _manager.RemovePreset(deletingPreset.Preset);
-            }
 
             return true;
         }
@@ -198,7 +188,10 @@ namespace CycleBell.ViewModels
         {
             get => _selectedPreset?.Name;
             set {
-                _manager.RenamePreset (_selectedPreset?.Preset, value);
+                // Because when preset has deleted we are don't know what
+                // preset will be next.
+                _manager.RenamePreset(_selectedPreset?.Preset, value);
+
                 OnPropertyChanged ();
             }
         }
@@ -339,14 +332,14 @@ namespace CycleBell.ViewModels
         /// Shows SavePresetDialog, then if true RenamePresetDialog.
         /// </summary>
         /// <returns>false - if user cansel save preset, true - if preset renamed</returns>
-        private bool ShowSavePresetDialog ()
+        private bool ShowSavePresetDialog (PresetViewModel preset)
         {
             var saveViewModel = new SavePresetDialogViewModel();
 
             if (_dialogRegistrator.ShowDialog (saveViewModel) != true) 
                 return false;
 
-            var renamePresetDialogViewModel = new RenamePresetDialogViewModel(_selectedPreset);
+            var renamePresetDialogViewModel = new RenamePresetDialogViewModel(preset);
 
             _dialogRegistrator.ShowDialog (renamePresetDialogViewModel);
 
@@ -665,7 +658,7 @@ namespace CycleBell.ViewModels
 
                 if (_selectedPreset.IsModified) {
 
-                    if (!ShowSavePresetDialog()) {
+                    if (!ShowSavePresetDialog(_selectedPreset)) {
                         _manager.RemovePreset(_selectedPreset.Preset);
                     }
                 }

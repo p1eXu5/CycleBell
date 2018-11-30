@@ -22,18 +22,18 @@ namespace CycleBell.ViewModels
 {
     public class RenamePresetDialogViewModel : DialogViewModelBase
     {
-        private readonly Preset _preset;
+        private readonly IPresetViewModel _presetViewModel;
 
         public RenamePresetDialogViewModel(IPresetViewModel presetViewModel)
         {
-            _preset = presetViewModel?.Preset ?? throw new ArgumentNullException();
+            _presetViewModel = presetViewModel ?? throw new ArgumentNullException();
         }
 
         public string PresetName
         {
-            get => _preset.PresetName;
+            get => _presetViewModel.Name;
             set {
-                _preset.PresetName = value;
+                _presetViewModel.Name = value;
                 OnPropertyChanged();
                 OnPropertyChanged(nameof(HasNoName));
                 OnPropertyChanged(nameof(HasName));
