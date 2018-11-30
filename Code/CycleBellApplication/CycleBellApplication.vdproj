@@ -51,7 +51,7 @@
         }
         "Entry"
         {
-        "MsmKey" = "8:_3CB6363DC018437DB6F0D9D00804EA34"
+        "MsmKey" = "8:_3ED8848D1BF34CA1880BEF23C6DBD770"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -459,9 +459,9 @@
             "IsDependency" = "11:TRUE"
             "IsolateTo" = "8:"
             }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_3CB6363DC018437DB6F0D9D00804EA34"
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_3ED8848D1BF34CA1880BEF23C6DBD770"
             {
-            "SourcePath" = "8:G:\\dns.xml"
+            "SourcePath" = "8:..\\Main Project\\CycleBell\\Resources\\dns.xml"
             "TargetName" = "8:dns.xml"
             "Tag" = "8:"
             "Folder" = "8:_A720C2C8B2B04B548D34224E35AB0E93"
@@ -1541,7 +1541,7 @@
         {
             "{5259A561-127C-4D43-A0A1-72F10C7B3BF8}:_14DE48A6DF4242C39A880D09874636F7"
             {
-            "SourcePath" = "8:..\\Main Project\\CycleBell\\obj\\Debug\\CycleBell.exe"
+            "SourcePath" = "8:..\\Main Project\\CycleBell\\obj\\Release\\CycleBell.exe"
             "TargetName" = "8:"
             "Tag" = "8:"
             "Folder" = "8:_8AE2E6C22DA745468210787AA5FE43B2"

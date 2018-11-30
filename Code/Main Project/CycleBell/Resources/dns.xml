@@ -1,0 +1,43 @@
+<?xml version="1.0"?>
+<Presets>
+  <Preset name="dns">
+    <StartTime>8:54</StartTime>
+    <IsInfiniteLoop>0</IsInfiniteLoop>
+    <Tag />
+    <TimePointCollection>
+      <TimePoint name="Перекур">
+        <Time>0:05:00</Time>
+        <TimePointType>1</TimePointType>
+        <CycleNum>0</CycleNum>
+        <SoundLocation />
+      </TimePoint>
+      <TimePoint name="Рабочее время">
+        <Time>0:55:00</Time>
+        <TimePointType>1</TimePointType>
+        <CycleNum>0</CycleNum>
+        <SoundLocation />
+      </TimePoint>
+      <TimePoint name="Перекур + чай">
+        <Time>0:05:00</Time>
+        <TimePointType>1</TimePointType>
+        <CycleNum>0</CycleNum>
+        <SoundLocation />
+      </TimePoint>
+      <TimePoint name="Чай">
+        <Time>0:05:00</Time>
+        <TimePointType>1</TimePointType>
+        <CycleNum>0</CycleNum>
+        <SoundLocation />
+      </TimePoint>
+      <TimePoint name="Рабочее время">
+        <Time>0:50:00</Time>
+        <TimePointType>1</TimePointType>
+        <CycleNum>0</CycleNum>
+        <SoundLocation />
+      </TimePoint>
+    </TimePointCollection>
+    <TimerLoops>
+      <Element key="0">6</Element>
+    </TimerLoops>
+  </Preset>
+</Presets>
