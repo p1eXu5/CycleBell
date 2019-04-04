@@ -344,18 +344,20 @@ namespace CycleBell.ViewModels
 
         private void Ring( TimePoint prevTimePoint, TimePoint nextTimePoint )
         {
-            if (prevTimePoint != null && prevTimePoint.Time >= TimeSpan.Zero) {
+            if ( prevTimePoint != null && prevTimePoint.Time >= TimeSpan.Zero ) {
 
                 if (prevTimePoint.Name == _mainViewModel.StartTimeName && _mainViewModel.IsRingOnStartTime) {
+                    _mainViewModel.Alarm.StopDispatcher();
                     _mainViewModel.Alarm.StopDefaultDispatcher();
                     _mainViewModel.Alarm.PlayDefaultDispatcher();
                 }
                 else {
-                    if (_activeTimePointVm != null) {
+                    if ( _activeTimePointVm != null ) {
 
-                        if (!((TimePointViewModel) _activeTimePointVm).MuteFlag) {
+                        if ( !(( TimePointViewModel )_activeTimePointVm).MuteFlag ) {
                             _mainViewModel.Alarm.StopDispatcher();
-                           _mainViewModel.Alarm.PlayDispatcher();
+                            _mainViewModel.Alarm.StopDefaultDispatcher();
+                           _mainViewModel.Alarm.PlayDispatcher( nextTimePoint );
                         }
                     }
                 }
