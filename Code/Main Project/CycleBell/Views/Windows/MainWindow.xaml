@@ -100,7 +100,7 @@
                     <TextBlock VerticalAlignment="Center">Settings</TextBlock>
                 </MenuItem.Header>
 
-                <!-- First Call menu -->
+                <!-- Ring On Start Time menu -->
                 <MenuItem Header="_Ring On Start Time"
                           Command="{Binding RingOnStartTimeSwitchCommand}">
                     <MenuItem.Icon>
@@ -150,6 +150,22 @@
                                   Fill="{x:Null}"
                                   Stroke="Black"/>
                         </Grid>
+                    </MenuItem.Icon>
+                </MenuItem>
+
+                <Separator />
+
+                <MenuItem Header="Default Sound..."
+                          Command="{Binding ChangeDefaultSoundCommand}"
+                          >
+                    <MenuItem.Icon>
+                        <Path Data="{StaticResource gmtry_Notes}" 
+                              Stretch="Uniform"
+                              Width="12"
+                              Margin="3,0,0,0"
+                              Stroke="{x:Null}"
+                              Fill="Black"
+                              />
                     </MenuItem.Icon>
                 </MenuItem>
             </MenuItem>

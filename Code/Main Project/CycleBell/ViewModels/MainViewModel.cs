@@ -22,7 +22,6 @@ using System.ComponentModel;
 using System.Globalization;
 using System.IO;
 using System.Linq;
-using System.Media;
 using System.Runtime.CompilerServices;
 using System.Threading;
 using System.Windows.Data;
@@ -41,15 +40,12 @@ namespace CycleBell.ViewModels
 
         #region Fields
 
-        public static SoundPlayer DefaultSoundPlayer;
-
         private readonly IDialogRegistrator _dialogRegistrator;
 
         private readonly ICycleBellManager _manager;
         private ITimerManager _timerManager;
 
         private PresetViewModel _selectedPreset;
-        //private PresetViewModel _prevSelectedPreset;
 
         private string _initialDirectory;
 
@@ -58,6 +54,9 @@ namespace CycleBell.ViewModels
 
         private string _statusBarText = "";
 
+        /// <summary>
+        /// For clean up status bar.
+        /// </summary>
         private readonly Timer _timer;
 
         private bool _dontSwitchSelectedPreset;
@@ -67,9 +66,10 @@ namespace CycleBell.ViewModels
 
         #region Constructor
 
-        public MainViewModel(IDialogRegistrator dialogRegistrator, ICycleBellManager cycleBellManager)
+        public MainViewModel(IDialogRegistrator dialogRegistrator, ICycleBellManager cycleBellManager, IAlarm alarm )
         {
             _dialogRegistrator = dialogRegistrator ?? throw new ArgumentNullException(nameof(dialogRegistrator));
+            Alarm = alarm ?? throw new ArgumentNullException(nameof(alarm), @"Alarm cannot be null.");
 
             _manager = cycleBellManager ?? throw new ArgumentNullException(nameof(cycleBellManager));
             _manager.CantCreateNewPresetEvent += OnCantCreateNewPresetEventHandler;
@@ -79,7 +79,10 @@ namespace CycleBell.ViewModels
 
             LoadPresetViewModelCollection(_manager);
 
-            DefaultSoundPlayer = File.Exists(@"Sounds/default.wav") ? new SoundPlayer(@"Sounds/default.wav") : new SoundPlayer();
+            if ( File.Exists( @"Sounds/default.wav" ) ) {
+                var path = Path.GetDirectoryName( System.Diagnostics.Process.GetCurrentProcess().MainModule.FileName ) + "/Sounds/default.wav";
+                Alarm.SetDefaultSound( path );
+            }
 
             _timer = new Timer(ClearStatusBarText, null, Timeout.Infinite, Timeout.Infinite);
         }
@@ -121,6 +124,8 @@ namespace CycleBell.ViewModels
         // Preset
         public ObservableCollection<PresetViewModel> PresetViewModelCollection { get; set; }
 
+        public IAlarm Alarm { get; }
+
         public PresetViewModel SelectedPreset
         {
             get => _selectedPreset;
@@ -129,59 +134,6 @@ namespace CycleBell.ViewModels
                     OnSelectedPresetPropertyChanged();
                 }
             }
-        }
-
-        /// <summary>
-        /// Updates properties and commands after SelectedPreset change.
-        /// </summary>
-        private void OnSelectedPresetPropertyChanged()
-        {
-            OnPropertyChanged(nameof(SelectedPreset));
-            OnPropertyChanged(nameof(SelectedPresetName));
-            OnPropertyChanged(nameof(IsInfiniteLoop));
-            OnPropertyChanged(nameof(HasNoName));
-            OnPropertyChanged(nameof(IsSelectedPreset));
-            OnPropertyChanged(nameof(IsNewPreset));
-            ((ActionCommand)ExportPresetsCommand).RaiseCanExecuteChanged();
-            ((ActionCommand)ClearPresetsCommand).RaiseCanExecuteChanged();
-            ((ActionCommand)RemoveSelectedPresetCommand).RaiseCanExecuteChanged();
-        }
-
-        /// <summary>
-        /// Deletes Timer handlers from the oldValue of SelectedPreset
-        /// than connects to the newValue of SelectedPreset.
-        /// </summary>
-        /// <param name="newSelectedPreset"></param>
-        private bool UpdateSelectedPreset (PresetViewModel newSelectedPreset)
-        {
-            if (newSelectedPreset == null) {
-
-                _selectedPreset = null;
-                return true;
-            }
-
-            var currentPreset = _selectedPreset;
-
-            if (ReferenceEquals(currentPreset, newSelectedPreset)) {
-                return false;
-            }
-
-            if (currentPreset != null) {
-                DisconnectHandlers(currentPreset);
-            }
-
-            if (currentPreset != null && currentPreset.IsNew && currentPreset.IsModified && !ShowSavePresetDialog(currentPreset)) {
-                // The deleting preset will be deleted. After that
-                // the selected preset will be try to set himself again
-                // and UpdateSelectedPreset will be invoked again.
-                _selectedPreset = null;
-                _manager.RemovePreset (currentPreset.Preset);
-            }
-
-            _selectedPreset = newSelectedPreset;
-            ConnectHandlers (_selectedPreset);
-
-            return true;
         }
 
         public string SelectedPresetName
@@ -215,18 +167,9 @@ namespace CycleBell.ViewModels
         public bool? TimerState
         {
             get {
-                if (IsPaused) {
-
-                    return null;
-                }
-                else if (IsRunning) {
-
-                    return true;
-                }
-                else {
-                    // Default
-                    return false;
-                }
+                if ( IsPaused ) { return null; }
+                if ( IsRunning ) { return true; }
+                return false;
             }
         }
 
@@ -281,7 +224,7 @@ namespace CycleBell.ViewModels
                 OnPropertyChanged();
 
                 if (!String.IsNullOrWhiteSpace(_statusBarText)) {
-                    RunTimer();
+                    RunStatusBarTimer();
                 }
             }
         }
@@ -303,7 +246,7 @@ namespace CycleBell.ViewModels
         public ICommand ExitCommand => new ActionCommand(Exit);
 
         // Menu Settings and some timer buttons
-        public ICommand RingOnStartTimeSwitchCommand => new ActionCommand (SwitchIsRingOnStartTime);
+        public ICommand RingOnStartTimeSwitchCommand => new ActionCommand( SwitchIsRingOnStartTime );
         public ICommand InfiniteLoopCommand => new ActionCommand((o) => { IsInfiniteLoop ^= true; });
 
         // Menu Help
@@ -311,18 +254,19 @@ namespace CycleBell.ViewModels
         public ICommand AboutCommand => new ActionCommand(About);
 
         // Presets ComboBox
-        public ICommand PresetComboBoxReturnCommand => new ActionCommand(PresetComboBoxReturnKeyHandler);
+        public ICommand PresetComboBoxReturnCommand => new ActionCommand( PresetComboBoxReturnKeyHandler );
         // Is initialized in ctor
         public ICommand RemoveSelectedPresetCommand { get; set; }
-        public ICommand PresetLostFocusCommand => new ActionCommand(PresetLostFocus);
+        public ICommand PresetLostFocusCommand => new ActionCommand( PresetLostFocus );
 
         // Timer buttons
-        public ICommand MediaTerminalCommand => new ActionCommand(MediaTerminal);
-        public ICommand StopCommand => new ActionCommand(Stop);
-        public ICommand RingCommand => new ActionCommand(Ring);
+        public ICommand MediaTerminalCommand => new ActionCommand( MediaTerminal );
+        public ICommand StopCommand => new ActionCommand( Stop );
+        public ICommand RingCommand => new ActionCommand( Ring );
+        public ICommand ChangeDefaultSoundCommand => new ActionCommand( ChangeDefaultSound );
 
         // MainWindow Events
-        public ICommand OnClosingWindowCommand => new ActionCommand(OnClosingWindow);
+        public ICommand OnClosingWindowCommand => new ActionCommand( OnClosingWindow );
 
         #endregion Commands
 
@@ -426,7 +370,7 @@ namespace CycleBell.ViewModels
             OnPropertyChanged (nameof(IsStopped));
         }
 
-        private void RunTimer()
+        private void RunStatusBarTimer()
         {
             _timer.Change(_DUE_TIME, Timeout.Infinite);
         }
@@ -434,6 +378,59 @@ namespace CycleBell.ViewModels
         private void ClearStatusBarText (object state)
         {
             StatusBarText = "";
+        }
+
+        /// <summary>
+        /// Updates properties and commands after SelectedPreset change.
+        /// </summary>
+        private void OnSelectedPresetPropertyChanged()
+        {
+            OnPropertyChanged(nameof(SelectedPreset));
+            OnPropertyChanged(nameof(SelectedPresetName));
+            OnPropertyChanged(nameof(IsInfiniteLoop));
+            OnPropertyChanged(nameof(HasNoName));
+            OnPropertyChanged(nameof(IsSelectedPreset));
+            OnPropertyChanged(nameof(IsNewPreset));
+            ((ActionCommand)ExportPresetsCommand).RaiseCanExecuteChanged();
+            ((ActionCommand)ClearPresetsCommand).RaiseCanExecuteChanged();
+            ((ActionCommand)RemoveSelectedPresetCommand).RaiseCanExecuteChanged();
+        }
+
+        /// <summary>
+        /// Deletes Timer handlers from the oldValue of SelectedPreset
+        /// than connects to the newValue of SelectedPreset.
+        /// </summary>
+        /// <param name="newSelectedPreset"></param>
+        private bool UpdateSelectedPreset (PresetViewModel newSelectedPreset)
+        {
+            if (newSelectedPreset == null) {
+
+                _selectedPreset = null;
+                return true;
+            }
+
+            var currentPreset = _selectedPreset;
+
+            if (ReferenceEquals(currentPreset, newSelectedPreset)) {
+                return false;
+            }
+
+            if (currentPreset != null) {
+                DisconnectHandlers(currentPreset);
+            }
+
+            if (currentPreset != null && currentPreset.IsNew && currentPreset.IsModified && !ShowSavePresetDialog(currentPreset)) {
+                // The deleting preset will be deleted. After that
+                // the selected preset will be try to set himself again
+                // and UpdateSelectedPreset will be invoked again.
+                _selectedPreset = null;
+                _manager.RemovePreset (currentPreset.Preset);
+            }
+
+            _selectedPreset = newSelectedPreset;
+            ConnectHandlers (_selectedPreset);
+
+            return true;
         }
 
         // add/remove SelectedPreset handlers
@@ -576,7 +573,26 @@ namespace CycleBell.ViewModels
         }
         private void PresetLostFocus(object obj) => OnPropertyChanged(nameof(HasNoName));
 
-        // MediaTerminal - timer launcher
+        // Sound
+        public void Ring(bool stopping = false)
+        {
+            Alarm.Stop();
+
+            if (!stopping) {
+                Alarm.Play();
+            }
+        }
+
+        private void Ring (object o)
+        {
+            IsRingOnStartTime = IsRingOnStartTime;
+            Ring();
+        }
+        private void Stop (object o)
+        {
+            _timerManager.Stop();
+        }
+
         private void MediaTerminal (object o)
         {
             var state = TimerState;
@@ -596,43 +612,35 @@ namespace CycleBell.ViewModels
             }
             else {
                 // if not running
-                if (!_selectedPreset.Preset.TimerLoops.Values.Any(tl => tl <= 0)) {
+                if ( !_selectedPreset.Preset.TimerLoops.Values.Any( tl => tl <= 0 ) ) {
 
-                    _timerManager.PlayAsync(_selectedPreset.Preset);
+                    _timerManager.PlayAsync( _selectedPreset.Preset );
                 }
             }
 
             OnPropertyChanged(nameof(TimerState));
         }
-
-        // ---- Stop
-        private void Stop (object o)
-        {
-            _timerManager.Stop();
-        }
-
-        // ---- SwitchIsRingOnStartTime
+        
         private void SwitchIsRingOnStartTime (object o)
         {
-            DefaultSoundPlayer.Stop();
+            Alarm.Stop();
             IsRingOnStartTime ^= true;
         }
 
-        // RingCommand
-        private void Ring (object o)
+        private void ChangeDefaultSound ( object o )
         {
-            IsRingOnStartTime = IsRingOnStartTime;
-            Ring();
-        }
-
-        public void Ring(bool stopping = false)
-        {
-            DefaultSoundPlayer.Stop();
-
-            if (!stopping) {
-                DefaultSoundPlayer.Play();
+            var ofd = new OpenFileDialog {
+                Filter = "mp3, wav|*.mp3;*.wav|all files|*.*",
+                InitialDirectory = Environment.GetFolderPath( Environment.SpecialFolder.MyMusic ),
+                RestoreDirectory = true,
+                CheckFileExists = true,
+                CheckPathExists = true
+            };
+            if ( ofd.ShowDialog() == true ) {
+                Alarm.SetDefaultSound( ofd.FileName );
             }
         }
+
 
         //  About
         private void About(object obj)

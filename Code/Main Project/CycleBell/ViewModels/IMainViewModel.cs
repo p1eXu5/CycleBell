@@ -16,6 +16,7 @@
  */
 
 using System.ComponentModel;
+using CycleBellLibrary.Context;
 
 namespace CycleBell.ViewModels
 {
@@ -25,5 +26,6 @@ namespace CycleBell.ViewModels
         bool IsRunning { get; }
         bool IsRingOnStartTime { get; }
         string StartTimeName { get; }
+        IAlarm Alarm { get; }
     }
 }

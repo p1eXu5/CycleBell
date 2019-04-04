@@ -44,10 +44,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Context\Alarm.cs" />
     <Compile Include="Context\CantCreateNewPreetEventArgs.cs" />
     <Compile Include="Context\CantCreateNewPresetReasons.cs" />
     <Compile Include="Context\CycleBellManager.cs" />
     <Compile Include="Context\ICycleBellManager.cs" />
+    <Compile Include="Context\IPlayer.cs" />
     <Compile Include="Context\PresetChecker.cs" />
     <Compile Include="Models\ObjectExtension.cs" />
     <Compile Include="Models\TimePointReferenceComparer.cs" />

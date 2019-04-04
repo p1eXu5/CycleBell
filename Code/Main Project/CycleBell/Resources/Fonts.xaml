@@ -5,6 +5,6 @@
     <FontFamily x:Key="font_FontAbuget">pack://application:,,,/../../fonts/#Abuget</FontFamily>
     <FontFamily x:Key="res_prosto">pack://application:,,,/../../fonts/#Prosto</FontFamily>
     <FontFamily x:Key="RussoOne">pack://application:,,,/../../fonts/#Russo One</FontFamily>
-    <FontFamily x:Key="font_SuiGeneris">pack://application:,,,/../../fonts/#Sui Generis Rg</FontFamily>
+    <FontFamily x:Key="font_SuiGeneris">pack://application:,,,/../fonts/#Sui Generis Rg</FontFamily>
 
 </ResourceDictionary>

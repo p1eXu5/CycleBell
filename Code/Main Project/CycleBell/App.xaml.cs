@@ -3,6 +3,7 @@ using System.Diagnostics;
 using System.Globalization;
 using System.Threading;
 using System.Windows;
+using System.Windows.Media;
 using CycleBell.Base;
 using CycleBell.ViewModels;
 using CycleBell.Views;
@@ -32,7 +33,6 @@ namespace CycleBell
 
                 base.OnStartup (e);
 
-                var container = new UnityContainer();
 
                 Window wnd = new MainWindow();
 
@@ -42,17 +42,18 @@ namespace CycleBell
                 dialogRegistrator.Register<SavePresetDialogViewModel, SavePresetDialogWindow>();
                 dialogRegistrator.Register<RenamePresetDialogViewModel, RenamePresetDialogWindow>();
 
+                var container = new UnityContainer();
                 container.RegisterInstance<IDialogRegistrator> (dialogRegistrator);
 
-                // ICycleBellManager:
-                var manager = new CycleBellManager ("test.xml", new PresetCollectionManager(), TimerManager.Instance);
+                var alarm = new Alarm( new MediaPlayer_() );
+                container.RegisterInstance< IAlarm >( alarm );
 
+                var manager = new CycleBellManager ("test.xml", new PresetCollectionManager(), TimerManager.Instance);
                 container.RegisterInstance<ICycleBellManager> (manager);
 
                 container.RegisterType<MainViewModel>();
 
                 wnd.DataContext = container.Resolve<MainViewModel>();
-
                 wnd.ShowDialog();
 
                 manager.SavePresets();

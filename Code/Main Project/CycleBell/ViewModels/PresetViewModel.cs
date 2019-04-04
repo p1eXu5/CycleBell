@@ -23,8 +23,11 @@ using System.ComponentModel;
 using System.Linq;
 using System.Media;
 using System.Runtime.CompilerServices;
+using System.Threading;
 using System.Windows.Data;
 using System.Windows.Input;
+using System.Windows.Media;
+using System.Windows.Threading;
 using CycleBell.Base;
 using CycleBell.ViewModels.TimePointViewModels;
 using CycleBell.Views;
@@ -50,7 +53,6 @@ namespace CycleBell.ViewModels
         private readonly IMainViewModel _mainViewModel;
 
         private readonly ObservableCollection<TimePointViewModelBase> _timePointVmCollection;
-        //private TimePointViewModelBase _selectedTimePoint;
         private AddingTimePointViewModel _addingTimePoint;
 
         private bool _canBellOnStartTime;
@@ -60,10 +62,10 @@ namespace CycleBell.ViewModels
         private string _nextTimePointName;
         private TimeSpanDigits _timeLeftTo;
 
-        public IDictionary<int, SoundPlayer> SoundMap { get; } = new Dictionary<int, SoundPlayer>();
+        public IDictionary<int, MediaPlayer> SoundMap { get; } = new Dictionary<int, MediaPlayer>();
         private SoundPlayer _lastSoundPlayer;
 
-        private TimePointViewModelBase _activeTimePointViewModelBase;
+        private TimePointViewModelBase _activeTimePointVm;
 
         private bool _focusStartTime;
 
@@ -337,30 +339,27 @@ namespace CycleBell.ViewModels
         // SoundBank
         public void UpdateSoundBank (TimePoint timePoint)
         {
-            SoundMap[timePoint.Id] = new SoundPlayer((string)timePoint.Tag);
+            _mainViewModel.Alarm.AddSound( timePoint );
         }
 
-        private void Ring(TimePoint prevTimePoint)
+        private void Ring( TimePoint prevTimePoint, TimePoint nextTimePoint )
         {
             if (prevTimePoint != null && prevTimePoint.Time >= TimeSpan.Zero) {
+
                 if (prevTimePoint.Name == _mainViewModel.StartTimeName && _mainViewModel.IsRingOnStartTime) {
-                    _mainViewModel.Ring();
+                    _mainViewModel.Alarm.Play( nextTimePoint );
                 }
                 else {
-                    if (_activeTimePointViewModelBase != null) {
+                    if (_activeTimePointVm != null) {
 
-                        if (!((TimePointViewModel) _activeTimePointViewModelBase).MuteFlag) {
-
-                            if (SoundMap.ContainsKey(_activeTimePointViewModelBase.Id)) {
-                                SoundMap[prevTimePoint.Id].Play();
-                                _lastSoundPlayer = SoundMap[prevTimePoint.Id];
-                            }
-                            else {
-                                _mainViewModel.Ring();
-                            }
+                        if (!((TimePointViewModel) _activeTimePointVm).MuteFlag) {
+                           _mainViewModel.Alarm.Play( nextTimePoint );
                         }
                     }
                 }
+            }
+            else {
+                _mainViewModel.Alarm.LoadSound( nextTimePoint );
             }
         }
 
@@ -368,7 +367,8 @@ namespace CycleBell.ViewModels
         internal void OnTimePointChangedEventHandler(object s, TimerEventArgs e)
         {
             if (e == null) return;
-            Ring(e.PrevTimePoint);
+            (( DispatcherObject )_mainViewModel.Alarm.Player).Dispatcher.BeginInvoke( DispatcherPriority.Normal, (ThreadStart)delegate() { Ring(e.PrevTimePoint, e.NextTimePoint); } );
+            
 
             if (e.NextTimePoint == null) return;
             UpdateActiveTimePointViewModel (e.NextTimePoint, e.PrevTimePointNextBaseTime);
@@ -384,15 +384,14 @@ namespace CycleBell.ViewModels
         private void UpdateActiveTimePointViewModel(TimePoint nextTimePoint, TimeSpan? prevTimePointNextBaseTime)
         {
             // deactivate:
-            if (_activeTimePointViewModelBase != null) {
+            if (_activeTimePointVm != null) {
 
-                _activeTimePointViewModelBase.IsActive = false;
+                _activeTimePointVm.IsActive = false;
 
                 if (prevTimePointNextBaseTime != null) {
 
-                    _activeTimePointViewModelBase.TimePoint.BaseTime = prevTimePointNextBaseTime;
-
-                    ((TimePointViewModel)_activeTimePointViewModelBase).UpdateTime();
+                    _activeTimePointVm.TimePoint.BaseTime = prevTimePointNextBaseTime;
+                    ((TimePointViewModel)_activeTimePointVm).UpdateTime();
                 }
             }
 
@@ -406,8 +405,11 @@ namespace CycleBell.ViewModels
                 }
             }
             else {
-                _activeTimePointViewModelBase = TimePointVmCollection.Activate(tpvmb => tpvmb.Equals(nextTimePoint));
+                _activeTimePointVm = TimePointVmCollection.Activate(tpvmb => tpvmb.Equals(nextTimePoint));
             }
+
+            (( DispatcherObject )_mainViewModel.Alarm.Player).Dispatcher.BeginInvoke( DispatcherPriority.Normal, (ThreadStart)delegate() { _mainViewModel.Alarm.LoadSound( nextTimePoint ); } );
+            
         }
 
         internal void OnSecondPassedEventHandler(object s, TimerEventArgs e)
@@ -417,14 +419,13 @@ namespace CycleBell.ViewModels
 
         internal void OnTimerPauseEventHandler(object sender, EventArgs args)
         {
-            _mainViewModel.Ring(true);
-            _lastSoundPlayer?.Stop();
+            (( DispatcherObject )_mainViewModel.Alarm.Player).Dispatcher.BeginInvoke( DispatcherPriority.Normal, (ThreadStart)delegate () { _mainViewModel.Alarm.Stop(); } );
         }
 
         internal void OnTimerStopEventHandler(object sender, EventArgs args)
         {
-            if (_activeTimePointViewModelBase != null)
-                _activeTimePointViewModelBase.IsActive = false;
+            if (_activeTimePointVm != null)
+                _activeTimePointVm.IsActive = false;
 
             TimePointVmCollection.EnableAll();
 

@@ -42,6 +42,7 @@
     <Reference Include="nunit.framework, Version=3.10.1.0, Culture=neutral, PublicKeyToken=2638cd05610744eb, processorArchitecture=MSIL">
       <HintPath>..\..\Code\packages\NUnit.3.10.1\lib\net45\nunit.framework.dll</HintPath>
     </Reference>
+    <Reference Include="PresentationCore" />
     <Reference Include="System" />
     <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
@@ -57,8 +58,10 @@
     <Reference Include="System.Data" />
     <Reference Include="System.Net.Http" />
     <Reference Include="System.Xml" />
+    <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Context.Tests\AlarmTests.cs" />
     <Compile Include="Context.Tests\CycleBellManagerTests.cs" />
     <Compile Include="Repository.Tests\PresetCollectionManagerTests.cs" />
     <Compile Include="Models.Tests\PresetTests.cs" />
@@ -77,6 +80,10 @@
     <ProjectReference Include="..\..\Code\Main Project\CycleBellLibrary\CycleBellLibrary.csproj">
       <Project>{9d17cc68-d43e-45af-bd40-4443a579b8c5}</Project>
       <Name>CycleBellLibrary</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Code\Main Project\CycleBell\CycleBell.csproj">
+      <Project>{b098ffd5-0010-4c65-94b0-0a73ded8dbd6}</Project>
+      <Name>CycleBell</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

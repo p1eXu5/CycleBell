@@ -83,6 +83,20 @@ namespace CycleBellLibrary.Timer
             _timerQueueCalculator = timerQueueCalculator;
         }
 
+        #endregion
+
+        #region Events
+
+        public event EventHandler<TimerEventArgs> ChangeTimePointEvent;
+        public event EventHandler<TimerEventArgs> TimerSecondPassedEvent;
+        public event EventHandler TimerPauseEvent;
+        public event EventHandler TimerStopEvent;
+        public event EventHandler TimerStartEvent;
+
+        #endregion
+
+        #region Properties
+
         /// <summary>
         /// Gets instance of manager and if IPresetCollectionManager.FileName is Exist loads presets or loads only one empty preset
         /// </summary>
@@ -92,42 +106,6 @@ namespace CycleBellLibrary.Timer
         
         public static TimerManager GetInstance (ITimerQueueCalculator timerQueueCalculator)
             => _timerManager ?? (_timerManager = new TimerManager(timerQueueCalculator));
-
-        #endregion
-
-        #region Events
-
-        public event EventHandler<TimerEventArgs> ChangeTimePointEvent;
-        public event EventHandler<TimerEventArgs> TimerSecondPassedEvent;
-
-
-        public event EventHandler TimerPauseEvent;
-
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        private void OnTimerPause()
-        {
-            TimerPauseEvent?.Invoke(this, EventArgs.Empty);
-        }
-
-        public event EventHandler TimerStopEvent;
-
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        private void OnTimerStop()
-        {
-            TimerStopEvent?.Invoke(this, EventArgs.Empty);
-        }
-
-        public event EventHandler TimerStartEvent;
-
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        private void OnTimerStart()
-        {
-            TimerStartEvent?.Invoke(this, EventArgs.Empty);
-        }
-
-        #endregion
-
-        #region Properties
 
         public static int Accuracy { get; set; } =300;
 
@@ -148,6 +126,24 @@ namespace CycleBellLibrary.Timer
 
         public void DontPreserveBaseTime() => _isPreserveBaseTime = false;
         public void PreserveBaseTime() => _isPreserveBaseTime = true;
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        private void OnTimerStart()
+        {
+            TimerStartEvent?.Invoke(this, EventArgs.Empty);
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        private void OnTimerPause()
+        {
+            TimerPauseEvent?.Invoke(this, EventArgs.Empty);
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        private void OnTimerStop()
+        {
+            TimerStopEvent?.Invoke(this, EventArgs.Empty);
+        }
 
         /// <summary>
         /// dueTime for _timer

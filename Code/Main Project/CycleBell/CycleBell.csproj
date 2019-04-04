@@ -136,6 +136,7 @@
     <Compile Include="Converters\BooleanInverseConverter.cs" />
     <Compile Include="Converters\FromTimeSpanToStringConverter.cs" />
     <Compile Include="DataTemplateSelectors\TimePointVmDataTemplateSelector.cs" />
+    <Compile Include="MediaPlayer_.cs" />
     <Compile Include="ViewModels\AboutDialogViewModel.cs" />
     <Compile Include="ViewModels\DialogViewModelBase.cs" />
     <Compile Include="ViewModels\IMainViewModel.cs" />
@@ -293,6 +294,7 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Resource>
     <Resource Include="fonts\RussoOne.ttf" />
+    <None Include="ClassDiagram1.cd" />
     <None Include="CycleBell_TemporaryKey.pfx" />
     <None Include="Design\projectGuides.guides" />
     <None Include="packages.config" />

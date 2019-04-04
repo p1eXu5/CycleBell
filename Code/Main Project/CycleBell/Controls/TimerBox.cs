@@ -284,8 +284,16 @@ namespace CycleBell.Controls
                     _nextOnes = true;
                     break;
                 case 1:
-                case 2:
                     Text = "" + num + Text.Substring(1);
+                    CaretIndex = 1;
+                    break;
+                case 2:
+                    if ( Text[1] == '4' ) {
+                        Text = "" + num + "3:59";
+                    }
+                    else {
+                        Text = "" + num + Text.Substring(1);
+                    }
                     CaretIndex = 1;
                     break;
             }
