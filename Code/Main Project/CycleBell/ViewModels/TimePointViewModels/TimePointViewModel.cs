@@ -178,7 +178,13 @@ namespace CycleBell.ViewModels.TimePointViewModels
 
         protected virtual void OpenWavFile()
         {
-            OpenFileDialog ofd = new OpenFileDialog { Filter = "Waveform Audio File Format|*.wav" };
+             var ofd = new OpenFileDialog {
+                Filter = "mp3, wav|*.mp3;*.wav|all files|*.*",
+                InitialDirectory = Environment.GetFolderPath( Environment.SpecialFolder.MyMusic ),
+                RestoreDirectory = true,
+                CheckFileExists = true,
+                CheckPathExists = true
+            };
 
             if (ofd.ShowDialog() == true) {
 

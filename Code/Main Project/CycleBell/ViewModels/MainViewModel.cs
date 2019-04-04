@@ -590,6 +590,7 @@ namespace CycleBell.ViewModels
         }
         private void Stop (object o)
         {
+            Alarm.StopDefault();
             _timerManager.Stop();
         }
 
@@ -601,6 +602,7 @@ namespace CycleBell.ViewModels
 
                 if (state == true) {
                     // if playing
+                    Alarm.StopDefault();
                     _timerManager.Pause();
                 }
                 else {
@@ -624,6 +626,7 @@ namespace CycleBell.ViewModels
         private void SwitchIsRingOnStartTime (object o)
         {
             Alarm.Stop();
+            Alarm.StopDefault();
             IsRingOnStartTime ^= true;
         }
 

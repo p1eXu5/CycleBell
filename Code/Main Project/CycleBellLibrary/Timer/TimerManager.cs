@@ -269,7 +269,7 @@ namespace CycleBellLibrary.Timer
         private void ChangeTimePoint(ref TimeSpan currentTime)
         {
             // Сообщаем, что прошла секунда, время истекло, следующую точку.
-            OnTimerSecondPassed(_queue.Peek().Item2, TimeSpan.Zero);
+            //OnTimerSecondPassed(_queue.Peek().Item2, TimeSpan.Zero);
 
             _prevQueueElement = _queue.Dequeue();
             _queue.Enqueue(_prevQueueElement);
@@ -284,7 +284,7 @@ namespace CycleBellLibrary.Timer
                 }
 
                 ResetDeltaTime();
-                _prevQueueElement = (currentTime, GetInitialTimePoint());
+                //_prevQueueElement = (currentTime, GetInitialTimePoint());
 
                 OnChangeTimePoint(_prevQueueElement.prevTimePoint, _queue.Peek(), currentTime);
                 return;
@@ -316,6 +316,8 @@ namespace CycleBellLibrary.Timer
         /// <param name="state"></param>
         private void TimerCallbackHandler(object state)
         {
+            TimeSpan deltaTime;
+
             _timer.Change(Timeout.Infinite, Timeout.Infinite);
 
             var nextTime = _queue.Peek().Item1;
@@ -342,14 +344,14 @@ namespace CycleBellLibrary.Timer
                     }
                 }
 
-                var deltaTime = nextTime + TimeSpan.FromHours(24) - currentTime;
+                deltaTime = nextTime - currentTime + new TimeSpan( 24 - currentTime.Hours, currentTime.Minutes, currentTime.Seconds );
+                OnTimerSecondPassed(_queue.Peek().Item2, deltaTime);
 
                 if (deltaTime > _deltaTime) {
                     ChangeTimePoint(ref currentTime);
                 }
                 else {
 
-                    OnTimerSecondPassed(_queue.Peek().Item2, deltaTime);
                     _deltaTime = deltaTime;
                 }
 
@@ -363,7 +365,8 @@ namespace CycleBellLibrary.Timer
                 _deltaTime = TimeSpan.FromHours(25);
             }
 
-            OnTimerSecondPassed(_queue.Peek().Item2, (nextTime - currentTime));
+            deltaTime = nextTime - new TimeSpan( currentTime.Hours, currentTime.Minutes, currentTime.Seconds );
+            OnTimerSecondPassed(_queue.Peek().Item2, deltaTime);
             ChangeTimer();
         }
 
@@ -425,10 +428,10 @@ namespace CycleBellLibrary.Timer
             TimeSpan diff;
 
             if (currentTime > nextTime) {
-                diff = nextTime + TimeSpan.FromHours(24) - currentTime;
+                diff = nextTime + new TimeSpan( 24 - currentTime.Hours, currentTime.Minutes, currentTime.Seconds );
             }
             else {
-                diff = nextTime - currentTime;
+                diff = nextTime - new TimeSpan( currentTime.Hours, currentTime.Minutes, currentTime.Seconds );
             }
 
             return diff;

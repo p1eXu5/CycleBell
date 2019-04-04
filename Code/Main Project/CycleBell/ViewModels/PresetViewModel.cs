@@ -425,6 +425,8 @@ namespace CycleBell.ViewModels
 
         internal void OnTimerStopEventHandler(object sender, EventArgs args)
         {
+            _mainViewModel.Alarm.StopDispatcher();
+
             if (_activeTimePointVm != null)
                 _activeTimePointVm.IsActive = false;
 
