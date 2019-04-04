@@ -138,6 +138,7 @@
     <Compile Include="DataTemplateSelectors\TimePointVmDataTemplateSelector.cs" />
     <Compile Include="MediaPlayer_.cs" />
     <Compile Include="ViewModels\AboutDialogViewModel.cs" />
+    <Compile Include="ViewModels\AlarmExtensions.cs" />
     <Compile Include="ViewModels\DialogViewModelBase.cs" />
     <Compile Include="ViewModels\IMainViewModel.cs" />
     <Compile Include="ViewModels\IPresetViewModel.cs" />

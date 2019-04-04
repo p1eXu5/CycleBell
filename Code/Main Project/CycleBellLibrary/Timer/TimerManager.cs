@@ -87,11 +87,11 @@ namespace CycleBellLibrary.Timer
 
         #region Events
 
-        public event EventHandler<TimerEventArgs> ChangeTimePointEvent;
+        public event EventHandler<TimerEventArgs> TimePointChanged;
         public event EventHandler<TimerEventArgs> TimerSecondPassedEvent;
         public event EventHandler TimerPauseEvent;
         public event EventHandler TimerStopEvent;
-        public event EventHandler TimerStartEvent;
+        public event EventHandler TimerStarted;
 
         #endregion
 
@@ -127,10 +127,13 @@ namespace CycleBellLibrary.Timer
         public void DontPreserveBaseTime() => _isPreserveBaseTime = false;
         public void PreserveBaseTime() => _isPreserveBaseTime = true;
 
+        /// <summary>
+        /// Invokes TimerStarted event.
+        /// </summary>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         private void OnTimerStart()
         {
-            TimerStartEvent?.Invoke(this, EventArgs.Empty);
+            TimerStarted?.Invoke(this, EventArgs.Empty);
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -254,7 +257,6 @@ namespace CycleBellLibrary.Timer
             var durTime = GetDueTime(currentTime.Milliseconds);
             _timer = new System.Threading.Timer(TimerCallbackHandler, null, durTime, Timeout.Infinite);
 
-            // Set previous queue element
             _prevQueueElement = (currentTime, GetInitialTimePoint());
 
             OnChangeTimePoint(_prevQueueElement.prevTimePoint, _queue.Peek(), currentTime);
@@ -301,6 +303,9 @@ namespace CycleBellLibrary.Timer
             _deltaTime = -TimeSpan.FromHours(1);
         }
 
+        /// <summary>
+        /// Assigns negative hour to _deltaTime.
+        /// </summary>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         private void ResetDeltaTime() => _deltaTime = -TimeSpan.FromHours(1);
 
@@ -311,14 +316,14 @@ namespace CycleBellLibrary.Timer
         /// <param name="state"></param>
         private void TimerCallbackHandler(object state)
         {
+            _timer.Change(Timeout.Infinite, Timeout.Infinite);
+
             var nextTime = _queue.Peek().Item1;
             var currentTime = DateTime.Now.TimeOfDay;
 
-            _timer.Change(GetDueTime (currentTime.Milliseconds), Timeout.Infinite);
 
             if (currentTime > nextTime) {
 
-                //_timer.Change(Timeout.Infinite, Timeout.Infinite);
 
                 if (_deltaTime < TimeSpan.Zero) {
 
@@ -332,6 +337,7 @@ namespace CycleBellLibrary.Timer
                         // Точка входа в ChangeTimePoint
                         ChangeTimePoint(ref currentTime);
 
+                        ChangeTimer();
                         return;
                     }
                 }
@@ -347,6 +353,7 @@ namespace CycleBellLibrary.Timer
                     _deltaTime = deltaTime;
                 }
 
+                ChangeTimer();
                 return;
             }
 
@@ -357,6 +364,13 @@ namespace CycleBellLibrary.Timer
             }
 
             OnTimerSecondPassed(_queue.Peek().Item2, (nextTime - currentTime));
+            ChangeTimer();
+        }
+
+        private void ChangeTimer ()
+        {
+            var currentTime = DateTime.Now.TimeOfDay;
+            _timer.Change( GetDueTime( currentTime.Milliseconds ), Timeout.Infinite );
         }
 
         // events:
@@ -368,7 +382,7 @@ namespace CycleBellLibrary.Timer
             // modify previous base time TimePoint will unnecessary
             if (prevTimePoint.Time < TimeSpan.Zero || prevTimePoint.Name == StartTimePointName) {
 
-                ChangeTimePointEvent?.Invoke(this, new TimerEventArgs(prevTimePoint, nextQueueElement.nextTimePoint, lastTime, null));
+                TimePointChanged?.Invoke(this, new TimerEventArgs(prevTimePoint, nextQueueElement.nextTimePoint, lastTime, null));
             }
             else {
 
@@ -388,7 +402,7 @@ namespace CycleBellLibrary.Timer
                     }
                 }
 
-                ChangeTimePointEvent?.Invoke(this, new TimerEventArgs(prevTimePoint, nextQueueElement.nextTimePoint, lastTime, nextBaseTime));
+                TimePointChanged?.Invoke(this, new TimerEventArgs(prevTimePoint, nextQueueElement.nextTimePoint, lastTime, nextBaseTime));
             }
 
         }

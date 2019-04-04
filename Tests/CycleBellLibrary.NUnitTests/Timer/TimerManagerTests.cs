@@ -59,7 +59,7 @@ namespace CycleBellLibrary.NUnitTests.Timer
             var tm = GetTimerManager();
 
             bool res = false;
-            tm.TimerStartEvent += (sender, args) => res = true;
+            tm.TimerStarted += (sender, args) => res = true;
 
             tm.Play (null);
 
@@ -73,7 +73,7 @@ namespace CycleBellLibrary.NUnitTests.Timer
             var preset = new Preset();
 
             bool res = false;
-            tm.TimerStartEvent += (sender, args) => res = true;
+            tm.TimerStarted += (sender, args) => res = true;
 
             tm.Play (preset);
 

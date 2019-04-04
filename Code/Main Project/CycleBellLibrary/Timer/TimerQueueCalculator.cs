@@ -37,7 +37,7 @@ namespace CycleBellLibrary.Timer
         /// Creates alarm queue
         /// </summary>
         /// <param name="preset">Preset</param>
-        /// <param name="preserveBaseTime">Does TimePoint BaseTime preserve?</param>
+        /// <param name="preserveBaseTime">Does TimePoint BaseTime preserve when GetAbsoluteTime methog is called?</param>
         /// <returns>The queue of tuples consists of time of the day and TimePoint that will come in this time</returns>
         public Queue<(TimeSpan nextChangeTime, TimePoint nextTimePoint)> GetTimerQueue(Preset preset, bool preserveBaseTime = true)
         {

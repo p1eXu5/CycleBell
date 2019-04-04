@@ -226,9 +226,9 @@ namespace CycleBellLibrary.NUnitTests.Context.Tests
         #pragma warning disable 0067
         internal class FakeTimerManager : ITimerManager
         {
-            public event EventHandler<TimerEventArgs> ChangeTimePointEvent;
+            public event EventHandler<TimerEventArgs> TimePointChanged;
             public event EventHandler<TimerEventArgs> TimerSecondPassedEvent;
-            public event EventHandler TimerStartEvent;
+            public event EventHandler TimerStarted;
             public event EventHandler TimerPauseEvent;
             public event EventHandler TimerStopEvent;
             public bool IsRunning { get; } = false;

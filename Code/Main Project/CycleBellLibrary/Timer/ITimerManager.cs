@@ -22,9 +22,9 @@ namespace CycleBellLibrary.Timer
 {
     public interface ITimerManager
     {
-        event EventHandler<TimerEventArgs> ChangeTimePointEvent;
+        event EventHandler<TimerEventArgs> TimePointChanged;
         event EventHandler<TimerEventArgs> TimerSecondPassedEvent;
-        event EventHandler TimerStartEvent;
+        event EventHandler TimerStarted;
         event EventHandler TimerPauseEvent;
         event EventHandler TimerStopEvent;
 

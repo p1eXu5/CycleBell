@@ -97,7 +97,7 @@ namespace CycleBell.ViewModels
         private void LoadTimerManager(ICycleBellManager manager)
         {
             _timerManager = manager.TimerManager;
-            _timerManager.TimerStartEvent += UpdateIsRunningAndTimerStateProperties;
+            _timerManager.TimerStarted += UpdateIsRunningAndTimerStateProperties;
             _timerManager.TimerStopEvent += UpdateIsRunningAndTimerStateProperties;
         }
 
@@ -443,7 +443,7 @@ namespace CycleBell.ViewModels
             selectedPresetViewModel.PropertyChanged += OnIsNewPresetChangedHandler;
             ((INotifyCollectionChanged)selectedPresetViewModel.TimePointVmCollection).CollectionChanged += RiseIsPlayableChanged;
 
-            _timerManager.ChangeTimePointEvent += selectedPresetViewModel.OnTimePointChangedEventHandler;
+            _timerManager.TimePointChanged += selectedPresetViewModel.OnTimePointChangedEventHandler;
             _timerManager.TimerSecondPassedEvent += selectedPresetViewModel.OnSecondPassedEventHandler;
             _timerManager.TimerPauseEvent += selectedPresetViewModel.OnTimerPauseEventHandler;
             _timerManager.TimerStopEvent += selectedPresetViewModel.OnTimerStopEventHandler;
@@ -457,7 +457,7 @@ namespace CycleBell.ViewModels
             _timerManager.TimerStopEvent -= selectedPresetViewModel.OnTimerStopEventHandler;
             _timerManager.TimerPauseEvent -= selectedPresetViewModel.OnTimerPauseEventHandler;
             _timerManager.TimerSecondPassedEvent -= selectedPresetViewModel.OnSecondPassedEventHandler;
-            _timerManager.ChangeTimePointEvent -= selectedPresetViewModel.OnTimePointChangedEventHandler;
+            _timerManager.TimePointChanged -= selectedPresetViewModel.OnTimePointChangedEventHandler;
 
             ((INotifyCollectionChanged)selectedPresetViewModel.TimePointVmCollection).CollectionChanged -= RiseIsPlayableChanged;
             selectedPresetViewModel.PropertyChanged -= OnIsNewPresetChangedHandler;
@@ -576,10 +576,10 @@ namespace CycleBell.ViewModels
         // Sound
         public void Ring(bool stopping = false)
         {
-            Alarm.Stop();
+            Alarm.StopDefault();
 
             if (!stopping) {
-                Alarm.Play();
+                Alarm.PlayDefault();
             }
         }
 

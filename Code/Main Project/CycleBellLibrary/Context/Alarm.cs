@@ -13,21 +13,25 @@ namespace CycleBellLibrary.Context
         void SetDefaultSound ( string path );
         void AddSound ( TimePoint tPoint );
         void LoadSound ( TimePoint tPoint );
-        void Play ( TimePoint nextTimePoint = null );
+        void Play ();
+        void PlayDefault ();
         void Stop ();
+        void StopDefault ();
     }
 
     public class Alarm : IAlarm
     {
         private readonly IDictionary< int, Uri > _soundMap = new Dictionary< int, Uri >();
+        private IPlayer _playerB;
 
         public Alarm ( IPlayer player ) 
         {
             Player = player;
+            _playerB = Player.ClonePlayer();
             DefaultPlayer = Player.ClonePlayer();
         }
 
-        public IPlayer Player { get; }
+        public IPlayer Player { get; private set; }
         public IPlayer DefaultPlayer { get; }
 
         public void SetDefaultSound ( string path ) 
@@ -57,26 +61,33 @@ namespace CycleBellLibrary.Context
             LoadSound( tPoint.Id, Player );
         }
 
-        public void Play ( TimePoint nextTimePoint = null )
+        public void Play ()
         {
-            if ( nextTimePoint == null ) {
-                if ( DefaultPlayer.HasAudio ) {
-                    DefaultPlayer.Play();
-                }
-                return;
-            }
-
-            var nextSoundKey = nextTimePoint?.Id ?? 0;
-
             if ( Player.HasAudio ) {
+
                 Player.Play();
-                LoadSound( nextSoundKey, Player );
+
+                var tmp = Player;
+                Player = _playerB;
+                _playerB = tmp;
+            }
+        }
+
+        public void PlayDefault ()
+        {
+            if ( DefaultPlayer.HasAudio ) {
+                DefaultPlayer.Play();
             }
         }
 
         public void Stop ()
         {
             Player.Stop();
+            _playerB.Stop();
+        }
+
+        public void StopDefault ()
+        {
             DefaultPlayer.Stop();
         }
 

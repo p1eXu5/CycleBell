@@ -347,19 +347,21 @@ namespace CycleBell.ViewModels
             if (prevTimePoint != null && prevTimePoint.Time >= TimeSpan.Zero) {
 
                 if (prevTimePoint.Name == _mainViewModel.StartTimeName && _mainViewModel.IsRingOnStartTime) {
-                    _mainViewModel.Alarm.Play( nextTimePoint );
+                    _mainViewModel.Alarm.StopDefaultDispatcher();
+                    _mainViewModel.Alarm.PlayDefaultDispatcher();
                 }
                 else {
                     if (_activeTimePointVm != null) {
 
                         if (!((TimePointViewModel) _activeTimePointVm).MuteFlag) {
-                           _mainViewModel.Alarm.Play( nextTimePoint );
+                            _mainViewModel.Alarm.StopDispatcher();
+                           _mainViewModel.Alarm.PlayDispatcher();
                         }
                     }
                 }
             }
             else {
-                _mainViewModel.Alarm.LoadSound( nextTimePoint );
+                _mainViewModel.Alarm.LoadSoundDispatcher( nextTimePoint );
             }
         }
 
@@ -367,8 +369,7 @@ namespace CycleBell.ViewModels
         internal void OnTimePointChangedEventHandler(object s, TimerEventArgs e)
         {
             if (e == null) return;
-            (( DispatcherObject )_mainViewModel.Alarm.Player).Dispatcher.BeginInvoke( DispatcherPriority.Normal, (ThreadStart)delegate() { Ring(e.PrevTimePoint, e.NextTimePoint); } );
-            
+            Ring(e.PrevTimePoint, e.NextTimePoint);
 
             if (e.NextTimePoint == null) return;
             UpdateActiveTimePointViewModel (e.NextTimePoint, e.PrevTimePointNextBaseTime);
@@ -419,7 +420,7 @@ namespace CycleBell.ViewModels
 
         internal void OnTimerPauseEventHandler(object sender, EventArgs args)
         {
-            (( DispatcherObject )_mainViewModel.Alarm.Player).Dispatcher.BeginInvoke( DispatcherPriority.Normal, (ThreadStart)delegate () { _mainViewModel.Alarm.Stop(); } );
+            _mainViewModel.Alarm.StopDispatcher();
         }
 
         internal void OnTimerStopEventHandler(object sender, EventArgs args)

@@ -23,6 +23,12 @@ namespace CycleBellLibrary.Timer
 {
     public interface ITimerQueueCalculator
     {
+        /// <summary>
+        /// Creates alarm queue
+        /// </summary>
+        /// <param name="preset"></param>
+        /// <param name="preserveBaseTime">Does TimePoint BaseTime preserve when GetAbsoluteTime methog is called?</param>
+        /// <returns></returns>
         Queue<(TimeSpan nextChangeTime, TimePoint nextTimePoint)> GetTimerQueue (Preset preset, bool preserveBaseTime = true);
     }
 }
