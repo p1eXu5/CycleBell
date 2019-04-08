@@ -34,7 +34,7 @@ namespace CycleBellLibrary.Timer
     /// First TimePointChange signal emits with "last TimePoint" with
     /// negative Time, next TimePoint - created TimePoint with name preset.StartTimePointName
     /// </summary>
-    public class TimerManager : ITimerManager, IStartTimeTimePointName
+    public class TimerManager : ITimerManager, IStartTimePointCreator
     {
         public const string START_TIMEPOINT_NAME = "Launch in T-minus";
         public const string INITIAL_TIMEPOINT_NAME = "Initial TimePoint";
@@ -68,6 +68,11 @@ namespace CycleBellLibrary.Timer
         private bool _isPreserveBaseTime = true;
 
         private readonly ITimerQueueCalculator _timerQueueCalculator;
+
+        private readonly object _locker = new object();
+        private readonly object _locker2 = new object();
+        private readonly object _locker3 = new object();
+        private bool _isJustRunned;
 
         #endregion
 
@@ -107,22 +112,26 @@ namespace CycleBellLibrary.Timer
         public static TimerManager GetInstance (ITimerQueueCalculator timerQueueCalculator)
             => _timerManager ?? (_timerManager = new TimerManager(timerQueueCalculator));
 
-        public static int Accuracy { get; set; } =300;
+        public static int Accuracy { get; set; } = 300;
 
         public bool IsRunning { get; private set; }
         public bool IsPaused { get; private set; }
         public string StartTimePointName => START_TIMEPOINT_NAME;
 
+        /// <summary>
+        /// TimePoint with negate absolute time.
+        /// </summary>
+        public static TimePoint InitialTimePoint { get; } = new TimePoint(INITIAL_TIMEPOINT_NAME, TimeSpan.FromMinutes(-1), TimePointType.Absolute);
+
         #endregion
 
         #region Methods
 
-        public static TimePoint GetStartTimePoint(TimeSpan startTime)
+        public static TimePoint GetStartTimePoint( TimeSpan startTime )
         {
-            return new TimePoint(START_TIMEPOINT_NAME, startTime, TimePointType.Absolute);
+            return new TimePoint( START_TIMEPOINT_NAME, startTime, TimePointType.Absolute );
         }
 
-        public static TimePoint GetInitialTimePoint() => new TimePoint(INITIAL_TIMEPOINT_NAME, TimeSpan.FromMinutes(-1), TimePointType.Absolute);
 
         public void DontPreserveBaseTime() => _isPreserveBaseTime = false;
         public void PreserveBaseTime() => _isPreserveBaseTime = true;
@@ -175,12 +184,12 @@ namespace CycleBellLibrary.Timer
         {
             if (!IsPaused) return;
 
-            var currentTime = DateTime.Now.TimeOfDay;
-            var foundedNextQueueElem = FindNextTimePoint(ref currentTime);
+            FindNextTimePoint();
 
-            OnChangeTimePoint(_prevQueueElement.prevTimePoint, foundedNextQueueElem, currentTime);
+            //OnChangeTimePoint(_prevQueueElement.prevTimePoint, foundedNextQueueElem, currentTime);
 
-            _timer.Change(GetDueTime (currentTime.Milliseconds), Timeout.Infinite);
+            ResetDeltaTime();
+            _timer.Change( 0, Timeout.Infinite );
 
             IsPaused = false;
         }
@@ -188,11 +197,11 @@ namespace CycleBellLibrary.Timer
         /// <summary>
         /// Find next NextTimePoint after resume
         /// </summary>
-        /// <param name="currentTime"></param>
-        private (TimeSpan nextChangeTime, TimePoint nextTimePoint) FindNextTimePoint(ref TimeSpan currentTime)
+        private void FindNextTimePoint()
         {
-            if (currentTime < _queue.Peek().nextChangeTime || _prevQueueElement.prevTimePoint.Time < TimeSpan.Zero) {
-                return _queue.Peek();
+            var currentTime = DateTime.Now.TimeOfDay;
+            if (currentTime < _queue.Peek().nextChangeTime || _prevQueueElement.prevTimePoint?.Equals( InitialTimePoint ) == true ) {
+                return;
             }
 
             do {
@@ -200,7 +209,6 @@ namespace CycleBellLibrary.Timer
                 _queue.Enqueue(_prevQueueElement);
             } while (currentTime >= _queue.Peek().nextChangeTime && _queue.Peek().nextTimePoint != null);
 
-            return _queue.Peek();
         }
 
         /// <summary>
@@ -210,7 +218,7 @@ namespace CycleBellLibrary.Timer
         {
             _timer?.Dispose();
 
-            _queue = null;
+            //_queue = null;
             if (IsRunning) IsRunning = false;
             if (_isRunAsync) _isRunAsync = false;
             if (IsPaused) IsPaused = false;
@@ -218,7 +226,7 @@ namespace CycleBellLibrary.Timer
             OnTimerStop();
         }
 
-        public async void PlayAsync(Preset preset)
+        public async void PlayAsync( Preset preset )
         {
             if (IsRunning)
                 return;
@@ -230,7 +238,7 @@ namespace CycleBellLibrary.Timer
         /// Запуск
         /// </summary>
         /// <param name="preset">Запускаемый пресет</param>
-        public void Play(Preset preset)
+        public void Play( Preset preset )
         {
             _preset = preset;
 
@@ -246,146 +254,97 @@ namespace CycleBellLibrary.Timer
                 return;
             }
 
-            IsRunning = true;
-            OnTimerStart();
-
+            _deltaTime = TimeSpan.Zero;
             var currentTime = DateTime.Now.TimeOfDay;
 
-            ResetDeltaTime();
+            _prevQueueElement = ( currentTime, InitialTimePoint );
 
-            // Timer initialize
-            var durTime = GetDueTime(currentTime.Milliseconds);
-            _timer = new System.Threading.Timer(TimerCallbackHandler, null, durTime, Timeout.Infinite);
-
-            _prevQueueElement = (currentTime, GetInitialTimePoint());
-
-            OnChangeTimePoint(_prevQueueElement.prevTimePoint, _queue.Peek(), currentTime);
+            _isJustRunned = IsRunning = true;
+            OnTimerStart();
+            _timer = new System.Threading.Timer(TimerCallbackHandler, null, 0, Timeout.Infinite);
         }
-
-        /// <summary>
-        /// Change NextTimePoint in timer queue
-        /// </summary>
-        /// <param name="currentTime">current time will be changed!</param>
-        private void ChangeTimePoint(ref TimeSpan currentTime)
-        {
-            // Сообщаем, что прошла секунда, время истекло, следующую точку.
-            //OnTimerSecondPassed(_queue.Peek().Item2, TimeSpan.Zero);
-
-            _prevQueueElement = _queue.Dequeue();
-            _queue.Enqueue(_prevQueueElement);
-
-            // If StartTimePoint are next:
-            if (_queue.Peek().nextTimePoint.Name == START_TIMEPOINT_NAME) {
-
-                if (!_preset.IsInfiniteLoop) {
-
-                    Stop();
-                    return;
-                }
-
-                ResetDeltaTime();
-                //_prevQueueElement = (currentTime, GetInitialTimePoint());
-
-                OnChangeTimePoint(_prevQueueElement.prevTimePoint, _queue.Peek(), currentTime);
-                return;
-            }
-
-
-            OnChangeTimePoint(_prevQueueElement.prevTimePoint, _queue.Peek(), currentTime);
-
-            // Если время следующей точки равно предыдущей:
-            if (_queue.Peek().Item1 == _prevQueueElement.Item1) {
-
-                ChangeTimePoint(ref currentTime);
-                return;
-            }
-
-            _deltaTime = -TimeSpan.FromHours(1);
-        }
-
-        /// <summary>
-        /// Assigns negative hour to _deltaTime.
-        /// </summary>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        private void ResetDeltaTime() => _deltaTime = -TimeSpan.FromHours(1);
 
         // timer callback:
         /// <summary>
         /// Timer handler
         /// </summary>
         /// <param name="state"></param>
-        private void TimerCallbackHandler(object state)
-        {
-            TimeSpan deltaTime;
-
-            _timer.Change(Timeout.Infinite, Timeout.Infinite);
-
-            var nextTime = _queue.Peek().Item1;
-            var currentTime = DateTime.Now.TimeOfDay;
-
-
-            if (currentTime > nextTime) {
-
-
-                if (_deltaTime < TimeSpan.Zero) {
-
-                    // Первый запуск или после смены NextTimePoint
-                    _deltaTime = TimeSpan.FromHours(25);
-                }
-                else {
-
-                    if (_deltaTime > TimeSpan.FromHours(24)) {
-
-                        // Точка входа в ChangeTimePoint
-                        ChangeTimePoint(ref currentTime);
-
-                        ChangeTimer();
-                        return;
-                    }
-                }
-
-                deltaTime = nextTime - currentTime + new TimeSpan( 24 - currentTime.Hours, currentTime.Minutes, currentTime.Seconds );
-                OnTimerSecondPassed(_queue.Peek().Item2, deltaTime);
-
-                if (deltaTime > _deltaTime) {
-                    ChangeTimePoint(ref currentTime);
-                }
-                else {
-
-                    _deltaTime = deltaTime;
-                }
-
-                ChangeTimer();
-                return;
-            }
-
-            if (_deltaTime < TimeSpan.Zero) {
-
-                // Первый запуск или после смены NextTimePoint
-                _deltaTime = TimeSpan.FromHours(25);
-            }
-
-            deltaTime = nextTime - new TimeSpan( currentTime.Hours, currentTime.Minutes, currentTime.Seconds );
-            OnTimerSecondPassed(_queue.Peek().Item2, deltaTime);
-            ChangeTimer();
-        }
-
-        private void ChangeTimer ()
+        private void TimerCallbackHandler( object state )
         {
             var currentTime = DateTime.Now.TimeOfDay;
             _timer.Change( GetDueTime( currentTime.Milliseconds ), Timeout.Infinite );
+
+
+            var (nextTime, nextPoint) = _queue.Peek();
+            var dt = CalculateLastTime( currentTime, nextTime );
+
+            OnTimerSecondPassed( nextPoint, dt );
+
+            if ( dt > _deltaTime || _deltaTime == TimeSpan.Zero ) {
+                if ( !ChangeTimePoint() ) {
+                    Stop();
+                    return;
+                }
+
+                OnChangeTimePoint( _prevQueueElement.prevTimePoint, _queue.Peek(), dt );
+                ResetDeltaTime();
+            }
+            else {
+                lock ( _locker ) {
+                    _deltaTime = dt;
+                }
+            }
+
+
+            //currentTime = DateTime.Now.TimeOfDay;
+        }
+
+        /// <summary>
+        /// Change NextTimePoint in timer queue
+        /// </summary>
+        private bool ChangeTimePoint()
+        {
+            lock ( _locker3 ) {
+                if ( _isJustRunned ) {
+                    _isJustRunned = false;
+                    return true;
+                }
+
+                _prevQueueElement = _queue.Dequeue();
+                _queue.Enqueue( _prevQueueElement );
+            }
+
+            // If StartTimePoint are the next TimePoint:
+            if ( _queue.Peek().nextTimePoint.Name == START_TIMEPOINT_NAME) {
+
+                if ( !_preset.IsInfiniteLoop ) {
+                    return false;
+                }
+
+            }
+            
+            return true;
+        }
+
+        /// <summary>
+        /// _deltaTime = TimeSpan.FromHours( 25 ).
+        /// </summary>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        private void ResetDeltaTime() 
+        {
+            lock ( _locker2 ) {
+                _deltaTime = TimeSpan.FromHours( 25 );
+            }
         }
 
         // events:
-        private void OnChangeTimePoint(TimePoint prevTimePoint, (TimeSpan nextChangeTime, TimePoint nextTimePoint) nextQueueElement, TimeSpan currentTime)
+        private void OnChangeTimePoint ( TimePoint prevTimePoint, (TimeSpan nextChangeTime, TimePoint nextTimePoint) nextQueueElement, TimeSpan lastTime )
         {
-            var lastTime = LastTime(currentTime, nextQueueElement.nextChangeTime);
-
             // if previous TimePoint is the initial out of queue TimePoint or the StartPoint then
             // modify previous base time TimePoint will unnecessary
-            if (prevTimePoint.Time < TimeSpan.Zero || prevTimePoint.Name == StartTimePointName) {
+            if ( prevTimePoint.Time < TimeSpan.Zero || prevTimePoint.Name == StartTimePointName ) {
 
-                TimePointChanged?.Invoke(this, new TimerEventArgs(prevTimePoint, nextQueueElement.nextTimePoint, lastTime, null));
+                TimePointChanged?.Invoke(this, new TimerEventArgs( prevTimePoint, nextQueueElement.nextTimePoint, lastTime, null ));
             }
             else {
 
@@ -423,12 +382,12 @@ namespace CycleBellLibrary.Timer
         /// <param name="nextTime"></param>
         /// <returns>Last time to nextTime</returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        private TimeSpan LastTime(TimeSpan currentTime, TimeSpan nextTime)
+        private TimeSpan CalculateLastTime(TimeSpan currentTime, TimeSpan nextTime)
         {
             TimeSpan diff;
 
             if (currentTime > nextTime) {
-                diff = nextTime + new TimeSpan( 24 - currentTime.Hours, currentTime.Minutes, currentTime.Seconds );
+                diff = TimeSpan.FromHours( 24 ) - new TimeSpan( currentTime.Hours, currentTime.Minutes, currentTime.Seconds ) + nextTime;
             }
             else {
                 diff = nextTime - new TimeSpan( currentTime.Hours, currentTime.Minutes, currentTime.Seconds );
@@ -437,7 +396,7 @@ namespace CycleBellLibrary.Timer
             return diff;
         }
 
-        TimePoint IStartTimeTimePointName.GetStartTimePoint(TimeSpan startTime)
+        TimePoint IStartTimePointCreator.GetStartTimePoint(TimeSpan startTime)
         {
             return GetStartTimePoint(startTime);
         }

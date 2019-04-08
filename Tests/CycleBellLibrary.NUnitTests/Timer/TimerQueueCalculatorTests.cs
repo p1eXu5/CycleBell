@@ -9,7 +9,7 @@ using NUnit.Framework;
 namespace CycleBellLibrary.NUnitTests.Timer
 {
     [TestFixture]
-    public class TimerQueueCalculatorTests : IStartTimeTimePointName
+    public class TimerQueueCalculatorTests : IStartTimePointCreator
     {
         [Test]
         public void GetTimerQueue_PresetIsNull_NotThows()

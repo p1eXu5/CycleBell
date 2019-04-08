@@ -20,8 +20,8 @@ using CycleBellLibrary.Models;
 
 namespace CycleBellLibrary.Timer
 {
-    public interface IStartTimeTimePointName
+    public interface IStartTimePointCreator
     {
-        TimePoint GetStartTimePoint(TimeSpan startTime);
+        TimePoint GetStartTimePoint( TimeSpan startTime );
     }
 }

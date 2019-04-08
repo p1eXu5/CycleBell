@@ -26,11 +26,11 @@ namespace CycleBellLibrary.Timer
 {
     public class TimerQueueCalculator : ITimerQueueCalculator
     {
-        private readonly IStartTimeTimePointName _startTimeTimePointName;
+        private readonly IStartTimePointCreator _startTimePointCreator;
 
-        public TimerQueueCalculator(IStartTimeTimePointName startTimeTimePointName)
+        public TimerQueueCalculator(IStartTimePointCreator startTimePointCreator)
         {
-            _startTimeTimePointName = startTimeTimePointName ?? throw new ArgumentNullException(nameof(startTimeTimePointName));
+            _startTimePointCreator = startTimePointCreator ?? throw new ArgumentNullException(nameof(startTimePointCreator));
         }
 
         /// <summary>
@@ -47,7 +47,7 @@ namespace CycleBellLibrary.Timer
             Queue<(TimeSpan nextChangeTime, TimePoint nextTimePoint)> queue = new Queue<(TimeSpan, TimePoint)>();
 
             TimeSpan time = preset.StartTime;
-            TimePoint startTimePoint = _startTimeTimePointName.GetStartTimePoint (time);
+            TimePoint startTimePoint = _startTimePointCreator.GetStartTimePoint (time);
 
             time = startTimePoint.GetAbsoluteTime();
             queue.Enqueue((time, startTimePoint));

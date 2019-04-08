@@ -493,6 +493,8 @@ namespace CycleBell.ViewModels
             if (_dontSwitchSelectedPreset) {
                 _dontSwitchSelectedPreset = false;
             }
+
+            OnPropertyChanged( nameof( IsPlayable ) );
         }
         private bool CanAppendPresets(object obj)
         {

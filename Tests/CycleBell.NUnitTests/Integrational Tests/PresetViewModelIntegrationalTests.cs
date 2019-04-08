@@ -13,7 +13,7 @@ using NUnit.Framework;
 namespace CycleBell.NUnitTests.Integrational_Tests
 {
     [TestFixture]
-    class PresetViewModelIntegrationalTests : IStartTimeTimePointName
+    class PresetViewModelIntegrationalTests : IStartTimePointCreator
     {
         [Test]
         public void OnTimePointChangedEventHandler__InitialTimePointIsPrev_StartTimePointIsNext__DoesntActivateAnyTimePointViewModel()
@@ -22,7 +22,7 @@ namespace CycleBell.NUnitTests.Integrational_Tests
             var pvm = GetPresetViewModel(preset);
             var queue = GetQueue().GetTimerQueue(preset).ToArray();
 
-            _mockTimerManager.Raise(t => t.TimePointChanged += null, new TimerEventArgs ( prevTimePoint: TimerManager.GetInitialTimePoint(),
+            _mockTimerManager.Raise(t => t.TimePointChanged += null, new TimerEventArgs ( prevTimePoint: TimerManager.InitialTimePoint(),
                                                                                               nextTimePoint: queue[0].nextTimePoint,
                                                                                               lastTimeToNextChange: default(TimeSpan),
                                                                                               prevTimePointNextBaseTime: null
