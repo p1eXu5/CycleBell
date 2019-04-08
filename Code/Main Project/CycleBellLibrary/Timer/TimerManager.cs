@@ -294,9 +294,6 @@ namespace CycleBellLibrary.Timer
                     _deltaTime = dt;
                 }
             }
-
-
-            //currentTime = DateTime.Now.TimeOfDay;
         }
 
         /// <summary>
