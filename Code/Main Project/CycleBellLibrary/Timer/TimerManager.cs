@@ -254,12 +254,12 @@ namespace CycleBellLibrary.Timer
                 return;
             }
 
-            _deltaTime = TimeSpan.Zero;
+            ResetDeltaTime();
+
             var currentTime = DateTime.Now.TimeOfDay;
 
             _prevQueueElement = ( currentTime, InitialTimePoint );
 
-            _isJustRunned = IsRunning = true;
             OnTimerStart();
             _timer = new System.Threading.Timer(TimerCallbackHandler, null, 0, Timeout.Infinite);
         }
@@ -287,7 +287,9 @@ namespace CycleBellLibrary.Timer
                 }
 
                 OnChangeTimePoint( _prevQueueElement.prevTimePoint, _queue.Peek(), dt );
-                ResetDeltaTime();
+                lock ( _locker2 ) {
+                    _deltaTime = TimeSpan.FromHours( 25 );
+                }
             }
             else {
                 lock ( _locker ) {
@@ -329,9 +331,8 @@ namespace CycleBellLibrary.Timer
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         private void ResetDeltaTime() 
         {
-            lock ( _locker2 ) {
-                _deltaTime = TimeSpan.FromHours( 25 );
-            }
+             _deltaTime = TimeSpan.Zero;
+            _isJustRunned = IsRunning = true;
         }
 
         // events:
