@@ -1,13 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using CycleBell.ViewModels;
-using CycleBell.Views;
 using NUnit.Framework;
 
-namespace CycleBell.NUnitTests.View
+namespace CycleBell.Tests.UnitTests.ViewModels
 {
     [TestFixture]
     public class TimeSpanDigitTests
