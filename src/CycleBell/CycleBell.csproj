@@ -122,14 +122,14 @@
     <Compile Include="Converters\FromTimeSpanToStringConverter.cs" />
     <Compile Include="DataTemplateSelectors\TimePointVmDataTemplateSelector.cs" />
     <Compile Include="MediaPlayer_.cs" />
-    <Compile Include="ViewModels\AboutDialogViewModel.cs" />
-    <Compile Include="ViewModels\AlarmExtensions.cs" />
-    <Compile Include="ViewModels\DialogViewModelBase.cs" />
+    <Compile Include="ViewModels\Dialogs\AboutDialogViewModel.cs" />
+    <Compile Include="ViewModels\Extensions\AlarmExtensions.cs" />
+    <Compile Include="ViewModels\Dialogs\DialogViewModelBase.cs" />
     <Compile Include="ViewModels\IMainViewModel.cs" />
     <Compile Include="ViewModels\IPresetViewModel.cs" />
-    <Compile Include="ViewModels\RenamePresetDialogViewModel.cs" />
-    <Compile Include="ViewModels\SavePresetDialogViewModel.cs" />
-    <Compile Include="ViewModels\ServiceExtensions.cs" />
+    <Compile Include="ViewModels\Dialogs\RenamePresetDialogViewModel.cs" />
+    <Compile Include="ViewModels\Dialogs\SavePresetDialogViewModel.cs" />
+    <Compile Include="ViewModels\Extensions\ServiceExtensions.cs" />
     <Compile Include="ViewModels\TimePointViewModels\TimePointViewModelExtension.cs" />
     <Compile Include="ViewModels\TimePointViewModels\AddingTimePointViewModel.cs" />
     <Compile Include="ViewModels\TimePointViewModels\EndTimePointViewModel.cs" />
@@ -140,7 +140,7 @@
     <Compile Include="ViewModels\TimePointViewModels\TimePointViewModel.cs" />
     <Compile Include="ViewModels\TimePointViewModels\TimePointViewModelBase.cs" />
     <Compile Include="Views\AttachedPropertyFactory.cs" />
-    <Compile Include="Views\TimeSpanDigits.cs" />
+    <Compile Include="ViewModels\TimeSpanDigits.cs" />
     <Compile Include="Views\UserControls\TimerButtonsUserControl.xaml.cs">
       <DependentUpon>TimerButtonsUserControl.xaml</DependentUpon>
     </Compile>
