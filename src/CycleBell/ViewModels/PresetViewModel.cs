@@ -50,6 +50,7 @@ namespace CycleBell.ViewModels
     public class PresetViewModel : ObservableObject, IPresetViewModel
     {
         #region fields
+
         private readonly IMainViewModel _mainViewModel;
 
         private readonly ObservableCollection<TimePointViewModelBase> _timePointVmCollection;
@@ -76,45 +77,70 @@ namespace CycleBell.ViewModels
 
         public PresetViewModel(Preset preset, IMainViewModel mainViewModel)
         {
-            // _PresetViewModel
-            Preset = preset ?? throw new ArgumentNullException(nameof(preset));
+            #region local functions
 
-            // _presetCollectionManager
-            _mainViewModel = mainViewModel ?? throw new ArgumentNullException(nameof(mainViewModel));
+            void LoadTimePointViewModelCollection()
+            {
+                if (Preset.TimePointCollection.Count > 0) {
 
+                    foreach (var point in Preset.TimePointCollection) {
 
-            // _settedLoopNumbers
-            _settedLoopNumbers = new HashSet<int>();
+                        GetTimePointViewModel (point);
+                        _timePointVmCollection.Add (new TimePointViewModel (point, this));
 
-            // _timePointVmCollection
-            _timePointVmCollection = new ObservableCollection<TimePointViewModelBase>();
-            LoadTimePointViewModelCollection(Preset);
-            
-            // TimePointVmCollection
-            TimePointVmCollection = new ReadOnlyObservableCollection<TimePointViewModelBase>(_timePointVmCollection);
-
-            // CollectionView:
-            ICollectionView view = CollectionViewSource.GetDefaultView (TimePointVmCollection);
-
-            view.SortDescriptions.Clear();
-            view.SortDescriptions.Add (new SortDescription("LoopNumber", ListSortDirection.Ascending));
-            view.SortDescriptions.Add (new SortDescription ("Id", ListSortDirection.Ascending));
-
-            // TimePointCollection INotifyCollectionChanged
-            ((INotifyCollectionChanged) Preset.TimePointCollection).CollectionChanged += OnTimePointCollectionChanged;
-
-            // CanBellOnStartTime
-            if (Preset.Tag is string str) {
-
-                if (str == "true")
-                    CanBellOnStartTime = true;
-                else if (str == "false")
-                    CanBellOnStartTime = false;
+                        CheckBounds (point);
+                    }
+                }
             }
 
+            void SetupTimePointVmCollectionView()
+            {
+                ICollectionView view = CollectionViewSource.GetDefaultView( TimePointVmCollection );
 
-            // AddingTimePoint
+                view.SortDescriptions.Clear();
+                view.SortDescriptions.Add( new SortDescription( "LoopNumber", ListSortDirection.Ascending ) );
+                view.SortDescriptions.Add( new SortDescription( "Id", ListSortDirection.Ascending ) );
+            }
+
+            void SetupCanBellOnStartTime()
+            {
+                if ( Preset.Tag is string str ) {
+                    if ( str == "true" )
+                        CanBellOnStartTime = true;
+                    else if ( str == "false" )
+                        CanBellOnStartTime = false;
+                }
+            }
+
+            AddingTimePointViewModel GetAddingTimePointViewModel ()
+            {
+                var addingTimePoint = new AddingTimePointViewModel (this);
+                addingTimePoint.Reset();
+
+                ((INotifyPropertyChanged) addingTimePoint).PropertyChanged += OnTimePropertyChanged;
+
+                return addingTimePoint;
+            }
+
+            #endregion
+
+
+            Preset = preset ?? throw new ArgumentNullException(nameof(preset));
+            _mainViewModel = mainViewModel ?? throw new ArgumentNullException(nameof(mainViewModel));
+
+            _settedLoopNumbers = new HashSet<int>();
+
+            _timePointVmCollection = new ObservableCollection<TimePointViewModelBase>();
+            LoadTimePointViewModelCollection();
+            
+            TimePointVmCollection = new ReadOnlyObservableCollection<TimePointViewModelBase>(_timePointVmCollection);
+            
+            SetupTimePointVmCollectionView();
+            SetupCanBellOnStartTime();
+
             AddingTimePoint = GetAddingTimePointViewModel();
+
+            ((INotifyCollectionChanged) Preset.TimePointCollection).CollectionChanged += OnTimePointCollectionChanged;
         }
 
         #endregion
@@ -267,29 +293,9 @@ namespace CycleBell.ViewModels
         }
 
         // Service:
-        private void LoadTimePointViewModelCollection (Preset preset)
-        {
-            if (preset.TimePointCollection.Count > 0) {
+        
 
-                foreach (var point in preset.TimePointCollection) {
-
-                    GetTimePointViewModel (point);
-                    _timePointVmCollection.Add (new TimePointViewModel (point, this));
-
-                    CheckBounds (point);
-                }
-            }
-        }
-
-        private AddingTimePointViewModel GetAddingTimePointViewModel ()
-        {
-            var addingTimePoint = new AddingTimePointViewModel (this);
-            addingTimePoint.Reset();
-
-            ((INotifyPropertyChanged) addingTimePoint).PropertyChanged += OnTimePropertyChanged;
-
-            return addingTimePoint;
-        }
+        
 
         [MethodImpl (MethodImplOptions.AggressiveInlining)]
         private void ResetAddingTimePoint()
