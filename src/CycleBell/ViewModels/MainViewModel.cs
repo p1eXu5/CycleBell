@@ -407,6 +407,29 @@ namespace CycleBell.ViewModels
         /// <param name="newSelectedPreset"></param>
         private bool UpdateSelectedPreset (PresetViewModel newSelectedPreset)
         {
+            void DisconnectHandlers( PresetViewModel presetVm )
+            {
+                _timerManager.TimerStopped -= presetVm.OnTimerStopped;
+                _timerManager.TimerPaused -= presetVm.OnTimerPaused;
+                _timerManager.SecondPassed -= presetVm.OnSecondPassed;
+                _timerManager.TimePointChanged -= presetVm.OnTimePointChanged;
+
+                ((INotifyCollectionChanged)presetVm.TimePointVmCollection).CollectionChanged -= RiseIsPlayableChanged;
+                presetVm.PropertyChanged -= OnIsNewPresetChangedHandler;
+            }
+
+            void ConnectHandlers()
+            {
+                _selectedPreset.PropertyChanged += OnIsNewPresetChangedHandler;
+                ((INotifyCollectionChanged)_selectedPreset.TimePointVmCollection).CollectionChanged += RiseIsPlayableChanged;
+
+                _timerManager.TimePointChanged += _selectedPreset.OnTimePointChanged;
+                _timerManager.SecondPassed += _selectedPreset.OnSecondPassed;
+                _timerManager.TimerPaused += _selectedPreset.OnTimerPaused;
+                _timerManager.TimerStopped += _selectedPreset.OnTimerStopped;
+            }
+
+
             if (newSelectedPreset == null) {
 
                 _selectedPreset = null;
@@ -420,7 +443,7 @@ namespace CycleBell.ViewModels
             }
 
             if (currentPreset != null) {
-                DisconnectHandlers(currentPreset);
+                DisconnectHandlers( currentPreset );
             }
 
             if (currentPreset != null && currentPreset.IsNew && currentPreset.IsModified && !ShowSavePresetDialog(currentPreset)) {
@@ -432,40 +455,11 @@ namespace CycleBell.ViewModels
             }
 
             _selectedPreset = newSelectedPreset;
-            ConnectHandlers (_selectedPreset);
+            ConnectHandlers();
 
             return true;
         }
 
-        // add/remove SelectedPreset handlers
-        /// <summary>
-        /// Connect handlers to SelectedPreset
-        /// </summary>
-        /// <param name="selectedPresetViewModel"></param>
-        private void ConnectHandlers(PresetViewModel selectedPresetViewModel)
-        {
-            selectedPresetViewModel.PropertyChanged += OnIsNewPresetChangedHandler;
-            ((INotifyCollectionChanged)selectedPresetViewModel.TimePointVmCollection).CollectionChanged += RiseIsPlayableChanged;
-
-            _timerManager.TimePointChanged += selectedPresetViewModel.OnTimePointChangedEventHandler;
-            _timerManager.SecondPassed += selectedPresetViewModel.OnSecondPassedHandler;
-            _timerManager.TimerPaused += selectedPresetViewModel.OnTimerPausedHandler;
-            _timerManager.TimerStopped += selectedPresetViewModel.OnTimerStoppedHandler;
-        }
-
-        /// <summary>
-        /// Disconnect handlers from SelectedPreset
-        /// </summary>
-        private void DisconnectHandlers(PresetViewModel selectedPresetViewModel)
-        {
-            _timerManager.TimerStopped -= selectedPresetViewModel.OnTimerStoppedHandler;
-            _timerManager.TimerPaused -= selectedPresetViewModel.OnTimerPausedHandler;
-            _timerManager.SecondPassed -= selectedPresetViewModel.OnSecondPassedHandler;
-            _timerManager.TimePointChanged -= selectedPresetViewModel.OnTimePointChangedEventHandler;
-
-            ((INotifyCollectionChanged)selectedPresetViewModel.TimePointVmCollection).CollectionChanged -= RiseIsPlayableChanged;
-            selectedPresetViewModel.PropertyChanged -= OnIsNewPresetChangedHandler;
-        }
 
         private void OnIsNewPresetChangedHandler(object s, PropertyChangedEventArgs e)
         {
