@@ -1,0 +1,37 @@
+<?xml version="1.0"?>
+<Presets>
+  <Preset name="tomato">
+    <StartTime>8:30</StartTime>
+    <IsInfiniteLoop>1</IsInfiniteLoop>
+    <Tag />
+    <TimePointCollection>
+      <TimePoint name="work">
+        <Time>0:25:00</Time>
+        <TimePointKinds>1</TimePointKinds>
+        <CycleNum>0</CycleNum>
+        <SoundLocation />
+      </TimePoint>
+      <TimePoint name="short break">
+        <Time>0:05:00</Time>
+        <TimePointKinds>1</TimePointKinds>
+        <CycleNum>0</CycleNum>
+        <SoundLocation />
+      </TimePoint>
+      <TimePoint name="work">
+        <Time>0:25:00</Time>
+        <TimePointKinds>1</TimePointKinds>
+        <CycleNum>0</CycleNum>
+        <SoundLocation />
+      </TimePoint>
+      <TimePoint name="long break">
+        <Time>0:10:00</Time>
+        <TimePointKinds>1</TimePointKinds>
+        <CycleNum>0</CycleNum>
+        <SoundLocation />
+      </TimePoint>
+    </TimePointCollection>
+    <TimerLoopDictionary>
+      <Element key="0">4</Element>
+    </TimerLoopDictionary>
+  </Preset>
+</Presets>

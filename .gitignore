@@ -93,3 +93,16 @@
 /Experiments/WpfApp1/bin/Release
 /Experiments/WpfElementsDesign/obj/Release
 /Tests/CycleBell.NUnitTests/bin/Release
+Documents/
+Code/*.htm
+/tests/CycleBell.Tests/obj
+/tests/CycleBell.Tests/bin/Debug
+/tests/CycleBell.Engine.Tests/obj
+/src/CycleBell.Engine/obj
+/setup/CycleBellApplication/Debug
+/setup/CycleBellApplication/Release
+/setup/CycleBell.Setup/Debug
+/setup/CycleBell.Setup/Release
+/src/CycleBell.Engine/bin/Debug
+/tests/CycleBell.Engine.Tests/bin/Debug
+/tests/_CycleBell.Tests

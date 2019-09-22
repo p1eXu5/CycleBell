@@ -1,0 +1,410 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:vm="clr-namespace:CycleBell.ViewModels.TimePointViewModels"
+                    xmlns:controls="clr-namespace:CycleBell.Controls"
+                    xmlns:converters="clr-namespace:CycleBell.Converters"
+                    xmlns:at="clr-namespace:CycleBell.Views"
+                    >
+
+    <converters:FromTimeSpanToStringConverter x:Key="conv_TimeSpanToString" />
+    <BooleanToVisibilityConverter x:Key="conv_BooleanToVisibility" />
+    
+    <Storyboard x:Key="amin_UpOpacity">
+        <DoubleAnimation Storyboard.TargetProperty="Opacity" To="1.0" Duration="0:0:.2" />
+    </Storyboard>
+
+    <Storyboard x:Key="amin_DownpOpacity">
+        <DoubleAnimation Storyboard.TargetProperty="Opacity" To="0.0" Duration="0:0:.2" />
+    </Storyboard>
+
+    <!-- BeginTimePointViewModel -->
+    <DataTemplate x:Key="datatempl_BeginTimePointViewModel" DataType="vm:BeginTimePointViewModel">
+        <Grid SnapsToDevicePixels="True" ShowGridLines="False" Margin="5,0" 
+              TextElement.FontStyle="Normal"
+              IsEnabled="{Binding IsEnabled}"
+              Focusable="False"
+              >
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="1" />
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="1" />
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="1" />
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="1" />
+                <RowDefinition Height="6" />
+                <RowDefinition Height="1" />
+                <RowDefinition Height="8" />
+            </Grid.RowDefinitions>
+
+            <Line Grid.Column="0" Grid.Row="0" Grid.RowSpan="4" 
+                  Stroke="DimGray" Fill="{x:Null}" Stretch="Fill"
+                  StrokeEndLineCap="Square" StrokeStartLineCap="Square"
+                  X1="0" Y1="0" Y2="1" />
+
+            <Line Grid.Column="1" Grid.Row="0" 
+                  Stroke="DimGray" Fill="{x:Null}" Stretch="Fill"
+                  StrokeEndLineCap="Square" 
+                  StrokeStartLineCap="Square"
+                  VerticalAlignment="Center"
+                  X1="0" Y1="0" X2="1" />
+
+            <StackPanel Grid.Column="1" Grid.Row="1" Grid.RowSpan="3"
+                        Orientation="Horizontal" 
+                        Height="13" Margin="5,0" 
+                        TextElement.FontSize="10" 
+                        TextElement.FontStyle="Normal">
+                <TextBlock Foreground="Black" 
+                           VerticalAlignment="Bottom"
+                           >
+                    <Run Text="loop #"/><Run Text="{Binding LoopNumber}"/><Run Text=":" />
+                </TextBlock>
+
+                <TextBox x:Name="tbx_LoopCount"
+                         at:AttachedPropertyFactory.MoveFocusNext="{Binding MoveFocusNext}"
+                         FontSize="10"
+                         Padding="0" VerticalContentAlignment="Bottom"
+                         HorizontalAlignment="Center"
+                         MinWidth="12"
+                         Margin="5,0,0,0"
+                         BorderThickness="0,0,0,1"
+                         Control.BorderBrush="Black"
+                         Focusable="True"
+                         KeyboardNavigation.IsTabStop="False"
+                         Text="{Binding LoopCount, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}"
+                         >
+                    <TextBox.RenderTransform>
+                        <TranslateTransform Y="1" />
+                    </TextBox.RenderTransform>
+
+                    <TextBox.InputBindings>
+                        <KeyBinding Command="{Binding TimePointNameInTemplateReturnCommand}"
+                                    Key="Return"
+                        />
+                    </TextBox.InputBindings>
+                </TextBox>
+
+                <!-- for focus after preset name renaming -->
+                <FrameworkElement Name="Dummy" Width="0" Focusable="True" />
+
+            </StackPanel>
+
+            <Polyline Grid.Column="2" Grid.ColumnSpan="3" Grid.Row="0" Grid.RowSpan="3"
+                      Stroke="DimGray" Fill="{x:Null}" Stretch="Fill"
+                      StrokeEndLineCap="Square" StrokeStartLineCap="Square"
+                      Points="0,0 0,1 1,1" />
+
+            <Line Grid.Column="4" Grid.Row="3" 
+                  Stroke="DimGray" Fill="{x:Null}" Stretch="Fill"
+                  StrokeEndLineCap="Square" StrokeStartLineCap="Square"
+                  VerticalAlignment="Stretch"
+                  X1="0" Y1="0" Y2="1" />
+        </Grid>
+    </DataTemplate>
+
+
+
+    <Storyboard x:Key="canim_Deactivate">
+        <ColorAnimation Storyboard.TargetProperty="(Control.Foreground).(LinearGradientBrush.GradientStops)[0].(GradientStop.Color)" 
+                        To="{StaticResource col_TopDisableTime}" Duration="0:0:.2" />
+        <ColorAnimation Storyboard.TargetProperty="(Control.Foreground).(LinearGradientBrush.GradientStops)[1].(GradientStop.Color)" 
+                        To="{StaticResource col_BottomDisableTime}" Duration="0:0:.2" />
+    </Storyboard>
+
+    <Storyboard x:Key="canim_Activate">
+        <ColorAnimation Storyboard.TargetProperty="(Control.Foreground).(LinearGradientBrush.GradientStops)[0].(GradientStop.Color)" 
+                        To="{StaticResource col_TopForeground}" Duration="0:0:.2" />
+        <ColorAnimation Storyboard.TargetProperty="(Control.Foreground).(LinearGradientBrush.GradientStops)[1].(GradientStop.Color)" 
+                        To="{StaticResource col_BottomForeground}" Duration="0:0:.2" />
+
+    </Storyboard>
+
+
+    <!-- TimePointViewModel --> 
+    <DataTemplate x:Key="datatempl_TimePointViewModel" >
+        <Grid ShowGridLines="False" MaxWidth="{TemplateBinding ActualWidth}" HorizontalAlignment="Stretch">
+            <!--<ToggleButton Width="200" Height="200" Content="mute" Style="{x:Null}" />-->
+            <Grid.ColumnDefinitions>
+                <!-- 0: left border -->
+                <ColumnDefinition Width="0.05*" />
+                <!-- 1: marker -->
+                <ColumnDefinition  Width="20"/>
+                <!-- 2: name -->
+                <ColumnDefinition Width="*" MaxWidth="250" />
+                <!-- 3: time -->
+                <ColumnDefinition Width="96"/>
+                <!-- 4: mute -->
+                <ColumnDefinition Width="42"/>
+                <!-- 5: sound -->
+                <ColumnDefinition Width="46"/>
+                <!-- 6: add -->
+                <ColumnDefinition Width="56"/>
+                <!-- 7: right border -->
+                <ColumnDefinition Width="0.065*" />
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+
+            <!-- marker -->
+            <Path Grid.Column="1" Grid.Row="0"
+              Fill="{DynamicResource brush_Marker}"
+              Stroke="{DynamicResource brush_Tip}"
+              StrokeThickness="1"
+              VerticalAlignment="Bottom"
+              HorizontalAlignment="Right"
+              Margin="5,0"
+              StrokeEndLineCap="Square"
+              Data="M 8.112,4.758 
+                    L 1.656,0.624 
+                    C 1.140,0.293 0.495,0.706 0.495,1.367 
+                    L 0.495,9.634 
+                    C 0.495,10.295 1.140,10.708 1.656,10.378 
+                    L 8.112,6.244 
+                    C 8.628,5.914 8.628,5.088 8.112,4.758 Z">
+                <Path.RenderTransform>
+                    <TranslateTransform Y="-4" />
+                </Path.RenderTransform>
+                
+                <Path.Style>
+                    <Style TargetType="Path">
+                    <Setter Property="Opacity" Value="0.0" />
+                        <Style.Triggers>
+
+                            <DataTrigger Binding="{Binding IsActive}" Value="True">
+
+                                <DataTrigger.EnterActions>
+                                    <BeginStoryboard>
+                                        <Storyboard>
+                                            <DoubleAnimation Storyboard.TargetProperty="Opacity" To="1.0" Duration="0:0:.2" />
+                                        </Storyboard>
+                                    </BeginStoryboard>
+                                </DataTrigger.EnterActions>
+                                <DataTrigger.ExitActions>
+                                    <BeginStoryboard>
+                                        <Storyboard>
+                                            <DoubleAnimation Storyboard.TargetProperty="Opacity" To="0.0" Duration="0:0:.2" />
+                                        </Storyboard>
+                                    </BeginStoryboard>
+                                </DataTrigger.ExitActions>
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </Path.Style>
+
+            </Path>
+
+            <!-- Name -->
+            <StackPanel Grid.Column="2" Grid.Row="0" VerticalAlignment="Bottom" CanHorizontallyScroll="False" ClipToBounds="True"
+                        >
+                <TextBox x:Name="m_pointName"
+                         MaxLines="1"
+                         Focusable="True"
+                         TextWrapping="WrapWithOverflow" 
+                         KeyboardNavigation.IsTabStop="False"
+                         at:AttachedPropertyFactory.MoveFocusNext="{Binding MoveFocusNext}"
+                         VerticalAlignment="Bottom"
+                         HorizontalAlignment="Right"
+                         HorizontalContentAlignment="Right"
+                         Margin="0,0,5,0"
+                         IsEnabled="{Binding IsEnabled}"
+                         Text="{Binding Name, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                         Style="{StaticResource style_TemplatedTextBox}"
+                         >
+                    <TextBox.RenderTransform>
+                        <TranslateTransform Y="-2"></TranslateTransform>
+                    </TextBox.RenderTransform>
+
+                    <TextBox.InputBindings>
+                        <KeyBinding Command="{Binding TimePointNameInTemplateReturnCommand}"
+                                    Key="Return"
+                        />
+                    </TextBox.InputBindings>
+                </TextBox>
+                <!-- for focus after preset name renaming -->
+                <FrameworkElement Name="Dummy" Width="0" Focusable="True" />
+            </StackPanel>
+
+            <!-- Time -->
+            <StackPanel Orientation="Horizontal" Grid.Column="3" Grid.Row="0" HorizontalAlignment="Center"
+                        Width="Auto">
+                <ToggleButton VerticalAlignment="Bottom"
+                              VerticalContentAlignment="Bottom"
+                              IsChecked="{Binding IsAbsolute}"
+                              Margin="0"
+                              Height="22" HorizontalAlignment="Center"
+                              FontSize="18"
+                              Content="{Binding Time, Converter={StaticResource conv_TimeSpanToString}, Mode=OneWay}"
+                              Focusable="False"
+                              >
+                    <ToggleButton.Style>
+                        <Style TargetType="ToggleButton" BasedOn="{StaticResource style_TimeToggleButton}">
+                            
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding IsActive}" Value="True">
+                                    <DataTrigger.EnterActions>
+                                        <BeginStoryboard Storyboard="{StaticResource canim_Activate}" />
+                                    </DataTrigger.EnterActions>
+                                    <DataTrigger.ExitActions>
+                                        <BeginStoryboard Storyboard="{StaticResource canim_Deactivate}" />
+                                    </DataTrigger.ExitActions>
+                                </DataTrigger>
+
+                                <MultiDataTrigger>
+                                    <MultiDataTrigger.Conditions>
+                                        <Condition Binding="{Binding IsActive}" Value="False" />
+                                        <Condition Binding="{Binding IsEnabled}" Value="True" />
+                                    </MultiDataTrigger.Conditions>
+                                    <MultiDataTrigger.EnterActions>
+                                        <BeginStoryboard Storyboard="{StaticResource canim_Activate}" />
+                                    </MultiDataTrigger.EnterActions>
+                                    <MultiDataTrigger.ExitActions>
+                                        <BeginStoryboard Storyboard="{StaticResource canim_Deactivate}" />
+                                    </MultiDataTrigger.ExitActions>
+                                </MultiDataTrigger>
+
+                                <MultiDataTrigger>
+                                    <MultiDataTrigger.Conditions>
+                                        <Condition Binding="{Binding IsActive}" Value="False" />
+                                        <Condition Binding="{Binding IsEnabled}" Value="False" />
+                                    </MultiDataTrigger.Conditions>
+                                    <MultiDataTrigger.EnterActions>
+                                        <BeginStoryboard Storyboard="{StaticResource canim_Deactivate}" />
+                                    </MultiDataTrigger.EnterActions>
+                                    <MultiDataTrigger.ExitActions>
+                                        <BeginStoryboard Storyboard="{StaticResource canim_Activate}" />
+                                    </MultiDataTrigger.ExitActions>
+                                </MultiDataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </ToggleButton.Style>
+                </ToggleButton>
+
+                <TextBlock x:Name="absolute" 
+                           VerticalAlignment="Top" 
+                           FontSize="8" 
+                           Foreground="{DynamicResource brush_AbsoluteTime}"
+                           Visibility="{Binding IsAbsolute,
+                                                Converter={StaticResource conv_BooleanToVisibility}}">
+                    <Run>A</Run>
+                </TextBlock>
+                
+            </StackPanel>
+
+            <!-- mute -->
+            <ToggleButton Grid.Column="4" Grid.Row="0"
+                          VerticalAlignment="Bottom"
+                          VerticalContentAlignment="Bottom"
+                          IsEnabled="True"
+                          IsChecked="{Binding MuteFlag}"
+                          Content="mute"
+                          HorizontalAlignment="Center" 
+                          Focusable="False"
+                          >
+
+                <ToggleButton.RenderTransform>
+                    <TranslateTransform Y="-1" X="2" />
+                </ToggleButton.RenderTransform>
+
+                <ToggleButton.Style>
+                    <Style TargetType="ToggleButton" BasedOn="{StaticResource style_MuteToggleButton}">
+
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding IsActive}" Value="True">
+                                <DataTrigger.EnterActions>
+                                    <BeginStoryboard Storyboard="{StaticResource canim_Activate}" />
+                                </DataTrigger.EnterActions>
+                                <DataTrigger.ExitActions>
+                                    <BeginStoryboard Storyboard="{StaticResource canim_Deactivate}" />
+                                </DataTrigger.ExitActions>
+                            </DataTrigger>
+
+                            <MultiDataTrigger>
+                                <MultiDataTrigger.Conditions>
+                                    <Condition Binding="{Binding IsActive}" Value="False" />
+                                    <Condition Binding="{Binding IsEnabled}" Value="True" />
+                                </MultiDataTrigger.Conditions>
+                                <MultiDataTrigger.EnterActions>
+                                    <BeginStoryboard Storyboard="{StaticResource canim_Activate}" />
+                                </MultiDataTrigger.EnterActions>
+                                <MultiDataTrigger.ExitActions>
+                                    <BeginStoryboard Storyboard="{StaticResource canim_Deactivate}" />
+                                </MultiDataTrigger.ExitActions>
+                            </MultiDataTrigger>
+
+                            <MultiDataTrigger>
+                                <MultiDataTrigger.Conditions>
+                                    <Condition Binding="{Binding IsActive}" Value="False" />
+                                    <Condition Binding="{Binding IsEnabled}" Value="False" />
+                                </MultiDataTrigger.Conditions>
+                                <MultiDataTrigger.EnterActions>
+                                    <BeginStoryboard Storyboard="{StaticResource canim_Deactivate}" />
+                                </MultiDataTrigger.EnterActions>
+                                <MultiDataTrigger.ExitActions>
+                                    <BeginStoryboard Storyboard="{StaticResource canim_Activate}" />
+                                </MultiDataTrigger.ExitActions>
+                            </MultiDataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </ToggleButton.Style>
+            </ToggleButton>
+
+            <!-- sound location -->
+            <TextBlock x:Name="tbx_soundName"
+                       Grid.Column="3" Grid.ColumnSpan="2" Grid.Row="1"
+                       Margin="20,0,0,0"
+                       HorizontalAlignment="Right"
+                       VerticalAlignment="Bottom"
+                       Text="{Binding SoundLocation}"
+                       Foreground="{DynamicResource brush_Tip}"
+                       FontWeight="SemiBold"
+                       FontSize="10"
+                       FontStyle="Normal"
+                       TextTrimming="CharacterEllipsis"
+                       MaxHeight="28"
+                       Focusable="False"
+                   />
+
+            <!-- add sound -->
+            <Button x:Name="btn_AddSoundButton"
+                    IsEnabled="{Binding IsEnabled}"
+                    Grid.Column="5" Grid.Row="0" Grid.RowSpan="2"
+                    Margin="16,5,0,0"
+                    Width="30" Height="30"
+                    VerticalAlignment="Center"
+                    Command="{Binding AddSoundCommand}"
+                    Focusable="False">
+                <Path Data="{StaticResource gmtry_Notes}"
+                      Stroke="{x:Null}"
+                />
+            </Button>
+
+            <!-- del -->
+            <Button x:Name="btn_RemoveTimePoint" Grid.Column="6" Grid.Row="0" Grid.RowSpan="2"
+                    IsEnabled="{Binding IsEnabled}"
+                    Width="40" Height="30" Margin="10,5,10,0" 
+                    Command="{Binding RemoveTimePointCommand}"
+                    VerticalAlignment="Center"
+                    Content="del" Padding="6"
+                    Focusable="False"
+                    >
+            </Button>
+        </Grid>
+
+    </DataTemplate>
+    
+
+     <!--EndTimePointViewModel-->
+    <DataTemplate x:Key="datatempl_EndTimePointViewModel" DataType="vm:EndTimePointViewModel">
+        <Grid SnapsToDevicePixels="True" Margin="5,0,5,10" Height="14">
+            <Polyline Stroke="DimGray" Fill="{x:Null}" Stretch="Fill"
+                      StrokeEndLineCap="Square" StrokeStartLineCap="Square"
+                      Points="0,0 0,1 1,1 1,0" >
+
+            </Polyline>
+        </Grid>
+    </DataTemplate>
+
+</ResourceDictionary>
