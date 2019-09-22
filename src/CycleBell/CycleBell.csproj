@@ -139,7 +139,7 @@
     <Compile Include="Properties\Annotations.cs" />
     <Compile Include="ViewModels\TimePointViewModels\TimePointViewModel.cs" />
     <Compile Include="ViewModels\TimePointViewModels\TimePointViewModelBase.cs" />
-    <Compile Include="Views\AttachedPropertyFactory.cs" />
+    <Compile Include="Controls\AttachedPropertyFactory.cs" />
     <Compile Include="ViewModels\TimeSpanDigits.cs" />
     <Compile Include="Views\UserControls\TimerButtonsUserControl.xaml.cs">
       <DependentUpon>TimerButtonsUserControl.xaml</DependentUpon>
