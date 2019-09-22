@@ -17,7 +17,7 @@
 
 using System;
 
-namespace CycleBell.Views
+namespace CycleBell.ViewModels
 {
     public struct TimeSpanDigits
     {
