@@ -168,7 +168,9 @@ namespace CycleBell.ViewModels
         }
         public bool IsPlayable => _selectedPreset?.TimePointVmCollection.Count > 0;
 
-        // Timer
+        /// <summary>
+        /// If timer stopped returns true, if paused - null, otherwise - false.
+        /// </summary>
         public bool? TimerState
         {
             get {
