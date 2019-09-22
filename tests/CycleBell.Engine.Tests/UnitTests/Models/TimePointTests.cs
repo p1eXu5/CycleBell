@@ -3,7 +3,7 @@ using CycleBell.Engine.Exceptions;
 using CycleBell.Engine.Models;
 using NUnit.Framework;
 
-namespace CycleBell.Engine.Tests.Models
+namespace CycleBell.Engine.Tests.UnitTests.Models
 {
     [TestFixture]
     public class TimePointTests

@@ -5,7 +5,7 @@ using CycleBell.Engine.Models;
 using CycleBell.Engine.Timer;
 using NUnit.Framework;
 
-namespace CycleBellLibrary.NUnitTests.Timer
+namespace CycleBell.Engine.Tests.UnitTests.Timer
 {
     [TestFixture]
     public class TimerQueueCalculatorTests : IStartTimePointCreator

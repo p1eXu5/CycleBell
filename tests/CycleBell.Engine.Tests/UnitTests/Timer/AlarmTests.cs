@@ -7,7 +7,7 @@ using CycleBell;
 using CycleBell.Engine.Timer;
 using NUnit.Framework;
 
-namespace CycleBell.Engine.Tests.Timer
+namespace CycleBell.Engine.Tests.UnitTests.Timer
 {
     [ TestFixture ]
     public class AlarmTests

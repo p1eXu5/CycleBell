@@ -7,7 +7,7 @@ using CycleBell.Engine.Models;
 using NUnit.Framework;
 using NUnit.Framework.Constraints;
 
-namespace CycleBell.Engine.Tests.Models
+namespace CycleBell.Engine.Tests.UnitTests.Models
 {
     [TestFixture]
     public class PresetTests

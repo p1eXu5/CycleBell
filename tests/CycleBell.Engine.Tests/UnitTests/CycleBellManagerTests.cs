@@ -8,7 +8,7 @@ using CycleBell.Engine.Timer;
 using Moq;
 using NUnit.Framework;
 
-namespace CycleBell.Engine.Tests
+namespace CycleBell.Engine.Tests.UnitTests
 {
     [TestFixture]
     public class CycleBellManagerTests

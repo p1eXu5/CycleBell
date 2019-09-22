@@ -4,7 +4,7 @@ using CycleBell.Engine.Repository;
 
 using NUnit.Framework;
 
-namespace CycleBell.Engine.Tests.Repository
+namespace CycleBell.Engine.Tests.UnitTests.Repository
 {
     [TestFixture]
     public class PresetCollectionTests
