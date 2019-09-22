@@ -378,7 +378,7 @@ namespace CycleBell.ViewModels
         }
 
         // TimerManager handlers:
-        internal void OnTimePointChangedEventHandler(object s, TimerEventArgs e)
+        internal void OnTimePointChanged(object s, TimerEventArgs e)
         {
             if (e == null) return;
             Ring(e.PrevTimePoint, e.NextTimePoint);
@@ -425,17 +425,17 @@ namespace CycleBell.ViewModels
             
         }
 
-        internal void OnSecondPassedHandler(object s, TimerEventArgs e)
+        internal void OnSecondPassed(object s, TimerEventArgs e)
         {
             TimeLeftTo = TimeSpanDigits.Parse(-e.LastTimeToNextChange);
         }
 
-        internal void OnTimerPausedHandler(object sender, EventArgs args)
+        internal void OnTimerPaused(object sender, EventArgs args)
         {
             _mainViewModel.Alarm.StopDispatcher();
         }
 
-        internal void OnTimerStoppedHandler(object sender, EventArgs args)
+        internal void OnTimerStopped(object sender, EventArgs args)
         {
             _mainViewModel.Alarm.StopDispatcher();
 
