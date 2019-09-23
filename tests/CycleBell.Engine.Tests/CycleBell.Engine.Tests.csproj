@@ -62,7 +62,6 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="FunctionalTests\Timer\AlarmTests.cs" />
     <Compile Include="UnitTests\CycleBellManagerTests.cs" />
     <Compile Include="UnitTests\Models\PresetTests.cs" />
     <Compile Include="UnitTests\Models\TimePointTests.cs" />
