@@ -10,11 +10,14 @@ namespace CycleBell.Engine.Timer
         string DefaultSoundsDirrectory { get; set; }
 
         ReadOnlyObservableCollection< Uri > DefaultSoundCollection { get; }
+        IEnumerable< KeyValuePair< int, Uri > > TimePointSoundDictionary { get; }
+
+        IPlayer NextPlayer { get; }
 
         void LoadDefaultSoundCollection();
 
-        bool SetDefaultSound();
-        bool SetDefaultSound ( Uri uri );
+        void SetDefaultSound();
+        void SetDefaultSound ( Uri uri );
         void AddSound ( TimePoint tPoint );
         void LoadNextSound ( TimePoint timePoint );
         void Play ();

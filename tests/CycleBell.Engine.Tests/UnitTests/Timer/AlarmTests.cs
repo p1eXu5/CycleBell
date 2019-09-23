@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
+using CycleBell.Engine.Models;
 using CycleBell.Engine.Timer;
 using Moq;
 using NUnit.Framework;
@@ -15,7 +17,9 @@ namespace CycleBell.Engine.Tests.UnitTests.Timer
         public void Ctor_PlayerFactoryIsNull_Throws()
         {
             var ex = Assert.Catch<ArgumentNullException>(() => new Alarm(null));
+            Assert.That( ex.Message, Is.EqualTo( "Player factory cannot be null.\r\nParameter name: playerFactory"));
         }
+
 
         #endregion
 
@@ -80,23 +84,124 @@ namespace CycleBell.Engine.Tests.UnitTests.Timer
         }
 
         [ Test ]
-        public void LoadDefaultSoundCollection_FolderIsEmpty_ReturnsEmptyDefaultSoundCollection()
+        public void LoadDefaultSoundCollection_FolderIsEmpty_DoesNotLoadDefaultSoundCollection()
         {
             var alarm = GetAlarm();
-            alarm.DefaultSoundsDirrectory = AppDomain.CurrentDomain.BaseDirectory;
+            alarm.DefaultSoundsDirrectory = AppDomain.CurrentDomain.BaseDirectory + "\\..\\";
 
             alarm.LoadDefaultSoundCollection();
 
             Assert.That(alarm.DefaultSoundCollection.Count, Is.EqualTo(0));
         }
 
-        [ Test ]
-        public void LoadDefaultSoundCollection_FolderContainsSounds_LoadDefaultPlayer()
-        {
 
+        #endregion
+
+
+        #region SetDefaultSound tests
+
+        [ Test ]
+        public void SetDefaultSound_UriIsNull_DoesNotSetDefaultSound()
+        {
+            // Arrange:
+            var alarm = GetAlarm();
+
+            // Action:
+            alarm.SetDefaultSound( null );
+
+            // Assert:
+            Assert.IsFalse( _playerDataDict[ _mockDefaultPlayer ].HasAudio );
+        }
+
+        [ Test ]
+        public void SetDefaultSound_FileNotExist_DoesNotSetDefaultSound()
+        {
+            // Arrange:
+            var alarm = GetAlarm();
+            var uri = new Uri( "Sounds/Alarm N.mp3", UriKind.Relative );
+
+            // Action:
+            alarm.SetDefaultSound( uri );
+
+            // Assert:
+            Assert.IsFalse( _playerDataDict[ _mockDefaultPlayer ].HasAudio );
+        }
+
+        [ Test ]
+        public void SetDefaultSound_DefaultSoundsCollectionDoesNotContainUri_AddsUriToDefaultSoundsCollection()
+        {
+            // Arrange:
+            var alarm = GetAlarm();
+            var uri = new Uri( AppDomain.CurrentDomain.BaseDirectory + "\\Alarm 666.mp3", UriKind.Absolute );
+
+            // Action:
+            alarm.SetDefaultSound( uri );
+
+            // Assert:
+            Assert.IsTrue( alarm.DefaultSoundCollection.Contains( uri )  );
         }
 
         #endregion
+
+
+        #region TimePointSoundDictionary test
+
+        [ Test ]
+        public void TimePointSoundDictionary_ByDefault_IsEmpty()
+        {
+            var alarm = GetAlarm();
+
+            Assert.That( alarm.TimePointSoundDictionary, Is.Empty );
+        }
+
+        #endregion
+
+
+        #region AddSound tests
+
+        [ Test ]
+        public void AddSound_TimePointTagIsNull_DoesNotAddUri()
+        {
+            var alarm = GetAlarm();
+
+            alarm.AddSound( null );
+
+            Assert.That( alarm.TimePointSoundDictionary, Is.Empty );
+        }
+
+        [ Test ]
+        public void AddSound_TimePointTagIsValidUrl_AddsUri()
+        {
+            var alarm = GetAlarm();
+            var uri = new Uri( AppDomain.CurrentDomain.BaseDirectory + "\\Alarm 666.mp3" );
+
+            alarm.AddSound( new TimePoint() { Tag = uri.OriginalString } );
+
+            Assert.That( alarm.TimePointSoundDictionary.First().Value, Is.EqualTo( uri ) );
+        }
+
+        #endregion
+
+
+        #region NextPlayer tests
+
+        [ Test ]
+        public void NextPlayer_ByDefault_IsNull()
+        {
+            var alarm = GetAlarm();
+
+            Assert.IsNull( alarm.NextPlayer );
+        }
+
+        #endregion
+
+
+        #region LoadNextSound tests
+
+        
+
+        #endregion
+
 
 
         #region test fields

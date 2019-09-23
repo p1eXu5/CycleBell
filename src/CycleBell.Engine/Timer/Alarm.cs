@@ -32,9 +32,7 @@ namespace CycleBell.Engine.Timer
         private readonly IPlayer _defaultPlayer;
         private readonly IPlayer _playerA;
         private readonly IPlayer _playerB;
-        private IPlayer _currentPlayer;
 
-        private readonly Uri _defaultSound;
 
         #endregion
 
@@ -44,8 +42,6 @@ namespace CycleBell.Engine.Timer
         public Alarm ( IPlayerFactory playerFactory ) 
         {
             if (playerFactory == null) throw new ArgumentNullException(nameof(playerFactory), @"Player factory cannot be null.");
-
-            _defaultSound = defaultSound;
 
             _defaultPlayer = playerFactory.CreatePlayer();
 
@@ -79,6 +75,10 @@ namespace CycleBell.Engine.Timer
             }
         }
 
+        public IEnumerable< KeyValuePair< int, Uri > > TimePointSoundDictionary => _soundMap;
+        
+        public IPlayer NextPlayer { get; private set; }
+
         #endregion
 
 
@@ -89,81 +89,50 @@ namespace CycleBell.Engine.Timer
         /// </summary>
         public void LoadDefaultSoundCollection()
         {
-            bool IsValid( string fileName )
-            {
-                bool isValid = false;
-
-                foreach ( var extension in _filter ) {
-                    if ( fileName.EndsWith( extension ) ) {
-                        isValid = true;
-                        break;
-                    }
-                }
-
-                if ( !isValid ) return false;
-
-                FileInfo fi;
-                try {
-                    fi = new FileInfo( fileName );
-                }
-                catch ( SecurityException ) {
-                    return false;
-                }
-                catch ( UnauthorizedAccessException ) {
-                    return false;
-                }
-                catch ( PathTooLongException ) {
-                    return false;
-                }
-                
-                if ( fi.Length < 256 ) return false;
-
-                return true;
-            }
-
-            _defaultSoundCollection.Clear();
-            
-
             var defaultSoundsDirectory = DefaultSoundsDirrectory;
+            var uriList = new List< Uri >();
 
             if ( Directory.Exists( defaultSoundsDirectory ) ) {
 
                 foreach ( var fileName in Directory.EnumerateFiles( defaultSoundsDirectory, "*.*", SearchOption.TopDirectoryOnly ) ) {
 
                     if ( !IsValid( fileName ) ) continue;
-                    _defaultSoundCollection.Add( new Uri( fileName ) );
+                    uriList.Add( new Uri( fileName ) );
+                }
+            }
+
+            if ( uriList.Any() ) 
+            {
+                _defaultSoundCollection.Clear();
+                
+                foreach ( var uri in uriList ) {
+                    _defaultSoundCollection.Add( uri );
                 }
             }
         }
 
-        public bool SetDefaultSound()
+        public void SetDefaultSound()
         {
             if ( DefaultSoundCollection.Count > 0) {
                 SetDefaultSound( DefaultSoundCollection.First() );
-
-                return true;
             }
-
-            return false;
         }
 
-        public bool SetDefaultSound( Uri uri )
+        public void SetDefaultSound( Uri uri )
         {
-            if ( uri == null || !File.Exists( uri.LocalPath ) ) return false;
+            if ( uri == null || !IsValid( uri.OriginalString ) ) return;
 
             if ( !_defaultSoundCollection.Contains( uri ) ) {
                 _defaultSoundCollection.Add( uri );
             }
 
             if ( _defaultPlayer.Source != null && _defaultPlayer.Source.Equals( uri ) ) {
-                return true;
+                return;
             }
 
             _defaultPlayer.Stop();
             _defaultPlayer.Close();
             _defaultPlayer.Open( uri );
-
-            return true;
         }
 
         /// <summary>
@@ -176,7 +145,7 @@ namespace CycleBell.Engine.Timer
                  || tPoint.Id == 0 
                  || tPoint.Tag == null 
                  || !(tPoint.Tag is string path) 
-                 || string.IsNullOrWhiteSpace( path ) ) return;
+                 || !IsValid( path ) ) return;
 
             Uri uri;
 
@@ -190,27 +159,27 @@ namespace CycleBell.Engine.Timer
             _soundMap[ tPoint.Id ] = uri;
         }
 
-        public void LoadNextSound ( TimePoint timePoint )
+        public void LoadNextSound( TimePoint timePoint )
         {
             if ( timePoint == null || !_soundMap.ContainsKey( timePoint.Id ) ) {
-                _currentPlayer = _defaultPlayer;
+                NextPlayer = _defaultPlayer;
             }
             else {
-                if ( _currentPlayer == _playerA ) {
+                if ( NextPlayer == _playerA ) {
                     _playerB.Open( _soundMap[ timePoint.Id ] );
-                    _currentPlayer = _playerB;
+                    NextPlayer = _playerB;
                 }
                 else {
                     _playerA.Open( _soundMap[ timePoint.Id ] );
-                    _currentPlayer = _playerA;
+                    NextPlayer = _playerA;
                 }
             }
         }
 
-        public void Play ()
+        public void Play()
         {
-            if ( _currentPlayer != null && _currentPlayer.HasAudio ) {
-                _currentPlayer.Play();
+            if ( NextPlayer != null && NextPlayer.HasAudio ) {
+                NextPlayer.Play();
             }
         }
 
@@ -223,8 +192,8 @@ namespace CycleBell.Engine.Timer
 
         public void Stop()
         {
-            if ( _currentPlayer != null && _currentPlayer.HasAudio ) {
-                _currentPlayer.Stop();
+            if ( NextPlayer != null && NextPlayer.HasAudio ) {
+                NextPlayer.Stop();
             }
         }
 
@@ -233,6 +202,44 @@ namespace CycleBell.Engine.Timer
             if ( _defaultPlayer != null && _defaultPlayer.HasAudio ) {
                 _defaultPlayer.Stop();
             }
+        }
+
+        #endregion
+
+        #region private methods
+
+        private bool IsValid( string fileName )
+        {
+            bool isValid = false;
+
+            foreach ( var extension in _filter ) {
+                if ( fileName.EndsWith( extension ) ) {
+                    isValid = true;
+                    break;
+                }
+            }
+
+            if ( !isValid ) return false;
+
+            if ( !File.Exists( fileName ) ) return false;
+
+            FileInfo fi;
+            try {
+                fi = new FileInfo( fileName );
+            }
+            catch ( SecurityException ) {
+                return false;
+            }
+            catch ( UnauthorizedAccessException ) {
+                return false;
+            }
+            catch ( PathTooLongException ) {
+                return false;
+            }
+            
+            if ( fi.Length < 256 ) return false;
+
+            return true;
         }
 
         #endregion
