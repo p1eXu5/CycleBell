@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 
 namespace CycleBell.Engine.Timer
 {
@@ -10,12 +11,17 @@ namespace CycleBell.Engine.Timer
     {
         Uri Source { get; }
         bool HasAudio { get; }
-
-        //event EventHandler MediaEnded;
-
         void Open ( Uri source );
         void Play ();
         void Stop ();
-        IPlayer ClonePlayer ();
+
+        void Close ();
+
+        double BufferingProgress { get; }
+        bool IsBuffering { get; }
+
+        Duration NaturalDuration { get; }
+
+        event EventHandler MediaOpened;
     }
 }

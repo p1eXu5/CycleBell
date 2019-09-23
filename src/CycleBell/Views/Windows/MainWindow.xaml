@@ -156,8 +156,14 @@
                 <Separator />
 
                 <MenuItem Header="Default Sound..."
-                          Command="{Binding ChangeDefaultSoundCommand}"
-                          >
+                          ItemsSource="{Binding DefaultSoundVmCollection}"
+                >
+                    <MenuItem.ItemContainerStyle>
+                        <Style TargetType="MenuItem">
+                            <Setter Property="Header" Value="{Binding Name}"></Setter>
+                            <Setter Property="Command" Value="{Binding Command}"></Setter>
+                        </Style>
+                    </MenuItem.ItemContainerStyle>
                     <MenuItem.Icon>
                         <Path Data="{StaticResource gmtry_Notes}" 
                               Stretch="Uniform"

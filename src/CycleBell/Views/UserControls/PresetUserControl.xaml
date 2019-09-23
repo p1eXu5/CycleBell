@@ -45,7 +45,7 @@
         <Grid Grid.Row="0" 
               TextElement.FontFamily="{StaticResource font_SuiGeneris}"
               SnapsToDevicePixels="True"
-              Margin="10,38,10,18"
+              Margin="10,18,10,18"
               >
             
             <!-- start time -->
@@ -55,6 +55,19 @@
                         HorizontalAlignment="Center"
                         VerticalAlignment="Center" 
                         >
+                <StackPanel Orientation="Horizontal" Margin="0,0,0,2" HorizontalAlignment="Center">
+                    <Button Height="25" Width="25" Margin="0,0,5,0" 
+                            Command="{Binding SetStartTimeCommand}" 
+                            CommandParameter="1">
+                        +1
+                    </Button>
+                    <Button Height="25" Width="25"
+                            Command="{Binding SetStartTimeCommand}" 
+                            CommandParameter="5"
+                            >
+                        +5
+                    </Button>
+                </StackPanel>
                 <controls:TimerBox x:Name="timer_Box" 
                                    TabIndex="2"
                                    at:AttachedPropertyFactory.IsFocused="{Binding FocusStartTime}"

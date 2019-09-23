@@ -176,9 +176,16 @@ namespace CycleBell.Engine.Repository
         private void DeserializePresets(string fileName)
         {
             XmlSerializer xmlSerializer = new XmlSerializer(typeof(PresetSerializableObservableCollection));
-            using (FileStream fStream = File.OpenRead(fileName)) {
+            using (FileStream fStream = File.OpenRead(fileName)) 
+            {
+                PresetSerializableObservableCollection presets;
 
-                var presets = (PresetSerializableObservableCollection)xmlSerializer.Deserialize(fStream);
+                try {
+                    presets = ( PresetSerializableObservableCollection )xmlSerializer.Deserialize( fStream );
+                }
+                catch ( InvalidOperationException ) {
+                    presets = new PresetSerializableObservableCollection();
+                }
 
                 if (presets.Count > 0) {
 

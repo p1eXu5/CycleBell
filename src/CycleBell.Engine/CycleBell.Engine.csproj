@@ -30,6 +30,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="PresentationCore" />
     <Reference Include="System" />
     <Reference Include="System.Configuration" />
     <Reference Include="System.Configuration.ConfigurationManager, Version=4.0.1.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
@@ -66,6 +67,7 @@
     <Compile Include="Models\Extensions\PresetExtensions.cs" />
     <Compile Include="Models\Extensions\CopyExtension.cs" />
     <Compile Include="Models\LoopNumberChangedEventArgs.cs" />
+    <Compile Include="Models\Sound.cs" />
     <Compile Include="Models\TimePointKinds.cs" />
     <Compile Include="Models\TimePointComparer.cs" />
     <Compile Include="Properties\Annotations.cs" />
@@ -73,6 +75,7 @@
     <Compile Include="Timer\Alarm.cs" />
     <Compile Include="Timer\IAlarm.cs" />
     <Compile Include="Timer\IPlayer.cs" />
+    <Compile Include="Timer\IPlayerFactory.cs" />
     <Compile Include="Timer\TimerQueueCalculator.cs" />
     <Compile Include="Timer\ITimerQueueCalculator.cs" />
     <Compile Include="Timer\IStartTimePointCreator.cs" />

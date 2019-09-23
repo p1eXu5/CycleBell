@@ -8,11 +8,11 @@ using CycleBell.Engine.Timer;
 
 namespace CycleBell
 {
-    public class MediaPlayer_ : MediaPlayer, IPlayer
+    public class MediaPlayerFactory : IPlayerFactory
     {
-        public IPlayer ClonePlayer ()
+        public IPlayer CreatePlayer()
         {
-            return new MediaPlayer_();
+            return new MediaPlayerWrapper();
         }
     }
 }

@@ -121,7 +121,8 @@
     <Compile Include="Converters\BooleanInverseConverter.cs" />
     <Compile Include="Converters\FromTimeSpanToStringConverter.cs" />
     <Compile Include="DataTemplateSelectors\TimePointVmDataTemplateSelector.cs" />
-    <Compile Include="MediaPlayer_.cs" />
+    <Compile Include="MediaPlayerFactory.cs" />
+    <Compile Include="MediaPlayerWrapper.cs" />
     <Compile Include="ViewModels\Dialogs\AboutDialogViewModel.cs" />
     <Compile Include="ViewModels\Extensions\AlarmExtensions.cs" />
     <Compile Include="ViewModels\Dialogs\DialogViewModelBase.cs" />
@@ -130,6 +131,7 @@
     <Compile Include="ViewModels\Dialogs\RenamePresetDialogViewModel.cs" />
     <Compile Include="ViewModels\Dialogs\SavePresetDialogViewModel.cs" />
     <Compile Include="ViewModels\Extensions\ServiceExtensions.cs" />
+    <Compile Include="ViewModels\SoundMenuItemViewModel.cs" />
     <Compile Include="ViewModels\TimePointViewModels\TimePointViewModelExtension.cs" />
     <Compile Include="ViewModels\TimePointViewModels\AddingTimePointViewModel.cs" />
     <Compile Include="ViewModels\TimePointViewModels\EndTimePointViewModel.cs" />
@@ -294,9 +296,6 @@
     <Resource Include="Resources\cycle_bell_icon_i8q_icon.ico">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Resource>
-    <Content Include="Sounds\default.wav">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include=".NETFramework,Version=v4.7.1">
@@ -315,6 +314,23 @@
       <Project>{9d17cc68-d43e-45af-bd40-4443a579b8c5}</Project>
       <Name>CycleBell.Engine</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Sounds\Alarm 1.mp3">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Sounds\Alarm 2.mp3">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Sounds\Alarm 3.mp3">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Sounds\Alarm 4.mp3">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Sounds\SchoolBell.mp3">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

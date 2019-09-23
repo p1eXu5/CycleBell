@@ -27,11 +27,12 @@ namespace CycleBell.Engine.Models
     {
         #region static
 
+        private static byte _timePointNum = Byte.MinValue + 1;
+
         static TimePoint()
         {
             GetDefaultName = (tp) => $"TimePoint {tp.Id}";
         }
-        
 
         /// <summary>
         /// Дефолтное смещение временной точки относительно текущего времени
@@ -56,8 +57,6 @@ namespace CycleBell.Engine.Models
 
 
         #region fields
-
-        private static byte _timePointNum = Byte.MinValue + 1;
 
         private string _name;
         private TimeSpan _time;

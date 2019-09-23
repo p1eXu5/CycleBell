@@ -29,7 +29,7 @@ namespace CycleBell.Engine.Repository
     /// For serialization <see cref="Preset"/><seealso cref="ObservableCollection{T}"/>
     /// </summary>
     [XmlRoot("PresetCollection")]
-    internal class PresetSerializableObservableCollection : ObservableCollection< Preset >, IXmlSerializable
+    public class PresetSerializableObservableCollection : ObservableCollection< Preset >, IXmlSerializable
     {
         public virtual XmlSchema GetSchema() => null;
 

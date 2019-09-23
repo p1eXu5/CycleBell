@@ -31,7 +31,7 @@ namespace CycleBell
             Window wnd = new MainWindow();
 
             var dialogRegistrator = RegisterDialogs( wnd );
-            var manager = new CycleBellManager ("test.xml", new PresetCollection(), TimerManager.Instance);
+            var manager = new CycleBellManager ("presets.xml", new PresetCollection(), TimerManager.Instance);
             var container = RegisterTypes( dialogRegistrator, manager );
 
             try {
@@ -50,7 +50,8 @@ namespace CycleBell
             var container = new UnityContainer();
             container.RegisterInstance< IDialogRegistrator >( dialogRegistrator );
 
-            var alarm = new Alarm( new MediaPlayer_() );
+            var alarm = new Alarm( new MediaPlayerFactory() );
+            alarm.LoadDefaultSounds();
             container.RegisterInstance< IAlarm >( alarm );
 
             container.RegisterInstance< ICycleBellManager >( manager );

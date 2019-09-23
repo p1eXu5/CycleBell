@@ -16,6 +16,7 @@
  */
 
 using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.ComponentModel;
@@ -99,6 +100,30 @@ namespace CycleBell.ViewModels
                 ((INotifyCollectionChanged) (_manager.PresetCollection.Presets)).CollectionChanged += OnPresetCollectionChangedEventHandler;
             }
 
+            void LoadDefaultSounds()
+            {
+                DefaultSoundVmCollection = new List< SoundMenuItemViewModel >( 
+                    Alarm.DefaultSounds
+                         .Select( s => {
+                             var ind1 = s.LocalPath.LastIndexOf( '\\' );
+                             if ( ind1 == -1 ) ind1 = 0;
+                             else ind1 += 1;
+
+                             var name = s.LocalPath.Substring( ind1 );
+
+                             var ind2 = name.LastIndexOf( '.' );
+                             if ( ind2 > -1 ) {
+                                 name = name.Substring( 0, ind2 );
+                             }
+
+                             return new SoundMenuItemViewModel {
+                                 Name = name,
+                                 Command = new ActionCommand( o => Alarm.SetDefaultSound( s ) )
+                             };
+                         } ) 
+                );
+            }
+
 
             _dialogRegistrator = dialogRegistrator ?? throw new ArgumentNullException(nameof(dialogRegistrator));
             Alarm = alarm ?? throw new ArgumentNullException(nameof(alarm), @"Alarm cannot be null.");
@@ -112,10 +137,7 @@ namespace CycleBell.ViewModels
 
             LoadPresetViewModelCollection();
 
-            if ( File.Exists( @"Sounds/default.wav" ) ) {
-                var path = Path.GetDirectoryName( System.Diagnostics.Process.GetCurrentProcess().MainModule.FileName ) + "/Sounds/default.wav";
-                Alarm.SetDefaultSound( path );
-            }
+            LoadDefaultSounds();
 
             _timer = new Timer(ClearStatusBarText, null, Timeout.Infinite, Timeout.Infinite);
         }
@@ -127,6 +149,8 @@ namespace CycleBell.ViewModels
 
         // Preset
         public ObservableCollection< PresetViewModel > PresetViewModelCollection { get; set; }
+
+        public IEnumerable< SoundMenuItemViewModel > DefaultSoundVmCollection { get; private set; }
 
         public IAlarm Alarm { get; }
 
@@ -645,7 +669,8 @@ namespace CycleBell.ViewModels
                 CheckPathExists = true
             };
             if ( ofd.ShowDialog() == true ) {
-                Alarm.SetDefaultSound( ofd.FileName );
+                // TODO:
+                //Alarm.SetDefaultSound( ofd.FileName );
             }
         }
 

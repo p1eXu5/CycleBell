@@ -47,7 +47,7 @@ namespace CycleBell.Engine.Timer
             Queue<(TimeSpan nextChangeTime, TimePoint nextTimePoint)> queue = new Queue<(TimeSpan, TimePoint)>();
 
             TimeSpan time = preset.StartTime;
-            TimePoint startTimePoint = _startTimePointCreator.GetStartTimePoint (time);
+            TimePoint startTimePoint = _startTimePointCreator.GetStartTimePoint( time );
 
             time = startTimePoint.GetAbsoluteTime();
             queue.Enqueue((time, startTimePoint));

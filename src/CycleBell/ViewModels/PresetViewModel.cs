@@ -84,11 +84,11 @@ namespace CycleBell.ViewModels
                 if (Preset.TimePointCollection.Count > 0) {
 
                     foreach (var point in Preset.TimePointCollection) {
+                        _timePointVmCollection.Add (GetTimePointViewModel (point) );
 
-                        GetTimePointViewModel (point);
-                        _timePointVmCollection.Add (new TimePointViewModel (point, this));
-
-                        CheckBounds (point);
+                        if ( !_settedLoopNumbers.Contains( point.LoopNumber ) ) {
+                            AddVisualBounds (point.LoopNumber);
+                        }
                     }
                 }
             }
@@ -255,10 +255,18 @@ namespace CycleBell.ViewModels
 
         public ICommand AddTimePointCommand => new ActionCommand (AddTimePoint, CanAddTimePoint);
 
+        public ICommand SetStartTimeCommand => new ActionCommand( SetStartTime );
+
         #endregion
 
 
         #region Methods
+
+        private void SetStartTime( object offset )
+        {
+            Preset.StartTime = (DateTime.Now + TimeSpan.FromMinutes( Int32.Parse( offset.ToString() ) )).TimeOfDay;
+            OnPropertyChanged( nameof(StartTime) );
+        }
 
         private void OnTimePointCollectionChanged (Object sender, NotifyCollectionChangedEventArgs e)
         {
@@ -266,7 +274,9 @@ namespace CycleBell.ViewModels
             if (e.NewItems?[0] is TimePoint newTimePoint) {
 
                 _timePointVmCollection.Add (GetTimePointViewModel(newTimePoint));
-                CheckBounds (newTimePoint);
+                if ( !_settedLoopNumbers.Contains( newTimePoint.LoopNumber ) ) {
+                    AddVisualBounds (newTimePoint.LoopNumber);
+                }
             }
             // Remove
             else if (e.OldItems?[0] is TimePoint oldTimePoint) {
@@ -292,10 +302,6 @@ namespace CycleBell.ViewModels
             OnPropertyChanged (nameof(HasTimePoints));
         }
 
-        // Service:
-        
-
-        
 
         [MethodImpl (MethodImplOptions.AggressiveInlining)]
         private void ResetAddingTimePoint()
@@ -352,36 +358,36 @@ namespace CycleBell.ViewModels
             _mainViewModel.Alarm.AddSound( timePoint );
         }
 
-        private void Ring( TimePoint prevTimePoint, TimePoint nextTimePoint )
-        {
-            if ( prevTimePoint != null && prevTimePoint.Time >= TimeSpan.Zero ) {
-
-                if (prevTimePoint.Name == _mainViewModel.StartTimeName && _mainViewModel.IsRingOnStartTime) {
-                    _mainViewModel.Alarm.StopDispatcher();
-                    _mainViewModel.Alarm.StopDefaultDispatcher();
-                    _mainViewModel.Alarm.PlayDefaultDispatcher();
-                }
-                else {
-                    if ( _activeTimePointVm != null ) {
-
-                        if ( !(( TimePointViewModel )_activeTimePointVm).MuteFlag ) {
-                            _mainViewModel.Alarm.StopDispatcher();
-                            _mainViewModel.Alarm.StopDefaultDispatcher();
-                           _mainViewModel.Alarm.PlayDispatcher( nextTimePoint );
-                        }
-                    }
-                }
-            }
-            else {
-                _mainViewModel.Alarm.LoadSoundDispatcher( nextTimePoint );
-            }
-        }
-
         // TimerManager handlers:
         internal void OnTimePointChanged(object s, TimerEventArgs e)
         {
+            void Ring()
+            {
+                if ( e.PrevTimePoint != null && !TimerManager.IsInitialTimePoint( e.PrevTimePoint ) ) 
+                {
+                    if (e.PrevTimePoint.Name == _mainViewModel.StartTimeName && _mainViewModel.IsRingOnStartTime) 
+                    {
+                        _mainViewModel.Alarm.Stop();
+                        _mainViewModel.Alarm.StopDefault();
+                        _mainViewModel.Alarm.PlayDefault();
+                    }
+                    else if ( _activeTimePointVm != null ) 
+                    {
+                        if ( !(( TimePointViewModel )_activeTimePointVm).MuteFlag ) 
+                        {
+                            _mainViewModel.Alarm.Stop();
+                            _mainViewModel.Alarm.Play();
+                        }
+                    }
+                }
+
+                _mainViewModel.Alarm.LoadNextSound( e.NextTimePoint );
+
+            }
+
+
             if (e == null) return;
-            Ring(e.PrevTimePoint, e.NextTimePoint);
+            Ring();
 
             if (e.NextTimePoint == null) return;
             UpdateActiveTimePointViewModel (e.NextTimePoint, e.PrevTimePointNextBaseTime);
@@ -421,7 +427,7 @@ namespace CycleBell.ViewModels
                 _activeTimePointVm = TimePointVmCollection.Activate(tpvmb => tpvmb.Equals(nextTimePoint));
             }
 
-            (( DispatcherObject )_mainViewModel.Alarm.Player).Dispatcher.BeginInvoke( DispatcherPriority.Normal, (ThreadStart)delegate() { _mainViewModel.Alarm.LoadSound( nextTimePoint ); } );
+            //(( DispatcherObject )_mainViewModel.Alarm.Player).Dispatcher.BeginInvoke( DispatcherPriority.Normal, (ThreadStart)delegate() { _mainViewModel.Alarm.LoadNextSound( nextTimePoint ); } );
             
         }
 
@@ -432,12 +438,12 @@ namespace CycleBell.ViewModels
 
         internal void OnTimerPaused(object sender, EventArgs args)
         {
-            _mainViewModel.Alarm.StopDispatcher();
+            _mainViewModel.Alarm.Stop();
         }
 
         internal void OnTimerStopped(object sender, EventArgs args)
         {
-            _mainViewModel.Alarm.StopDispatcher();
+            _mainViewModel.Alarm.Stop();
 
             if (_activeTimePointVm != null)
                 _activeTimePointVm.IsActive = false;
@@ -462,15 +468,15 @@ namespace CycleBell.ViewModels
         /// Used in OnTimePointCollectionChanged
         /// </summary>
         /// <param name="timePoint"></param>
-        private void CheckBounds(TimePoint timePoint)
+        private void AddVisualBounds(int loopNumber)
         {
-            if (_settedLoopNumbers.Contains (timePoint.LoopNumber))
+            if (_settedLoopNumbers.Contains (loopNumber))
                 return;
 
-            _timePointVmCollection.Add (new BeginTimePointViewModel (timePoint.LoopNumber, this));
-            _timePointVmCollection.Add (new EndTimePointViewModel (timePoint.LoopNumber));
+            _timePointVmCollection.Add (new BeginTimePointViewModel (loopNumber, this));
+            _timePointVmCollection.Add (new EndTimePointViewModel (loopNumber));
 
-            _settedLoopNumbers.Add (timePoint.LoopNumber);
+            _settedLoopNumbers.Add(loopNumber);
         }
 
         /// <summary>
@@ -487,9 +493,11 @@ namespace CycleBell.ViewModels
 
             if (point.Kind == TimePointKinds.Absolute) {
 
-                point.ChangeTimePointType (TimePointKinds.Relative);
+                point.ChangeTimePointType( TimePointKinds.Relative );
                 tp.IsAbsolute = true;
             }
+
+            _mainViewModel.Alarm.AddSound( point );
 
             return tp;
         }
