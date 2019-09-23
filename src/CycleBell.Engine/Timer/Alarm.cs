@@ -63,10 +63,21 @@ namespace CycleBell.Engine.Timer
 
         public ReadOnlyObservableCollection< Uri > DefaultSoundCollection { get; }
 
-        public string DefaultSoundsDirrectory 
-            => String.IsNullOrWhiteSpace( _defaultSoundsDirectory )
-                     ? (_defaultSoundsDirectory = AppDomain.CurrentDomain.BaseDirectory + BASE_SOUND_DIRECTORY)
-                     : _defaultSoundsDirectory;
+        /// <summary>
+        /// When assigned null resets default directory to <see cref="BASE_SOUND_DIRECTORY"/>
+        /// </summary>
+        public string DefaultSoundsDirrectory
+        {
+            get => String.IsNullOrWhiteSpace( _defaultSoundsDirectory )
+                       ? (_defaultSoundsDirectory = AppDomain.CurrentDomain.BaseDirectory + BASE_SOUND_DIRECTORY)
+                       : _defaultSoundsDirectory;
+
+            set {
+                if ( Directory.Exists( value ) ) {
+                    _defaultSoundsDirectory = value;
+                }
+            }
+        }
 
         #endregion
 
