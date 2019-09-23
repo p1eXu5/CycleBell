@@ -103,7 +103,7 @@ namespace CycleBell.ViewModels
             void LoadDefaultSounds()
             {
                 DefaultSoundVmCollection = new List< SoundMenuItemViewModel >( 
-                    Alarm.DefaultSounds
+                    Alarm.DefaultSoundCollection
                          .Select( s => {
                              var ind1 = s.LocalPath.LastIndexOf( '\\' );
                              if ( ind1 == -1 ) ind1 = 0;

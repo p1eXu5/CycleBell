@@ -26,7 +26,7 @@ namespace CycleBell.Engine.Timer
 
         private string _defaultSoundsDirectory;
 
-        private readonly ObservableCollection<Uri> _defaultSounds;
+        private readonly ObservableCollection<Uri> _defaultSoundCollection;
         private readonly IDictionary<int, Uri> _soundMap = new Dictionary<int, Uri>();
 
         private readonly IPlayer _defaultPlayer;
@@ -52,8 +52,8 @@ namespace CycleBell.Engine.Timer
             _playerA = playerFactory.CreatePlayer();
             _playerB = playerFactory.CreatePlayer();
 
-            _defaultSounds = new ObservableCollection< Uri >();
-            DefaultSounds = new ReadOnlyObservableCollection< Uri >( _defaultSounds );
+            _defaultSoundCollection = new ObservableCollection< Uri >();
+            DefaultSoundCollection = new ReadOnlyObservableCollection< Uri >( _defaultSoundCollection );
         }
 
         #endregion
@@ -61,7 +61,7 @@ namespace CycleBell.Engine.Timer
 
         #region properties
 
-        public ReadOnlyObservableCollection< Uri > DefaultSounds { get; }
+        public ReadOnlyObservableCollection< Uri > DefaultSoundCollection { get; }
 
         public string DefaultSoundsDirrectory 
             => String.IsNullOrWhiteSpace( _defaultSoundsDirectory )
@@ -74,7 +74,7 @@ namespace CycleBell.Engine.Timer
         #region public methods
 
         /// <summary>
-        /// Fills DefaultSounds collection, set up default player.
+        /// Fills DefaultSoundCollection collection, set up default player.
         /// </summary>
         public void LoadDefaultSounds()
         {
@@ -110,7 +110,7 @@ namespace CycleBell.Engine.Timer
                 return true;
             }
 
-            _defaultSounds.Clear();
+            _defaultSoundCollection.Clear();
             
 
             var defaultSoundsDirectory = DefaultSoundsDirrectory;
@@ -120,15 +120,15 @@ namespace CycleBell.Engine.Timer
                 foreach ( var fileName in Directory.EnumerateFiles( defaultSoundsDirectory, "*.*", SearchOption.TopDirectoryOnly ) ) {
 
                     if ( !IsValid( fileName ) ) continue;
-                    _defaultSounds.Add( new Uri( fileName ) );
+                    _defaultSoundCollection.Add( new Uri( fileName ) );
                 }
             }
 
             if ( _defaultSound != null && IsValid( _defaultSound.LocalPath ) ) {
                 SetDefaultSound( _defaultSound );
             }
-            else if ( DefaultSounds.Count > 0) {
-                SetDefaultSound( DefaultSounds.First() );
+            else if ( DefaultSoundCollection.Count > 0) {
+                SetDefaultSound( DefaultSoundCollection.First() );
             }
         }
 
@@ -136,8 +136,8 @@ namespace CycleBell.Engine.Timer
         {
             if ( uri == null ) return false;
 
-            if ( !_defaultSounds.Contains( uri ) ) {
-                _defaultSounds.Add( uri );
+            if ( !_defaultSoundCollection.Contains( uri ) ) {
+                _defaultSoundCollection.Add( uri );
             }
 
             if ( _defaultPlayer.Source != null && _defaultPlayer.Source.Equals( uri ) ) {

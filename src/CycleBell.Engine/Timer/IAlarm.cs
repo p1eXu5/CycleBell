@@ -7,7 +7,7 @@ namespace CycleBell.Engine.Timer
 {
     public interface IAlarm
     {
-        ReadOnlyObservableCollection< Uri > DefaultSounds { get; }
+        ReadOnlyObservableCollection< Uri > DefaultSoundCollection { get; }
 
         void LoadDefaultSounds();
 
