@@ -11,8 +11,9 @@ namespace CycleBell.Engine.Timer
 
         ReadOnlyObservableCollection< Uri > DefaultSoundCollection { get; }
 
-        void LoadDefaultSounds();
+        void LoadDefaultSoundCollection();
 
+        bool SetDefaultSound();
         bool SetDefaultSound ( Uri uri );
         void AddSound ( TimePoint tPoint );
         void LoadNextSound ( TimePoint timePoint );

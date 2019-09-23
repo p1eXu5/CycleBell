@@ -51,7 +51,9 @@ namespace CycleBell
             container.RegisterInstance< IDialogRegistrator >( dialogRegistrator );
 
             var alarm = new Alarm( new MediaPlayerFactory() );
-            alarm.LoadDefaultSounds();
+            alarm.LoadDefaultSoundCollection();
+            alarm.SetDefaultSound();
+
             container.RegisterInstance< IAlarm >( alarm );
 
             container.RegisterInstance< ICycleBellManager >( manager );

@@ -41,7 +41,7 @@ namespace CycleBell.Engine.Timer
 
         #region ctor
 
-        public Alarm ( IPlayerFactory playerFactory, Uri defaultSound = null ) 
+        public Alarm ( IPlayerFactory playerFactory ) 
         {
             if (playerFactory == null) throw new ArgumentNullException(nameof(playerFactory), @"Player factory cannot be null.");
 
@@ -73,7 +73,7 @@ namespace CycleBell.Engine.Timer
                        : _defaultSoundsDirectory;
 
             set {
-                if ( Directory.Exists( value ) ) {
+                if ( value == null || Directory.Exists( value ) ) {
                     _defaultSoundsDirectory = value;
                 }
             }
@@ -87,7 +87,7 @@ namespace CycleBell.Engine.Timer
         /// <summary>
         /// Fills DefaultSoundCollection collection, set up default player.
         /// </summary>
-        public void LoadDefaultSounds()
+        public void LoadDefaultSoundCollection()
         {
             bool IsValid( string fileName )
             {
@@ -134,18 +134,22 @@ namespace CycleBell.Engine.Timer
                     _defaultSoundCollection.Add( new Uri( fileName ) );
                 }
             }
+        }
 
-            if ( _defaultSound != null && IsValid( _defaultSound.LocalPath ) ) {
-                SetDefaultSound( _defaultSound );
-            }
-            else if ( DefaultSoundCollection.Count > 0) {
+        public bool SetDefaultSound()
+        {
+            if ( DefaultSoundCollection.Count > 0) {
                 SetDefaultSound( DefaultSoundCollection.First() );
+
+                return true;
             }
+
+            return false;
         }
 
         public bool SetDefaultSound( Uri uri )
         {
-            if ( uri == null ) return false;
+            if ( uri == null || !File.Exists( uri.LocalPath ) ) return false;
 
             if ( !_defaultSoundCollection.Contains( uri ) ) {
                 _defaultSoundCollection.Add( uri );
