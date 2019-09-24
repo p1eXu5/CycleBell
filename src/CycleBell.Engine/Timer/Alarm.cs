@@ -30,9 +30,11 @@ namespace CycleBell.Engine.Timer
         private readonly IDictionary<int, Uri> _soundMap = new Dictionary<int, Uri>();
 
         private readonly IPlayer _defaultPlayer;
+
         private readonly IPlayer _playerA;
         private readonly IPlayer _playerB;
 
+        private IPlayer _nextPlayer;
 
         #endregion
 
@@ -77,7 +79,8 @@ namespace CycleBell.Engine.Timer
 
         public IEnumerable< KeyValuePair< int, Uri > > TimePointSoundDictionary => _soundMap;
         
-        public IPlayer NextPlayer { get; private set; }
+        public bool CanPlay => _nextPlayer.HasAudio;
+        public bool CanPlayDefault => _defaultPlayer.HasAudio;
 
         #endregion
 
@@ -130,8 +133,6 @@ namespace CycleBell.Engine.Timer
                 return;
             }
 
-            _defaultPlayer.Stop();
-            _defaultPlayer.Close();
             _defaultPlayer.Open( uri );
         }
 
@@ -161,25 +162,30 @@ namespace CycleBell.Engine.Timer
 
         public void LoadNextSound( TimePoint timePoint )
         {
+            Uri source;
+
             if ( timePoint == null || !_soundMap.ContainsKey( timePoint.Id ) ) {
-                NextPlayer = _defaultPlayer;
+                source = _defaultPlayer.Source;
             }
             else {
-                if ( NextPlayer == _playerA ) {
-                    _playerB.Open( _soundMap[ timePoint.Id ] );
-                    NextPlayer = _playerB;
-                }
-                else {
-                    _playerA.Open( _soundMap[ timePoint.Id ] );
-                    NextPlayer = _playerA;
-                }
+                source = _soundMap[ timePoint.Id ];
             }
+
+            if ( _nextPlayer == _playerA ) {
+                _playerB.Open( source );
+                _nextPlayer = _playerB;
+            }
+            else {
+                _playerA.Open( source );
+                _nextPlayer = _playerA;
+            }
+
         }
 
         public void Play()
         {
-            if ( NextPlayer != null && NextPlayer.HasAudio ) {
-                NextPlayer.Play();
+            if ( _nextPlayer != null && _nextPlayer.HasAudio ) {
+                _nextPlayer.Play();
             }
         }
 
@@ -192,8 +198,12 @@ namespace CycleBell.Engine.Timer
 
         public void Stop()
         {
-            if ( NextPlayer != null && NextPlayer.HasAudio ) {
-                NextPlayer.Stop();
+            if ( _playerA.HasAudio ) {
+                _playerA.Stop();
+            }
+
+            if ( _playerB.HasAudio ) {
+                _playerB.Stop();
             }
         }
 

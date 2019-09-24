@@ -98,7 +98,7 @@ namespace CycleBell.Engine.Tests.UnitTests.Timer
         #endregion
 
 
-        #region SetDefaultSound tests
+        #region SetDefaultSound( Uri ) tests
 
         [ Test ]
         public void SetDefaultSound_UriIsNull_DoesNotSetDefaultSound()
@@ -144,6 +144,33 @@ namespace CycleBell.Engine.Tests.UnitTests.Timer
         #endregion
 
 
+        #region SetDefaultSound tests
+
+        [ Test ]
+        public void SetDefaultSound_DefaultSoundCollectionEmpty_DoesNotSetDefaultSound()
+        {
+            var alarm = GetAlarm();
+
+            alarm.SetDefaultSound();
+
+            _mockDefaultPlayer.Verify( p => p.Open( It.IsAny<Uri>() ), Times.Never );
+        }
+
+
+        [ Test ]
+        public void SetDefaultSound_DefaultSoundCollectionHasLoaded_SetsDefaultSound()
+        {
+            var alarm = GetAlarm();
+            alarm.LoadDefaultSoundCollection();
+
+            alarm.SetDefaultSound();
+
+            _mockDefaultPlayer.Verify( p => p.Open( It.IsAny<Uri>() ), Times.Once );
+        }
+
+        #endregion
+
+
         #region TimePointSoundDictionary test
 
         [ Test ]
@@ -183,38 +210,310 @@ namespace CycleBell.Engine.Tests.UnitTests.Timer
         #endregion
 
 
-        #region NextPlayer tests
+        #region LoadNextSound tests
 
-        [ Test ]
-        public void NextPlayer_ByDefault_IsNull()
+        [Test]
+        public void LoadNextSound__TimePointTagIsNull_DefaultSoundNotLoaded__CannotPlay()
         {
             var alarm = GetAlarm();
 
-            Assert.IsNull( alarm.NextPlayer );
+            alarm.LoadNextSound( null );
+
+            Assert.IsFalse( alarm.CanPlay );
+        }
+
+        [Test]
+        public void LoadNextSound__TimePointDoesNotInDictionary_DefaultSoundNotLoaded__CannotPlay()
+        {
+            var alarm = GetAlarm();
+
+            alarm.LoadNextSound( new TimePoint() );
+
+            Assert.IsFalse( alarm.CanPlay );
+        }
+
+
+        [Test]
+        public void LoadNextSound__TimePointIsInDictionary__CanPlay()
+        {
+            var alarm = GetAlarm();
+            alarm.AddSound( _timePointsWithSound[0] );
+
+            alarm.LoadNextSound( _timePointsWithSound[0] );
+
+            Assert.IsTrue( alarm.CanPlay );
+        }
+
+
+        [Test]
+        public void LoadNextSound__TimePointIsInDictionary_PlayerAIsNotSetted_CallsPlayerAOpen()
+        {
+            var alarm = GetAlarm();
+            alarm.AddSound( _timePointsWithSound[0] );
+
+            alarm.LoadNextSound( _timePointsWithSound[0] );
+
+            _mockPlayerA.Verify( p => p.Open( It.IsAny<Uri>() ), Times.Once );
+        }
+
+        [Test]
+        public void LoadNextSound__TimePointIsInDictionary__SetsPlayerAHasAudioToTrue()
+        {
+            var alarm = GetAlarm();
+            alarm.AddSound( _timePointsWithSound[0] );
+
+            alarm.LoadNextSound( _timePointsWithSound[0] );
+
+            Assert.IsTrue( _mockPlayerA.Object.HasAudio );
+        }
+
+
+        [Test]
+        public void LoadNextSound__TimePointTagIsNull_DefaultSoundHasLoaded__PlayerAIsDefaultPlayer()
+        {
+            var alarm = GetAlarm();
+            alarm.LoadDefaultSoundCollection();
+
+            alarm.LoadNextSound( null );
+
+            Assert.That( _playerDataDict[ _mockPlayerA ].Uri, Is.EqualTo( _playerDataDict[ _mockPlayerA ].Uri ) );
+        }
+
+        [Test]
+        public void LoadNextSound__TimePointDoesNotInDictionary_DefaultSoundHasLoaded__PlayerAIsDefaultPlayer()
+        {
+            var alarm = GetAlarm();
+            alarm.LoadDefaultSoundCollection();
+
+            alarm.LoadNextSound( new TimePoint() );
+
+            Assert.That( _playerDataDict[ _mockPlayerA ].Uri, Is.EqualTo( _playerDataDict[ _mockPlayerA ].Uri ) );
+        }
+
+
+        [Test]
+        public void LoadNextSound__TimePointIsInDictionary_PlayerAIsSettedLast_CallsPlayerBOpen()
+        {
+            var alarm = GetAlarm();
+            alarm.AddSound( _timePointsWithSound[0] );
+            alarm.AddSound( _timePointsWithSound[1] );
+
+            alarm.LoadNextSound( _timePointsWithSound[0] );
+            alarm.LoadNextSound( _timePointsWithSound[1] );
+
+            _mockPlayerB.Verify( p => p.Open( It.IsAny<Uri>() ), Times.Once );
+        }
+
+
+        [Test]
+        public void LoadNextSound__TimePointIsInDictionary_PlayerBIsSettedLast_CallsPlayerAOpen()
+        {
+            var alarm = GetAlarm();
+            alarm.AddSound( _timePointsWithSound[0] );
+            alarm.AddSound( _timePointsWithSound[1] );
+            alarm.AddSound( _timePointsWithSound[2] );
+
+            alarm.LoadNextSound( _timePointsWithSound[0] );
+            alarm.LoadNextSound( _timePointsWithSound[1] );
+            alarm.LoadNextSound( _timePointsWithSound[2] );
+
+            _mockPlayerA.Verify( p => p.Open( It.IsAny<Uri>() ), Times.Exactly( 2 ) );
         }
 
         #endregion
 
 
-        #region LoadNextSound tests
+        #region Play tests
 
-        
+        [ Test ]
+        public void Play_ByDefault_DoesNotCallPlayersPlay()
+        {
+            var alarm = GetAlarm();
+
+            alarm.Play();
+
+            _mockDefaultPlayer.Verify( p => p.Play(), Times.Never() );
+            _mockPlayerA.Verify( p => p.Play(), Times.Never() );
+            _mockPlayerB.Verify( p => p.Play(), Times.Never() );
+        }
+
+        [Test]
+        public void Play_CurrentPlayerNotSetted_DoesNotCallPlayersPlayMethod()
+        {
+            var alarm = GetAlarm();
+
+            alarm.LoadNextSound( null );
+            alarm.Play();
+
+            _mockDefaultPlayer.Verify( p => p.Play(), Times.Never() );
+            _mockPlayerA.Verify( p => p.Play(), Times.Never() );
+            _mockPlayerB.Verify( p => p.Play(), Times.Never() );
+        }
+
+
+        [Test]
+        public void Play_TimePointIsInDictionary_PlayPlayerA()
+        {
+            var alarm = GetAlarm();
+            alarm.AddSound( _timePointsWithSound[0] );
+
+            alarm.LoadNextSound( _timePointsWithSound[0] );
+            alarm.Play();
+
+            _mockPlayerA.Verify( p => p.Play(), Times.Once );
+        }
+
+        #endregion
+
+
+        #region PlayDefault tests
+
+        [ Test ]
+        public void PlayDefault_ByDefault_DoesNotCallPlayersPlay()
+        {
+            var alarm = GetAlarm();
+
+            alarm.PlayDefault();
+
+            _mockDefaultPlayer.Verify( p => p.Play(), Times.Never() );
+            _mockPlayerA.Verify( p => p.Play(), Times.Never() );
+            _mockPlayerB.Verify( p => p.Play(), Times.Never() );
+        }
+
+        [ Test ]
+        public void PlayDefault_DefaultSoundSetted_CallsDefaultPlayerPlay()
+        {
+            var alarm = GetAlarm();
+            alarm.LoadDefaultSoundCollection();
+            alarm.SetDefaultSound();
+
+            alarm.PlayDefault();
+
+            _mockDefaultPlayer.Verify( p => p.Play(), Times.Once() );
+            _mockPlayerA.Verify( p => p.Play(), Times.Never() );
+            _mockPlayerB.Verify( p => p.Play(), Times.Never() );
+        }
+
+        #endregion
+
+
+        #region CanPlayDefault tests
+
+        [ Test ]
+        public void CanPlayDefault_DyDefault_ReturnsFalse()
+        {
+            var alarm = GetAlarm();
+
+            Assert.IsFalse( alarm.CanPlayDefault );
+        }
+
+        [ Test ]
+        public void CanPlayDefault_DefaultSoundIsSetted_ReturnsFalse()
+        {
+            var alarm = GetAlarm();
+            alarm.LoadDefaultSoundCollection();
+            alarm.SetDefaultSound();
+
+            Assert.IsTrue( alarm.CanPlayDefault );
+        }
+
+        #endregion
+
+
+        #region Stop tests
+
+        [ Test ]
+        public void Stop_ByDefault_DoesNotCallsPlayersStopMethod()
+        {
+            var alarm = GetAlarm();
+
+            alarm.Stop();
+
+            _mockDefaultPlayer.Verify( p => p.Stop(), Times.Never );
+            _mockPlayerA.Verify( p => p.Stop(), Times.Never );
+            _mockPlayerB.Verify( p => p.Stop(), Times.Never );
+        }
+
+        [ Test ]
+        public void Stop_FirstTimePointSoundIsSetted_CallsPlayerAStopMethod()
+        {
+            var alarm = GetAlarm();
+            alarm.AddSound( _timePointsWithSound[0] );
+            alarm.LoadNextSound( _timePointsWithSound[0] );
+
+            alarm.Stop();
+
+            _mockPlayerA.Verify( p => p.Stop(), Times.Once );
+        }
+
+        [ Test ]
+        public void Stop_TwoTimePointSoundIsSetted_CallsPlayersStopMethod()
+        {
+            var alarm = GetAlarm();
+            alarm.AddSound( _timePointsWithSound[0] );
+            alarm.AddSound( _timePointsWithSound[1] );
+            alarm.LoadNextSound( _timePointsWithSound[0] );
+            alarm.LoadNextSound( _timePointsWithSound[1] );
+
+            alarm.Stop();
+
+            _mockPlayerA.Verify( p => p.Stop(), Times.Once );
+            _mockPlayerB.Verify( p => p.Stop(), Times.Once );
+        }
+
+        #endregion
+
+
+        #region StopDefault tests
+
+        [ Test ]
+        public void StopDefault_ByDefault_DoesNotCallsPlayersStopMethod()
+        {
+            var alarm = GetAlarm();
+
+            alarm.StopDefault();
+
+            _mockDefaultPlayer.Verify( p => p.Stop(), Times.Never );
+            _mockPlayerA.Verify( p => p.Stop(), Times.Never );
+            _mockPlayerB.Verify( p => p.Stop(), Times.Never );
+        }
+
+        [ Test ]
+        public void StopDefault_DefaultSoundIsSetted_CallsDefaultPlayerStopMethod()
+        {
+            var alarm = GetAlarm();
+            alarm.LoadDefaultSoundCollection();
+            alarm.SetDefaultSound();
+
+            alarm.StopDefault();
+
+            _mockDefaultPlayer.Verify( p => p.Stop(), Times.Once );
+            _mockPlayerA.Verify( p => p.Stop(), Times.Never );
+            _mockPlayerB.Verify( p => p.Stop(), Times.Never );
+        }
 
         #endregion
 
 
 
-        #region test fields
+        #region fields
 
         private Dictionary< Mock< IPlayer >, PlayerData > _playerDataDict;
         private Mock< IPlayer > _mockDefaultPlayer;
         private Mock< IPlayer > _mockPlayerA;
         private Mock< IPlayer > _mockPlayerB;
 
+        private readonly TimePoint[] _timePointsWithSound = new [] {
+            new TimePoint { Tag = AppDomain.CurrentDomain.BaseDirectory + "\\Alarm 666.mp3" },
+            new TimePoint { Tag = AppDomain.CurrentDomain.BaseDirectory + "\\Sounds\\Alarm 1.mp3" },
+            new TimePoint { Tag = AppDomain.CurrentDomain.BaseDirectory + "\\Sounds\\Alarm 2.mp3" },
+            new TimePoint { Tag = AppDomain.CurrentDomain.BaseDirectory + "\\Sounds\\Alarm 3.mp3" },
+        };
+
         #endregion
 
 
-        #region factory
+        #region factories
 
         private IAlarm GetAlarm()
         {
@@ -252,7 +551,7 @@ namespace CycleBell.Engine.Tests.UnitTests.Timer
 
             mockPlayer.Setup( p => p.Open( It.IsAny< Uri >() ) ).Callback< Uri >( u => _playerDataDict[ mockPlayer ].Open( u ) );
             mockPlayer.Setup( p => p.Close() ).Callback( () => _playerDataDict[ mockPlayer ].Close() );
-            mockPlayer.Setup( p => p.HasAudio ).Returns( _playerDataDict[ mockPlayer ].HasAudio );
+            mockPlayer.Setup( p => p.HasAudio ).Returns( () => _playerDataDict[ mockPlayer ].HasAudio );
             mockPlayer.Setup( p => p.Play() ).Callback( () => _playerDataDict[ mockPlayer ].Play() );
             mockPlayer.Setup( p => p.Stop() ).Callback( () => _playerDataDict[ mockPlayer ].Stop() );
 
@@ -262,9 +561,9 @@ namespace CycleBell.Engine.Tests.UnitTests.Timer
         #endregion
 
 
-        #region test types
+        #region types
 
-        private struct PlayerData
+        private class PlayerData
         {
             private bool _isPlaying;
 

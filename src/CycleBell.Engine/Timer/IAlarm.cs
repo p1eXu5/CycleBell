@@ -12,7 +12,8 @@ namespace CycleBell.Engine.Timer
         ReadOnlyObservableCollection< Uri > DefaultSoundCollection { get; }
         IEnumerable< KeyValuePair< int, Uri > > TimePointSoundDictionary { get; }
 
-        IPlayer NextPlayer { get; }
+        bool CanPlay { get; }
+        bool CanPlayDefault { get;}
 
         void LoadDefaultSoundCollection();
 
