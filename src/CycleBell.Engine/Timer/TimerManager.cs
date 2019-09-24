@@ -67,12 +67,17 @@ namespace CycleBell.Engine.Timer
 
         public static bool IsInitialTimePoint( TimePoint timePoint )
         {
-            return timePoint.Time < TimeSpan.Zero;
+            return timePoint != null && timePoint.Time < TimeSpan.Zero;
         }
+
+        private static TimePoint _startTimePoint;
+
+        public static bool IsStartTimePoint( TimePoint timePoint ) => timePoint != null && timePoint.Equals( _startTimePoint );
 
         public static TimePoint GetStartTimePoint( TimeSpan startTime )
         {
-            return new TimePoint( START_TIMEPOINT_NAME, startTime, TimePointKinds.Absolute );
+            _startTimePoint = new TimePoint( START_TIMEPOINT_NAME, startTime, TimePointKinds.Absolute );
+            return _startTimePoint;
         }
 
         #endregion

@@ -235,6 +235,11 @@ namespace CycleBell.Engine.Timer
             }
         }
 
+        public void Reset()
+        {
+            _nextPlayer = null;
+        }
+
         #endregion
 
 

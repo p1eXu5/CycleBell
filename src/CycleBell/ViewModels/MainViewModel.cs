@@ -72,9 +72,9 @@ namespace CycleBell.ViewModels
         {
             void InitializeCommands()
             {
-                RemoveSelectedPresetCommand = new ActionCommand(RemoveSelectedPreset, CanRemoveSelectedPreset);
-                ExportPresetsCommand = new ActionCommand(ExportPresets, CanExportPresets);
-                ClearPresetsCommand = new ActionCommand(ClearPresets, CanExportPresets);
+                RemoveSelectedPresetCommand = new ActionCommand( RemoveSelectedPreset, CanRemoveSelectedPreset );
+                ExportPresetsCommand = new ActionCommand( ExportPresets, CanExportPresets );
+                ClearPresetsCommand = new ActionCommand( ClearPresets, CanExportPresets );
             }
 
             void LoadTimerManager()
@@ -264,15 +264,13 @@ namespace CycleBell.ViewModels
 
         // Menu File
         public ICommand CreateNewPresetCommand => new ActionCommand(CreateNewPreset);
-
-        public ICommand AppendPresetsCommand => new ActionCommand(AppendPresets, CanAppendPresets);
-        // Is initialized in ctor
+        public ICommand AppendPresetsCommand => new ActionCommand( AppendPresets, CanAppendPresets );
         public ICommand ExportPresetsCommand { get; set; }
-
-        // Is initialized in ctor
         public ICommand ClearPresetsCommand { get; set; }
+        public ICommand RemoveSelectedPresetCommand { get; set; }
 
-        public ICommand ExitCommand => new ActionCommand(Exit);
+
+
 
         // Menu Settings and some timer buttons
         public ICommand RingOnStartTimeSwitchCommand => new ActionCommand( SwitchIsRingOnStartTime );
@@ -284,17 +282,23 @@ namespace CycleBell.ViewModels
 
         // Presets ComboBox
         public ICommand PresetComboBoxReturnCommand => new ActionCommand( PresetComboBoxReturnKeyHandler );
-        // Is initialized in ctor
-        public ICommand RemoveSelectedPresetCommand { get; set; }
-        public ICommand PresetLostFocusCommand => new ActionCommand( PresetLostFocus );
 
+
+        public ICommand PresetLostFocusCommand => new ActionCommand( PresetLostFocus );
         // Timer buttons
         public ICommand MediaTerminalCommand => new ActionCommand( MediaTerminal );
         public ICommand StopCommand => new ActionCommand( Stop );
         public ICommand RingCommand => new ActionCommand( Ring );
         public ICommand ChangeDefaultSoundCommand => new ActionCommand( ChangeDefaultSound );
 
-        // MainWindow Events
+        /// <summary>
+        /// Menu command: File -> Exit
+        /// </summary>
+        public ICommand ExitCommand => new ActionCommand(Exit);
+
+        /// <summary>
+        /// MainWindow Closing event
+        /// </summary>
         public ICommand CloseCommand => new ActionCommand( CloseWindow );
 
         #endregion Commands
@@ -343,8 +347,12 @@ namespace CycleBell.ViewModels
 
                 var deletingPresetVm = PresetViewModelCollection.First(pvm => pvm.Preset.Equals((Preset)e.OldItems[0]));
 
+                foreach ( var timePoint in deletingPresetVm.Preset.TimePointCollection ) {
+                    Alarm.RemoveSound( timePoint );
+                }
+
                 // Collection switches selected preset to null
-                PresetViewModelCollection.Remove(deletingPresetVm);
+                PresetViewModelCollection.Remove( deletingPresetVm );
 
                 if (_selectedPreset == null && PresetViewModelCollection.Count > 0) {
 
@@ -353,6 +361,12 @@ namespace CycleBell.ViewModels
             }
             // clear
             else if (e != null && e.OldItems == null && e.NewItems == null) {
+
+                foreach ( var preset in PresetViewModelCollection.Select( p => p.Preset ) ) {
+                    foreach ( var timePoint in preset.TimePointCollection ) {
+                        Alarm.RemoveSound( timePoint );
+                    }
+                }
 
                 PresetViewModelCollection.Clear();
             }

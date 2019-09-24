@@ -50,15 +50,6 @@ namespace CycleBell.ViewModels.TimePointViewModels
         {
             _timePoint = timePoint ?? throw new ArgumentNullException();
             _presetViewModel = presetViewModel ?? throw new ArgumentNullException();
-
-            if (_timePoint.Tag is string str) {
-
-                if (String.IsNullOrWhiteSpace (str) || !File.Exists (str))
-                    _timePoint.Tag = DefaultSoundLocation;
-                else {
-                    _PresetViewModel.UpdateSoundBank (this);
-                }
-            }
         }
 
         #endregion

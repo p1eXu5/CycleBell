@@ -82,6 +82,8 @@
     <Compile Include="FunctionalTests\ViewModels\MainViewModelTests.cs" />
     <Compile Include="FunctionalTests\ViewModels\PresetViewModelTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="UnitTests\Factories\PresetFactory.cs" />
+    <Compile Include="UnitTests\Factories\TimePointFactory.cs" />
     <Compile Include="UnitTests\ViewModels\AddingTimePointViewModelTests.cs" />
     <Compile Include="UnitTests\ViewModels\BeginTimePointViewModelTests.cs" />
     <Compile Include="UnitTests\ViewModels\MainViewModelTests.cs" />

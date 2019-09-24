@@ -6,6 +6,7 @@ using CycleBell.Engine;
 using CycleBell.Engine.Models;
 using CycleBell.Engine.Repository;
 using CycleBell.Engine.Timer;
+using CycleBell.Tests.UnitTests.Factories;
 using CycleBell.ViewModels;
 using CycleBell.ViewModels.TimePointViewModels;
 using Moq;
@@ -24,12 +25,35 @@ namespace CycleBell.Tests.UnitTests.ViewModels
             Assert.AreEqual (typeof(PresetViewModel).BaseType, typeof(ObservableObject));
         }
 
+
+        [ Test ]
+        public void ctor_PresetIsNull_Throws()
+        {
+            Assert.That( () => GetPresetViewModel( null ), Throws.ArgumentNullException );
+        }
+
+        [ Test ]
+        public void ctor_IMainViewModelIsNull_Throws()
+        {
+            Assert.That( () => new PresetViewModel( PresetFactory.GetPresetWithSounds(), null ), Throws.ArgumentNullException );
+        }
+
         [Test]
-        public void ctor_WhenCreated_CreatesEmptyNamedTimePoint()
+        public void ctor_ByDefault_CreatesAddingTimePointVmWithEmptyName()
         {
             var pvm = GetPresetViewModel();
 
             Assert.AreEqual (String.Empty, pvm.AddingTimePoint.Name);
+        }
+
+        [ Test ]
+        public void ctor_PresetContainsTimePointsWithSound_AddsSoundsToTheAlarm()
+        {
+            var preset = PresetFactory.GetPresetWithSounds();
+
+            var pvm = GetPresetViewModel( preset );
+
+            _mockAlarm.Verify( a => a.AddSound( It.IsAny< TimePoint >() ), Times.Exactly( preset.TimePointCollection.Count ));
         }
 
         #endregion
@@ -288,10 +312,10 @@ namespace CycleBell.Tests.UnitTests.ViewModels
         #endregion
 
 
-        #region OnTimePointChangedEventHandler tests
+        #region OnTimePointChanged tests
 
         [Test]
-        public void OnTimePointChangedEventHandler_NextTimePointNotNull_ChangesActiveTpvmb()
+        public void OnTimePointChanged_NextTimePointNotNull_ChangesActiveTpvmb()
         {
             MainViewModel mvm = GetMockedMainViewModel();
             
@@ -316,14 +340,52 @@ namespace CycleBell.Tests.UnitTests.ViewModels
             Assert.IsTrue (timePoints[1].IsActive);
         }
 
+
+        [ Test ]
+        public void OnTimePointChanged_TimePointEventArgsIsNull_NotThrows()
+        {
+            var pvm = GetPresetViewModel( PresetFactory.GetPresetWithSounds() );
+
+            Assert.That( () => pvm.OnTimePointChanged( null, null ), Throws.Nothing );
+        }
+
+        [ Test ]
+        public void OnTimePointChanged_NextTimePointContainsInCollection_CallsAlarmLoadNextSound()
+        {
+            var preset = PresetFactory.GetPresetWithSounds();
+            var pvm = GetPresetViewModel( preset );
+
+            pvm.OnTimePointChanged( null, new TimerEventArgs( null, null, TimeSpan.Zero, null ) );
+
+            _mockAlarm.Verify( a => a.LoadNextSound( It.IsAny<TimePoint>() ), Times.Once);
+        }
+
         #endregion
 
+
+
+        #region fields
+
+        private Mock< IAlarm > _mockAlarm;
+
+        #endregion
 
 
         #region factory
 
         private Mock<ITimerManager> _mockTimerManager;
         private readonly PresetCollection _presetCollection = new PresetCollection();
+
+        private PresetViewModel GetPresetViewModel( Preset preset, bool ringOnStartTime = true )
+        {
+            _mockAlarm = new Mock< IAlarm >();
+
+            var mockMvm = new Mock< IMainViewModel >();
+            mockMvm.Setup( m => m.Alarm ).Returns( _mockAlarm.Object );
+            mockMvm.Setup( m => m.IsRingOnStartTime ).Returns( ringOnStartTime );
+
+            return new PresetViewModel( preset, mockMvm.Object );
+        }
 
         private PresetViewModel GetPresetViewModel()
         {

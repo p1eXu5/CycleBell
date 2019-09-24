@@ -26,5 +26,7 @@ namespace CycleBell.Engine.Timer
         void PlayDefault ();
         void Stop ();
         void StopDefault ();
+
+        void Reset();
     }
 }

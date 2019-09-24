@@ -214,7 +214,7 @@ namespace CycleBell.Engine.Models
         /// </summary>
         /// <param name="timePoint">Adding TimePoint</param>
         /// <exception cref="ArgumentException"></exception>
-        public virtual void CheckTime(TimePoint timePoint)
+        public virtual void CheckTime( TimePoint timePoint )
         {
             if ((timePoint.Kind == TimePointKinds.Relative && timePoint.Time == TimeSpan.Zero)
                 || (timePoint.Time < TimeSpan.Zero)) {
@@ -238,12 +238,28 @@ namespace CycleBell.Engine.Models
             if (TimePointCollection.Contains (timePoint))
                 throw new ArgumentException("timePoint already exists", nameof(timePoint));
 
-            PrepareTimePoint (ref timePoint);
-            _timePoints.Add(timePoint);
+            CheckTime( timePoint );
 
+            if ( TimePointCollection.Count > 0 ) 
+            {
+                var maxId = TimePointCollection.Max( tp => tp.Id );
+
+                // If time point was created earlier then last time point in inner collection
+                if (timePoint.Id <= maxId) {
+                    timePoint = timePoint.Clone();
+                }   
+            }
+
+            if ( AutoUpdateTimePointBaseTimes ) 
+            {
+                var points = new List< TimePoint >( TimePointCollection ) { timePoint };
+                UpdateTimePointBaseTimes(points.OrderBy (tp => tp.LoopNumber).ThenBy (tp => tp.Id), StartTime);
+            }
+
+            _timePoints.Add( timePoint );
             // -> time point added to TimePointViewModelCollection 
 
-            AddLoopNumber(timePoint);
+            AddLoopNumberFrom( timePoint );
             timePoint.LoopNumberChanged += OnTimePointLoopNumberChanged;
 
             return timePoint;
@@ -344,19 +360,6 @@ namespace CycleBell.Engine.Models
         }
 
 
-        private void PrepareTimePoint (ref TimePoint timePoint)
-        {
-            CheckTime(timePoint);
-
-            if (TimePointCollection.Count > 0)
-                PrepareTimePointId (ref timePoint);
-
-            if (AutoUpdateTimePointBaseTimes) {
-
-                var points = new List<TimePoint> (TimePointCollection) { timePoint };
-                UpdateTimePointBaseTimes(points.OrderBy (tp => tp.LoopNumber).ThenBy (tp => tp.Id), StartTime);
-            }
-        }
 
         /// <summary>
         /// If adding TimePoint Id less then max Id in Preset PresetCollection
@@ -365,15 +368,10 @@ namespace CycleBell.Engine.Models
         /// <param name="timePoint">Adding TimePoint</param>
         private void PrepareTimePointId (ref TimePoint timePoint)
         {
-            var maxId = TimePointCollection.Max (tp => tp.Id);
-
-            if (timePoint.Id <= maxId) {
-
-                timePoint = timePoint.Clone();
-            }
+            
         }
 
-        private void AddLoopNumber (TimePoint timePoint)
+        private void AddLoopNumberFrom (TimePoint timePoint)
         {
             if (!TimerLoopDictionary.ContainsKey (timePoint.LoopNumber)) {
                 TimerLoopDictionary[timePoint.LoopNumber] = 1;
@@ -389,7 +387,7 @@ namespace CycleBell.Engine.Models
         {
             if (sender is TimePoint tp) {
                 
-                AddLoopNumber (tp);
+                AddLoopNumberFrom (tp);
 
                 if (TimePointCollection.FirstOrDefault (t => t.LoopNumber == (Byte) args.OldLoopNumber) == null) {
 

@@ -22,7 +22,7 @@ namespace CycleBell.ViewModels
 {
     public interface IPresetViewModel
     {
-        void UpdateSoundBank (TimePoint timePoint);
+        void UpdateSoundBank( TimePoint timePoint );
         void RemoveTimePoint (TimePoint timePoint);
         Preset Preset { get; }
         string Name { get; set; }

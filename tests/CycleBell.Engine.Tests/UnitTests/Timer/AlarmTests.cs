@@ -495,6 +495,27 @@ namespace CycleBell.Engine.Tests.UnitTests.Timer
         #endregion
 
 
+        #region Reset tests
+
+        [ Test ]
+        public void Reset_NextPleyerIsLoaded_SetsNextPlayerToNull()
+        {
+            var alarm = GetAlarm();
+            alarm.AddSound( _timePointsWithSound[0] );
+            alarm.LoadNextSound( _timePointsWithSound[0] );
+
+            alarm.Reset();
+            alarm.Play();
+
+            _mockPlayerA.Verify( p => p.Play(), Times.Never );
+            _mockPlayerB.Verify( p => p.Play(), Times.Never );
+            _mockDefaultPlayer.Verify( p => p.Play(), Times.Never );
+        }
+
+        #endregion
+
+
+
         #region RemoveSound tests
 
         [ Test ]

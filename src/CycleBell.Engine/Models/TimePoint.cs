@@ -170,6 +170,9 @@ namespace CycleBell.Engine.Models
             set => _time = new TimeSpan(value.Hours, value.Minutes, value.Seconds);
         }
 
+        /// <summary>
+        /// Can be setted by <see cref="Preset.AddTimePoint"/> and <see cref="Timer.TimerQueueCalculator.GetTimerQueue"/>
+        /// </summary>
         public TimeSpan? BaseTime
         {
             get => _baseTime;
