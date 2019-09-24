@@ -160,6 +160,27 @@ namespace CycleBell.Engine.Timer
             _soundMap[ tPoint.Id ] = uri;
         }
 
+
+        public void RemoveSound( TimePoint tPoint )
+        {
+            if ( tPoint == null || !_soundMap.ContainsKey( tPoint.Id ) ) {
+                return;
+            }
+
+            var key = tPoint.Id;
+
+            Uri uri = _soundMap[ key ];
+            _soundMap.Remove( key );
+
+            if ( _playerA.Source == uri ) {
+                _playerA.Close();
+            }
+
+            if ( _playerB.Source == uri ) {
+                _playerB.Close();
+            }
+        }
+
         public void LoadNextSound( TimePoint timePoint )
         {
             Uri source;
@@ -215,6 +236,7 @@ namespace CycleBell.Engine.Timer
         }
 
         #endregion
+
 
         #region private methods
 

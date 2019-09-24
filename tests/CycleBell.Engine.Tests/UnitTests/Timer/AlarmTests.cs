@@ -98,7 +98,7 @@ namespace CycleBell.Engine.Tests.UnitTests.Timer
         #endregion
 
 
-        #region SetDefaultSound( Uri ) tests
+        #region SetDefaultSound( Source ) tests
 
         [ Test ]
         public void SetDefaultSound_UriIsNull_DoesNotSetDefaultSound()
@@ -276,7 +276,7 @@ namespace CycleBell.Engine.Tests.UnitTests.Timer
 
             alarm.LoadNextSound( null );
 
-            Assert.That( _playerDataDict[ _mockPlayerA ].Uri, Is.EqualTo( _playerDataDict[ _mockPlayerA ].Uri ) );
+            Assert.That( _playerDataDict[ _mockPlayerA ].Source, Is.EqualTo( _playerDataDict[ _mockPlayerA ].Source ) );
         }
 
         [Test]
@@ -287,7 +287,7 @@ namespace CycleBell.Engine.Tests.UnitTests.Timer
 
             alarm.LoadNextSound( new TimePoint() );
 
-            Assert.That( _playerDataDict[ _mockPlayerA ].Uri, Is.EqualTo( _playerDataDict[ _mockPlayerA ].Uri ) );
+            Assert.That( _playerDataDict[ _mockPlayerA ].Source, Is.EqualTo( _playerDataDict[ _mockPlayerA ].Source ) );
         }
 
 
@@ -495,6 +495,49 @@ namespace CycleBell.Engine.Tests.UnitTests.Timer
         #endregion
 
 
+        #region RemoveSound tests
+
+        [ Test ]
+        public void RemoveSound_SoundIsNotSetted_CanRemoveSound()
+        {
+            var alarm = GetAlarm();
+            alarm.AddSound( _timePointsWithSound[0] );
+
+            Assert.That( alarm.TimePointSoundDictionary.Count(), Is.EqualTo( 1 ) );
+
+            alarm.RemoveSound( _timePointsWithSound[ 0 ] );
+
+            Assert.That( alarm.TimePointSoundDictionary.Count(), Is.EqualTo( 0 ) );
+        }
+
+        [ Test ]
+        public void RemoveSound_SoundIsSettedInNextPlayerA_ClosePlayerA()
+        {
+            var alarm = GetAlarm();
+            alarm.AddSound( _timePointsWithSound[0] );
+            alarm.LoadNextSound( _timePointsWithSound[0] );
+
+            alarm.RemoveSound( _timePointsWithSound[ 0 ] );
+
+            _mockPlayerA.Verify( p => p.Close(), Times.Once );
+        }
+
+        [ Test ]
+        public void RemoveSound_SoundIsSettedInNextPlayerB_ClosePlayerB()
+        {
+            var alarm = GetAlarm();
+            alarm.AddSound( _timePointsWithSound[0] );
+            alarm.AddSound( _timePointsWithSound[1] );
+            alarm.LoadNextSound( _timePointsWithSound[0] );
+            alarm.LoadNextSound( _timePointsWithSound[1] );
+
+            alarm.RemoveSound( _timePointsWithSound[ 1 ] );
+
+            _mockPlayerB.Verify( p => p.Close(), Times.Once );
+        }
+
+        #endregion
+
 
         #region fields
 
@@ -552,7 +595,9 @@ namespace CycleBell.Engine.Tests.UnitTests.Timer
             mockPlayer.Setup( p => p.Open( It.IsAny< Uri >() ) ).Callback< Uri >( u => _playerDataDict[ mockPlayer ].Open( u ) );
             mockPlayer.Setup( p => p.Close() ).Callback( () => _playerDataDict[ mockPlayer ].Close() );
             mockPlayer.Setup( p => p.HasAudio ).Returns( () => _playerDataDict[ mockPlayer ].HasAudio );
+            mockPlayer.Setup( p => p.Source ).Returns( () => _playerDataDict[ mockPlayer ].Source );
             mockPlayer.Setup( p => p.Play() ).Callback( () => _playerDataDict[ mockPlayer ].Play() );
+            mockPlayer.Setup( p => p.Stop() ).Callback( () => _playerDataDict[ mockPlayer ].Stop() );
             mockPlayer.Setup( p => p.Stop() ).Callback( () => _playerDataDict[ mockPlayer ].Stop() );
 
             return mockPlayer;
@@ -567,20 +612,20 @@ namespace CycleBell.Engine.Tests.UnitTests.Timer
         {
             private bool _isPlaying;
 
-            public Uri Uri { get; private set; }
+            public Uri Source { get; private set; }
 
-            public bool HasAudio => Uri != null;
+            public bool HasAudio => Source != null;
 
             public bool IsPlaying => HasAudio && _isPlaying;
 
             public void Open( Uri uri )
             {
-                Uri = uri;
+                Source = uri;
             }
 
             public void Close()
             {
-                Uri = null;
+                Source = null;
             }
 
             public void Play()
