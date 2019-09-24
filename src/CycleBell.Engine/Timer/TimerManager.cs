@@ -289,8 +289,6 @@ namespace CycleBell.Engine.Timer
         private void TimerCallbackHandler( object state )
         {
             var currentTime = DateTime.Now.TimeOfDay;
-            _timer.Change( GetDueTime( currentTime.Milliseconds ), Timeout.Infinite );
-
 
             var (nextTime, nextPoint) = _queue.Peek();
             var dt = CalculateLastTime( currentTime, nextTime );
@@ -313,6 +311,9 @@ namespace CycleBell.Engine.Timer
                     _deltaTime = dt;
                 }
             }
+
+            currentTime = DateTime.Now.TimeOfDay;
+            _timer.Change( GetDueTime( currentTime.Milliseconds ), Timeout.Infinite );
         }
 
         /// <summary>

@@ -22,7 +22,7 @@ using CycleBell.Engine.Timer;
 namespace CycleBell.Tests.FunctionalTests.ViewModels
 {
     [TestFixture, RequiresThread(ApartmentState.STA)]
-    public class MainViewModelIntegrationalTests
+    public class MainViewModelTests
     {
         [Test]
         public void CreateNewPreset__SelectedPresetHasNotANewPreset_NewPresetDoesntExist__SetsSelectedPresetEqualedToANewPreset()

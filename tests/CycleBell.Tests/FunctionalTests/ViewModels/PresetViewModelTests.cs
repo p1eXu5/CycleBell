@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using CycleBell.Base;
 using CycleBell.Engine;
 using CycleBell.Engine.Models;
+using CycleBell.Engine.Repository;
 using CycleBell.Engine.Timer;
 using CycleBell.ViewModels;
 using Moq;
@@ -12,7 +14,7 @@ using NUnit.Framework;
 namespace CycleBell.Tests.FunctionalTests.ViewModels
 {
     [TestFixture]
-    class PresetViewModelIntegrationalTests : IStartTimePointCreator
+    class PresetViewModelTests : IStartTimePointCreator
     {
         [Test]
         public void OnTimePointChangedEventHandler__InitialTimePointIsPrev_StartTimePointIsNext__DoesntActivateAnyTimePointViewModel()
@@ -134,20 +136,20 @@ namespace CycleBell.Tests.FunctionalTests.ViewModels
         public string StartTimePointName { get; } = "StartTime";
         public TimePoint GetStartTimePoint(TimeSpan startTime)
         {
-            return new TimePoint(StartTimePointName, startTime, TimePointType.Absolute);
+            return new TimePoint(StartTimePointName, startTime, TimePointKinds.Absolute);
         }
 
 
         private Mock<ITimerManager> _mockTimerManager;
-        private PresetCollectionManager _presetCollectionManager;
+        private PresetCollection _presetCollectionManager;
 
         private Preset GetPreset(TimeSpan startTime) => new Preset(new []
                                                         {
-                                                            new TimePoint("Test TimePoint # 1", "0:02:00", TimePointType.Relative, 0),
-                                                            new TimePoint("Test TimePoint # 2", "0:02:00", TimePointType.Relative, 0),
-                                                            new TimePoint("Test TimePoint # 3", "0:02:00", TimePointType.Relative, 1),
-                                                            new TimePoint("Test TimePoint # 4", "0:02:00", TimePointType.Relative, 1),
-                                                        }) { StartTime = startTime, TimerLoops = { [0] = 2, [1] = 2 } };
+                                                            new TimePoint("Test TimePoint # 1", "0:02:00", TimePointKinds.Relative, 0),
+                                                            new TimePoint("Test TimePoint # 2", "0:02:00", TimePointKinds.Relative, 0),
+                                                            new TimePoint("Test TimePoint # 3", "0:02:00", TimePointKinds.Relative, 1),
+                                                            new TimePoint("Test TimePoint # 4", "0:02:00", TimePointKinds.Relative, 1),
+                                                        }) { StartTime = startTime, TimerLoopDictionary = { [0] = 2, [1] = 2 } };
 
         private ITimerQueueCalculator GetQueue() => new TimerQueueCalculator(this);
 
@@ -158,17 +160,21 @@ namespace CycleBell.Tests.FunctionalTests.ViewModels
 
         private PresetViewModel GetPresetViewModel(Preset preset)
         {
-            _presetCollectionManager = new PresetCollectionManager();
+            _presetCollectionManager = new PresetCollection();
 
             Mock<IDialogRegistrator> stub_DialogRegistrator = new Mock<IDialogRegistrator>();
 
             var mockCycleBellManager = new Mock<ICycleBellManager>();
             _mockTimerManager = mockCycleBellManager.As<ITimerManager>();
 
-            mockCycleBellManager.Setup (m => m.PresetCollectionManager).Returns (_presetCollectionManager);
+            mockCycleBellManager.Setup (m => m.PresetCollection).Returns (_presetCollectionManager);
             mockCycleBellManager.Setup (m => m.TimerManager).Returns (_mockTimerManager.Object);
 
-            var mainViewModel = new MainViewModel(stub_DialogRegistrator.Object, mockCycleBellManager.Object);
+            var stubAlarm = new Mock<IAlarm>();
+            var scoll = new ObservableCollection<Uri>();
+            stubAlarm.Setup( a => a.DefaultSoundCollection ).Returns( new ReadOnlyObservableCollection< Uri >( scoll ) );
+
+            var mainViewModel = new MainViewModel(stub_DialogRegistrator.Object, mockCycleBellManager.Object, stubAlarm.Object );
 
             _presetCollectionManager.Add (preset);
 

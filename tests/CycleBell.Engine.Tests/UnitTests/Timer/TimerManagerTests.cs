@@ -103,7 +103,7 @@ namespace CycleBell.Engine.Tests.UnitTests.Timer
             // Action:
             tm.Play( preset );
 
-            Thread.Sleep( 2 );
+            Thread.Sleep( 5 );
 
             // Assert:
             Assert.That( canRiseTimePointChanged );
@@ -180,7 +180,7 @@ namespace CycleBell.Engine.Tests.UnitTests.Timer
         private TimeSpan _startTime;
         private TimePoint[] _timePoints;
         private int _shortDecey = 10000;
-        private int _longDecey = 100_000;
+        private int _longDecey = 26_000;
 
         private TimerManager GetTimerManager()
         {
@@ -190,11 +190,11 @@ namespace CycleBell.Engine.Tests.UnitTests.Timer
 
         private Preset GetLongPreset ()
         {
-            _startTime = DateTime.Now.TimeOfDay + TimeSpan.FromMilliseconds( 20_000 );
+            _startTime = DateTime.Now.TimeOfDay + TimeSpan.FromMilliseconds( 5_000 );
             _timePoints = new[] {
-                new TimePoint( "test tp 1", _startTime + TimeSpan.FromMilliseconds( 40_000 ), TimePointKinds.Absolute ),
-                new TimePoint( "test tp 2", _startTime + TimeSpan.FromMilliseconds( 60_000 ), TimePointKinds.Absolute ),
-                new TimePoint( "test tp 3", _startTime + TimeSpan.FromMilliseconds( 80_000 ), TimePointKinds.Absolute ),
+                new TimePoint( "test tp 1", _startTime + TimeSpan.FromMilliseconds( 10_000 ), TimePointKinds.Absolute ),
+                new TimePoint( "test tp 2", _startTime + TimeSpan.FromMilliseconds( 15_000 ), TimePointKinds.Absolute ),
+                new TimePoint( "test tp 3", _startTime + TimeSpan.FromMilliseconds( 20_000 ), TimePointKinds.Absolute ),
             };
 
             var preset =  new Preset {

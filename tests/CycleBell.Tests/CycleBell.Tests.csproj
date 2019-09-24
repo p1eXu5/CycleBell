@@ -79,7 +79,6 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="FunctionalTests\UITests.cs" />
     <Compile Include="FunctionalTests\ViewModels\MainViewModelTests.cs" />
     <Compile Include="FunctionalTests\ViewModels\PresetViewModelTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

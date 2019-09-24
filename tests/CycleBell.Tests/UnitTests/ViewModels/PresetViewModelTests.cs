@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.ObjectModel;
 using System.Linq;
 using CycleBell.Base;
 using CycleBell.Engine;
@@ -342,6 +343,8 @@ namespace CycleBell.Tests.UnitTests.ViewModels
             mockCycleBellManager.Setup (m => m.TimerManager).Returns (_mockTimerManager.Object);
 
             var stubAlarm = new Mock<IAlarm>();
+            var scoll = new ObservableCollection<Uri>();
+            stubAlarm.Setup( a => a.DefaultSoundCollection ).Returns( new ReadOnlyObservableCollection< Uri >( scoll ) );
 
             var mvm = new MainViewModel (mockDialogRegistrator.Object, mockCycleBellManager.Object, stubAlarm.Object);
             return mvm;
