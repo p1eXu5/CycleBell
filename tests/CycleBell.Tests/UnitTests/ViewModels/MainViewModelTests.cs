@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.ObjectModel;
+using System.Linq;
 using CycleBell.Base;
 using CycleBell.Engine;
 using CycleBell.Engine.Models;
@@ -119,6 +120,8 @@ namespace CycleBell.Tests.UnitTests.ViewModels
                                  .Returns((Preset preset) => preset.IsDefaultNamed() );
 
             var stubAlarm = new Mock<IAlarm>();
+            var scoll = new ObservableCollection<Uri>();
+            stubAlarm.Setup( a => a.DefaultSoundCollection ).Returns( new ReadOnlyObservableCollection< Uri >( scoll ) );
 
 
             var mainViewModel = new MainViewModel (_mockDialogRegistrator.Object, _mockCycleBellManager.Object, stubAlarm.Object);

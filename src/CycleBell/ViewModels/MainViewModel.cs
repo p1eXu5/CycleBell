@@ -137,7 +137,9 @@ namespace CycleBell.ViewModels
 
             LoadPresetViewModelCollection();
 
-            LoadDefaultSounds();
+            if ( Alarm.DefaultSoundCollection.Any() ) {
+                LoadDefaultSounds();
+            }
 
             _timer = new Timer(ClearStatusBarText, null, Timeout.Infinite, Timeout.Infinite);
         }
