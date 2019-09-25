@@ -36,6 +36,9 @@ namespace CycleBell.Engine.Timer
 
         private IPlayer _nextPlayer;
 
+        private bool _isPlayerAPlay;
+        private bool _isPlayerBPlay;
+
         #endregion
 
 
@@ -144,7 +147,19 @@ namespace CycleBell.Engine.Timer
                 return;
             }
 
+            var lastUri = _defaultPlayer.Source;
             _defaultPlayer.Open( uri );
+
+            if ( _nextPlayer?.Source != null && _nextPlayer.Source == lastUri ) {
+
+                if ( _nextPlayer == _playerA && !_isPlayerAPlay ) {
+                    _nextPlayer.Open( uri );
+                }
+
+                if ( _nextPlayer == _playerB && !_isPlayerBPlay ) {
+                    _nextPlayer.Open( uri );
+                }
+            }
         }
 
         /// <summary>
@@ -220,9 +235,11 @@ namespace CycleBell.Engine.Timer
 
                 if ( _nextPlayer == _playerA ) {
                     _playerB.Stop();
+                    _isPlayerAPlay = true;
                 }
                 else {
                     _playerA.Stop();
+                    _isPlayerBPlay = true;
                 }
 
                 _nextPlayer.Play();
@@ -240,10 +257,12 @@ namespace CycleBell.Engine.Timer
         {
             if ( _playerA.HasAudio ) {
                 _playerA.Stop();
+                _isPlayerAPlay = false;
             }
 
             if ( _playerB.HasAudio ) {
                 _playerB.Stop();
+                _isPlayerBPlay = false;
             }
         }
 
@@ -257,6 +276,8 @@ namespace CycleBell.Engine.Timer
         public void Reset()
         {
             _nextPlayer = null;
+            _isPlayerBPlay = false;
+            _isPlayerAPlay = false;
         }
 
         #endregion

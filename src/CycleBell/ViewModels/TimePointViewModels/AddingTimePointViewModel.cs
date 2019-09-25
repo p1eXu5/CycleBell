@@ -142,6 +142,9 @@ namespace CycleBell.ViewModels.TimePointViewModels
             OnPropertyChanged(nameof(TimePointKinds));
 
             LoopNumber = 0;
+
+            TimePoint.Tag = null;
+            OnPropertyChanged(nameof(SoundLocation));
         }
 
         public void CopyFrom(TimePoint timePoint)

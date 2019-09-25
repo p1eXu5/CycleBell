@@ -141,6 +141,13 @@ namespace CycleBell.Engine.Tests.UnitTests.Timer
             Assert.IsTrue( alarm.DefaultSoundCollection.Contains( uri )  );
         }
 
+        // TODO: when next sound is loaded and equals to default - reopen next
+        [ Test ]
+        public void ChangeDefaultSound_NextPlayerNull_DoesNotCallPlayersOpen()
+        {
+
+        }
+
         #endregion
 
 

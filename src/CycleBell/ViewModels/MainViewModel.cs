@@ -119,7 +119,10 @@ namespace CycleBell.ViewModels
 
                              return new SoundMenuItemViewModel {
                                  Name = name,
-                                 Command = new ActionCommand( o => Alarm.SetDefaultSound( s ) )
+                                 Command = new ActionCommand( o => {
+                                     Alarm.SetDefaultSound( s );
+                                     OnMediaEnded( this, EventArgs.Empty );
+                                 } )
                              };
                          } ) 
                 );
@@ -628,14 +631,14 @@ namespace CycleBell.ViewModels
         {
             return _manager.IsNewPreset( preset );
         }
+        private void OnMediaEnded( object s, EventArgs e )
+        {
+            _isPlayDefault = false;
+            Alarm.DefaultMediaEnded -= OnMediaEnded;
+        }
 
         private void Ring (object o)
         {
-            void OnMediaEnded( object s, EventArgs e )
-            {
-                _isPlayDefault = false;
-                Alarm.DefaultMediaEnded -= OnMediaEnded;
-            }
 
             if ( !_isPlayDefault ) {
                 Alarm.DefaultMediaEnded += OnMediaEnded;
