@@ -62,6 +62,7 @@ namespace CycleBell.ViewModels
 
         private bool _dontSwitchSelectedPreset;
         private bool _checked;
+        private bool _isPlayDefault;
 
         #endregion Private
 
@@ -630,8 +631,24 @@ namespace CycleBell.ViewModels
 
         private void Ring (object o)
         {
+            void OnMediaEnded( object s, EventArgs e )
+            {
+                _isPlayDefault = false;
+                Alarm.DefaultMediaEnded -= OnMediaEnded;
+            }
+
+            if ( !_isPlayDefault ) {
+                Alarm.DefaultMediaEnded += OnMediaEnded;
+                Alarm.PlayDefault();
+                _isPlayDefault = true;
+            }
+            else {
+                Alarm.StopDefault();
+                Alarm.DefaultMediaEnded -= OnMediaEnded;
+                _isPlayDefault = false;
+            }
+
             IsRingOnStartTime = IsRingOnStartTime;
-            Ring();
         }
         private void Stop (object o)
         {
@@ -661,6 +678,7 @@ namespace CycleBell.ViewModels
                 // if not running
                 if ( !_selectedPreset.Preset.TimerLoopDictionary.Values.Any( tl => tl <= 0 ) ) {
 
+                    Alarm.Reset();
                     _timerManager.PlayAsync( _selectedPreset.Preset );
                 }
             }
@@ -670,8 +688,6 @@ namespace CycleBell.ViewModels
         
         private void SwitchIsRingOnStartTime (object o)
         {
-            Alarm.Stop();
-            Alarm.StopDefault();
             IsRingOnStartTime ^= true;
         }
 

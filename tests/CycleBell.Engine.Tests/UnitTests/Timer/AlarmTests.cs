@@ -350,7 +350,6 @@ namespace CycleBell.Engine.Tests.UnitTests.Timer
             _mockPlayerB.Verify( p => p.Play(), Times.Never() );
         }
 
-
         [Test]
         public void Play_TimePointIsInDictionary_PlayPlayerA()
         {
@@ -361,6 +360,32 @@ namespace CycleBell.Engine.Tests.UnitTests.Timer
             alarm.Play();
 
             _mockPlayerA.Verify( p => p.Play(), Times.Once );
+        }
+
+        [ Test ]
+        public void Play_NextPlayerIsPlayerA_CallsPlayerBStop()
+        {
+            var alarm = GetAlarm();
+            alarm.AddSound( _timePointsWithSound[0] );
+            alarm.LoadNextSound( _timePointsWithSound[0] );
+
+            alarm.Play();
+
+            _mockPlayerB.Verify( p => p.Stop(), Times.Once );
+        }
+
+        [ Test ]
+        public void Play_NextPlayerIsPlayerB_CallsPlayerAStop()
+        {
+            var alarm = GetAlarm();
+            alarm.AddSound( _timePointsWithSound[0] );
+            alarm.AddSound( _timePointsWithSound[1] );
+            alarm.LoadNextSound( _timePointsWithSound[0] );
+            alarm.LoadNextSound( _timePointsWithSound[1] );
+
+            alarm.Play();
+
+            _mockPlayerA.Verify( p => p.Stop(), Times.Once );
         }
 
         #endregion

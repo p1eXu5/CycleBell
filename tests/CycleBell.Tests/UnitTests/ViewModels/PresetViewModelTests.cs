@@ -350,14 +350,89 @@ namespace CycleBell.Tests.UnitTests.ViewModels
         }
 
         [ Test ]
-        public void OnTimePointChanged_NextTimePointContainsInCollection_CallsAlarmLoadNextSound()
+        public void OnTimePointChanged_TimerEventArgsIsNotNull_CallsAlarmLoadNextSound()
         {
             var preset = PresetFactory.GetPresetWithSounds();
             var pvm = GetPresetViewModel( preset );
 
-            pvm.OnTimePointChanged( null, new TimerEventArgs( null, null, TimeSpan.Zero, null ) );
+            pvm.OnTimePointChanged( this, new TimerEventArgs( null, null, TimeSpan.Zero, null ) );
 
             _mockAlarm.Verify( a => a.LoadNextSound( It.IsAny<TimePoint>() ), Times.Once);
+        }
+
+        [ Test ]
+        public void OnTimePointChanged_PrevIsInitialTimePoint_CallsAlarmLoadNextSound()
+        {
+            var preset = PresetFactory.GetPresetWithSounds();
+            var pvm = GetPresetViewModel( preset );
+            var startTime = DateTime.Now.TimeOfDay + TimeSpan.FromSeconds( 1 );
+            var initialTimePoint = TimerManager.InitialTimePoint;
+            var startTimePoint = TimerManager.GetStartTimePoint( startTime );
+
+            pvm.OnTimePointChanged( this, new TimerEventArgs( initialTimePoint, startTimePoint, TimeSpan.FromSeconds( 1 ), startTime ) );
+
+            _mockAlarm.Verify( a => a.LoadNextSound( It.IsAny<TimePoint>() ), Times.Once);
+            _mockAlarm.Verify( a => a.Play(), Times.Never );
+            _mockAlarm.Verify( a => a.PlayDefault(), Times.Never );
+        }
+
+        [ Test ]
+        public void OnTimePointChanged_PrevIsStartTimePoint_RingOnStartTime_CallsAlarmLoadNextSound()
+        {
+            var preset = PresetFactory.GetPresetWithSounds();
+            var pvm = GetPresetViewModel( preset );
+            var startTime = DateTime.Now.TimeOfDay + TimeSpan.FromSeconds( 1 );
+            var startTimePoint = TimerManager.GetStartTimePoint( startTime );
+
+            pvm.OnTimePointChanged( this, new TimerEventArgs( startTimePoint, preset.TimePointCollection[0], TimeSpan.FromSeconds( 1 ), startTime ) );
+
+            _mockAlarm.Verify( a => a.LoadNextSound( It.IsAny<TimePoint>() ), Times.Once);
+            _mockAlarm.Verify( a => a.Play(), Times.Once );
+            _mockAlarm.Verify( a => a.PlayDefault(), Times.Never );
+        }
+
+        [ Test ]
+        public void OnTimePointChanged_PrevIsRegularTimePoint_RingOnStartTime_CallsAlarmLoadNextSound()
+        {
+            var preset = PresetFactory.GetPresetWithSounds();
+            var pvm = GetPresetViewModel( preset );
+            var startTime = DateTime.Now.TimeOfDay + TimeSpan.FromSeconds( 1 );
+
+            pvm.OnTimePointChanged( this, new TimerEventArgs( preset.TimePointCollection[0], preset.TimePointCollection[1], TimeSpan.FromSeconds( 1 ), startTime ) );
+
+            _mockAlarm.Verify( a => a.LoadNextSound( It.IsAny<TimePoint>() ), Times.Once);
+            _mockAlarm.Verify( a => a.Play(), Times.Once );
+            _mockAlarm.Verify( a => a.PlayDefault(), Times.Never );
+        }
+
+        [ Test ]
+        public void OnTimePointChanged_PrevIsStartTimePoint_DoesNotRingOnStartTime_CallsAlarmLoadNextSound()
+        {
+            var preset = PresetFactory.GetPresetWithSounds();
+            var pvm = GetPresetViewModel( preset, false );
+            var startTime = DateTime.Now.TimeOfDay + TimeSpan.FromSeconds( 1 );
+            var startTimePoint = TimerManager.GetStartTimePoint( startTime );
+
+            pvm.OnTimePointChanged( this, new TimerEventArgs( startTimePoint, preset.TimePointCollection[0], TimeSpan.FromSeconds( 1 ), startTime ) );
+
+            _mockAlarm.Verify( a => a.LoadNextSound( It.IsAny<TimePoint>() ), Times.Once);
+            _mockAlarm.Verify( a => a.Play(), Times.Never );
+            _mockAlarm.Verify( a => a.PlayDefault(), Times.Never );
+        }
+
+        [ Test ]
+        public void OnTimePointChanged_NextIsStartTimePoint_DoesNotRingOnStartTime_CallsAlarmLoadNextSound()
+        {
+            var preset = PresetFactory.GetPresetWithSounds();
+            var pvm = GetPresetViewModel( preset, false );
+            var startTime = DateTime.Now.TimeOfDay + TimeSpan.FromSeconds( 1 );
+            var startTimePoint = TimerManager.GetStartTimePoint( startTime );
+
+            pvm.OnTimePointChanged( this, new TimerEventArgs( preset.TimePointCollection[0], startTimePoint, TimeSpan.FromSeconds( 1 ), startTime ) );
+
+            _mockAlarm.Verify( a => a.LoadNextSound( It.IsAny<TimePoint>() ), Times.Once);
+            _mockAlarm.Verify( a => a.Play(), Times.Once );
+            _mockAlarm.Verify( a => a.PlayDefault(), Times.Never );
         }
 
         #endregion

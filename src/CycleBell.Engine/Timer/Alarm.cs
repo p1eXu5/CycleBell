@@ -57,6 +57,17 @@ namespace CycleBell.Engine.Timer
         #endregion
 
 
+        #region events
+
+        public event EventHandler DefaultMediaEnded
+        {
+            add => _defaultPlayer.MediaEnded += value;
+            remove => _defaultPlayer.MediaEnded -= value;
+        }
+
+        #endregion
+
+
         #region properties
 
         public ReadOnlyObservableCollection< Uri > DefaultSoundCollection { get; }
@@ -206,6 +217,14 @@ namespace CycleBell.Engine.Timer
         public void Play()
         {
             if ( _nextPlayer != null && _nextPlayer.HasAudio ) {
+
+                if ( _nextPlayer == _playerA ) {
+                    _playerB.Stop();
+                }
+                else {
+                    _playerA.Stop();
+                }
+
                 _nextPlayer.Play();
             }
         }

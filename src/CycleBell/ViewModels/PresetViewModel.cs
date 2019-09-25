@@ -66,9 +66,6 @@ namespace CycleBell.ViewModels
         private string _nextTimePointName;
         private TimeSpanDigits _timeLeftTo;
 
-        public IDictionary<int, MediaPlayer> SoundMap { get; } = new Dictionary<int, MediaPlayer>();
-        private SoundPlayer _lastSoundPlayer;
-
         private TimePointViewModelBase _activeTimePointVm;
 
         private bool _focusStartTime;
@@ -391,8 +388,10 @@ namespace CycleBell.ViewModels
         {
             if ( TimerManager.IsInitialTimePoint( e.PrevTimePoint )) {
             }
-            else if ( TimerManager.IsStartTimePoint( e.PrevTimePoint ) && _mainViewModel.IsRingOnStartTime ) {
-                _mainViewModel.Alarm.Play();
+            else if ( TimerManager.IsStartTimePoint( e.PrevTimePoint )) {
+                if ( _mainViewModel.IsRingOnStartTime ) {
+                    _mainViewModel.Alarm.Play();
+                }
             }
             else  {
                 _mainViewModel.Alarm.Play();
@@ -455,25 +454,12 @@ namespace CycleBell.ViewModels
 
         internal void OnTimerStopped(object sender, EventArgs args)
         {
-            if ( _dispatcher != null ) {
-                _dispatcher.BeginInvoke( DispatcherPriority.Normal, (Action)StopRing );
-            }
-            else {
-                StopRing();
-            }
-
             if (_activeTimePointVm != null)
                 _activeTimePointVm.IsActive = false;
 
             TimePointVmCollection.EnableAll();
 
             ResetBaseTimes();
-        }
-
-        private void StopRing()
-        {
-            _mainViewModel.Alarm.Stop();
-            _mainViewModel.Alarm.Reset();
         }
 
         private void ResetBaseTimes()

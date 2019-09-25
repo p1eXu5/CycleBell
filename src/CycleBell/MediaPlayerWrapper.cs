@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Media;
 using CycleBell.Engine.Timer;
@@ -27,6 +23,12 @@ namespace CycleBell
         {
             add => _player.MediaOpened += value;
             remove => _player.MediaOpened -= value;
+        }
+
+        public event EventHandler MediaEnded
+        {
+            add => _player.MediaEnded += value;
+            remove => _player.MediaEnded -= value;
         }
     }
 }

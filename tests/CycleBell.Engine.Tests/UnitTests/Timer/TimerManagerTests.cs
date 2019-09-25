@@ -111,7 +111,7 @@ namespace CycleBell.Engine.Tests.UnitTests.Timer
         }
 
         [Test]
-        public void Play_ShortPreset_RaisesTimePointChangedEventWithExpectedArgs()
+        public void Play_ShortPreset_RaisesTimePointChangedEventWithExpectedNextTimePoint()
         {
             // Arrange:
             var tm = GetTimerManager();
@@ -121,6 +121,7 @@ namespace CycleBell.Engine.Tests.UnitTests.Timer
                 _timePoints[ 0 ],
                 _timePoints[ 1 ],
                 _timePoints[ 2 ],
+                TimerManager.GetStartTimePoint( _startTime ),
             };
 
             var actualList = new List< TimePoint >();
@@ -137,9 +138,40 @@ namespace CycleBell.Engine.Tests.UnitTests.Timer
 
             // Assert:
             Assert.That( actualList.Select( a => (a.Name, a.GetAbsoluteTime()) ), Is.EquivalentTo( expectedList.Select( e => (e.Name, e.GetAbsoluteTime()) ) ) );
-
-            tm.Stop();
         }
+
+
+        [Test]
+        public void Play_ShortPreset_RaisesTimePointChangedEventWithExpectedPrevTimePoint()
+        {
+            // Arrange:
+            var tm = GetTimerManager();
+            var preset = GetShortPreset();
+            var expectedList = new [] {
+                TimerManager.InitialTimePoint,
+                TimerManager.GetStartTimePoint( _startTime ),
+                _timePoints[ 0 ],
+                _timePoints[ 1 ],
+                _timePoints[ 2 ],
+            };
+
+            var actualList = new List< TimePoint >();
+
+            tm.TimePointChanged += ( sender, args ) =>
+                                   {
+                                       actualList.Add( args.PrevTimePoint );
+                                   };
+
+            // Action:
+            tm.Play( preset );
+
+            Thread.Sleep( _shortDecey );
+
+            // Assert:
+            Assert.That( actualList.Select( a => (a.Name, a.GetAbsoluteTime()) ), Is.EquivalentTo( expectedList.Select( e => (e.Name, e.GetAbsoluteTime()) ) ) );
+        }
+
+
 
         [Test]
         public void Play_LongPreset_RaisesTimePointChangedEventWithExpectedArgs()

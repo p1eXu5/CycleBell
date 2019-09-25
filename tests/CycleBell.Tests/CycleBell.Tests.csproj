@@ -81,6 +81,7 @@
   <ItemGroup>
     <Compile Include="FunctionalTests\ViewModels\MainViewModelTests.cs" />
     <Compile Include="FunctionalTests\ViewModels\PresetViewModelTests.cs" />
+    <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="UnitTests\Factories\PresetFactory.cs" />
     <Compile Include="UnitTests\Factories\TimePointFactory.cs" />

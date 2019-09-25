@@ -19,5 +19,7 @@ namespace CycleBell.Engine.Timer
         Duration NaturalDuration { get; }
 
         event EventHandler MediaOpened;
+
+        event EventHandler MediaEnded;
     }
 }

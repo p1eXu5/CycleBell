@@ -59,15 +59,18 @@ namespace CycleBell.Engine.Timer
             => _timerManager ?? (_timerManager = new TimerManager());
         
         public static int Accuracy { get; set; } = 300;
-        
+
+        private static TimePoint _initialTimePoint;
+
         /// <summary>
         /// TimePoint with negate absolute time.
         /// </summary>
-        public static TimePoint InitialTimePoint { get; } = new TimePoint(INITIAL_TIMEPOINT_NAME, TimeSpan.FromMinutes(-1), TimePointKinds.Absolute);
+        public static TimePoint InitialTimePoint => _initialTimePoint 
+                                                    ?? ( _initialTimePoint = new TimePoint(INITIAL_TIMEPOINT_NAME, TimeSpan.FromMinutes(-1), TimePointKinds.Absolute));
 
         public static bool IsInitialTimePoint( TimePoint timePoint )
         {
-            return timePoint != null && timePoint.Time < TimeSpan.Zero;
+            return timePoint != null && timePoint.Time < TimeSpan.Zero && timePoint.Name == INITIAL_TIMEPOINT_NAME;
         }
 
         private static TimePoint _startTimePoint;
@@ -288,33 +291,38 @@ namespace CycleBell.Engine.Timer
 
         // timer callback:
         /// <summary>
-        /// Timer handler
+        /// Timer handler.
         /// </summary>
         /// <param name="state"></param>
         private void TimerCallbackHandler( object state )
         {
             var currentTime = DateTime.Now.TimeOfDay;
 
+            // First peek is start time point
             var (nextTime, nextPoint) = _queue.Peek();
+
+            // if current time will be greeter than next time then dt will be greeter then _deltaTime
+            // and time point will be changed
             var dt = CalculateLastTime( currentTime, nextTime );
 
             OnTimerSecondPassed( nextPoint, dt );
 
-            if ( dt > _deltaTime || _deltaTime == TimeSpan.Zero ) {
-                if ( !ChangeTimePoint() ) {
+            // In the begining _deltaTime equals to zero
+            if ( dt > _deltaTime || _deltaTime == TimeSpan.Zero ) 
+            {
+                if ( !ChangeTimePoint() ) 
+                {
+                    OnChangeTimePoint( _prevQueueElement.prevTimePoint, _queue.Peek(), dt );
                     Stop();
                     return;
                 }
 
+                // if this the first handler call _prevTimePoint is the InitialTimePoint
                 OnChangeTimePoint( _prevQueueElement.prevTimePoint, _queue.Peek(), dt );
-                lock ( _locker2 ) {
-                    _deltaTime = TimeSpan.FromHours( 25 );
-                }
+                _deltaTime = TimeSpan.FromHours( 25 );
             }
             else {
-                lock ( _locker ) {
-                    _deltaTime = dt;
-                }
+                _deltaTime = dt;
             }
 
             currentTime = DateTime.Now.TimeOfDay;
@@ -322,27 +330,24 @@ namespace CycleBell.Engine.Timer
         }
 
         /// <summary>
-        /// Change NextTimePoint in timer queue
+        /// Returns true if just runned or try to change NextTimePoint in timer queue
         /// </summary>
         private bool ChangeTimePoint()
         {
-            lock ( _locker3 ) {
-                if ( _isJustRunned ) {
-                    _isJustRunned = false;
-                    return true;
-                }
-
-                _prevQueueElement = _queue.Dequeue();
-                _queue.Enqueue( _prevQueueElement );
+            if ( _isJustRunned ) {
+                _isJustRunned = false;
+                return true;
             }
 
+            _prevQueueElement = _queue.Dequeue();
+            _queue.Enqueue( _prevQueueElement );
+            
             // If StartTimePoint are the next TimePoint:
             if ( _queue.Peek().nextTimePoint.Name == START_TIMEPOINT_NAME) {
 
                 if ( !_preset.IsInfiniteLoop ) {
                     return false;
                 }
-
             }
             
             return true;
@@ -396,11 +401,11 @@ namespace CycleBell.Engine.Timer
         }
 
         /// <summary>
-        /// Calculate time to the next TimePoint change
+        /// Calculate absolute time to the next TimePoint change.
         /// </summary>
         /// <param name="currentTime">current time reference</param>
         /// <param name="nextTime"></param>
-        /// <returns>Last time to nextTime</returns>
+        /// <returns>Last time to nextTime [0h; 24h)</returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         private TimeSpan CalculateLastTime(TimeSpan currentTime, TimeSpan nextTime)
         {

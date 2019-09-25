@@ -28,5 +28,7 @@ namespace CycleBell.Engine.Timer
         void StopDefault ();
 
         void Reset();
+
+        event EventHandler DefaultMediaEnded;
     }
 }
