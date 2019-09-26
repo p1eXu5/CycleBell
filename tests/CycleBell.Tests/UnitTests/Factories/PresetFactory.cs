@@ -16,5 +16,14 @@ namespace CycleBell.Tests.UnitTests.Factories
 
             return preset;
         }
+
+        public static Preset[] GetPresetCollection()
+        {
+            return new[] {
+                new Preset( "Test Preset #1" ),
+                new Preset( "Test Preset #2" ),
+                new Preset( "Test Preset #3" ),
+            };
+        }
     }
 }
