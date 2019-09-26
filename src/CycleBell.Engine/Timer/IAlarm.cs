@@ -17,6 +17,8 @@ namespace CycleBell.Engine.Timer
 
         void LoadDefaultSoundCollection();
 
+        Uri GetDefaultSound();
+
         void SetDefaultSound();
         void SetDefaultSound ( Uri uri );
         void AddSound ( TimePoint tPoint );

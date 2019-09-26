@@ -143,9 +143,17 @@ namespace CycleBell.Engine.Tests.UnitTests.Timer
 
         // TODO: when next sound is loaded and equals to default - reopen next
         [ Test ]
-        public void ChangeDefaultSound_NextPlayerNull_DoesNotCallPlayersOpen()
+        public void SetDefaultSound_NativeUri_SetsDefaultSound()
         {
+            var alarm = GetAlarm();
+            alarm.LoadDefaultSoundCollection();
 
+            var uri = new Uri( AppDomain.CurrentDomain.BaseDirectory + "\\Sounds\\Alarm 2.mp3" );
+            var uri2 = new Uri( uri.ToString() );
+
+            alarm.SetDefaultSound( uri2 );
+
+            Assert.That( alarm.GetDefaultSound(), Is.EqualTo( uri2 ) );
         }
 
         #endregion

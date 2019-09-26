@@ -128,6 +128,11 @@ namespace CycleBell.Engine.Timer
             }
         }
 
+        public Uri GetDefaultSound()
+        {
+            return _defaultPlayer.Source;
+        }
+
         public void SetDefaultSound()
         {
             if ( DefaultSoundCollection.Count > 0) {
@@ -137,7 +142,14 @@ namespace CycleBell.Engine.Timer
 
         public void SetDefaultSound( Uri uri )
         {
-            if ( uri == null || !IsValid( uri.OriginalString ) ) return;
+            if ( uri == null ) return;
+
+            try {
+                if ( !IsValid( uri.LocalPath ) ) return;
+            }
+            catch ( InvalidOperationException ) {
+                if ( !IsValid( uri.OriginalString ) ) return;
+            }
 
             if ( !_defaultSoundCollection.Contains( uri ) ) {
                 _defaultSoundCollection.Add( uri );

@@ -184,6 +184,7 @@ namespace CycleBell.Engine.Tests.UnitTests.Timer
                 _timePoints[ 0 ],
                 _timePoints[ 1 ],
                 _timePoints[ 2 ],
+                TimerManager.GetStartTimePoint( _startTime ),
             };
 
             var actualList = new List<TimePoint>();
