@@ -33,11 +33,20 @@ using CycleBell.Engine.Models;
 using CycleBell.Engine.Timer;
 using Microsoft.Win32;
 
+
+[assembly:InternalsVisibleTo("CycleBell.Tests")]
 namespace CycleBell.ViewModels
 {
     public class MainViewModel : ObservableObject, IMainViewModel
     {
+        #region consts
+
         private const int _DUE_TIME = 5000;
+        internal const string REG_PATH = @"Software\CycleBell\Settings\";
+        internal const string DEFAULT_SOUND_KEY = "Default Sound";
+        internal const string SELECTED_PRESET_KEY = "Selected Preset";
+
+        #endregion
 
         #region fields
 
@@ -164,7 +173,7 @@ namespace CycleBell.ViewModels
         {
             get => _selectedPreset;
             set {
-                if (UpdateSelectedPreset(value)) {
+                if ( UpdateSelectedPreset( value ) ) {
                     OnSelectedPresetPropertyChanged();
                 }
             }
@@ -265,6 +274,62 @@ namespace CycleBell.ViewModels
 
 
         #region commands
+
+        #region LoadUserSettingsCommand
+
+        public ICommand LoadUserSettingsCommand => new ActionCommand(LoadUserSettings, CanLoadUserSettings);
+
+        private void LoadUserSettings(object o)
+        {
+            var key = Registry.CurrentUser.OpenSubKey( REG_PATH );
+
+            // ReSharper disable once PossibleNullReferenceException
+            var defaultSound = key.GetValue( DEFAULT_SOUND_KEY )?.ToString() ?? "";
+            var savedSelectedPreset = key.GetValue( SELECTED_PRESET_KEY )?.ToString() ?? "";
+            key.Close();
+
+            try {
+                Alarm.SetDefaultSound( new Uri( defaultSound ) );
+            }
+            catch ( UriFormatException ) { }
+
+            var presetVm = PresetViewModelCollection.FirstOrDefault( p => p.Name.Equals( savedSelectedPreset ) );
+
+            if ( presetVm != null ) {
+                SelectedPreset = presetVm;
+            }
+        }
+
+        private bool CanLoadUserSettings(object o)
+        {
+            var key = Registry.CurrentUser.OpenSubKey( REG_PATH );
+            return PresetViewModelCollection.Any() && key != null;
+        }
+
+        #endregion
+
+        #region SaveUserSettingsCommand
+
+        public ICommand SaveUserSettingsCommand => new ActionCommand( SaveUserSettings );
+
+        private void SaveUserSettings( object o )
+        {
+            var key = Registry.CurrentUser.OpenSubKey( MainViewModel.REG_PATH, true );
+
+            if ( key == null ) {
+                key = Registry.CurrentUser.CreateSubKey( MainViewModel.REG_PATH );
+            }
+
+            
+            key.SetValue( MainViewModel.SELECTED_PRESET_KEY, _selectedPreset?.Name ?? "" );
+            var defaultSound = Alarm.GetDefaultSound()?.ToString() ?? "";
+
+            key.SetValue( MainViewModel.DEFAULT_SOUND_KEY, defaultSound );
+
+            key.Close();
+        }
+
+        #endregion
 
         // Menu File
         public ICommand CreateNewPresetCommand => new ActionCommand(CreateNewPreset);
@@ -451,6 +516,8 @@ namespace CycleBell.ViewModels
         /// <param name="newSelectedPreset"></param>
         private bool UpdateSelectedPreset (PresetViewModel newSelectedPreset)
         {
+            #region locals
+
             void DisconnectHandlers( PresetViewModel presetVm )
             {
                 _timerManager.TimerStopped -= presetVm.OnTimerStopped;
@@ -473,9 +540,11 @@ namespace CycleBell.ViewModels
                 _timerManager.TimerStopped += _selectedPreset.OnTimerStopped;
             }
 
+            #endregion
 
-            if (newSelectedPreset == null) {
 
+            if (newSelectedPreset == null) 
+            {
                 _selectedPreset = null;
                 return true;
             }
@@ -490,15 +559,20 @@ namespace CycleBell.ViewModels
                 DisconnectHandlers( currentPreset );
             }
 
-            if (currentPreset != null && currentPreset.IsNew && currentPreset.IsModified && !ShowSavePresetDialog(currentPreset)) {
-                // The deleting preset will be deleted. After that
-                // the selected preset will be try to set himself again
+            if ( currentPreset != null 
+                 && currentPreset.IsNew 
+                 && currentPreset.IsModified 
+                 && !ShowSavePresetDialog(currentPreset)) 
+            {
+                // remove new and not modified last preset
+                // After that the selected preset will be try to set himself again
                 // and UpdateSelectedPreset will be invoked again.
                 _selectedPreset = null;
-                _manager.RemovePreset (currentPreset.Preset);
+                _manager.RemovePreset( currentPreset.Preset );
             }
 
             _selectedPreset = newSelectedPreset;
+            _checked = false;
             ConnectHandlers();
 
             return true;
@@ -726,7 +800,7 @@ namespace CycleBell.ViewModels
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         private void CheckSelectedPresetBeforeExit()
         {
-            if (_checked) {
+            if ( _checked ) {
                 return;
             }
 
