@@ -20,20 +20,23 @@
     </Window.Resources>
     <Grid Background="Transparent">
         <Grid Margin="5" >
-            <Grid.Effect>
-                <DropShadowEffect BlurRadius="8" ShadowDepth="0" Opacity=".8" />
-            </Grid.Effect>
-            <Border BorderBrush="Black" BorderThickness="1" />
+            <Border BorderBrush="Black" BorderThickness="1" >
+                <Border.Effect>
+                    <DropShadowEffect BlurRadius="4" ShadowDepth="0" Opacity=".8" />
+                </Border.Effect>
+            </Border>
+            <Border Background="White" BorderThickness="1" >
+            </Border>
 
             <Grid>
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="24"/>
                     <RowDefinition Height="*"/>
                 </Grid.RowDefinitions>
 
 
-                <Button Width="32" Height="22" 
-                    Padding="5"
+                <Button Width="28" Height="16" 
+                    Padding="0"
                     HorizontalAlignment="Right"
                     Background="#FF33FFFF"
                     BorderThickness="0"
@@ -91,19 +94,26 @@
                 <Grid Margin="20,10" Grid.Row="1">
                     <Grid.RowDefinitions>
                         <RowDefinition Height="Auto"/>
-                        <RowDefinition Height="Auto"/>
                         <RowDefinition Height="*"/>
                     </Grid.RowDefinitions>
-                    <TextBlock Grid.Row="0" HorizontalAlignment="Center" 
-                           Margin="0,20"
-                           FontWeight="Bold" FontSize="20">
-                    Cycle Bell
-                    </TextBlock>
-                    <TextBlock Grid.Row="1" HorizontalAlignment="Center" 
-                           TextWrapping="Wrap"
-                           FontWeight="Normal" FontSize="14">
-                    Бесплатное использование для физических и юридических лиц.
-                    </TextBlock>
+                    <StackPanel>
+                        <TextBlock Grid.Row="0" HorizontalAlignment="Center" 
+                               Margin="0,20,0,10"
+                               FontWeight="Bold" FontSize="20"
+                               TextAlignment="Center"
+                               >
+                            CycleBell (Free Edition)
+                        </TextBlock>
+                        <TextBlock TextAlignment="Center" Margin="0,0,0,5" FontWeight="Black">
+                            <Run>v1.0.1</Run>
+                        </TextBlock>
+                        <TextBlock TextAlignment="Center">
+                            <Run FontWeight="Bold">©</Run> 2018-2019 <Run FontWeight="Bold">Vladimir Likhatskiy</Run>
+                            <LineBreak />
+                            licensed under <Run FontWeight="Bold">Apache License 2.0</Run>
+                        </TextBlock>
+                    </StackPanel>
+
                     <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Center">
                         <Button Width="100" Height="24" 
                             Command="{Binding OkCommand}"

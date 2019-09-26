@@ -346,7 +346,13 @@ namespace CycleBell.ViewModels
         public ICommand InfiniteLoopCommand => new ActionCommand((o) => { IsInfiniteLoop ^= true; });
 
         // Menu Help
-        public ICommand ViewHelpCommand => new ActionCommand(About, o => false);
+        public ICommand ViewHelpCommand => new ActionCommand(OpenGettingStarted);
+
+        private void OpenGettingStarted( object o )
+        {
+            System.Diagnostics.Process.Start( "https://www.cyclebell.com/getting_started" );
+        }
+
         public ICommand AboutCommand => new ActionCommand(About);
 
         // Presets ComboBox

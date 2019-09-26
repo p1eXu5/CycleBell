@@ -190,9 +190,9 @@
                     <TextBlock VerticalAlignment="Center">Help</TextBlock>
                 </MenuItem.Header>
 
-                <!--<MenuItem Header="View Help" Command="{Binding ViewHelpCommand}" />-->
-                <!--<Separator />-->
-                <MenuItem Header="About Cycle Bell"  Command="{Binding AboutCommand}" />
+                <MenuItem Header="Getting Started" Command="{Binding ViewHelpCommand}" />
+                <Separator />
+                <MenuItem Header="About"  Command="{Binding AboutCommand}" />
             </MenuItem>
         </Menu>
 
