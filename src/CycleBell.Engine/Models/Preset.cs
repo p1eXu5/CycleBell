@@ -72,10 +72,7 @@ namespace CycleBell.Engine.Models
         public static bool AutoUpdateTimePointBaseTimes { get; set; } = true;
 
         // Instance:
-        /// <summary>
-        /// Preset name
-        /// </summary>
-        public string PresetName { get; set; }
+       
 
         public static void UpdateTimePointBaseTimes(IEnumerable<TimePoint> timePointCollection, TimeSpan startTime)
         {
@@ -163,6 +160,11 @@ namespace CycleBell.Engine.Models
 
 
         #region Properties
+
+         /// <summary>
+        /// Preset name
+        /// </summary>
+        public string PresetName { get; set; }
 
         /// <summary>
         /// Start time for preset
