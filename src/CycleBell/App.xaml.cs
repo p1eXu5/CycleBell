@@ -41,7 +41,7 @@ namespace CycleBell
                 Trace.WriteLine (ex.Message);
             }
 
-            wnd.Closing += delegate( object sender, CancelEventArgs args ) { manager.SavePresets(); };
+            wnd.Closed += delegate( object sender, EventArgs args ) { manager.SavePresets(); };
             wnd.Show();
         }
 

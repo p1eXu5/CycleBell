@@ -116,6 +116,7 @@ namespace CycleBell.ViewModels.TimePointViewModels
             set {
                 _muteFlag = value;
                 OnPropertyChanged ();
+
             }
         }
 

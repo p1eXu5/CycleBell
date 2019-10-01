@@ -14,7 +14,7 @@
 
              d:DataContext="{d:DesignInstance viewModels:PresetViewModel}"
 
-             d:DesignHeight="450" d:DesignWidth="400">
+             d:DesignHeight="450" d:DesignWidth="480">
 
     <UserControl.Resources>
         
@@ -31,7 +31,7 @@
 
     </UserControl.Resources>
 
-    <Grid x:Name="PresetGrid" HorizontalAlignment="Stretch">
+    <Grid x:Name="PresetGrid" HorizontalAlignment="Stretch" MinWidth="460">
         <Grid.RowDefinitions>
             <!-- start time -->
             <RowDefinition Height="auto"/>
@@ -239,7 +239,7 @@
                      FontFamily="{StaticResource font_SuiGeneris}"
                      ScrollViewer.HorizontalScrollBarVisibility="Hidden"
                      ScrollViewer.CanContentScroll="False"
-
+                     
                      at:AttachedPropertyFactory.IsTimePopints="{Binding HasTimePoints}"
                      >
                 <!--<ToggleButton Width="200" Height="200" Style="{x:Null}" />-->
@@ -291,6 +291,8 @@
         <!-- adding point -->
         <userControls:AddingTimePointUserControl Grid.Row="2"
                                                  VerticalAlignment="Center"
+                                                 HorizontalAlignment="Center"
+                                                 MinWidth="400"
                                                  Height="Auto" Width="Auto" Margin="20,10,20,0"
                                                  DataContext="{Binding AddingTimePoint}">
             <userControls:AddingTimePointUserControl.Style>
