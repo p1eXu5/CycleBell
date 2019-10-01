@@ -462,6 +462,7 @@ namespace CycleBell.ViewModels
             ResetBaseTimes();
         }
 
+
         private void ResetBaseTimes()
         {
             Preset.UpdateTimePointBaseTimes();
