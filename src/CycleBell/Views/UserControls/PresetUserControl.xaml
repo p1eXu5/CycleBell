@@ -230,7 +230,7 @@
         </Grid>
 
         <!-- points list -->
-        <Grid Grid.Row="1">
+        <Grid Grid.Row="1" Width="Auto">
             <!-- TimePointVmCollection -->
             <ListBox x:Name="m_pointsList" 
                      ItemTemplateSelector="{StaticResource templsel_Selector}"
