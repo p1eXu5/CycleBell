@@ -362,7 +362,20 @@ namespace CycleBell.ViewModels
         public ICommand PresetLostFocusCommand => new ActionCommand( PresetLostFocus );
         // Timer buttons
         public ICommand MediaTerminalCommand => new ActionCommand( MediaTerminal );
-        public ICommand StopCommand => new ActionCommand( Stop );
+
+
+        #region StopCommand
+
+        public ICommand StopCommand => new ActionCommand(Stop);
+
+        private void Stop(object o)
+        {
+            Alarm.Stop();
+            _timerManager.Stop();
+        }
+
+        #endregion
+
         public ICommand RingCommand => new ActionCommand( Ring );
         public ICommand ChangeDefaultSoundCommand => new ActionCommand( ChangeDefaultSound );
 
@@ -733,11 +746,7 @@ namespace CycleBell.ViewModels
 
             IsRingOnStartTime = IsRingOnStartTime;
         }
-        private void Stop (object o)
-        {
-            Alarm.StopDefault();
-            _timerManager.Stop();
-        }
+        
 
         private void MediaTerminal (object o)
         {

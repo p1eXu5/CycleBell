@@ -16,7 +16,7 @@
         d:DataContext="{d:DesignInstance vmodels:MainViewModel}"
         
         Title="Cicle Bell" 
-        MinHeight="716" Height="716" Width="456" MinWidth="456" 
+        MinHeight="716" Height="716" Width="456" MinWidth="474" 
         ResizeMode="CanResize" WindowStartupLocation="CenterScreen" 
         >
 
