@@ -145,7 +145,7 @@
         <img src="https://github.com/p1eXu5/CycleBell/blob/development/images/item12.png" alt="элемента списка #12" align="top"  />
       </td>
       <td>
-        
+        .
       </td>
     </tr>
     <tr>
@@ -153,7 +153,7 @@
         <img src="https://github.com/p1eXu5/CycleBell/blob/development/images/item13.png" alt="элемента списка #13" align="top"  />
       </td>
       <td>
-        
+        .
       </td>
     </tr>
     <tr>
@@ -161,7 +161,7 @@
         <img src="https://github.com/p1eXu5/CycleBell/blob/development/images/item14.png" alt="элемента списка #14" align="top"  />
       </td>
       <td>
-        
+        .
       </td>
     </tr>
     <tr>
@@ -169,7 +169,7 @@
         <img src="https://github.com/p1eXu5/CycleBell/blob/development/images/item15.png" alt="элемента списка #15" align="top"  />
       </td>
       <td>
-        
+        .
       </td>
     </tr>
     <tr>
@@ -177,7 +177,7 @@
         <img src="https://github.com/p1eXu5/CycleBell/blob/development/images/item16.png" alt="элемента списка #16" align="top"  />
       </td>
       <td>
-        
+        .
       </td>
     </tr>
     <tr>
@@ -185,7 +185,7 @@
         <img src="https://github.com/p1eXu5/CycleBell/blob/development/images/item17.png" alt="элемента списка #17" align="top"  />
       </td>
       <td>
-        
+        .
       </td>
     </tr>
     <tr>
@@ -193,7 +193,7 @@
         <img src="https://github.com/p1eXu5/CycleBell/blob/development/images/item18.png" alt="элемента списка #18" align="top"  />
       </td>
       <td>
-        
+        .
       </td>
     </tr>
     <tr>
@@ -201,7 +201,7 @@
         <img src="https://github.com/p1eXu5/CycleBell/blob/development/images/item19.png" alt="элемента списка #19" align="top"  />
       </td>
       <td>
-        
+        .
       </td>
     </tr>
     <tr>
@@ -209,7 +209,7 @@
         <img src="https://github.com/p1eXu5/CycleBell/blob/development/images/item20.png" alt="элемента списка #20" align="top"  />
       </td>
       <td>
-        
+        .
       </td>
     </tr>
     <tr>
@@ -217,7 +217,7 @@
         <img src="https://github.com/p1eXu5/CycleBell/blob/development/images/item21.png" alt="элемента списка #21" align="top"  />
       </td>
       <td>
-        
+        .
       </td>
     </tr>
     <tr>
@@ -225,7 +225,7 @@
         <img src="https://github.com/p1eXu5/CycleBell/blob/development/images/item22.png" alt="элемента списка #22" align="top"  />
       </td>
       <td>
-        
+        .
       </td>
     </tr>
     <tr>
@@ -233,7 +233,7 @@
         <img src="https://github.com/p1eXu5/CycleBell/blob/development/images/item23.png" alt="элемента списка #23" align="top"  />
       </td>
       <td>
-        
+        .
       </td>
     </tr>
     <tr>
@@ -241,7 +241,7 @@
         <img src="https://github.com/p1eXu5/CycleBell/blob/development/images/item24.png" alt="элемента списка #24" align="top"  />
       </td>
       <td>
-        
+        .
       </td>
     </tr>
     <tr>
@@ -249,7 +249,7 @@
         <img src="https://github.com/p1eXu5/CycleBell/blob/development/images/item25.png" alt="элемента списка #25" align="top"  />
       </td>
       <td>
-        
+        .
       </td>
     </tr>
   </tbody>
