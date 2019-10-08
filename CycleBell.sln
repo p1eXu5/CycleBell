@@ -26,6 +26,10 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "images", "images", "{814BC78E-60F3-4EB8-8241-EDE4103CF8A6}"
 	ProjectSection(SolutionItems) = preProject
+		images\demonstration.png = images\demonstration.png
+		images\main-window.png = images\main-window.png
+		images\menu-file.png = images\menu-file.png
+		images\menu-settings.png = images\menu-settings.png
 		images\start-window.png = images\start-window.png
 	EndProjectSection
 EndProject
