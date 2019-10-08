@@ -1,4 +1,4 @@
-# CycleBell 
+# Cycle Bell 
 *Прочитать на других языках:* [English](README.md)
 
 <img src="https://github.com/p1eXu5/CycleBell/blob/development/images/demonstration.png" alt="CycleBell. Окно программы" width="250" />
