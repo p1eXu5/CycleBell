@@ -113,7 +113,7 @@
 
 <br/>
 
-#### Меню главного окна:
+#### Главное окна:
 
 <img src="https://github.com/p1eXu5/CycleBell/blob/development/images/main-window.png" alt="CycleBell. Меню главного окна." />
  
