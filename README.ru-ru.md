@@ -164,7 +164,7 @@
         <img src="https://github.com/p1eXu5/CycleBell/blob/development/images/item14.png" alt="элемента списка #14" align="top"  />
       </td>
       <td>
-        Имя добавляемого временной точки.
+        Имя добавляемой временной точки.
       </td>
     </tr>
     <tr>
