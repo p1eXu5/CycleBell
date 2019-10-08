@@ -13,13 +13,16 @@
 - Работает под управлением операционных систем Windows 7, Windows 10
 - Возможно использовать в качестве Pomodoro-таймера
 
-### Описание интерфейса
+<br/>
 
-##### Начальное окно программы:
+Описание интерфейса
+------
+
+#### Начальное окно программы:
 
 <img src="https://github.com/p1eXu5/CycleBell/blob/development/images/start-window.png" alt="CycleBell. Начальное окно" width="250" />
 
-##### Меню "File":
+#### Меню "File":
 
 <img src="https://github.com/p1eXu5/CycleBell/blob/development/images/menu-file.png" alt="CycleBell. меню File" />
  
