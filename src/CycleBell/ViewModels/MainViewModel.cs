@@ -335,7 +335,19 @@ namespace CycleBell.ViewModels
         public ICommand CreateNewPresetCommand => new ActionCommand(CreateNewPreset);
         public ICommand AppendPresetsCommand => new ActionCommand( AppendPresets, CanAppendPresets );
         public ICommand ExportPresetsCommand { get; set; }
+
+        #region ClearPresetsCommand
+
         public ICommand ClearPresetsCommand { get; set; }
+        private void ClearPresets(object obj)
+        {
+            _manager.ClearPresets();
+
+            OnPropertyChanged( nameof( IsPlayable ) );
+        }
+
+        #endregion
+
         public ICommand RemoveSelectedPresetCommand { get; set; }
 
 
@@ -523,6 +535,7 @@ namespace CycleBell.ViewModels
             OnPropertyChanged(nameof(HasNoName));
             OnPropertyChanged(nameof(IsSelectedPresetExist));
             OnPropertyChanged(nameof(IsNewPreset));
+            OnPropertyChanged( nameof( IsPlayable ) );
             ((ActionCommand)ExportPresetsCommand).RaiseCanExecuteChanged();
             ((ActionCommand)ClearPresetsCommand).RaiseCanExecuteChanged();
             ((ActionCommand)RemoveSelectedPresetCommand).RaiseCanExecuteChanged();
@@ -674,10 +687,7 @@ namespace CycleBell.ViewModels
             return PresetViewModelCollection.Count > 0;
         }
 
-        private void ClearPresets(object obj)
-        {
-            _manager.ClearPresets();
-        }
+        
 
         private void Exit(object obj)
         {
