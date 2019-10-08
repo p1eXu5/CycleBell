@@ -29,7 +29,7 @@
 
 #### Меню "File":
 
-<img src="https://github.com/p1eXu5/CycleBell/blob/development/images/menu-file.png" alt="CycleBell. меню File" />
+<img src="https://github.com/p1eXu5/CycleBell/blob/development/images/menu-file.png" alt="CycleBell. Меню File" />
  
 <table border="0">
   <tbody>
