@@ -1,1 +1,3 @@
-# CycleBell - Interval Timer
+# CycleBell
+
+### Предистория
