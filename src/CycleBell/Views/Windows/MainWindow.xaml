@@ -407,7 +407,7 @@
                     <TextBlock HorizontalAlignment="Center"
                                VerticalAlignment="Center"
                                >
-                        <Bold>To create a new preset:</Bold>
+                        <Bold>To create the new preset:</Bold>
                         <LineBreak /><LineBreak />
                         <Run Text="    "></Run><Run>1. Menu "File"</Run>
                         <LineBreak />
