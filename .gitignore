@@ -107,3 +107,5 @@ Code/*.htm
 /tests/CycleBell.Engine.Tests/bin/Debug
 /tests/_CycleBell.Tests
 /src/CycleBell.Engine/bin/Release
+/tests/CycleBell.Engine.Tests/bin/Release
+/tests/CycleBell.Tests/bin/Release
