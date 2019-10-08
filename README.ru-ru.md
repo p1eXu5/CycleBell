@@ -124,7 +124,7 @@
         <img src="https://github.com/p1eXu5/CycleBell/blob/development/images/item9.png" alt="элемента списка #9" align="top" />
       </td>
       <td>
-        Если данная опция включает первый звонок. 
+        Наименование и выбор пресета.
       </td>
     </tr>
     <tr>
@@ -132,7 +132,7 @@
         <img src="https://github.com/p1eXu5/CycleBell/blob/development/images/item10.png" alt="элемента списка #10" align="top" />
       </td>
       <td>
-        Опция зацикливает таймер. Неактивна, если ни один пресет не создан.
+        Удаление пресета.
       </td>
     </tr>
     <tr>
@@ -140,7 +140,7 @@
         <img src="https://github.com/p1eXu5/CycleBell/blob/development/images/item11.png" alt="элемента списка #11" align="top"  />
       </td>
       <td>
-        пап
+        Установка времени начала отсчёта, +1 минута , либо +5 минут от текущего времени.
       </td>
     </tr>
     <tr>
@@ -148,7 +148,7 @@
         <img src="https://github.com/p1eXu5/CycleBell/blob/development/images/item12.png" alt="элемента списка #12" align="top"  />
       </td>
       <td>
-        .
+        Установка времени начала отсчета.
       </td>
     </tr>
     <tr>
@@ -156,7 +156,7 @@
         <img src="https://github.com/p1eXu5/CycleBell/blob/development/images/item13.png" alt="элемента списка #13" align="top"  />
       </td>
       <td>
-        .
+        Имя текущего временной точки.
       </td>
     </tr>
     <tr>
@@ -164,7 +164,7 @@
         <img src="https://github.com/p1eXu5/CycleBell/blob/development/images/item14.png" alt="элемента списка #14" align="top"  />
       </td>
       <td>
-        .
+        Имя добавляемого временной точки.
       </td>
     </tr>
     <tr>
@@ -172,7 +172,7 @@
         <img src="https://github.com/p1eXu5/CycleBell/blob/development/images/item15.png" alt="элемента списка #15" align="top"  />
       </td>
       <td>
-        .
+        Длительность, либо время окончания временной точки.
       </td>
     </tr>
     <tr>
@@ -180,7 +180,7 @@
         <img src="https://github.com/p1eXu5/CycleBell/blob/development/images/item16.png" alt="элемента списка #16" align="top"  />
       </td>
       <td>
-        .
+        Переключатель типа задаваемого времени временной точки, длительность, либо время окончания.
       </td>
     </tr>
     <tr>
@@ -188,7 +188,7 @@
         <img src="https://github.com/p1eXu5/CycleBell/blob/development/images/item17.png" alt="элемента списка #17" align="top"  />
       </td>
       <td>
-        .
+        Установка мелодии звонка для временной точки.
       </td>
     </tr>
     <tr>
@@ -196,7 +196,7 @@
         <img src="https://github.com/p1eXu5/CycleBell/blob/development/images/item18.png" alt="элемента списка #18" align="top"  />
       </td>
       <td>
-        .
+        Номер временного сегмента.
       </td>
     </tr>
     <tr>
@@ -204,7 +204,7 @@
         <img src="https://github.com/p1eXu5/CycleBell/blob/development/images/item19.png" alt="элемента списка #19" align="top"  />
       </td>
       <td>
-        .
+        Кнопка добавления временной точки в пресет.
       </td>
     </tr>
     <tr>
@@ -212,7 +212,7 @@
         <img src="https://github.com/p1eXu5/CycleBell/blob/development/images/item20.png" alt="элемента списка #20" align="top"  />
       </td>
       <td>
-        .
+        Кнопка зацикливания таймера.
       </td>
     </tr>
     <tr>
@@ -220,7 +220,7 @@
         <img src="https://github.com/p1eXu5/CycleBell/blob/development/images/item21.png" alt="элемента списка #21" align="top"  />
       </td>
       <td>
-        .
+        Запуск/пауза.
       </td>
     </tr>
     <tr>
@@ -228,7 +228,7 @@
         <img src="https://github.com/p1eXu5/CycleBell/blob/development/images/item22.png" alt="элемента списка #22" align="top"  />
       </td>
       <td>
-        .
+        Остановка таймера.
       </td>
     </tr>
     <tr>
@@ -236,7 +236,7 @@
         <img src="https://github.com/p1eXu5/CycleBell/blob/development/images/item23.png" alt="элемента списка #23" align="top"  />
       </td>
       <td>
-        .
+        Нажати левой кнопки мыши инициирует звонок, повторное нажатие - останавливает его. Правая кнопка мыши - включает или отключает первый звонок.
       </td>
     </tr>
     <tr>
@@ -244,7 +244,7 @@
         <img src="https://github.com/p1eXu5/CycleBell/blob/development/images/item24.png" alt="элемента списка #24" align="top"  />
       </td>
       <td>
-        .
+        Секция временных точек пресета.
       </td>
     </tr>
     <tr>
@@ -252,7 +252,7 @@
         <img src="https://github.com/p1eXu5/CycleBell/blob/development/images/item25.png" alt="элемента списка #25" align="top"  />
       </td>
       <td>
-        .
+        Количество повторений временного сегмента.
       </td>
     </tr>
   </tbody>
