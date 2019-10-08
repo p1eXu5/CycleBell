@@ -17,7 +17,53 @@
 
 ##### Начальное окно программы:
 
-<img src="https://github.com/p1eXu5/CycleBell/blob/development/images/start-window.png" alt="CycleBell начальное окно" width="250" />
+<img src="https://github.com/p1eXu5/CycleBell/blob/development/images/start-window.png" alt="CycleBell. Начальное окно" width="250" />
 
-##### Добавление пресета:
+##### Меню "File":
 
+<img src="https://github.com/p1eXu5/CycleBell/blob/development/images/menu-file.png" alt="CycleBell. меню File" />
+ 
+<table border="0">
+  <tbody>
+    <tr>
+      <td width="50" align="center" valign="middle">
+        <img src="https://github.com/p1eXu5/CycleBell/blob/development/images/item1.png" alt="элемента списка #1" align="top" />
+      </td>
+      <td>
+        Создание нового пресета
+      </td>
+    </tr>
+    <tr>
+      <td width="50" align="center" valign="middle">
+        <img src="https://github.com/p1eXu5/CycleBell/blob/development/images/item2.png" alt="элемента списка #2" align="top" />
+      </td>
+      <td>
+        Добавление пресетов из xml-файла
+      </td>
+    </tr>
+    <tr>
+      <td width="50" align="center" valign="middle">
+        <img src="https://github.com/p1eXu5/CycleBell/blob/development/images/item3.png" alt="элемента списка #3" align="top"  />
+      </td>
+      <td>
+        Экспорт пресетов в xml-файл
+      </td>
+    </tr>
+    <tr>
+      <td width="50" align="center" valign="middle">
+        <img src="https://github.com/p1eXu5/CycleBell/blob/development/images/item4.png" alt="элемента списка #4" align="top" />
+      </td>
+      <td>
+        Очистка списка пресетов. Если после этого не будет добавлено других пресетов, то при перезапуске список восстановится
+      </td>
+    </tr>
+    <tr>
+      <td width="50" align="center" valign="middle">
+        <img src="https://github.com/p1eXu5/CycleBell/blob/development/images/item5.png" alt="элемента списка #5" align="top" />
+      </td>
+      <td>
+        Выход из программы
+      </td>
+    </tr>
+  </tbody>
+</table>
