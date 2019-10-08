@@ -33,7 +33,7 @@
         <img src="https://github.com/p1eXu5/CycleBell/blob/development/images/item1.png" alt="элемента списка #1" align="top" />
       </td>
       <td>
-        Создание нового пресета
+        Создание нового пресета.
       </td>
     </tr>
     <tr>
@@ -41,7 +41,7 @@
         <img src="https://github.com/p1eXu5/CycleBell/blob/development/images/item2.png" alt="элемента списка #2" align="top" />
       </td>
       <td>
-        Добавление пресетов из xml-файла
+        Добавление пресетов из xml-файла.
       </td>
     </tr>
     <tr>
@@ -49,7 +49,7 @@
         <img src="https://github.com/p1eXu5/CycleBell/blob/development/images/item3.png" alt="элемента списка #3" align="top"  />
       </td>
       <td>
-        Экспорт пресетов в xml-файл
+        Экспорт пресетов в xml-файл. Неактивна, если ни один пресет не создан.
       </td>
     </tr>
     <tr>
@@ -57,7 +57,7 @@
         <img src="https://github.com/p1eXu5/CycleBell/blob/development/images/item4.png" alt="элемента списка #4" align="top" />
       </td>
       <td>
-        Очистка списка пресетов. Если после этого не будет добавлено других пресетов, то при перезапуске список восстановится
+        Очистка списка пресетов. Неактивна, если ни один пресет не создан.
       </td>
     </tr>
     <tr>
@@ -65,8 +65,44 @@
         <img src="https://github.com/p1eXu5/CycleBell/blob/development/images/item5.png" alt="элемента списка #5" align="top" />
       </td>
       <td>
-        Выход из программы
+        Выход из программы.
       </td>
     </tr>
   </tbody>
 </table>
+
+<br/>
+
+#### Меню "Settings":
+
+<img src="https://github.com/p1eXu5/CycleBell/blob/development/images/menu-settings.png" alt="CycleBell. меню File" />
+ 
+<table border="0">
+  <tbody>
+    <tr>
+      <td width="50" align="center" valign="middle">
+        <img src="https://github.com/p1eXu5/CycleBell/blob/development/images/item6.png" alt="элемента списка #6" align="top" />
+      </td>
+      <td>
+        Если данная опция включает первый звонок. 
+      </td>
+    </tr>
+    <tr>
+      <td width="50" align="center" valign="middle">
+        <img src="https://github.com/p1eXu5/CycleBell/blob/development/images/item7.png" alt="элемента списка #7" align="top" />
+      </td>
+      <td>
+        Опция зацикливает таймер. Неактивна, если ни один пресет не создан.
+      </td>
+    </tr>
+    <tr>
+      <td width="50" align="center" valign="middle">
+        <img src="https://github.com/p1eXu5/CycleBell/blob/development/images/item8.png" alt="элемента списка #8" align="top"  />
+      </td>
+      <td>
+        Выбор мелодии звонка по уполчанию.
+      </td>
+    </tr>
+  </tbody>
+</table>
+
