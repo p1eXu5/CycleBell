@@ -1,5 +1,5 @@
 # Cycle Bell 
-*Read this in other languages:* [English](README.md)
+*Read this in other languages:* [Русский](README.md)
 
 <img src="https://github.com/p1eXu5/CycleBell/blob/development/images/demonstration.png" alt="CycleBell. Main window." width="250" />
 
