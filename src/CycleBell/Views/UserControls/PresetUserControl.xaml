@@ -273,7 +273,7 @@
 
                 <TextBlock HorizontalAlignment="Center" Style="{x:Null}">
                     <LineBreak />
-                    <Run Text="               "></Run><Bold>Preset is empty. To fill it you need:</Bold>
+                    <Run Text="               "></Run><Bold>Preset is empty. You have to fill out:</Bold>
                     <LineBreak /><LineBreak />
                     <Run Text="    "></Run><Run>1. Set the Time in section bellow</Run>
                     <LineBreak />
