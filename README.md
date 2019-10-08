@@ -6,17 +6,18 @@
 Download: [CycleBell 1.0.1](https://github.com/p1eXu5/CycleBell/releases/download/1.0.1/CycleBell.msi)
 
 
-### Предистория
+### Background
 
-Стояла задача сделать легковесную систему оповещения перерывов для двух категорий сотрудников, для курящих - каждый час по 5 минут, для некурящих - по 10 минут каждые два часа. Также одно из требований было "включил и забыл", т.е. запустил таймер и он круглосуточно отзванивает перерывы в установленное время. Подходящего инструмента на тот момент найдено не было, то были либо платные решения, либо не отличающиеся простотой настройки, либо недостаточно гипкие для решения этой задачи. В результате был написан данный таймер.
+The task was to create a lightweight break notification system for two categories of employees: for smokers - with 5 min break every hour, and for non-smokers - with 10 min break every two hours.
+Also, one of the requirements was to make it a "turn-on-and-forget" solution, i.e. after the timer is started, it notifies on breaks at the set time round-the-clock. No suitable tool was found at that time. There existed either paid solutions, or those that were difficult to set up, or those that were not flexible enough to solve the given task. Therefore, this timer was created.
 
-### Описание возможностей
+### Features
 
-- Устанавливается локально
-- Есть возможность сохранять и импортировать пресеты
-- Предустановлены 5 сэмплов звуковых сигналов, можно добавлять свои
-- Работает под управлением операционных систем Windows 7, Windows 10
-- Возможно использовать в качестве Pomodoro-таймера
+- Installs locally.
+- Able to save and import presets.
+- Has 5 preset sound samples, plus you can add your own.
+- Runs on Windows 7, Windows 10.
+- Can be used as a Pomodoro-timer.
 
 <br/>
 
