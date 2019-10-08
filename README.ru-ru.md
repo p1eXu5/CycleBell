@@ -15,5 +15,9 @@
 
 ### Описание интерфейса
 
-##### Начальное окно программы
+##### Начальное окно программы:
+
+<img src="https://github.com/p1eXu5/CycleBell/blob/feature/readme_feature/images/start-window.png" alt="CycleBell начальное окно" width="250" />
+
+##### Добавление пресета:
 
