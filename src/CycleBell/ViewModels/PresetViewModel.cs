@@ -270,7 +270,7 @@ namespace CycleBell.ViewModels
 
         private void SetStartTime( object offset )
         {
-            StartTime = (DateTime.Now + TimeSpan.FromSeconds( Int32.Parse( offset.ToString() ) )).TimeOfDay;
+            StartTime = (DateTime.Now + TimeSpan.FromMinutes( Int32.Parse( offset.ToString() ) )).TimeOfDay;
         }
 
         private void OnTimePointCollectionChanged (Object sender, NotifyCollectionChangedEventArgs e)
