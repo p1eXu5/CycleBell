@@ -147,6 +147,9 @@ namespace CycleBell.ViewModels.TimePointViewModels
 
         public static implicit operator TimePoint(TimePointViewModel instance) => instance.TimePoint;
 
+        /// <summary>
+        /// Emit that Time property changed.
+        /// </summary>
         internal void UpdateTime() => OnPropertyChanged(nameof(Time));
         
         /// <summary>

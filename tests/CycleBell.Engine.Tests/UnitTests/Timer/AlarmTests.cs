@@ -156,6 +156,8 @@ namespace CycleBell.Engine.Tests.UnitTests.Timer
             Assert.That( alarm.GetDefaultSound(), Is.EqualTo( uri2 ) );
         }
 
+
+
         #endregion
 
 
@@ -246,6 +248,7 @@ namespace CycleBell.Engine.Tests.UnitTests.Timer
 
             Assert.IsFalse( alarm.CanPlay );
         }
+
 
 
         [Test]

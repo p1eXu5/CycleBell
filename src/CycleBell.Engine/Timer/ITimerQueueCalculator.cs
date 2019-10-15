@@ -21,14 +21,20 @@ using CycleBell.Engine.Models;
 
 namespace CycleBell.Engine.Timer
 {
+    using TimePointQueue =  Queue<(TimeSpan nextChangeTime, TimePoint nextTimePoint)>;
+
     public interface ITimerQueueCalculator
     {
         /// <summary>
-        /// Creates alarm queue
+        /// Creates alarm queue consisted of tuples of time of the day and TimePoint,
+        /// including <see cref="IStartTimePointCreator.GetStartTimePoint"/>.
         /// </summary>
-        /// <param name="preset"></param>
-        /// <param name="preserveBaseTime">Does TimePoint BaseTime preserve when GetAbsoluteTime methog is called?</param>
-        /// <returns></returns>
-        Queue<(TimeSpan nextChangeTime, TimePoint nextTimePoint)> GetTimerQueue (Preset preset, bool preserveBaseTime = true);
+        /// <param name="preset">Preset</param>
+        /// <param name="preserveBaseTime">
+        /// Does TimePoint BaseTime preserve when GetAbsoluteTime methog is called?
+        /// true - by default.
+        /// </param>
+        /// <returns>The queue of time points</returns>
+        TimePointQueue GetTimerQueue( Preset preset, bool preserveBaseTime = true );
     }
 }

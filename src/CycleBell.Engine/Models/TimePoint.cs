@@ -367,6 +367,11 @@ namespace CycleBell.Engine.Models
 
         #region IEquatable
         
+        /// <summary>
+        /// Compares two time points by id's.
+        /// </summary>
+        /// <param name="other"></param>
+        /// <returns></returns>
         public bool Equals (TimePoint other)
         {
             if (other == null)

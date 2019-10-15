@@ -437,11 +437,11 @@ namespace CycleBell.Engine.Tests.UnitTests.Models
 
         [TestCase(1)]
         [TestCase(-1)]
-        public void IsDefaultPreset_StartTimeHaveNotDefaultValue_ReturnsFalse(int milliseconds)
+        public void IsDefaultPreset_StartTimeHaveNotDefaultValue_ReturnsFalse(int seconds)
         {
-            var preset = new Preset(Preset.DefaultStartTime + TimeSpan.FromMilliseconds(milliseconds));
+            var preset = new Preset(Preset.DefaultStartTime + TimeSpan.FromSeconds(seconds));
 
-            Assert.That(Preset.IsDefaultPreset(preset), Is.EqualTo(false));
+            Assert.That(Preset.IsDefaultPreset( preset ), Is.EqualTo(false));
         }
 
         [Test]

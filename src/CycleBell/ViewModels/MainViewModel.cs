@@ -350,9 +350,6 @@ namespace CycleBell.ViewModels
 
         public ICommand RemoveSelectedPresetCommand { get; set; }
 
-
-
-
         // Menu Settings and some timer buttons
         public ICommand RingOnStartTimeSwitchCommand => new ActionCommand( SwitchIsRingOnStartTime );
         public ICommand InfiniteLoopCommand => new ActionCommand((o) => { IsInfiniteLoop ^= true; });
@@ -372,9 +369,47 @@ namespace CycleBell.ViewModels
 
 
         public ICommand PresetLostFocusCommand => new ActionCommand( PresetLostFocus );
-        // Timer buttons
-        public ICommand MediaTerminalCommand => new ActionCommand( MediaTerminal );
 
+        #region MediaTerminalCommand
+
+        // Timer buttons
+        public ICommand MediaTerminalCommand => new ActionCommand(MediaTerminal);
+
+        private void MediaTerminal(object o)
+        {
+            var state = TimerState;
+
+            if (state == true || state == null)
+            {
+
+                if (state == true)
+                {
+                    // if playing
+                    Alarm.StopDefault();
+                    _timerManager.Pause();
+                }
+                else
+                {
+                    // if paused
+                    _timerManager.Resume();
+                }
+
+                OnPropertyChanged(nameof(IsPaused));
+            }
+            else
+            {
+                // if not running
+                if (!_selectedPreset.Preset.TimerLoopDictionary.Values.Any( tl => tl <= 0 ))
+                {
+                    Alarm.Reset();
+                    _timerManager.PlayAsync( _selectedPreset.Preset );
+                }
+            }
+
+            OnPropertyChanged(nameof(TimerState));
+        }
+
+        #endregion
 
         #region StopCommand
 
@@ -387,6 +422,7 @@ namespace CycleBell.ViewModels
         }
 
         #endregion
+
 
         public ICommand RingCommand => new ActionCommand( Ring );
         public ICommand ChangeDefaultSoundCommand => new ActionCommand( ChangeDefaultSound );
@@ -757,36 +793,6 @@ namespace CycleBell.ViewModels
             IsRingOnStartTime = IsRingOnStartTime;
         }
         
-
-        private void MediaTerminal (object o)
-        {
-            var state = TimerState;
-
-            if (state == true || state == null) {
-
-                if (state == true) {
-                    // if playing
-                    Alarm.StopDefault();
-                    _timerManager.Pause();
-                }
-                else {
-                    // if paused
-                    _timerManager.Resume();
-                }
-
-                OnPropertyChanged(nameof(IsPaused));
-            }
-            else {
-                // if not running
-                if ( !_selectedPreset.Preset.TimerLoopDictionary.Values.Any( tl => tl <= 0 ) ) {
-
-                    Alarm.Reset();
-                    _timerManager.PlayAsync( _selectedPreset.Preset );
-                }
-            }
-
-            OnPropertyChanged(nameof(TimerState));
-        }
         
         private void SwitchIsRingOnStartTime (object o)
         {
