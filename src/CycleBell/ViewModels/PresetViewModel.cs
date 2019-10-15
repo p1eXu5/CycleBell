@@ -20,6 +20,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Linq;
 using System.Media;
 using System.Runtime.CompilerServices;
@@ -269,8 +270,7 @@ namespace CycleBell.ViewModels
 
         private void SetStartTime( object offset )
         {
-            Preset.StartTime = (DateTime.Now + TimeSpan.FromMinutes( Int32.Parse( offset.ToString() ) )).TimeOfDay;
-            OnPropertyChanged( nameof(StartTime) );
+            StartTime = (DateTime.Now + TimeSpan.FromSeconds( Int32.Parse( offset.ToString() ) )).TimeOfDay;
         }
 
         private void OnTimePointCollectionChanged (Object sender, NotifyCollectionChangedEventArgs e)
@@ -386,9 +386,11 @@ namespace CycleBell.ViewModels
 
         private void Ring( TimerEventArgs e )
         {
+            //Trace.WriteLine( $"prev: {e.PrevTimePoint}; next: {e.NextTimePoint}" );
+
             if ( TimerManager.IsInitialTimePoint( e.PrevTimePoint )) {
             }
-            else if ( TimerManager.IsStartTimePoint( e.PrevTimePoint )) {
+            else if ( TimerManager.IsStartTimePoint( e.PrevTimePoint, Preset )) {
                 if ( _mainViewModel.IsRingOnStartTime ) {
                     _mainViewModel.Alarm.Play();
                 }

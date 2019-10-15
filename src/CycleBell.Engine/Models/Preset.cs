@@ -112,11 +112,7 @@ namespace CycleBell.Engine.Models
 
             _readOnlyTimePointCollectionCollection = new ReadOnlyObservableCollection<TimePoint> (_timePoints);
 
-            _startTime = startTime < TimeSpan.Zero ? startTime.Negate() : startTime;
-
-            if (_startTime >= TimeSpan.FromDays(1)) {
-                _startTime -= TimeSpan.FromDays(1);
-            }
+            StartTime = startTime < TimeSpan.Zero ? startTime.Negate() : startTime;
         }
 
         #region Linked Constructors
@@ -173,7 +169,7 @@ namespace CycleBell.Engine.Models
         {
             get => _startTime;
             set {
-                TimeSpan startTime = value;
+                TimeSpan startTime = new TimeSpan(value.Hours, value.Minutes, value.Seconds);
 
                 if (startTime < TimeSpan.Zero) {
                     startTime = startTime.Negate();

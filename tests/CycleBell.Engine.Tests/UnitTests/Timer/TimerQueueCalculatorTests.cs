@@ -13,7 +13,7 @@ namespace CycleBell.Engine.Tests.UnitTests.Timer
         [Test]
         public void GetTimerQueue_PresetIsNull_NotThows()
         {
-            var btc = GetBaseTimeCalculator();
+            var btc = GetTimeQueueCalculator();
 
             Assert.That (() => btc.GetTimerQueue(null), Throws.Nothing);
         }
@@ -21,7 +21,7 @@ namespace CycleBell.Engine.Tests.UnitTests.Timer
         [Test]
         public void GetTimerQueue_PresetIsNull_ReturnsNull()
         {
-            var btc = GetBaseTimeCalculator();
+            var btc = GetTimeQueueCalculator();
 
             Assert.That (() => btc.GetTimerQueue(null), Is.Null);
         }
@@ -29,7 +29,7 @@ namespace CycleBell.Engine.Tests.UnitTests.Timer
         [Test]
         public void GetTimerQueue_PresetContainsTimePoint_ReturnsExpectedTimePoints()
         {
-            var btc = GetBaseTimeCalculator();
+            var btc = GetTimeQueueCalculator();
             var startTime = TimeSpan.Parse ("12:00:00");
             var preset = new Preset (new[]
                 {
@@ -57,8 +57,8 @@ namespace CycleBell.Engine.Tests.UnitTests.Timer
         [Test]
         public void GetTimerQueue_TestPresetsWithTheTestTimePoints_ReturnsExpectedNextChangeTime()
         {
-            var btc = GetBaseTimeCalculator();
-            var testData = GetTestData();
+            var btc = GetTimeQueueCalculator();
+            var testData = GetTestPresetsAndResults();
 
             for (int i = 0; i < 2; ++i) {
 
@@ -76,11 +76,11 @@ namespace CycleBell.Engine.Tests.UnitTests.Timer
         [Test]
         public void GetTimerQueue__PresetContainsTimePoint_PreserveBaseTimeIsFalse__ChangesBaseTime()
         {
-            var testData = GetTestData();
+            var testData = GetTestPresetsAndResults();
             var preset = testData.presets[2];
             var result = testData.results[2];
 
-            GetBaseTimeCalculator().GetTimerQueue(preset, false);
+            GetTimeQueueCalculator().GetTimerQueue(preset, false);
 
             Assert.That(preset.TimePointCollection[0].BaseTime == result[1], $"TimePoint.BaseTime:\n{preset.TimePointCollection[0]}\nExpected BaseTime:\t{result[1]}\n");
             Assert.That(preset.TimePointCollection[1].BaseTime == result[2], $"TimePoint.BaseTime:\n{preset.TimePointCollection[1]}\nExpected BaseTime:\t{result[2]}\n");
@@ -90,34 +90,126 @@ namespace CycleBell.Engine.Tests.UnitTests.Timer
         [Test]
         public void GetTimerQueue_PresetContainsTimePoint_ChangesBaseTime()
         {
-            var testData = GetTestData();
+            var testData = GetTestPresetsAndResults();
             var preset = testData.presets[2];
             var result = testData.results[2];
 
-            GetBaseTimeCalculator().GetTimerQueue(preset);
+            GetTimeQueueCalculator().GetTimerQueue(preset);
 
             Assert.That(preset.TimePointCollection[0].BaseTime == result[4]);
             Assert.That(preset.TimePointCollection[1].BaseTime == result[5]);
             Assert.That(preset.TimePointCollection[2].BaseTime == result[6]);
         }
 
+        [ Test ]
+        public void GetTimeQueue_ByDefault_ReturnsDifferentQueues()
+        {
+            // Arrange:
+            var calc = GetTimeQueueCalculator();
+
+            var preset = new Preset("Test Prest") {
+                StartTime = TimeSpan.Parse( "1:11:11" ),
+            };
+            preset.AddTimePoint( new TimePoint( "Test TimePoint", "0:01", TimePointKinds.Relative ) );
+
+            // Action:
+            var tq1 = calc.GetTimerQueue( preset );
+            var tq2 = calc.GetTimerQueue( preset );
+
+            // Assert:
+            Assert.False( object.ReferenceEquals( tq1, tq2 ) );
+        }
+
+        [ Test ]
+        public void GetTimeQueue_ByDefault_ReturnsEqualsQueues()
+        {
+            // Arrange:
+            var calc = GetTimeQueueCalculator();
+
+            var preset = new Preset("Test Prest") {
+                StartTime = TimeSpan.Parse( "1:11:11" ),
+            };
+            preset.AddTimePoint( new TimePoint( "Test TimePoint", "0:01", TimePointKinds.Relative ) );
+            
+            var comparer = new TimePointComparer();
+
+            // Action:
+            var tq1 = calc.GetTimerQueue( preset );
+            var tq2 = calc.GetTimerQueue( preset );
+
+            // Assert:
+            Assert.That( tq1, Is.EquivalentTo( tq2 ).Using< TimePoint >( comparer ) );
+        }
+
+
+        [ Test ]
+        public void GetTimeQueue_AfterChangeStartTime_ReturnsNotEqualQueues()
+        {
+            // Arrange:
+            var calc = GetTimeQueueCalculator();
+
+            var preset = new Preset("Test Prest") {
+                StartTime = TimeSpan.Parse( "1:11:11" ),
+            };
+            preset.AddTimePoint( new TimePoint( "Test TimePoint", "0:01", TimePointKinds.Relative ) );
+
+            var comparer = new TimePointComparer();
+
+            // Action:
+            var tq1 = calc.GetTimerQueue( preset );
+
+            preset.StartTime = TimeSpan.Parse( "1:11:12" );
+            var tq2 = calc.GetTimerQueue( preset );
+
+            // Assert:
+            Assert.That( tq1, Is.Not.EquivalentTo( tq2 ).Using< TimePoint >( comparer ) );
+        }
+
+
+        [ Test ]
+        public void GetTimeQueue_AfterChangeStartTime_FirstTimePointInQueuesIsStartTimePoint()
+        {
+            // Arrange:
+            var calc = GetTimeQueueCalculator();
+
+            var preset = new Preset("Test Prest") {
+                StartTime = TimeSpan.Parse( "1:11:11" ),
+            };
+            preset.AddTimePoint( new TimePoint( "Test TimePoint", "0:01", TimePointKinds.Relative ) );
+
+            var comparer = new TimePointComparer();
+
+            // Action:
+            var tq1 = calc.GetTimerQueue( preset );
+            Assert.True( TimerManager.IsStartTimePoint( tq1.First().nextTimePoint, preset ), $"{tq1.First().nextTimePoint}" );
+
+            // Assert:
+            preset.StartTime = TimeSpan.Parse( "1:11:12" );
+            var tq2 = calc.GetTimerQueue( preset );
+            Assert.True( TimerManager.IsStartTimePoint( tq2.First().nextTimePoint, preset ) );
+        }
+
+
+
         #region Factory
 
-        public string StartTimePointName => "Test Start TimePoint";
+        public string StartTimePointName => TimerManager.START_TIMEPOINT_NAME;
 
         public TimePoint GetStartTimePoint(TimeSpan startTime)
         {
-            return new TimePoint(StartTimePointName, startTime, TimePointKinds.Absolute );
+            return new TimePoint( StartTimePointName, startTime, TimePointKinds.Absolute );
         }
 
-        private TimerQueueCalculator GetBaseTimeCalculator()
+
+
+        private TimerQueueCalculator GetTimeQueueCalculator()
         {
             var btc = new TimerQueueCalculator (this);
 
             return btc;
         }
 
-        private (Preset[] presets, TimeSpan[][] results) GetTestData()
+        private (Preset[] presets, TimeSpan[][] results) GetTestPresetsAndResults()
         {
             var presets = new Preset[3];
             var result = new TimeSpan[3][];
@@ -203,6 +295,5 @@ namespace CycleBell.Engine.Tests.UnitTests.Timer
         }
 
         #endregion
-
     }
 }

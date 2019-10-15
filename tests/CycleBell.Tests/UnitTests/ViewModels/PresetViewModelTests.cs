@@ -408,9 +408,10 @@ namespace CycleBell.Tests.UnitTests.ViewModels
         [ Test ]
         public void OnTimePointChanged_PrevIsStartTimePoint_DoesNotRingOnStartTime_CallsAlarmLoadNextSound()
         {
-            var preset = PresetFactory.GetPresetWithSounds();
-            var pvm = GetPresetViewModel( preset, false );
             var startTime = DateTime.Now.TimeOfDay + TimeSpan.FromSeconds( 1 );
+            var preset = PresetFactory.GetPresetWithSounds();
+            preset.StartTime = startTime;
+            var pvm = GetPresetViewModel( preset, false );
             var startTimePoint = TimerManager.GetStartTimePoint( startTime );
 
             pvm.OnTimePointChanged( this, new TimerEventArgs( startTimePoint, preset.TimePointCollection[0], TimeSpan.FromSeconds( 1 ), startTime ) );

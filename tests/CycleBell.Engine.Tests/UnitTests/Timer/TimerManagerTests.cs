@@ -11,9 +11,8 @@ namespace CycleBell.Engine.Tests.UnitTests.Timer
     [TestFixture]
     public class TimerManagerTests
     {
-    
         [Test]
-        public void GetStartTimePoint_ByDefault_CreatesZeroBaseTimeTimePoint()
+        public void GetStartTimePoint_ByDefault_CreatesTimePointWithZeroBaseTime()
         {
             var tp = TimerManager.GetStartTimePoint(TimeSpan.Parse("1:11:11"));
 
@@ -29,10 +28,22 @@ namespace CycleBell.Engine.Tests.UnitTests.Timer
         }
 
         [ Test ]
-        public void GetStartTimePoint_EqualStartTime_GetsSameTimePoint ()
+        public void GetStartTimePoint_ByDefault_CreatesTimePointWithStartTimePointName()
         {
+            var tp = TimerManager.GetStartTimePoint(TimeSpan.Parse("1:11:11"));
 
+            Assert.That(tp.Name, Is.EqualTo( TimerManager.START_TIMEPOINT_NAME ));
         }
+
+        [ Test ]
+        public void GetStartTimePoint_ByDefault_ReturnsDifferentTimePoints()
+        {
+            var tp1 = TimerManager.GetStartTimePoint(TimeSpan.Parse("1:11:11"));
+            var tp2 = TimerManager.GetStartTimePoint(TimeSpan.Parse("1:11:11"));
+
+            Assert.False( object.ReferenceEquals( tp1, tp2 ) );
+        }
+
 
         #region Play
 
@@ -142,6 +153,39 @@ namespace CycleBell.Engine.Tests.UnitTests.Timer
 
 
         [Test]
+        public void Play__ShortPreset_ChangeStartTimeAfterFirstPlay__RaisesTimePointChangedEventWithExpectedNextTimePoint()
+        {
+            // Arrange:
+            var tm = GetTimerManager();
+            var preset = GetShortPreset();
+            var expectedList = new [] {
+                TimerManager.GetStartTimePoint( _startTime ),
+                _timePoints[ 0 ],
+                _timePoints[ 1 ],
+                _timePoints[ 2 ],
+                TimerManager.GetStartTimePoint( _startTime ),
+            };
+
+            var actualList = new List< TimePoint >();
+
+            tm.TimePointChanged += ( sender, args ) =>
+                                   {
+                                       actualList.Add( args.NextTimePoint );
+                                   };
+
+            tm.Play( preset );
+            Thread.Sleep( _shortDecey );
+            Assert.That( actualList.Select( a => (a.Name, a.GetAbsoluteTime()) ), Is.EquivalentTo( expectedList.Select( e => (e.Name, e.GetAbsoluteTime()) ) ) );
+
+            // Action:
+            preset.StartTime = DateTime.Now.TimeOfDay + TimeSpan.FromSeconds( 1 );
+
+            // Assert:
+
+        }
+
+
+        [Test]
         public void Play_ShortPreset_RaisesTimePointChangedEventWithExpectedPrevTimePoint()
         {
             // Arrange:
@@ -170,7 +214,6 @@ namespace CycleBell.Engine.Tests.UnitTests.Timer
             // Assert:
             Assert.That( actualList.Select( a => (a.Name, a.GetAbsoluteTime()) ), Is.EquivalentTo( expectedList.Select( e => (e.Name, e.GetAbsoluteTime()) ) ) );
         }
-
 
 
         [Test]

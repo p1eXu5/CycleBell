@@ -288,8 +288,7 @@ namespace CycleBell.Engine.Timer
         public void Reset()
         {
             _nextPlayer = null;
-            _isPlayerBPlay = false;
-            _isPlayerAPlay = false;
+            Stop();
         }
 
         #endregion

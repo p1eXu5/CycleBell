@@ -73,14 +73,20 @@ namespace CycleBell.Engine.Timer
             return timePoint != null && timePoint.Time < TimeSpan.Zero && timePoint.Name == INITIAL_TIMEPOINT_NAME;
         }
 
-        private static TimePoint _startTimePoint;
+        public static bool IsStartTimePoint( TimePoint timePoint, Preset preset ) 
+            => timePoint != null 
+               && preset != null 
+               && preset.StartTime.Equals( timePoint.GetAbsoluteTime() )
+               && timePoint.Name.Equals( START_TIMEPOINT_NAME );
 
-        public static bool IsStartTimePoint( TimePoint timePoint ) => timePoint != null && timePoint.Equals( _startTimePoint );
-
+        /// <summary>
+        /// Returns absolute time point with <see cref="START_TIMEPOINT_NAME"/>.
+        /// </summary>
+        /// <param name="startTime"></param>
+        /// <returns></returns>
         public static TimePoint GetStartTimePoint( TimeSpan startTime )
         {
-            _startTimePoint = new TimePoint( START_TIMEPOINT_NAME, startTime, TimePointKinds.Absolute );
-            return _startTimePoint;
+            return new TimePoint( START_TIMEPOINT_NAME, startTime, TimePointKinds.Absolute );
         }
 
         #endregion
@@ -124,11 +130,6 @@ namespace CycleBell.Engine.Timer
         private TimerManager()
         {
             _timerQueueCalculator = new TimerQueueCalculator (this);
-        }
-
-        private TimerManager(ITimerQueueCalculator timerQueueCalculator)
-        {
-            _timerQueueCalculator = timerQueueCalculator;
         }
 
         #endregion
@@ -191,7 +192,7 @@ namespace CycleBell.Engine.Timer
             _prevQueueElement = ( currentTime, InitialTimePoint );
 
             OnTimerStart();
-            _timer = new System.Threading.Timer(TimerCallbackHandler, null, 0, Timeout.Infinite);
+            _timer = new System.Threading.Timer( TimerCallbackHandler, null, 0, Timeout.Infinite );
         }
 
         /// <summary>
@@ -421,12 +422,17 @@ namespace CycleBell.Engine.Timer
             return diff;
         }
 
+        #endregion Methods
+
+
+        #region IStartTimePointCreator implementation
+
         TimePoint IStartTimePointCreator.GetStartTimePoint(TimeSpan startTime)
         {
             return GetStartTimePoint(startTime);
         }
 
-        #endregion Methods
+        #endregion
     }
 
     #region Extension Class

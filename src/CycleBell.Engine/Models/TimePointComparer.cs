@@ -3,8 +3,17 @@ using System.Collections.Generic;
 
 namespace CycleBell.Engine.Models
 {
+    /// <summary>
+    /// Compares two time points by fields.
+    /// </summary>
     public class TimePointComparer : EqualityComparer<TimePoint>
     {
+        /// <summary>
+        /// Create comparer that compares two time points by fields.
+        /// </summary>
+        public TimePointComparer():base(){}
+
+        /// <inheritdoc cref="TimePointComparer"/>
         public override bool Equals(TimePoint x, TimePoint y)
         {
             if (x == null || y == null )
