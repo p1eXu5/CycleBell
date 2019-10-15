@@ -24,27 +24,25 @@ using CycleBell.Engine.Models;
 
 namespace CycleBell.Engine.Timer
 {
+    using TimePointQueue =  Queue<(TimeSpan nextChangeTime, TimePoint nextTimePoint)>;
+
     public class TimerQueueCalculator : ITimerQueueCalculator
     {
+
         private readonly IStartTimePointCreator _startTimePointCreator;
 
-        public TimerQueueCalculator(IStartTimePointCreator startTimePointCreator)
+        public TimerQueueCalculator( IStartTimePointCreator startTimePointCreator )
         {
             _startTimePointCreator = startTimePointCreator ?? throw new ArgumentNullException(nameof(startTimePointCreator));
         }
 
-        /// <summary>
-        /// Creates alarm queue
-        /// </summary>
-        /// <param name="preset">Preset</param>
-        /// <param name="preserveBaseTime">Does TimePoint BaseTime preserve when GetAbsoluteTime methog is called?</param>
-        /// <returns>The queue of tuples consists of time of the day and TimePoint that will come in this time</returns>
-        public Queue<(TimeSpan nextChangeTime, TimePoint nextTimePoint)> GetTimerQueue(Preset preset, bool preserveBaseTime = true)
+        /// <inheritdoc />
+        public TimePointQueue GetTimerQueue( Preset preset, bool preserveBaseTime = true )
         {
             if (preset?.TimePointCollection == null || preset.TimePointCollection.Count == 0)
                 return null;
 
-            Queue<(TimeSpan nextChangeTime, TimePoint nextTimePoint)> queue = new Queue<(TimeSpan, TimePoint)>();
+            TimePointQueue queue = new Queue< (TimeSpan, TimePoint) >();
 
             TimeSpan time = preset.StartTime;
             TimePoint startTimePoint = _startTimePointCreator.GetStartTimePoint( time );
