@@ -11,6 +11,13 @@ namespace CycleBell.Engine.Tests.UnitTests.Timer
     [TestFixture]
     public class TimerManagerTests
     {
+        [ TearDown ]
+        public void StopTimer()
+        {
+            _timerManager?.Stop();
+        }
+
+
         [Test]
         public void GetStartTimePoint_ByDefault_CreatesTimePointWithZeroBaseTime()
         {
@@ -118,7 +125,6 @@ namespace CycleBell.Engine.Tests.UnitTests.Timer
 
             // Assert:
             Assert.That( canRiseTimePointChanged );
-            tm.Stop();
         }
 
         [Test]
@@ -244,7 +250,6 @@ namespace CycleBell.Engine.Tests.UnitTests.Timer
 
             // Assert:
             Assert.That(actualList.Select(a => (a.Name, a.GetAbsoluteTime())), Is.EquivalentTo(expectedList.Select(e => (e.Name, e.GetAbsoluteTime()))));
-            tm.Stop();
         }
 
         #endregion
@@ -257,11 +262,11 @@ namespace CycleBell.Engine.Tests.UnitTests.Timer
         private TimePoint[] _timePoints;
         private int _shortDecey = 10000;
         private int _longDecey = 26_000;
+        private TimerManager _timerManager;
 
         private TimerManager GetTimerManager()
         {
-            var tm = TimerManager.Instance;
-            return tm;
+            return _timerManager ?? (_timerManager = TimerManager.Instance);
         }
 
         private Preset GetLongPreset ()
