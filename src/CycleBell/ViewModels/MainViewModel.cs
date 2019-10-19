@@ -530,9 +530,9 @@ namespace CycleBell.ViewModels
         #region MediaTerminalCommand
 
         // Timer buttons
-        public ICommand MediaTerminalCommand => new ActionCommand(MediaTerminal);
+        public ICommand PlayPauseCommand => new ActionCommand( PlayPause );
 
-        private void MediaTerminal(object o)
+        private void PlayPause(object o)
         {
             var state = TimerState;
 

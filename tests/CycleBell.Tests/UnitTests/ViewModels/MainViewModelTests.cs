@@ -146,7 +146,7 @@ namespace CycleBell.Tests.UnitTests.ViewModels
         {
             var mvm = GetMainViewModel(new [] { GetTestFilledPreset() } );
 
-            mvm.MediaTerminalCommand.Execute(null);
+            mvm.PlayPauseCommand.Execute(null);
            
             _mockTimerManager.Verify(a => a.PlayAsync(It.IsAny< Preset >()));
         }

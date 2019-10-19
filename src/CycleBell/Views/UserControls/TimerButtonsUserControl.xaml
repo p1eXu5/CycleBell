@@ -37,7 +37,7 @@
             <Path Data="{StaticResource gmtry_Infinite}"/>
         </ToggleButton>
 
-        <!-- play -->
+        <!-- play/pause -->
         <ToggleButton Grid.Column="1"
                       TabIndex="7"
                       IsThreeState="True"
@@ -47,7 +47,7 @@
                       local:AttachedPropertyFactory.BorderColor="#33553300"
                       IsEnabled="{Binding IsPlayable}"
                       IsChecked="{Binding TimerState, Mode=OneWay}"
-                      Command="{Binding MediaTerminalCommand}"
+                      Command="{Binding PlayPauseCommand}"
                       >
             <Grid>
                 <Grid.ColumnDefinitions>
