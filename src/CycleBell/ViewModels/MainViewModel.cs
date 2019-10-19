@@ -48,6 +48,7 @@ namespace CycleBell.ViewModels
 
         #endregion
 
+
         #region fields
 
         private readonly IDialogRegistrator _dialogRegistrator;
@@ -275,6 +276,8 @@ namespace CycleBell.ViewModels
 
         #region commands
 
+        // File menu
+
         #region LoadUserSettingsCommand
 
         public ICommand LoadUserSettingsCommand => new ActionCommand(LoadUserSettings, CanLoadUserSettings);
@@ -308,11 +311,20 @@ namespace CycleBell.ViewModels
 
         #endregion
 
+
         #region SaveUserSettingsCommand
 
-        public ICommand SaveUserSettingsCommand => new ActionCommand( SaveUserSettings );
+        public ICommand SaveUserSettingsCommand => new ActionCommand( _ => {
+            try {
+                SaveUserSettings();
+            }
+            // ReSharper disable once EmptyGeneralCatchClause
+            catch {
 
-        private void SaveUserSettings( object o )
+            }
+        } );
+
+        private void SaveUserSettings()
         {
             var key = Registry.CurrentUser.OpenSubKey( MainViewModel.REG_PATH, true );
 
@@ -331,10 +343,79 @@ namespace CycleBell.ViewModels
 
         #endregion
 
-        // Menu File
+
+        #region CreateNewPresetCommand
+
         public ICommand CreateNewPresetCommand => new ActionCommand(CreateNewPreset);
-        public ICommand AppendPresetsCommand => new ActionCommand( AppendPresets, CanAppendPresets );
+
+        private void CreateNewPreset(object obj)
+        {
+            _manager.CreateNewPreset();
+        }
+
+        #endregion
+
+
+        #region AppendPresetsCommand
+
+        public ICommand AppendPresetsCommand => new ActionCommand(AppendPresets, CanAppendPresets);
+
+        private void AppendPresets(object obj)
+        {
+            var fileName = GetPresetsFile();
+
+            if (fileName == null)
+                return;
+
+            if (SelectedPreset != null) {
+                _dontSwitchSelectedPreset = true;
+            }
+
+            _manager.OpenPresets(fileName);
+
+            if (_dontSwitchSelectedPreset) {
+                _dontSwitchSelectedPreset = false;
+            }
+
+            OnPropertyChanged( nameof( IsPlayable ) );
+        }
+
+        private bool CanAppendPresets(object obj)
+        {
+            return true;
+        }
+
+        #endregion
+
+
+        #region ExportPresetsCommand
+
         public ICommand ExportPresetsCommand { get; set; }
+
+        private void ExportPresets(object obj)
+        {
+            var sfd = new SaveFileDialog()
+                {
+                    Filter = "xml file (*.xml)|*.xml",
+                    InitialDirectory = _initialDirectory ?? Environment.GetFolderPath (Environment.SpecialFolder.MyDocuments),
+                };
+
+            if (sfd.ShowDialog() != true)
+                return;
+
+            var fileName = sfd.FileName;
+            _initialDirectory = Path.GetDirectoryName (fileName);
+
+            _manager.SavePresets(fileName);
+        }
+
+        private bool CanExportPresets(object obj)
+        {
+            return PresetViewModelCollection.Count > 0;
+        }
+
+        #endregion
+
 
         #region ClearPresetsCommand
 
@@ -348,27 +429,103 @@ namespace CycleBell.ViewModels
 
         #endregion
 
+
+        #region RemoveSelectedPresetCommand
+
         public ICommand RemoveSelectedPresetCommand { get; set; }
 
-        // Menu Settings and some timer buttons
+        private void RemoveSelectedPreset(object o)
+        {
+            _manager.RemovePreset(SelectedPreset?.Preset);
+        }
+
+        private bool CanRemoveSelectedPreset(object o)
+        {
+            return IsSelectedPresetExist;
+        }
+
+        #endregion
+
+
+        // Settings menu
+
+        #region RingOnStartTimeSwitchCommand
+
         public ICommand RingOnStartTimeSwitchCommand => new ActionCommand( SwitchIsRingOnStartTime );
+
+        private void SwitchIsRingOnStartTime (object o)
+        {
+            IsRingOnStartTime ^= true;
+        }
+
+        #endregion
+
+
+        #region InfiniteLoopCommand
+
         public ICommand InfiniteLoopCommand => new ActionCommand((o) => { IsInfiniteLoop ^= true; });
 
-        // Menu Help
+        #endregion
+
+
+        // Help menu
+
+        #region ViewHelpCommand
+
         public ICommand ViewHelpCommand => new ActionCommand(OpenGettingStarted);
 
-        private void OpenGettingStarted( object o )
+        private void OpenGettingStarted(object o)
         {
-            System.Diagnostics.Process.Start( "https://www.cyclebell.com/getting_started" );
+            System.Diagnostics.Process.Start("https://www.cyclebell.com/getting_started");
         }
+
+        #endregion
+
+
+        #region AboutCommand
 
         public ICommand AboutCommand => new ActionCommand(About);
 
-        // Presets ComboBox
+        private void About(object obj)
+        {
+            var viewModel = new AboutDialogViewModel();
+            _dialogRegistrator.ShowDialog(viewModel);
+        }
+
+        #endregion
+
+
+        // Focus commands
+
+        #region PresetComboBoxReturnCommand
+
         public ICommand PresetComboBoxReturnCommand => new ActionCommand( PresetComboBoxReturnKeyHandler );
 
+        private void PresetComboBoxReturnKeyHandler (object newName)
+        {
+            //SelectedPreset.Name = newName.ToString();
+            OnPropertyChanged(nameof(HasNoName));
+
+            // Change newSelectedPreset for call PropertyChangedCallback in attached property
+            MoveFocusRightTrigger ^= true;
+
+            if (_selectedPreset != null)
+                _selectedPreset.FocusStartTime = true;
+        }
+
+        #endregion
+
+
+        #region PresetLostFocusCommand
 
         public ICommand PresetLostFocusCommand => new ActionCommand( PresetLostFocus );
+
+        private void PresetLostFocus(object obj) => OnPropertyChanged(nameof(HasNoName));
+
+        #endregion
+
+
+        // Media buttons
 
         #region MediaTerminalCommand
 
@@ -411,6 +568,7 @@ namespace CycleBell.ViewModels
 
         #endregion
 
+
         #region StopCommand
 
         public ICommand StopCommand => new ActionCommand(Stop);
@@ -424,23 +582,102 @@ namespace CycleBell.ViewModels
         #endregion
 
 
-        public ICommand RingCommand => new ActionCommand( Ring );
-        public ICommand ChangeDefaultSoundCommand => new ActionCommand( ChangeDefaultSound );
+        #region RingCommand
+
+        public ICommand RingCommand => new ActionCommand(Ring);
+
+        private void Ring (object o)
+        {
+
+            if ( !_isPlayDefault ) {
+                Alarm.DefaultMediaEnded += OnMediaEnded;
+                Alarm.PlayDefault();
+                _isPlayDefault = true;
+            }
+            else {
+                Alarm.StopDefault();
+                Alarm.DefaultMediaEnded -= OnMediaEnded;
+                _isPlayDefault = false;
+            }
+
+            IsRingOnStartTime = IsRingOnStartTime;
+        }
+
+        #endregion
+
+
+        // Window handlers
+
+        #region ExitCommand
 
         /// <summary>
         /// Menu command: File -> Exit
         /// </summary>
-        public ICommand ExitCommand => new ActionCommand(Exit);
+        public ICommand ExitCommand => new ActionCommand( Exit );
+
+        private void Exit(object obj)
+        {
+            CheckSelectedPresetBeforeExit();
+            System.Windows.Application.Current.Shutdown();
+            // -> CloseWindow(object o);
+        }
+
+        #endregion
+
+
+        #region CloseCommand
 
         /// <summary>
         /// MainWindow Closing event
         /// </summary>
         public ICommand CloseCommand => new ActionCommand( CloseWindow );
 
+        private void CloseWindow(object o)
+        {
+            CheckSelectedPresetBeforeExit();
+        }
+
+        #endregion
+
+
+        // Reserved
+
+        #region ChangeDefaultSoundCommand
+
+        public ICommand ChangeDefaultSoundCommand => new ActionCommand( ChangeDefaultSound );
+
+        private void ChangeDefaultSound ( object o )
+        {
+            var ofd = new OpenFileDialog {
+                Filter = "mp3, wav|*.mp3;*.wav|all files|*.*",
+                InitialDirectory = Environment.GetFolderPath( Environment.SpecialFolder.MyMusic ),
+                RestoreDirectory = true,
+                CheckFileExists = true,
+                CheckPathExists = true
+            };
+            if ( ofd.ShowDialog() == true ) {
+                // TODO:
+                //Alarm.SetDefaultSound( ofd.FileName );
+            }
+        }
+
+        #endregion
+
         #endregion Commands
 
 
         #region methods
+
+        // Sound
+        public void Ring(bool stopping = false)
+        {
+            Alarm.StopDefault();
+
+            if (!stopping) {
+                Alarm.PlayDefault();
+            }
+        }
+
 
         /// <summary>
         /// Shows SavePresetDialog, then if true RenamePresetDialog.
@@ -646,43 +883,12 @@ namespace CycleBell.ViewModels
             return true;
         }
 
-
         private void OnIsNewPresetChangedHandler(object s, PropertyChangedEventArgs e)
         {
             if (e?.PropertyName == "IsNew") {
 
                 OnPropertyChanged(nameof(IsNewPreset));
             }
-        }
-
-        //  File
-        private void CreateNewPreset(object obj)
-        {
-            _manager.CreateNewPreset();
-        }
-
-        private void AppendPresets(object obj)
-        {
-            var fileName = GetPresetsFile();
-
-            if (fileName == null)
-                return;
-
-            if (SelectedPreset != null) {
-                _dontSwitchSelectedPreset = true;
-            }
-
-            _manager.OpenPresets(fileName);
-
-            if (_dontSwitchSelectedPreset) {
-                _dontSwitchSelectedPreset = false;
-            }
-
-            OnPropertyChanged( nameof( IsPlayable ) );
-        }
-        private bool CanAppendPresets(object obj)
-        {
-            return true;
         }
 
         private string GetPresetsFile()
@@ -702,132 +908,17 @@ namespace CycleBell.ViewModels
             return fileName;
         }
 
-        private void ExportPresets(object obj)
-        {
-            var sfd = new SaveFileDialog()
-                {
-                    Filter = "xml file (*.xml)|*.xml",
-                    InitialDirectory = _initialDirectory ?? Environment.GetFolderPath (Environment.SpecialFolder.MyDocuments),
-                };
-
-            if (sfd.ShowDialog() != true)
-                return;
-
-            var fileName = sfd.FileName;
-            _initialDirectory = Path.GetDirectoryName (fileName);
-
-            _manager.SavePresets(fileName);
-        }
-        private bool CanExportPresets(object obj)
-        {
-            return PresetViewModelCollection.Count > 0;
-        }
-
-        
-
-        private void Exit(object obj)
-        {
-            CheckSelectedPresetBeforeExit();
-            System.Windows.Application.Current.Shutdown();
-            // -> CloseWindow(object o);
-        }
-
-        // Remove SelectedPreset
-        private void RemoveSelectedPreset(object o)
-        {
-            _manager.RemovePreset(SelectedPreset?.Preset);
-        }
-        private bool CanRemoveSelectedPreset(object o)
-        {
-            return IsSelectedPresetExist;
-        }
-
-        // Preset ComboBox
-        private void PresetComboBoxReturnKeyHandler (object newName)
-        {
-            //SelectedPreset.Name = newName.ToString();
-            OnPropertyChanged(nameof(HasNoName));
-
-            // Change newSelectedPreset for call PropertyChangedCallback in attached property
-            MoveFocusRightTrigger ^= true;
-
-            if (_selectedPreset != null)
-                _selectedPreset.FocusStartTime = true;
-        }
-        private void PresetLostFocus(object obj) => OnPropertyChanged(nameof(HasNoName));
-
-        // Sound
-        public void Ring(bool stopping = false)
-        {
-            Alarm.StopDefault();
-
-            if (!stopping) {
-                Alarm.PlayDefault();
-            }
-        }
-
         bool IMainViewModel.IsNewPreset( Preset preset )
         {
             return _manager.IsNewPreset( preset );
         }
+
         private void OnMediaEnded( object s, EventArgs e )
         {
             _isPlayDefault = false;
             Alarm.DefaultMediaEnded -= OnMediaEnded;
         }
 
-        private void Ring (object o)
-        {
-
-            if ( !_isPlayDefault ) {
-                Alarm.DefaultMediaEnded += OnMediaEnded;
-                Alarm.PlayDefault();
-                _isPlayDefault = true;
-            }
-            else {
-                Alarm.StopDefault();
-                Alarm.DefaultMediaEnded -= OnMediaEnded;
-                _isPlayDefault = false;
-            }
-
-            IsRingOnStartTime = IsRingOnStartTime;
-        }
-        
-        
-        private void SwitchIsRingOnStartTime (object o)
-        {
-            IsRingOnStartTime ^= true;
-        }
-
-        private void ChangeDefaultSound ( object o )
-        {
-            var ofd = new OpenFileDialog {
-                Filter = "mp3, wav|*.mp3;*.wav|all files|*.*",
-                InitialDirectory = Environment.GetFolderPath( Environment.SpecialFolder.MyMusic ),
-                RestoreDirectory = true,
-                CheckFileExists = true,
-                CheckPathExists = true
-            };
-            if ( ofd.ShowDialog() == true ) {
-                // TODO:
-                //Alarm.SetDefaultSound( ofd.FileName );
-            }
-        }
-
-
-        //  About
-        private void About(object obj)
-        {
-            var viewModel = new AboutDialogViewModel();
-            _dialogRegistrator.ShowDialog(viewModel);
-        }
-
-        // Closing MainWindow handler
-        private void CloseWindow(object o)
-        {
-            CheckSelectedPresetBeforeExit();
-        }
-        
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         private void CheckSelectedPresetBeforeExit()
         {
