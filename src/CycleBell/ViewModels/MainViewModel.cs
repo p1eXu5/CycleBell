@@ -25,6 +25,7 @@ using System.IO;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Threading;
+using System.Threading.Tasks;
 using System.Windows.Data;
 using System.Windows.Input;
 using CycleBell.Base;
@@ -530,9 +531,9 @@ namespace CycleBell.ViewModels
         #region PlayPauseCommand
 
         // Timer buttons
-        public ICommand PlayPauseCommand => new ActionCommand( PlayPause );
+        public ICommand PlayPauseCommand => new MvvmAsyncCommand( PlayPause );
 
-        private void PlayPause(object o)
+        private async Task PlayPause(object o)
         {
             var state = TimerState;
 
@@ -542,7 +543,7 @@ namespace CycleBell.ViewModels
                 if (state == true)
                 {
                     // if playing
-                    Alarm.StopDefault();
+                    Alarm.Stop();
                     _timerManager.Pause();
                 }
                 else
@@ -559,7 +560,7 @@ namespace CycleBell.ViewModels
                 if (!_selectedPreset.Preset.TimerLoopDictionary.Values.Any( tl => tl <= 0 ))
                 {
                     Alarm.Reset();
-                    _timerManager.PlayAsync( _selectedPreset.Preset );
+                    await _timerManager.PlayAsync( _selectedPreset.Preset );
                 }
             }
 

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Threading.Tasks;
 using CycleBell.Engine;
 using CycleBell.Engine.Models;
 using CycleBell.Engine.Repository;
@@ -253,7 +254,7 @@ namespace CycleBell.Engine.Tests.UnitTests
                 throw new NotImplementedException();
             }
 
-            public void PlayAsync (Preset preset)
+            public Task PlayAsync (Preset preset)
             {
                 throw new NotImplementedException();
             }

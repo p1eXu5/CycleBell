@@ -16,6 +16,7 @@
  */
 
 using System;
+using System.Threading.Tasks;
 using CycleBell.Engine.Models;
 
 namespace CycleBell.Engine.Timer
@@ -32,7 +33,7 @@ namespace CycleBell.Engine.Timer
         bool IsPaused { get; }
         string StartTimePointName { get; }
 
-        void PlayAsync(Preset preset);
+        Task PlayAsync(Preset preset);
 
         /// <summary>
         /// Start timer.

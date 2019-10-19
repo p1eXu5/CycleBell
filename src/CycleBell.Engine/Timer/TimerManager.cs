@@ -70,7 +70,7 @@ namespace CycleBell.Engine.Timer
 
         public static bool IsInitialTimePoint( TimePoint timePoint )
         {
-            return timePoint != null && timePoint.Time < TimeSpan.Zero && timePoint.Name == INITIAL_TIMEPOINT_NAME;
+            return timePoint != null && object.ReferenceEquals( timePoint, _initialTimePoint );
         }
 
         public static bool IsStartTimePoint( TimePoint timePoint, Preset preset ) 
@@ -157,7 +157,7 @@ namespace CycleBell.Engine.Timer
 
         #region methods
 
-        public async void PlayAsync( Preset preset )
+        public async Task PlayAsync( Preset preset )
         {
             if (IsRunning)
                 return;
@@ -166,9 +166,9 @@ namespace CycleBell.Engine.Timer
         }
 
         /// <summary>
-        /// Запуск
+        /// Run timer
         /// </summary>
-        /// <param name="preset">Запускаемый пресет</param>
+        /// <param name="preset"></param>
         public void Play( Preset preset )
         {
             _preset = preset;
@@ -434,19 +434,4 @@ namespace CycleBell.Engine.Timer
 
         #endregion
     }
-
-    #region Extension Class
-
-    /// <summary>
-    /// Extension class
-    /// </summary>
-    public static class PresetExtention
-    {
-        public static void RunTimer (this Preset preset, TimerManager manager)
-        {
-            manager.PlayAsync (preset);
-        }
-    }
-
-    #endregion
 }
