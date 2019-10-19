@@ -54,7 +54,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup>
-    <ManifestCertificateThumbprint>50A41C3DA0AABAFDD76D168042FB73E5444F0D2A</ManifestCertificateThumbprint>
+    <ManifestCertificateThumbprint>47F0F21357E29ED698C886CEC6B6F60F89560BD9</ManifestCertificateThumbprint>
   </PropertyGroup>
   <PropertyGroup>
     <ManifestKeyFile>CycleBell_TemporaryKey.pfx</ManifestKeyFile>
@@ -111,11 +111,15 @@
     </ApplicationDefinition>
     <Compile Include="Base\ActionCommand.cs" />
     <Compile Include="Base\DialogRequestCloseEventArgs.cs" />
+    <Compile Include="Base\IAsyncCommand.cs" />
     <Compile Include="Base\IDialog.cs" />
     <Compile Include="Base\IDialogCloseRequested.cs" />
     <Compile Include="Base\IDialogRegistrator.cs" />
+    <Compile Include="Base\IErrorHandler.cs" />
+    <Compile Include="Base\MvvmAsyncCommand.cs" />
     <Compile Include="Base\ObservableObject.cs" />
     <Compile Include="Base\DialogRegistrator.cs" />
+    <Compile Include="Base\TaskExtensions.cs" />
     <Compile Include="Base\ViewModel.cs" />
     <Compile Include="Controls\TimerBox.cs" />
     <Compile Include="Converters\BooleanInverseConverter.cs" />
@@ -281,6 +285,7 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Resource>
     <Resource Include="fonts\RussoOne.ttf" />
+    <None Include="CycleBell_TemporaryKey.pfx" />
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
