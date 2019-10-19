@@ -527,7 +527,7 @@ namespace CycleBell.ViewModels
 
         // Media buttons
 
-        #region MediaTerminalCommand
+        #region PlayPauseCommand
 
         // Timer buttons
         public ICommand PlayPauseCommand => new ActionCommand( PlayPause );
