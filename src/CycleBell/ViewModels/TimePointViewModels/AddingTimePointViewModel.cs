@@ -18,6 +18,7 @@
 using System;
 using System.Linq;
 using System.Media;
+using System.Runtime.CompilerServices;
 using System.Security.Cryptography;
 using System.Windows.Input;
 using CycleBell.Base;
@@ -51,9 +52,7 @@ namespace CycleBell.ViewModels.TimePointViewModels
             get => TimePoint.Time;
             set {
                 TimePoint.Time = value;
-                OnPropertyChanged();
-                OnPropertyChanged(nameof(NoSetTime));
-                ((ActionCommand)AddTimePointCommand).RaiseCanExecuteChanged();
+                UpdateControl();
             }
         }
 
@@ -84,8 +83,7 @@ namespace CycleBell.ViewModels.TimePointViewModels
                 FocusTime ^= true;
 
                 OnPropertyChanged();
-                OnPropertyChanged(nameof(Time));
-                OnPropertyChanged(nameof(NoSetTime));
+                UpdateControl();
             }
         }
 
@@ -120,6 +118,16 @@ namespace CycleBell.ViewModels.TimePointViewModels
         public ICommand TimePointNameReturnCommand => new ActionCommand(TimePointNameReturn);
 
         #endregion
+
+        /// <summary>
+        /// Notify about possible changes of Time, NoSetTime and AddCommand.
+        /// </summary>
+        private void UpdateControl()
+        {
+            OnPropertyChanged( nameof(Time) );
+            OnPropertyChanged( nameof(NoSetTime) );
+            ((ActionCommand)AddTimePointCommand).RaiseCanExecuteChanged();
+        }
 
         private void TimePointNameReturn(object o)
         {
