@@ -20,6 +20,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Globalization;
 using System.IO;
 using System.Linq;
@@ -89,11 +90,11 @@ namespace CycleBell.ViewModels
                 ClearPresetsCommand = new ActionCommand( ClearPresets, CanExportPresets );
             }
 
-            void LoadTimerManager()
+            void SetHandlers()
             {
-                _timerManager = _manager.TimerManager;
                 _timerManager.TimerStarted += UpdateIsRunningAndTimerStateProperties;
                 _timerManager.TimerStopped += UpdateIsRunningAndTimerStateProperties;
+                _timerManager.TimerPaused += UpdateIsRunningAndTimerStateProperties;
             }
             
             void LoadPresetViewModelCollection()
@@ -146,7 +147,8 @@ namespace CycleBell.ViewModels
             _manager = cycleBellManager ?? throw new ArgumentNullException(nameof(cycleBellManager));
             _manager.CantCreateNewPresetEvent += OnCantCreateNewPresetEventHandler;
             
-            LoadTimerManager();
+            _timerManager = _manager.TimerManager;
+            SetHandlers();
 
             InitializeCommands();
 
@@ -222,7 +224,6 @@ namespace CycleBell.ViewModels
         }
 
         public bool IsRunning => _timerManager.IsRunning;
-
         public bool IsPaused => _timerManager.IsPaused;
         public bool IsStopped => IsRunning == false && IsPlayable;
 
@@ -272,7 +273,7 @@ namespace CycleBell.ViewModels
             }
         }
 
-        #endregion
+        #endregion properties
 
 
         #region commands
@@ -531,15 +532,23 @@ namespace CycleBell.ViewModels
         #region PlayPauseCommand
 
         // Timer buttons
-        public ICommand PlayPauseCommand => new MvvmAsyncCommand( PlayPause );
+        public ICommand PlayPauseCommand => new ActionCommand( PlayPause );
 
-        private async Task PlayPause(object o)
+        private void PlayPause(object o)
         {
             var state = TimerState;
 
-            if (state == true || state == null)
+            if ( state == false )
             {
-
+                // if stopped
+                if (!_selectedPreset.Preset.TimerLoopDictionary.Values.Any( tl => tl <= 0 ))
+                {
+                    Alarm.Reset();
+                    _timerManager.PlayAsync( _selectedPreset.Preset );
+                }
+            }
+            else
+            {
                 if (state == true)
                 {
                     // if playing
@@ -551,20 +560,7 @@ namespace CycleBell.ViewModels
                     // if paused
                     _timerManager.Resume();
                 }
-
-                OnPropertyChanged(nameof(IsPaused));
             }
-            else
-            {
-                // if not running
-                if (!_selectedPreset.Preset.TimerLoopDictionary.Values.Any( tl => tl <= 0 ))
-                {
-                    Alarm.Reset();
-                    await _timerManager.PlayAsync( _selectedPreset.Preset );
-                }
-            }
-
-            OnPropertyChanged(nameof(TimerState));
         }
 
         #endregion
@@ -664,7 +660,7 @@ namespace CycleBell.ViewModels
 
         #endregion
 
-        #endregion Commands
+        #endregion commands
 
 
         #region methods

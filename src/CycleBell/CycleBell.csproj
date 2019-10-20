@@ -111,15 +111,11 @@
     </ApplicationDefinition>
     <Compile Include="Base\ActionCommand.cs" />
     <Compile Include="Base\DialogRequestCloseEventArgs.cs" />
-    <Compile Include="Base\IAsyncCommand.cs" />
     <Compile Include="Base\IDialog.cs" />
     <Compile Include="Base\IDialogCloseRequested.cs" />
     <Compile Include="Base\IDialogRegistrator.cs" />
-    <Compile Include="Base\IErrorHandler.cs" />
-    <Compile Include="Base\MvvmAsyncCommand.cs" />
     <Compile Include="Base\ObservableObject.cs" />
     <Compile Include="Base\DialogRegistrator.cs" />
-    <Compile Include="Base\TaskExtensions.cs" />
     <Compile Include="Base\ViewModel.cs" />
     <Compile Include="Controls\TimerBox.cs" />
     <Compile Include="Converters\BooleanInverseConverter.cs" />
