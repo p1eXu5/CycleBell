@@ -121,8 +121,6 @@ namespace CycleBell.ViewModels
                 var addingTimePoint = new AddingTimePointViewModel (this);
                 addingTimePoint.Reset();
 
-                ((INotifyPropertyChanged) addingTimePoint).PropertyChanged += OnTimePropertyChanged;
-
                 return addingTimePoint;
             }
 
@@ -156,6 +154,7 @@ namespace CycleBell.ViewModels
 
         // Preset
         public Preset Preset { get; }
+
         public string Name
         {
             get => Preset?.PresetName;
@@ -179,6 +178,7 @@ namespace CycleBell.ViewModels
         }
 
         public ReadOnlyObservableCollection<TimePointViewModelBase> TimePointVmCollection { get; }
+
         //public TimePointViewModelBase SelectedTimePoint
         //{
         //    get => _selectedTimePoint;
@@ -257,13 +257,15 @@ namespace CycleBell.ViewModels
         #endregion
 
 
-        #region Commands
+        #region commands
 
         public ICommand AddTimePointCommand => new ActionCommand (AddTimePoint, CanAddTimePoint);
 
+
+
         public ICommand SetStartTimeCommand => new ActionCommand( SetStartTime );
 
-        #endregion
+        #endregion commands
 
 
         #region Methods
@@ -320,12 +322,6 @@ namespace CycleBell.ViewModels
             // Update TimePoint list trigger
             OnPropertyChanged (nameof(IsNoTimePoints));
         }
-        
-
-        private void OnTimePropertyChanged (object s, PropertyChangedEventArgs e)
-        {
-            OnPropertyChanged (nameof(CanAddTimePoint));
-        }
 
         // RemoveTimePoint
         public void RemoveTimePoint (TimePoint timePoint)
@@ -353,6 +349,7 @@ namespace CycleBell.ViewModels
 
             return res;
         }
+
         private bool CanAddTimePoint (TimePoint timePoint)
         {
             var res = timePoint.Time == TimeSpan.Zero && timePoint.Kind == TimePointKinds.Absolute 
