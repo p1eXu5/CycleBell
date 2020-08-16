@@ -53,6 +53,13 @@ namespace CycleBell.ViewModels.TimePointViewModels
             return timePointViewModels;
         }
 
+        /// <summary>
+        /// Set IsActive property to true if <see cref="TimePointViewModelBase"/> contained in the collection.
+        /// Otherwise returns null.
+        /// </summary>
+        /// <param name="timePointViewModels"></param>
+        /// <param name="predicate"></param>
+        /// <returns></returns>
         internal static TimePointViewModelBase Activate(this ReadOnlyObservableCollection<TimePointViewModelBase> timePointViewModels, Func<TimePointViewModelBase,bool> predicate)
         {
             var tpvm = timePointViewModels?.Where(predicate).FirstOrDefault();
