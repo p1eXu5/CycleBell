@@ -54,6 +54,13 @@ namespace CycleBell
             alarm.LoadDefaultSoundCollection();
             alarm.SetDefaultSound();
 
+            var mp = new MediaPlayer();
+            mp.MediaFailed += (o, args) =>
+                                  {
+                                      MessageBox.Show( args.ErrorException.ToString() );
+                                  };
+            mp.Open( new Uri( "D:\\Projects\\Programming\\CSharp\\_wpf\\CycleBell\\src\\CycleBell\\Sounds\\Alarm 3.mp3", UriKind.Absolute ) );
+
             container.RegisterInstance< IAlarm >( alarm );
 
             container.RegisterInstance< ICycleBellManager >( manager );
