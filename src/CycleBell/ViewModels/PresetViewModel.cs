@@ -179,16 +179,15 @@ namespace CycleBell.ViewModels
 
         public ReadOnlyObservableCollection<TimePointViewModelBase> TimePointVmCollection { get; }
 
-        //public TimePointViewModelBase SelectedTimePoint
-        //{
-        //    get => _selectedTimePoint;
-        //    set {
-        //        if (value is TimePointViewModel newValue) {
-        //            _selectedTimePoint = newValue;
-        //        }
-        //        OnPropertyChanged ();
-        //    }
-        //}
+        public TimePointViewModelBase ActiveTimePointVm
+        {
+            get => _activeTimePointVm;
+            set {
+                _activeTimePointVm = value;
+                OnPropertyChanged();
+            }
+        }
+
         public AddingTimePointViewModel AddingTimePoint
         {
             get => _addingTimePoint;
@@ -197,6 +196,8 @@ namespace CycleBell.ViewModels
                 OnPropertyChanged ();
             }
         }
+
+
 
         public bool IsNew => _mainViewModel.IsNewPreset( Preset );
         public bool IsModified => Preset.IsModifiedPreset();
@@ -254,26 +255,55 @@ namespace CycleBell.ViewModels
             }
         }
 
-        #endregion
+        #endregion properties
 
 
         #region commands
 
-        public ICommand AddTimePointCommand => new ActionCommand (AddTimePoint, CanAddTimePoint);
+        #region AddTimePointCommand
+
+        public ICommand AddTimePointCommand => new ActionCommand(AddTimePoint, CanAddTimePoint);
+
+        private void AddTimePoint(object o)
+        {
+            var timePoint = _addingTimePoint.TimePoint.Clone();
+
+            if (String.IsNullOrWhiteSpace(timePoint.Name))
+                timePoint.Name = TimePoint.GetDefaultName(timePoint);
+
+            Preset.AddTimePoint(timePoint);
+
+            ResetAddingTimePoint();
+        }
+
+        private bool CanAddTimePoint(object o)
+        {
+            var res = _addingTimePoint.Time < TimeSpan.FromDays(1)
+                      && ((_addingTimePoint.TimePointKinds == TimePointKinds.Relative && _addingTimePoint.Time > TimeSpan.Zero)
+                      || (_addingTimePoint.TimePointKinds == TimePointKinds.Absolute && _addingTimePoint.Time >= TimeSpan.Zero));
+
+            return res;
+        }
+
+        #endregion
 
 
+        #region SetStartTimeCommand
 
-        public ICommand SetStartTimeCommand => new ActionCommand( SetStartTime );
+        public ICommand SetStartTimeCommand => new ActionCommand(SetStartTime);
+
+        private void SetStartTime(object offset)
+        {
+            var nfi = System.Globalization.CultureInfo.InvariantCulture.NumberFormat;
+            StartTime = ( DateTime.Now + TimeSpan.FromMinutes( Double.Parse( offset.ToString(), nfi ) ) ).TimeOfDay;
+        }
+
+        #endregion
 
         #endregion commands
 
 
         #region Methods
-
-        private void SetStartTime( object offset )
-        {
-            StartTime = (DateTime.Now + TimeSpan.FromMinutes( Int32.Parse( offset.ToString() ) )).TimeOfDay;
-        }
 
         private void OnTimePointCollectionChanged (Object sender, NotifyCollectionChangedEventArgs e)
         {
@@ -327,27 +357,6 @@ namespace CycleBell.ViewModels
         public void RemoveTimePoint (TimePoint timePoint)
         {
             Preset.RemoveTimePoint (timePoint);
-        }
-
-        // AddTimePointCommand:
-        private void AddTimePoint(object o)
-        {
-            var timePoint = _addingTimePoint.TimePoint.Clone();
-
-            if (String.IsNullOrWhiteSpace (timePoint.Name))
-                timePoint.Name = TimePoint.GetDefaultName(timePoint);
-
-            Preset.AddTimePoint(timePoint);
-
-            ResetAddingTimePoint();
-        }
-        private bool CanAddTimePoint (object o)
-        {
-            var res = _addingTimePoint.Time < TimeSpan.FromDays(1) 
-                      && ((_addingTimePoint.TimePointKinds == TimePointKinds.Relative && _addingTimePoint.Time > TimeSpan.Zero) 
-                      || (_addingTimePoint.TimePointKinds == TimePointKinds.Absolute && _addingTimePoint.Time >= TimeSpan.Zero));
-
-            return res;
         }
 
         private bool CanAddTimePoint (TimePoint timePoint)
@@ -407,19 +416,21 @@ namespace CycleBell.ViewModels
 
         private void UpdateActiveTimePointViewModel(TimePoint nextTimePoint, TimeSpan? prevTimePointNextBaseTime)
         {
-            // deactivate:
-            if (_activeTimePointVm != null) {
+            var activeTp = ActiveTimePointVm;
 
-                _activeTimePointVm.IsActive = false;
+            // deactivate:
+            if (activeTp != null) {
+
+                activeTp.IsActive = false;
 
                 if (prevTimePointNextBaseTime != null) {
 
-                    _activeTimePointVm.TimePoint.BaseTime = prevTimePointNextBaseTime;
-                    ((TimePointViewModel)_activeTimePointVm).UpdateTime();
+                    activeTp.TimePoint.BaseTime = prevTimePointNextBaseTime;
+                    ((TimePointViewModel)activeTp).UpdateTime();
                 }
             }
 
-            // activate:
+            // deactivate all:
             if (nextTimePoint.Name == _mainViewModel.StartTimeName) {
 
                 if (TimePointVmCollection.Count > 0) {
@@ -428,12 +439,10 @@ namespace CycleBell.ViewModels
                     ResetBaseTimes();
                 }
             }
+            // activate:
             else {
-                _activeTimePointVm = TimePointVmCollection.Activate(tpvmb => tpvmb.Equals(nextTimePoint));
+                ActiveTimePointVm = TimePointVmCollection.Activate(tpvmb => tpvmb.Equals(nextTimePoint));
             }
-
-            //(( DispatcherObject )_mainViewModel.Alarm.Player).Dispatcher.BeginInvoke( DispatcherPriority.Normal, (ThreadStart)delegate() { _mainViewModel.Alarm.LoadNextSound( nextTimePoint ); } );
-            
         }
 
         internal void OnSecondPassed(object s, TimerEventArgs e)
