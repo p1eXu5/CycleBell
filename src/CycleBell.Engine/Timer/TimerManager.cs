@@ -142,6 +142,7 @@ namespace CycleBell.Engine.Timer
         public event EventHandler TimerPaused;
         public event EventHandler TimerStopped;
         public event EventHandler TimerStarted;
+        public event EventHandler TimerResumed;
 
         #endregion
 
@@ -222,6 +223,7 @@ namespace CycleBell.Engine.Timer
             _timer.Change( 0, Timeout.Infinite );
 
             IsPaused = false;
+            OnTimerResume();
         }
 
         /// <summary>
@@ -257,6 +259,12 @@ namespace CycleBell.Engine.Timer
         private void OnTimerPause()
         {
             TimerPaused?.Invoke(this, EventArgs.Empty);
+        }
+
+         [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        private void OnTimerResume()
+        {
+            TimerResumed?.Invoke(this, EventArgs.Empty);
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]

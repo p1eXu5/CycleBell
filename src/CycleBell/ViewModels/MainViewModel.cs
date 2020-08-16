@@ -95,6 +95,7 @@ namespace CycleBell.ViewModels
                 _timerManager.TimerStarted += UpdateIsRunningAndTimerStateProperties;
                 _timerManager.TimerStopped += UpdateIsRunningAndTimerStateProperties;
                 _timerManager.TimerPaused += UpdateIsRunningAndTimerStateProperties;
+                _timerManager.TimerResumed += UpdateIsRunningAndTimerStateProperties;
             }
             
             void LoadPresetViewModelCollection()
@@ -600,6 +601,12 @@ namespace CycleBell.ViewModels
             IsRingOnStartTime = IsRingOnStartTime;
         }
 
+        private void OnMediaEnded( object s, EventArgs e )
+        {
+            _isPlayDefault = false;
+            Alarm.DefaultMediaEnded -= OnMediaEnded;
+        }
+
         #endregion
 
 
@@ -910,11 +917,6 @@ namespace CycleBell.ViewModels
             return _manager.IsNewPreset( preset );
         }
 
-        private void OnMediaEnded( object s, EventArgs e )
-        {
-            _isPlayDefault = false;
-            Alarm.DefaultMediaEnded -= OnMediaEnded;
-        }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         private void CheckSelectedPresetBeforeExit()

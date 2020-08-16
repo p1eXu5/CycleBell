@@ -28,6 +28,7 @@ namespace CycleBell.Engine.Timer
         event EventHandler TimerStarted;
         event EventHandler TimerPaused;
         event EventHandler TimerStopped;
+        event EventHandler TimerResumed;
 
         bool IsRunning { get; }
         bool IsPaused { get; }
