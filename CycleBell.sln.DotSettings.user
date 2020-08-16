@@ -4,4 +4,10 @@
   &lt;Assembly Path="D:\Projects\Programming Projects\C# Projects\CycleBell\packages\Unity.5.8.6\lib\net47\Unity.Container.dll" /&gt;&#xD;
   &lt;Assembly Path="D:\Projects\Programming Projects\C# Projects\CycleBell\Code\packages\NUnit.3.10.1\lib\net45\nunit.framework.dll" /&gt;&#xD;
   &lt;Assembly Path="D:\Projects\Programming Projects\C# Projects\WPF\CycleBell\packages\Selenium.WebDriver.3.141.0\lib\net45\WebDriver.dll" /&gt;&#xD;
-&lt;/AssemblyExplorer&gt;</s:String></wpf:ResourceDictionary>
+&lt;/AssemblyExplorer&gt;</s:String>
+	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=ba5f3c0d_002Db398_002D407c_002D858f_002D5695eaa93679/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" Name="All tests from &amp;lt;tests&amp;gt;\&amp;lt;CycleBell.Engine.Tests&amp;gt;" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;&#xD;
+  &lt;Or&gt;&#xD;
+    &lt;Project Location="D:\Projects\Programming\CSharp\_wpf\CycleBell\tests\CycleBell.Engine.Tests" Presentation="&amp;lt;tests&amp;gt;\&amp;lt;CycleBell.Engine.Tests&amp;gt;" /&gt;&#xD;
+    &lt;Project Location="D:\Projects\Programming\CSharp\_wpf\CycleBell\tests\CycleBell.Tests" Presentation="&amp;lt;tests&amp;gt;\&amp;lt;CycleBell.Tests&amp;gt;" /&gt;&#xD;
+  &lt;/Or&gt;&#xD;
+&lt;/SessionState&gt;</s:String></wpf:ResourceDictionary>
