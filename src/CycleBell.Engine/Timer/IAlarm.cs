@@ -7,7 +7,7 @@ namespace CycleBell.Engine.Timer
 {
     public interface IAlarm
     {
-        string DefaultSoundsDirrectory { get; set; }
+        string DefaultSoundsDirectory { get; set; }
 
         ReadOnlyObservableCollection< Uri > DefaultSoundCollection { get; }
         IEnumerable< KeyValuePair< int, Uri > > TimePointSoundDictionary { get; }

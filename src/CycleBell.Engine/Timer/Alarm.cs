@@ -15,7 +15,7 @@ namespace CycleBell.Engine.Timer
     {
         #region const
 
-        public const string BASE_SOUND_DIRECTORY = "\\Sounds";
+        public const string BASE_SOUND_DIRECTORY = "Sounds";
 
         #endregion
 
@@ -78,10 +78,10 @@ namespace CycleBell.Engine.Timer
         /// <summary>
         /// When assigned null resets default directory to <see cref="BASE_SOUND_DIRECTORY"/>
         /// </summary>
-        public string DefaultSoundsDirrectory
+        public string DefaultSoundsDirectory
         {
             get => String.IsNullOrWhiteSpace( _defaultSoundsDirectory )
-                       ? (_defaultSoundsDirectory = AppDomain.CurrentDomain.BaseDirectory + BASE_SOUND_DIRECTORY)
+                       ? (_defaultSoundsDirectory = Path.Combine( AppDomain.CurrentDomain.BaseDirectory, BASE_SOUND_DIRECTORY))
                        : _defaultSoundsDirectory;
 
             set {
@@ -106,7 +106,7 @@ namespace CycleBell.Engine.Timer
         /// </summary>
         public void LoadDefaultSoundCollection()
         {
-            var defaultSoundsDirectory = DefaultSoundsDirrectory;
+            var defaultSoundsDirectory = DefaultSoundsDirectory;
             var uriList = new List< Uri >();
 
             if ( Directory.Exists( defaultSoundsDirectory ) ) {

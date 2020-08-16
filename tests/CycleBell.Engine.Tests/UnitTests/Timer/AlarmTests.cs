@@ -31,7 +31,7 @@ namespace CycleBell.Engine.Tests.UnitTests.Timer
         {
             var alarm = GetAlarm();
 
-            Assert.IsTrue( alarm.DefaultSoundsDirrectory.Equals( AppDomain.CurrentDomain.BaseDirectory + Alarm.BASE_SOUND_DIRECTORY ) );
+            Assert.IsTrue( alarm.DefaultSoundsDirectory.Equals( AppDomain.CurrentDomain.BaseDirectory + Alarm.BASE_SOUND_DIRECTORY ) );
         }
 
         [ Test ]
@@ -39,9 +39,9 @@ namespace CycleBell.Engine.Tests.UnitTests.Timer
         {
             var alarm = GetAlarm();
 
-            alarm.DefaultSoundsDirrectory = "Not existed directory";
+            alarm.DefaultSoundsDirectory = "Not existed directory";
 
-            Assert.IsTrue( alarm.DefaultSoundsDirrectory.Equals( AppDomain.CurrentDomain.BaseDirectory + Alarm.BASE_SOUND_DIRECTORY ) );
+            Assert.IsTrue( alarm.DefaultSoundsDirectory.Equals( AppDomain.CurrentDomain.BaseDirectory + Alarm.BASE_SOUND_DIRECTORY ) );
         }
 
         [ Test ]
@@ -50,9 +50,9 @@ namespace CycleBell.Engine.Tests.UnitTests.Timer
             var alarm = GetAlarm();
             var debugDir = AppDomain.CurrentDomain.BaseDirectory;
 
-            alarm.DefaultSoundsDirrectory = debugDir;
+            alarm.DefaultSoundsDirectory = debugDir;
 
-            Assert.IsTrue( alarm.DefaultSoundsDirrectory.Equals( debugDir) );
+            Assert.IsTrue( alarm.DefaultSoundsDirectory.Equals( debugDir) );
         }
 
         [ Test ]
@@ -61,11 +61,11 @@ namespace CycleBell.Engine.Tests.UnitTests.Timer
             var alarm = GetAlarm();
             var debugDir = AppDomain.CurrentDomain.BaseDirectory;
 
-            alarm.DefaultSoundsDirrectory = debugDir;
-            Assert.IsTrue( alarm.DefaultSoundsDirrectory.Equals( debugDir) );
+            alarm.DefaultSoundsDirectory = debugDir;
+            Assert.IsTrue( alarm.DefaultSoundsDirectory.Equals( debugDir) );
 
-            alarm.DefaultSoundsDirrectory = null;
-            Assert.IsTrue( alarm.DefaultSoundsDirrectory.Equals( AppDomain.CurrentDomain.BaseDirectory + Alarm.BASE_SOUND_DIRECTORY ) );
+            alarm.DefaultSoundsDirectory = null;
+            Assert.IsTrue( alarm.DefaultSoundsDirectory.Equals( AppDomain.CurrentDomain.BaseDirectory + Alarm.BASE_SOUND_DIRECTORY ) );
         }
 
         #endregion
@@ -87,7 +87,7 @@ namespace CycleBell.Engine.Tests.UnitTests.Timer
         public void LoadDefaultSoundCollection_FolderIsEmpty_DoesNotLoadDefaultSoundCollection()
         {
             var alarm = GetAlarm();
-            alarm.DefaultSoundsDirrectory = AppDomain.CurrentDomain.BaseDirectory + "\\..\\";
+            alarm.DefaultSoundsDirectory = AppDomain.CurrentDomain.BaseDirectory + "\\..\\";
 
             alarm.LoadDefaultSoundCollection();
 
@@ -356,7 +356,7 @@ namespace CycleBell.Engine.Tests.UnitTests.Timer
         }
 
         [Test]
-        public void Play_CurrentPlayerNotSetted_DoesNotCallPlayersPlayMethod()
+        public void Play_CurrentPlayerNotSet_DoesNotCallPlayersPlayMethod()
         {
             var alarm = GetAlarm();
 
