@@ -26,7 +26,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using CycleBell.Controls;
 
-namespace CycleBell.Views
+namespace CycleBell.Controls
 {
     public static class AttachedPropertyFactory
     {

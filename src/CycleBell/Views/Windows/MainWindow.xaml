@@ -1,10 +1,10 @@
-﻿<Window x:Class="CycleBell.MainWindow" x:Name="Window"
+﻿<Window x:Class="CycleBell.Views.Windows.MainWindow" x:Name="Window"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:sys="clr-namespace:System;assembly=mscorlib"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:CycleBell.Views"
+        xmlns:local="clr-namespace:CycleBell.Views.Windows"
         xmlns:controls="clr-namespace:CycleBell.Controls"
         xmlns:vmodels="clr-namespace:CycleBell.ViewModels;assembly="
         xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
@@ -19,6 +19,10 @@
         MinHeight="716" Height="716" Width="456" MinWidth="474" 
         ResizeMode="CanResize" WindowStartupLocation="CenterScreen" 
         >
+
+    <Window.TaskbarItemInfo>
+        <TaskbarItemInfo x:Name="m_TaskbarItemInfo" />
+    </Window.TaskbarItemInfo>
 
     <i:Interaction.Triggers>
         <i:EventTrigger EventName="Loaded">
@@ -258,7 +262,7 @@
                               IsEditable="True"
                               MaxDropDownHeight="90"
                               IsTextSearchEnabled="False"
-                              local:AttachedPropertyFactory.MoveFocusRight="{Binding MoveFocusRightTrigger}"
+                              controls:AttachedPropertyFactory.MoveFocusRight="{Binding MoveFocusRightTrigger}"
                               Text="{Binding SelectedPresetName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                               >
 
@@ -369,6 +373,7 @@
             <Grid Grid.Row="2">
                 <userControls:PresetUserControl x:Name="preset" 
                                                 DataContext="{Binding SelectedPreset}"
+                                                local:MainWindow.ActiveTimePoint ="{Binding ActiveTimePointVm}"
                                                 >
 
                     <userControls:PresetUserControl.Style>

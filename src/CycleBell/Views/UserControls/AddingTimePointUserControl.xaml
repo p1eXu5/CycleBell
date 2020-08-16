@@ -3,11 +3,11 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:local="clr-namespace:CycleBell.Views"
+             xmlns:local="clr-namespace:CycleBell.Controls"
              xmlns:controls="clr-namespace:CycleBell.Controls"
              xmlns:conv="clr-namespace:CycleBell.Converters"
              xmlns:timePointViewModels="clr-namespace:CycleBell.ViewModels.TimePointViewModels"
-             xmlns:at="clr-namespace:CycleBell.Views"
+             xmlns:at="clr-namespace:CycleBell.Controls"
              mc:Ignorable="d" 
              
              d:DataContext="{d:DesignInstance timePointViewModels:AddingTimePointViewModel}"

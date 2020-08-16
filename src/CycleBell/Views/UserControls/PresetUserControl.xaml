@@ -8,7 +8,7 @@
              xmlns:viewModels="clr-namespace:CycleBell.ViewModels"
              xmlns:dts="clr-namespace:CycleBell.DataTemplateSelectors"
              xmlns:userControls="clr-namespace:CycleBell.Views.UserControls"
-             xmlns:at="clr-namespace:CycleBell.Views"
+             xmlns:at="clr-namespace:CycleBell.Controls"
              xmlns:converters="clr-namespace:CycleBell.Converters"
              mc:Ignorable="d"
 
@@ -56,6 +56,11 @@
                         VerticalAlignment="Center" 
                         >
                 <StackPanel Orientation="Horizontal" Margin="0,0,0,2" HorizontalAlignment="Center">
+                    <!--<Button Height="25" Width="25" Margin="0,0,5,0" 
+                            Command="{Binding SetStartTimeCommand}" 
+                            CommandParameter="0.1">
+                        +0.1
+                    </Button>-->
                     <Button Height="25" Width="25" Margin="0,0,5,0" 
                             Command="{Binding SetStartTimeCommand}" 
                             CommandParameter="1">

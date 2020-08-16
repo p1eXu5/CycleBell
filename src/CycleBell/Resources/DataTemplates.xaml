@@ -1,9 +1,8 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:vm="clr-namespace:CycleBell.ViewModels.TimePointViewModels"
-                    xmlns:controls="clr-namespace:CycleBell.Controls"
                     xmlns:converters="clr-namespace:CycleBell.Converters"
-                    xmlns:at="clr-namespace:CycleBell.Views"
+                    xmlns:at="clr-namespace:CycleBell.Controls"
                     >
 
     <converters:FromTimeSpanToStringConverter x:Key="conv_TimeSpanToString" />
